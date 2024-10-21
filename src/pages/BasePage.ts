@@ -99,13 +99,13 @@ export default abstract class BasePage {
 
     async expectElementToHaveText(locator: string, text: string) {
         await expect(
-            this.page.locator(locator),
+            this.page.locator(locator).first(),
             "Check if page element has text :" + text
         ).toHaveText(text);
     }
     async expectElementToHaveValue(locator: string, value: string) {
         await expect(
-            this.page.locator(locator),
+            this.page.locator(locator).first(),
             "Check if page element has value :" + value
         ).toHaveValue(value);
     }
@@ -152,7 +152,7 @@ export default abstract class BasePage {
             fs.writeFile(
                 path.join(
                     __dirname,
-                    "../../",
+                    dir,
                     "/Test Files/test" + Date.now() + ext
                 ),
                 "SIMS Finance Test File Content " + Date.now(),
@@ -230,4 +230,5 @@ export default abstract class BasePage {
             expectedTexts.expectedSchoolID
         );
     }
+    // async;
 }

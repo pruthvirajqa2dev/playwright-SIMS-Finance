@@ -4,6 +4,7 @@ import BasePage from "./BasePage";
 import * as fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
+import expectedTexts from "../data/expectedTexts.json";
 // <reference lib="dom"/>
 
 /**
@@ -33,6 +34,11 @@ export default class SPC420 extends BasePage {
     private readonly uploadedFileNameOnUFDialogLocator = "#physical_file";
     private readonly fileNameOnUFDialogLocator = "#rep_name";
     private readonly successMarkLocator = "*[class^=dhx_item--success-mark]";
+    private readonly schoolIdOnUploadedFileDetailsTableLocator =
+        '[axes="COMPANY_ID"] > div';
+    private readonly fileNameOnUploadedFileDetailsTableLocator =
+        '[axes="REP_NAME"] > div';
+    private readonly extOnUploadedFileDetailsTableLocator = '[axes="EXT"]>div';
     //*[class^=dhx_item--success-mark]
 
     //Actions
@@ -130,7 +136,25 @@ export default class SPC420 extends BasePage {
         await expect(
             this.page.locator(this.fileNameOnUFDialogLocator)
         ).toHaveValue(fileName!);
-
-        // const titleExist = this.doesDialogWithTitleExist("School ID");
+    }
+    async verifyUploadedFileDetailsOnTableRecord() {
+        await this.expectElementToHaveText(
+            this.schoolIdOnUploadedFileDetailsTableLocator,
+            expectedTexts.expectedSchoolID
+        );
+        const newestFileName: string | null = this.getNewestFileNameInDir(
+            this.testFileDir
+        );
+        const fileName = newestFileName?.split(".")[0].toUpperCase();
+        const fileExt = newestFileName?.split(".")[1].toUpperCase();
+        await this.expectElementToHaveText(
+            this.fileNameOnUploadedFileDetailsTableLocator,
+            fileName!.toUpperCase()
+        );
+        await this.expectElementToHaveText(
+            this.extOnUploadedFileDetailsTableLocator,
+            fileExt!.toUpperCase()
+        );
+        //fileNameOnUploadedFileDetailsTableLocator
     }
 }

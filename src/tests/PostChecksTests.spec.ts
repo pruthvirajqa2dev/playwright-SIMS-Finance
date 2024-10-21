@@ -100,6 +100,7 @@ test.describe(
             await test.step("Upload the file", async () => {
                 await spc420.uploadFile();
                 await spc420.selectSchoolId(expectedTexts.expectedSchoolName);
+                await spc420.clickButtonUsingRole("Update");
             });
         });
     }
