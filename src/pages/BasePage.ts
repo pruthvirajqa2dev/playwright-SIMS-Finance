@@ -149,6 +149,10 @@ export default abstract class BasePage {
         else dir = "../../";
         console.log("Previous directory is: " + path.join(__dirname, "../"));
         return new Promise((resolve) => {
+            if (!fs.existsSync(path.join(__dirname, dir, "/Test Files"))) {
+                // If it doesn't exist, create the directory
+                fs.mkdirSync(path.join(__dirname, dir, "/Test Files"));
+            }
             fs.writeFile(
                 path.join(
                     __dirname,
