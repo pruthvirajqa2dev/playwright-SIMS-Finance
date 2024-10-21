@@ -144,9 +144,9 @@ export default abstract class BasePage {
      */
     async fsWriteFile(ext: string) {
         console.log("Current directory is: " + __dirname);
-        var dir;
-        if (process.env.CI ? true : false) dir = "../../../";
-        else dir = "../../";
+        var dir = "../../";
+        // if (process.env.CI ? true : false) dir = "../../../";
+        // else dir = "../../";
         console.log("Previous directory is: " + path.join(__dirname, "../"));
         return new Promise((resolve) => {
             if (!fs.existsSync(path.join(__dirname, dir, "/Test Files"))) {
