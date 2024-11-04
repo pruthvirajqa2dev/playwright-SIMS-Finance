@@ -18,9 +18,6 @@ export default class HomePage extends BasePage {
     private readonly profileMenuDropdown = "#esr_user_profile_menu";
     private readonly logoutLabel = "Click to Logout";
 
-    private readonly yesBtn = "#esr_messagebox_yes";
-    private readonly noBtn = "#esr_messagebox_no";
-
     //Constructor
 
     //Actions
@@ -104,18 +101,18 @@ export default class HomePage extends BasePage {
 
     async verifyVisibilityYesNoButton() {
         await expect(
-            this.page.locator(this.yesBtn),
+            this.page.locator(this.yesBtnLocator),
             "Expect yes button to be visible"
         ).toBeVisible();
         await expect(
-            this.page.locator(this.noBtn),
+            this.page.locator(this.noBtnLocator),
             "Expect no button to be visible"
         ).toBeVisible();
     }
-    async clickYesBtn() {
+    async clickyesBtnLocator() {
         await this.verifyVisibilityYesNoButton();
         await this.page
-            .locator(this.yesBtn)
+            .locator(this.yesBtnLocator)
             .click()
             .catch((error) => {
                 console.error(`Error clicking yes button: ${error}`);

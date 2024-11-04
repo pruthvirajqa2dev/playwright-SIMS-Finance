@@ -1,6 +1,8 @@
-import { Page } from "@playwright/test";
+import test, { Page } from "@playwright/test";
 import HomePage from "./HomePage";
 import BasePage from "./BasePage";
+import * as fs from "fs";
+import * as path from "path";
 /**
  * @author: @pruthvirajqa2dev
  * SIMS Finance Login page class with locators
@@ -19,9 +21,26 @@ export default class LoginPage extends BasePage {
         await this.page.locator(this.usernameInputLocator).fill(username);
         await this.page.locator(this.passwordInputLocator).fill(password);
     }
-    async login(username: string, password: string, testInfo) {
+    async login(
+        username: string,
+        password: string,
+        testInfo: { title: string; attach: (arg0: void) => any }
+    ) {
         await this.navigateTo("/");
         await this.fillUsernameAndPassword(username, password);
+
+        console.log("Path is " + this.screenshotPath + "/" + testInfo.title);
+        if (
+            !fs.existsSync(path.join(this.screenshotPath, "/", testInfo.title))
+        ) {
+            fs.mkdirSync(path.join(this.screenshotPath, "/", testInfo.title), {
+                recursive: true
+            });
+        }
+        await this.page.screenshot({
+            path: this.screenshotPath + "/Login.png"
+        });
+
         const homepage: HomePage = await this.clickLoginBtn(testInfo);
         return homepage;
     }

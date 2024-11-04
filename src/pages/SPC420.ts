@@ -39,6 +39,7 @@ export default class SPC420 extends BasePage {
     private readonly fileNameOnUploadedFileDetailsTableLocator =
         '[axes="REP_NAME"] > div';
     private readonly extOnUploadedFileDetailsTableLocator = '[axes="EXT"]>div';
+    private readonly viewDropdownOnTableLocator = ".multibutton_content > a";
     //*[class^=dhx_item--success-mark]
 
     //Actions
@@ -128,7 +129,6 @@ export default class SPC420 extends BasePage {
         ).toBeVisible();
         await this.clickButtonUsingRole(this.okBtnLocator);
         const fileName = newestFileName?.split(".")[0].toUpperCase();
-        const fileExt = newestFileName?.split(".")[1].toUpperCase();
 
         await expect(
             this.page.locator(this.uploadedFileNameOnUFDialogLocator)
@@ -155,6 +155,18 @@ export default class SPC420 extends BasePage {
             this.extOnUploadedFileDetailsTableLocator,
             fileExt!.toUpperCase()
         );
-        //fileNameOnUploadedFileDetailsTableLocator
+    }
+    async deleteUploadedFile() {
+        await this.click(this.viewDropdownOnTableLocator);
+        await (await this.getByRole("menuitem", { name: "Delete" })).click();
+        await this.checkIfDialogExistsWithTitle("Delete File");
+        const newestFileName: string | null = this.getNewestFileNameInDir(
+            this.testFileDir
+        );
+        await this.expectElementToContainText(
+            this.esrPromptTextLocator,
+            newestFileName!.toUpperCase()
+        );
+        await this.click(this.yesBtnLocator);
     }
 }

@@ -4,6 +4,7 @@ import HomePage from "../pages/HomePage";
 import ENV from "../config/env";
 import expectedTexts from "../data/expectedTexts.json";
 import SPC420 from "../pages/SPC420";
+import path from "path";
 
 async function login(page, testInfo) {
     const loginPage = new LoginPage(page, testInfo);
@@ -14,14 +15,14 @@ async function login(page, testInfo) {
         ENV.PASSWORD!,
         testInfo
     );
+
     return homepage;
 }
 test.describe(
     "Postchecks on environment:" + `${process.env.test_env}`.toUpperCase(),
     () => {
-        test("Postcheck # 1 and #2: Login and Logout", async ({
-            page
-        }, testInfo) => {
+        //Test case 1
+        test("Login and Logout", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "Login and Logout",
                 description:
@@ -36,10 +37,25 @@ test.describe(
 
             //Logout
             await test.step(`Expect home page elements visible on Load`, async () => {
+                const filePath = testInfo.outputPath(
+                    homepage.screenshotPath,
+                    "/Homepage.png"
+                );
+                await page.screenshot({
+                    path: filePath
+                });
+                testInfo.attachments.push({
+                    name: "screenshot",
+                    path: filePath,
+                    contentType: "image/png"
+                });
                 await homepage.expectPageElementsVisibilityOnLoad();
             });
             await test.step(`Click on profile and logout button`, async () => {
                 await homepage.logout();
+                await page.screenshot({
+                    path: homepage.screenshotPath + "/Logout.png"
+                });
             });
             //Assertions
             await test.step(`Assert logout dialog is displayed, verify its content and logout`, async () => {
@@ -55,13 +71,18 @@ test.describe(
                     homepage.dialogContentLocator,
                     expectedDialogContent
                 );
-                await homepage.clickYesBtn();
+                await page.screenshot({
+                    path: homepage.screenshotPath + "/Dialog.png"
+                });
+                await homepage.clickyesBtnLocator();
+                await page.screenshot({
+                    path: homepage.screenshotPath + "/YesButton.png"
+                });
                 await homepage.verifyURL(ENV.LOGOUT_URL!);
             });
         });
-        test("Postcheck #2: File upload using SPC420", async ({
-            page
-        }, testInfo) => {
+        //Test case 2
+        test("File upload using SPC420", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "File upload using SPC420",
                 description:
@@ -101,6 +122,10 @@ test.describe(
                 await spc420.uploadFile();
                 await spc420.selectSchoolId(expectedTexts.expectedSchoolName);
                 await spc420.clickButtonUsingRole("Update");
+            });
+            await test.step("Delete the uploaded file", async () => {
+                await spc420.verifyUploadedFileDetailsOnTableRecord();
+                await spc420.deleteUploadedFile();
             });
         });
     }

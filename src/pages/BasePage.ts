@@ -1,4 +1,4 @@
-import test, { expect, Locator, Page } from "@playwright/test";
+import base, { expect, Page } from "@playwright/test";
 import { error } from "console";
 import * as fs from "fs";
 import expectedTexts from "../data/expectedTexts.json";
@@ -28,6 +28,24 @@ export default abstract class BasePage {
     private readonly multipleDialogTitleLocator = "*[id^=ui-id]";
     private readonly selectBtnForSchoolLocator =
         "td:right-of(td[axes='COMP_DESC']:has-text('%'))>button[aria-label='Click to Select Record']";
+    private readonly _yesBtnLocator = "#esr_messagebox_yes";
+    private readonly _esrPromptTextLocator = "div[id*=esr_prompt]";
+    public get yesBtnLocator() {
+        return this._yesBtnLocator;
+    }
+    public get esrPromptTextLocator() {
+        return this._esrPromptTextLocator;
+    }
+    private readonly _noBtnLocator = "#esr_messagebox_no";
+    public get noBtnLocator() {
+        return this._noBtnLocator;
+    }
+    screenshotPath =
+        "test-results/Postchecks/RunOn" +
+        new Date().toLocaleDateString("en-GB").replaceAll("/", "") +
+        "/" +
+        "Hour " +
+        new Date().getHours();
     //Actions
 
     // Common navigation methods
@@ -49,7 +67,7 @@ export default abstract class BasePage {
 
     // Common element interaction methods
     async click(locator: string) {
-        await this.page.locator(locator).click();
+        await this.page.locator(locator).first().click();
     }
 
     async fill(locator: string, text: string) {
@@ -102,6 +120,12 @@ export default abstract class BasePage {
             this.page.locator(locator).first(),
             "Check if page element has text :" + text
         ).toHaveText(text);
+    }
+    async expectElementToContainText(locator: string, text: string) {
+        await expect(
+            this.page.locator(locator).first(),
+            "Check if page element contains text :" + text
+        ).toContainText(text);
     }
     async expectElementToHaveValue(locator: string, value: string) {
         await expect(
