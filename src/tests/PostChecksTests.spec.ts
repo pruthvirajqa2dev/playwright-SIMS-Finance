@@ -1,10 +1,12 @@
-import test from "@playwright/test";
+import test, { BrowserContext, Page } from "@playwright/test";
 import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import ENV from "../config/env";
 import expectedTexts from "../data/expectedTexts.json";
 import SPC420 from "../pages/SPC420";
 import path from "path";
+import RSS570 from "../pages/RSS570";
+const { chromium } = require("playwright");
 
 async function login(page, testInfo) {
     const loginPage = new LoginPage(page, testInfo);
@@ -103,6 +105,9 @@ test.describe(
                     return new SPC420(page, testInfo);
                 }
             );
+            await test.step("Verify valid page elements are visible", async () => {
+                await spc420.expectPageElementsVisibilityOnLoad();
+            });
             const directory = "ADM - Administration";
             const subDirectory = "LOGS";
             await test.step(
@@ -126,6 +131,84 @@ test.describe(
             await test.step("Delete the uploaded file", async () => {
                 await spc420.verifyUploadedFileDetailsOnTableRecord();
                 await spc420.deleteUploadedFile();
+            });
+        });
+        test("RSS570 - Crystal Report", async ({ browser }, testInfo) => {
+            test.info().annotations.push({
+                type: "RSS570 - Crystal Report",
+                description:
+                    "This test is for checking if RSS570 Crystal Report is generated for given criteria"
+            });
+            // Launch a new browser context
+            const context: BrowserContext = await browser.newContext();
+
+            // Open an initial page
+            let page: Page = await context.newPage();
+            //Login
+            const homepage =
+                await test.step(`Login using ${ENV.USERID!}`, async () => {
+                    return await login(page, testInfo);
+                });
+            const screen = expectedTexts.RSS570;
+            const rss570 = await test.step(
+                "Go to the screen " + screen,
+                async () => {
+                    await homepage.clickHamburgerMenuButton();
+                    await homepage.fillSearchOptions(screen);
+                    await homepage.clickSearchOptionInList();
+                    return new RSS570(page, testInfo);
+                }
+            );
+            await test.step("Verify valid page elements are visible", async () => {
+                await rss570.expectPageElementsVisibilityOnLoad();
+            });
+            await test.step("Enter school Id, sort option and check currency checkbox", async () => {
+                await rss570.selectSchoolId(expectedTexts.expectedSchoolName);
+                await rss570.fillSupplierOrNominalSortInput(
+                    expectedTexts.expectedSupplierOrNominalSortRSS570
+                );
+                await rss570.checkCurrencyCheckBox();
+            });
+            await test.step("Click on submit button", async () => {
+                await rss570.clickSubmitBtn();
+            });
+            await test.step("Submit job on job processing dialog and wait for green icon on Background processing dialog", async () => {
+                await rss570.checkIfDialogExistsWithTitle(
+                    expectedTexts.expectedJobProcessingDialogTitle
+                );
+                await rss570.clickOkBtn();
+                await rss570.checkIfDialogExistsWithTitle(
+                    expectedTexts.expectedBackgroundProcessingDialogTitle
+                );
+                await rss570.expectGreenIconToBeVisible();
+            });
+            await test.step("Verify PDF is generated in RSS570", async () => {
+                await rss570.verifyPDFGeneratedWithExtOnRSS570();
+            });
+            await test.step("Click on PDF report", async () => {
+                await page.waitForTimeout(2000);
+
+                // context.waitForEvent("page"), // Wait for new page (tab) to open
+                const [newPage] = await Promise.all([
+                    context.waitForEvent("page"),
+                    rss570.clickReportButton() // Adjust selector to open a new tab
+                ]);
+
+                // Ensure new tab loads completely
+                await newPage.waitForLoadState();
+                // Retrieve the current (most recently opened) page
+                const pages: Page[] = context.pages();
+                console.log("Length of pages:" + pages.length);
+                const currentPage = pages[1]; // Get the last opened page
+
+                for (let i = 0; i < pages.length; i++) {
+                    console.log("Title:" + pages[i].title());
+                }
+
+                // Verify the title of the new tab
+                const title = await currentPage.title(); // Replace with the expected title
+                console.log("Current page title:", title);
+                await rss570.verifyPDFTabTitle(title);
             });
         });
     }

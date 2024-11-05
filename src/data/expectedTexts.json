@@ -2,7 +2,12 @@
     "expectedLogoutDialogTitle": "Logout?",
     "expectedLogoutDialogContent" : "'Logout' Are you sure?",
     "SPC420":"SPC420",
+    "RSS570":"RSS570",
     "expectedSchoolName":"Green Abbey School",
     "expectedSchoolID":"000001",
-    "expectedSchoolIDDialogTitle":"School ID"
+    "expectedSchoolIDDialogTitle":"School ID",
+    "expectedSupplierOrNominalSortRSS570":"S",
+    "expectedJobProcessingDialogTitle": "Job Processing",
+    "expectedBackgroundProcessingDialogTitle": "Background Processing",
+    "PDFExt":".PDF"
 }

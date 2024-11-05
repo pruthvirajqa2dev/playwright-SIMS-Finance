@@ -1,8 +1,5 @@
 import base, { expect, Page } from "@playwright/test";
-import { error } from "console";
-import * as fs from "fs";
 import expectedTexts from "../data/expectedTexts.json";
-import * as path from "path";
 /**
  * @author: @pruthvirajqa2dev
  * Base page class to inherit basic page functionality
@@ -40,6 +37,18 @@ export default abstract class BasePage {
     public get noBtnLocator() {
         return this._noBtnLocator;
     }
+    private readonly _submitBtnLocator = "#submit";
+    public get submitBtnLocator() {
+        return this._submitBtnLocator;
+    }
+    private readonly _okBtnLocator = "#btn_ok";
+    public get okBtnLocator() {
+        return this._okBtnLocator;
+    }
+    private readonly _greenIconLocator = '.faicon > i[style*="color:green"]';
+    public get greenIconLocator() {
+        return this._greenIconLocator;
+    }
     screenshotPath =
         "test-results/Postchecks/RunOn" +
         new Date().toLocaleDateString("en-GB").replaceAll("/", "") +
@@ -69,11 +78,24 @@ export default abstract class BasePage {
     async click(locator: string) {
         await this.page.locator(locator).first().click();
     }
-
-    async fill(locator: string, text: string) {
-        await this.page.locator(locator).fill(text);
+    async check(locator: string) {
+        await this.page.check(locator);
+    }
+    async checkAndVerify(locator: string) {
+        await this.check(locator);
+        await expect(await this.page.isChecked(locator)).toBeTruthy();
     }
 
+    async fill(locator: string, text: string) {
+        await this.page.locator(locator).fill(text, { force: true });
+    }
+
+    async fillTextAndVerify(locator: string, text: string) {
+        // Fill text
+        await this.fill(locator, text);
+        //Verify Text filled
+        await this.expectElementToContainText(locator, text);
+    }
     async selectOption(locator: string, value: string) {
         await this.page.locator(locator).selectOption(value);
     }
@@ -133,6 +155,22 @@ export default abstract class BasePage {
             "Check if page element has value :" + value
         ).toHaveValue(value);
     }
+    /**
+     * This function checks if a provided attribute with provided value is present in the element locator by provided locator
+     * @param locator
+     * @param attr
+     * @param value
+     */
+    async expectElementToHaveAttributeWithValue(
+        locator: string,
+        attr: string,
+        value: string
+    ) {
+        await expect(
+            this.page.locator(locator).first(),
+            "Check if page element has attr :" + attr + " with value " + value
+        ).toHaveAttribute(attr, value);
+    }
 
     // Additional methods (as needed)
     async screenshot(path: string) {
@@ -162,59 +200,14 @@ export default abstract class BasePage {
         ).isVisible();
     }
     /**
-     * This function writes a file to file system with default content
-     * @param ext
-     * @returns Promise
+     * This function clicks the heading on page located by provided text
+     * @param headingText
+     * @returns
      */
-    async fsWriteFile(ext: string) {
-        console.log("Current directory is: " + __dirname);
-        var dir = "../../";
-        // if (process.env.CI ? true : false) dir = "../../../";
-        // else dir = "../../";
-        console.log("Previous directory is: " + path.join(__dirname, "../"));
-        return new Promise((resolve) => {
-            if (!fs.existsSync(path.join(__dirname, dir, "/Test Files"))) {
-                // If it doesn't exist, create the directory
-                fs.mkdirSync(path.join(__dirname, dir, "/Test Files"));
-            }
-            fs.writeFile(
-                path.join(
-                    __dirname,
-                    dir,
-                    "/Test Files/test" + Date.now() + ext
-                ),
-                "SIMS Finance Test File Content " + Date.now(),
-                function (err) {
-                    if (err) {
-                        resolve(null);
-                    }
-                }
-            );
-            resolve("File created");
-        });
+    async clickHeadingByText(headingText: string) {
+        await (await this.getByRole("heading", { name: headingText })).click();
     }
-    /**
-     * This function returns the latest file name from provided directory
-     * @param dirPath
-     * @returns latestFile.name
-     */
-    getNewestFileNameInDir(dirPath: string): string | null {
-        const files = fs.readdirSync(path.join(__dirname, "../../", dirPath));
 
-        if (files.length === 0) {
-            console.log("No files in the directory");
-            return null;
-        }
-
-        const latestFile = files
-            .map((fileName) => ({
-                name: fileName,
-                time: fs.statSync(path.join(dirPath, fileName)).mtime.getTime()
-            }))
-            .sort((a, b) => b.time - a.time)[0];
-
-        return latestFile ? latestFile.name : null;
-    }
     /**
      * This function wraps the function to find the element using role
      * @param name
@@ -258,5 +251,22 @@ export default abstract class BasePage {
             expectedTexts.expectedSchoolID
         );
     }
-    // async;
+    /**
+     * Click submit button on page
+     */
+    async clickSubmitBtn() {
+        await this.page.locator(this.submitBtnLocator).click();
+    }
+    /**
+     * Click ok button on page
+     */
+    async clickOkBtn() {
+        await this.page.locator(this.okBtnLocator).click();
+    }
+    /**
+     * Wait for
+     */
+    async waitForGreenIcon() {
+        await this.page.locator(this.greenIconLocator);
+    }
 }

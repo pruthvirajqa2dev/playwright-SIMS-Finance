@@ -5,6 +5,7 @@ import * as fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
 import expectedTexts from "../data/expectedTexts.json";
+import FileUtils from "../utils/FileUtils";
 // <reference lib="dom"/>
 
 /**
@@ -28,7 +29,7 @@ export default class SPC420 extends BasePage {
 
     private readonly uploadFileText = "Upload File";
     private readonly browseForFileLocator = "Browse for a file";
-    private readonly okBtnLocator = "OK";
+    private readonly okBtnText = "OK";
     private readonly fileCreatedText = "File created";
     private readonly uploadedFileNameLocator = ".dhx_list-item--name";
     private readonly uploadedFileNameOnUFDialogLocator = "#physical_file";
@@ -105,9 +106,9 @@ export default class SPC420 extends BasePage {
             this.dialogTitleLocator,
             this.uploadFileText
         );
-        const resolution = await this.fsWriteFile(".TXT");
+        const resolution = await FileUtils.fsWriteFile(".TXT");
         await expect(resolution).toBe(this.fileCreatedText);
-        const newestFileName: string | null = this.getNewestFileNameInDir(
+        const newestFileName: string | null = FileUtils.getNewestFileNameInDir(
             this.testFileDir
         );
         // Start waiting for file chooser before clicking. Note no await.
@@ -127,7 +128,7 @@ export default class SPC420 extends BasePage {
             this.page.locator(this.successMarkLocator),
             "Checking if Success Mark (✔) is visible"
         ).toBeVisible();
-        await this.clickButtonUsingRole(this.okBtnLocator);
+        await this.clickButtonUsingRole(this.okBtnText);
         const fileName = newestFileName?.split(".")[0].toUpperCase();
 
         await expect(
@@ -142,7 +143,7 @@ export default class SPC420 extends BasePage {
             this.schoolIdOnUploadedFileDetailsTableLocator,
             expectedTexts.expectedSchoolID
         );
-        const newestFileName: string | null = this.getNewestFileNameInDir(
+        const newestFileName: string | null = FileUtils.getNewestFileNameInDir(
             this.testFileDir
         );
         const fileName = newestFileName?.split(".")[0].toUpperCase();
@@ -160,7 +161,7 @@ export default class SPC420 extends BasePage {
         await this.click(this.viewDropdownOnTableLocator);
         await (await this.getByRole("menuitem", { name: "Delete" })).click();
         await this.checkIfDialogExistsWithTitle("Delete File");
-        const newestFileName: string | null = this.getNewestFileNameInDir(
+        const newestFileName: string | null = FileUtils.getNewestFileNameInDir(
             this.testFileDir
         );
         await this.expectElementToContainText(
