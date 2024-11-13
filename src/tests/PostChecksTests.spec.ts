@@ -192,7 +192,7 @@ test.describe(
                 );
             });
             await test.step("Click on PDF report", async () => {
-                await page.waitForTimeout(1000);
+                await rss570.waitForPdfIconLocator();
                 const downloadPromise = page.waitForEvent("download");
                 await rss570.clickSaveAllButton();
                 const download = await downloadPromise;
@@ -262,7 +262,7 @@ test.describe(
                 }
             );
             await test.step("Click on PDF report", async () => {
-                await page.waitForTimeout(2500);
+                await nml510.waitForPdfIconLocator();
                 const downloadPromise = page.waitForEvent("download");
                 await nml510.clickSaveAllButton();
                 const download = await downloadPromise;

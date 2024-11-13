@@ -78,7 +78,7 @@ export default class HomePage extends BasePage {
             /[.*+?^=!:${}()|\[\]\/\\]/g,
             "\\$&"
         );
-        const regexPattern = `${escapedBaseText}\\s*-?\\s*.*`; // Match anything after baseText
+        const regexPattern = `${escapedBaseText} \\s*-?\\s*.*`; // Match anything after baseText
         return new RegExp(regexPattern, "i"); // Case-insensitive regex
     }
     async clickScreenLocator(screen: string) {

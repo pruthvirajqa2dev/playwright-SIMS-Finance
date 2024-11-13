@@ -70,6 +70,8 @@ export default abstract class BasePage {
     public get closeBtnLocator() {
         return this._closeBtnLocator;
     }
+    private readonly pdfIconLocator =
+        "div[style*='background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);']";
     screenshotPath =
         "test-results/Postchecks/RunOn" +
         new Date().toLocaleDateString("en-GB").replaceAll("/", "") +
@@ -333,5 +335,9 @@ export default abstract class BasePage {
      */
     async clickSaveAllButton() {
         await this.click(this.saveAllBtnLocator);
+    }
+
+    async waitForPdfIconLocator() {
+        await this.expectElementToBeVisible(this.pdfIconLocator);
     }
 }
