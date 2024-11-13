@@ -1,4 +1,4 @@
-import base, { expect, Page } from "@playwright/test";
+import base, { expect, Locator, Page } from "@playwright/test";
 import expectedTexts from "../data/expectedTexts.json";
 /**
  * @author: @pruthvirajqa2dev
@@ -23,8 +23,11 @@ export default abstract class BasePage {
     private readonly schoolIdIconLocator = "#company_id_icon";
     private readonly schoolIdLocator = "input#company_id";
     private readonly multipleDialogTitleLocator = "*[id^=ui-id]";
-    private readonly selectBtnForSchoolLocator =
+    private readonly _selectBtnForSchoolLocator =
         "td:right-of(td[axes='COMP_DESC']:has-text('%'))>button[aria-label='Click to Select Record']";
+    public get selectBtnForSchoolLocator() {
+        return this._selectBtnForSchoolLocator;
+    }
     private readonly _yesBtnLocator = "#esr_messagebox_yes";
     private readonly _esrPromptTextLocator = "div[id*=esr_prompt]";
     public get yesBtnLocator() {
@@ -37,15 +40,15 @@ export default abstract class BasePage {
     public get noBtnLocator() {
         return this._noBtnLocator;
     }
-    private readonly _submitBtnLocator = "#submit";
-    private readonly _submitBtnLocator1 = "#submit_button";
+    protected _submitBtnLocator = "#submit";
+    protected _submitBtnLocator1 = "#submit_button";
     public get submitBtnLocator() {
         return this._submitBtnLocator;
     }
     public get submitBtnLocator1() {
         return this._submitBtnLocator1;
     }
-    private readonly _okBtnLocator = "#btn_ok";
+    protected _okBtnLocator = "#btn_ok";
     public get okBtnLocator() {
         return this._okBtnLocator;
     }
@@ -66,9 +69,13 @@ export default abstract class BasePage {
         return this._saveAllBtnLocator;
     }
 
-    private readonly _closeBtnLocator = "#btn_close";
+    protected _closeBtnLocator = "#btn_close";
     public get closeBtnLocator() {
         return this._closeBtnLocator;
+    }
+    // Setter
+    set closeBtnLocator(locator: string) {
+        this._closeBtnLocator = locator;
     }
     private readonly pdfIconLocator =
         "div[style*='background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);']";
@@ -187,7 +194,7 @@ export default abstract class BasePage {
     async expectElementToHaveAttributeWithValue(
         locator: string,
         attr: string,
-        value: string
+        value
     ) {
         await expect(
             this.page.locator(locator).first(),

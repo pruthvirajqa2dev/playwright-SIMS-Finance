@@ -7,6 +7,8 @@ import SPC420 from "../pages/SPC420";
 import NML510 from "../pages/NML510";
 import RSS570 from "../pages/RSS570";
 import PDFUtils from "../utils/PDFUtils";
+import XQuerySIMS_TB_SCHOOL from "../pages/XQuerySIMS_TB_SCHOOL";
+import RSS310Q from "../pages/RSS310Q";
 
 async function login(page, testInfo) {
     const loginPage = new LoginPage(page, testInfo);
@@ -278,6 +280,119 @@ test.describe(
             });
             await test.step("Click on Close", async () => {
                 await nml510.click(nml510.closeBtnLocator);
+            });
+        });
+        test("SIMS_TB_SCHOOL - XQuery Report - Execute", async ({
+            page
+        }, testInfo) => {
+            test.info().annotations.push({
+                type: "SIMS_TB_SCHOOL - XQuery Report - Execute",
+                description:
+                    "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Execute"
+            });
+            //Login
+            const homepage =
+                await test.step(`Login using ${ENV.USERID!}`, async () => {
+                    return await login(page, testInfo);
+                });
+            const screen = expectedTexts.SIMS_TB_SCHOOL;
+            const simsTbSchool = await test.step(
+                "Go to the screen " + screen,
+                async () => {
+                    await homepage.clickHamburgerMenuButton();
+                    await homepage.goToScreenUsingMenusOption(screen);
+                    return new XQuerySIMS_TB_SCHOOL(page, testInfo);
+                }
+            );
+            await test.step("Verify valid page elements are visible", async () => {
+                await simsTbSchool.expectPageElementsVisibilityOnLoad();
+            });
+            await test.step("Fill up the form and click Execute", async () => {
+                await simsTbSchool.selectSchoolId(
+                    expectedTexts.expectedSchoolName
+                );
+                await simsTbSchool.selectYearAndPeriod(
+                    expectedTexts.expectedYear,
+                    expectedTexts.expectedPeriod
+                );
+
+                const [newTab] = await Promise.all([
+                    page.waitForEvent("popup"), // Wait for the new tab to open
+                    simsTbSchool.clickExecuteBtn() // Click the button that opens the new tab
+                ]);
+                await simsTbSchool.assertionsOnNewTab(newTab);
+                await simsTbSchool.clickCloseBtnOnNewTab(newTab);
+            });
+        });
+        test("SIMS_TB_SCHOOL - XQuery Report - Distribute", async ({
+            page
+        }, testInfo) => {
+            test.info().annotations.push({
+                type: "SIMS_TB_SCHOOL - XQuery Report - Distribute",
+                description:
+                    "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Distribute"
+            });
+            //Login
+            const homepage =
+                await test.step(`Login using ${ENV.USERID!}`, async () => {
+                    return await login(page, testInfo);
+                });
+            const screen = expectedTexts.SIMS_TB_SCHOOL;
+            const simsTbSchool = await test.step(
+                "Go to the screen " + screen,
+                async () => {
+                    await homepage.clickHamburgerMenuButton();
+                    await homepage.goToScreenUsingMenusOption(screen);
+                    return new XQuerySIMS_TB_SCHOOL(page, testInfo);
+                }
+            );
+            await test.step("Verify valid page elements are visible", async () => {
+                await simsTbSchool.expectPageElementsVisibilityOnLoad();
+            });
+            await test.step("Fill up the form and click distribute", async () => {
+                await simsTbSchool.selectSchoolId(
+                    expectedTexts.expectedSchoolName
+                );
+                await simsTbSchool.selectYearAndPeriod(
+                    expectedTexts.expectedYear,
+                    expectedTexts.expectedPeriod
+                );
+                await simsTbSchool.clickSubmitBtnDistribute();
+            });
+            await test.step("Enter emailId on SIMS TB dialog, verify email subject,time and click Ok", async () => {
+                await simsTbSchool.checkIfDialogExistsWithTitle(
+                    expectedTexts.exepctedSimsTbDialogText
+                );
+                await simsTbSchool.fillEmailAddress();
+                await simsTbSchool.assertSubjectAndTime();
+                await simsTbSchool.clickOkBtn();
+            });
+        });
+        test("RSS310Q - Attachments", async ({ page }, testInfo) => {
+            test.info().annotations.push({
+                type: "RSS310Q - Attachments",
+                description:
+                    "This test is for checking if attachments can be attached to RSS310Q"
+            });
+            //Login
+            const homepage =
+                await test.step(`Login using ${ENV.USERID!}`, async () => {
+                    return await login(page, testInfo);
+                });
+            const screen = expectedTexts.RSS310Q;
+            const rss310q = await test.step(
+                "Go to the screen " + screen,
+                async () => {
+                    await homepage.clickHamburgerMenuButton();
+                    await homepage.goToScreenUsingMenusOption(screen);
+                    return new RSS310Q(page, testInfo);
+                }
+            );
+            await test.step("Verify valid page elements are visible", async () => {
+                await rss310q.expectPageElementsVisibilityOnLoad();
+            });
+            await test.step("Fill up the form and click search", async () => {
+                await rss310q.selectSchoolId(expectedTexts.expectedSchoolName);
             });
         });
     }

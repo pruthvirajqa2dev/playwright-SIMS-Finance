@@ -6,7 +6,7 @@ import { expect, Page } from "@playwright/test";
 
 /**
  * @author: @pruthvirajqa2dev
- * This page class is for RSS570 screen related page elements and actions on them
+ * This page class is for NML510 screen related page elements and actions on them
  */
 export default class NML510 extends BasePage {
     //Locators and Texts
@@ -15,7 +15,10 @@ export default class NML510 extends BasePage {
     public get trialBalanceText() {
         return this._trialBalanceText;
     }
-
+    _submitBtnLocator = "#submit_button";
+    public get submitBtnLocator() {
+        return this._submitBtnLocator;
+    }
     //Actions
     /**
      * @author: @pruthvirajqa2dev
@@ -32,6 +35,6 @@ export default class NML510 extends BasePage {
      * Click on Submit button
      */
     async clickSubmitBtn() {
-        await this.page.locator(this.submitBtnLocator1).click();
+        await this.page.locator(this.submitBtnLocator).click();
     }
 }
