@@ -17,7 +17,12 @@ export default class HomePage extends BasePage {
     private readonly searchResult = ".ui-menu-item-wrapper";
     private readonly profileMenuDropdown = "#esr_user_profile_menu";
     private readonly logoutLabel = "Click to Logout";
-
+    private readonly menusLocator = "[name*='_esr_nav_ESR_NAV_PANE']";
+    private readonly filterInputLocator =
+        "input[placeholder='type here to filter...']";
+    private readonly filterBtnLocator = "#esr_tree_filter_button";
+    private readonly filteredMenuItemLocator =
+        "div.esr_tree_selectable[name*=_esr_nav_ESR_MENUS_TREE_]";
     //Constructor
 
     //Actions
@@ -59,8 +64,33 @@ export default class HomePage extends BasePage {
         await this.page.locator(this.hamburgerMenuBtnLocator).click();
     }
     /**
+     *
+     */
+    async goToScreenUsingMenusOption(screen: string) {
+        await this.click(this.menusLocator);
+        await this.fill(this.filterInputLocator, screen);
+        await this.click(this.filterBtnLocator);
+        await this.clickScreenLocator(screen);
+    }
+    createDynamicScreenNameRegex(baseText: string) {
+        // Escape any special characters in baseText, then build the regex
+        const escapedBaseText = baseText.replace(
+            /[.*+?^=!:${}()|\[\]\/\\]/g,
+            "\\$&"
+        );
+        const regexPattern = `${escapedBaseText}\\s*-?\\s*.*`; // Match anything after baseText
+        return new RegExp(regexPattern, "i"); // Case-insensitive regex
+    }
+    async clickScreenLocator(screen: string) {
+        await this.page
+            .locator(this.filteredMenuItemLocator)
+            .filter({ hasText: this.createDynamicScreenNameRegex(screen) })
+            .first()
+            .click();
+    }
+    /**
      * This function enters search criteria into the search textbox
-     * @param search
+     * @param search ***UNUSED***
      */
     async fillSearchOptions(search: string) {
         await this.page
@@ -68,7 +98,7 @@ export default class HomePage extends BasePage {
             .fill(search);
     }
     /**
-     * This function clicks first search option displayed on the search list
+     * This function clicks first search option displayed on the search list ***UNUSED***
      */
     async clickSearchOptionInList() {
         await this.page.locator(this.searchResult).first().click();

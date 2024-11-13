@@ -19,7 +19,7 @@ export default abstract class BasePage {
     public get dialogContentLocator() {
         return this._dialogContentLocator;
     }
-    public readonly testFileDir = "./Test Files/";
+    public readonly testFileDir = "/Test Files/*.TXT";
     private readonly schoolIdIconLocator = "#company_id_icon";
     private readonly schoolIdLocator = "input#company_id";
     private readonly multipleDialogTitleLocator = "*[id^=ui-id]";
@@ -38,8 +38,12 @@ export default abstract class BasePage {
         return this._noBtnLocator;
     }
     private readonly _submitBtnLocator = "#submit";
+    private readonly _submitBtnLocator1 = "#submit_button";
     public get submitBtnLocator() {
         return this._submitBtnLocator;
+    }
+    public get submitBtnLocator1() {
+        return this._submitBtnLocator1;
     }
     private readonly _okBtnLocator = "#btn_ok";
     public get okBtnLocator() {
@@ -48,6 +52,23 @@ export default abstract class BasePage {
     private readonly _greenIconLocator = '.faicon > i[style*="color:green"]';
     public get greenIconLocator() {
         return this._greenIconLocator;
+    }
+    private readonly _reportLocator = "#spc_rep_0";
+    public get reportLocator() {
+        return this._reportLocator;
+    }
+    private readonly _secondReportLocator = "#spc_rep_1";
+    public get secondReportLocator() {
+        return this._secondReportLocator;
+    }
+    private readonly _saveAllBtnLocator = "#save_all";
+    public get saveAllBtnLocator() {
+        return this._saveAllBtnLocator;
+    }
+
+    private readonly _closeBtnLocator = "#btn_close";
+    public get closeBtnLocator() {
+        return this._closeBtnLocator;
     }
     screenshotPath =
         "test-results/Postchecks/RunOn" +
@@ -264,9 +285,53 @@ export default abstract class BasePage {
         await this.page.locator(this.okBtnLocator).click();
     }
     /**
-     * Wait for
+     * This function is for waiting for green icon to be visible
      */
-    async waitForGreenIcon() {
-        await this.page.locator(this.greenIconLocator);
+    async expectGreenIconToBeVisible() {
+        await expect(this.page.locator(this.greenIconLocator)).toBeInViewport();
+    }
+    async expectTextNotToBeNull(text: string | null) {
+        expect(text).not.toBeNull();
+    }
+    /**
+     * This function is for checking if PDF is generated with extension on RSS570
+     */
+    async verifyPDFGeneratedWithExtOnScreen(
+        screen: string,
+        expectedText: string
+    ) {
+        await Promise.all([
+            this.expectElementToContainText(this.reportLocator, screen),
+            this.expectElementToContainText(this.reportLocator, expectedText),
+            this.expectElementToContainText(
+                this.reportLocator,
+                expectedTexts.PDFExt
+            )
+        ]);
+    }
+    /**
+     * This function is for checking if PDF is generated with extension on RSS570
+     */
+    async verifyExcelGeneratedWithExtOnScreen(
+        screen: string,
+        expectedText: string
+    ) {
+        await Promise.all([
+            this.expectElementToContainText(this.secondReportLocator, screen),
+            this.expectElementToContainText(
+                this.secondReportLocator,
+                expectedText
+            ),
+            this.expectElementToContainText(
+                this.secondReportLocator,
+                expectedTexts.XLSXExt
+            )
+        ]);
+    }
+    /**
+     * This function is for clicking save all button
+     */
+    async clickSaveAllButton() {
+        await this.click(this.saveAllBtnLocator);
     }
 }

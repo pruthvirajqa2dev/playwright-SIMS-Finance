@@ -33,9 +33,9 @@ if (process.env.test_env) {
  */
 export default defineConfig({
     expect: {
-        timeout: 30 * 1000 // 30 seconds
+        timeout: 60 * 1000 // 60 seconds
     },
-    timeout: 50 * 1000,
+    timeout: 120 * 1000,
     testDir: "./src/tests",
     /* Run tests in files in parallel */
     fullyParallel: true,

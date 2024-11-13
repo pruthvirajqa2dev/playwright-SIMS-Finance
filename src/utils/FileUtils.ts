@@ -1,28 +1,27 @@
 import * as fs from "fs";
 import * as path from "path";
+import { glob } from "glob";
+import fsPromise from "fs/promises";
+import expectedTexts from "../data/expectedTexts.json";
+
 export default class FileUtils {
+    private static readonly pdfDownloadLocation = "/PDFDownloads";
     /**
      * This function writes a file to file system with default content
      * @param ext
      * @returns Promise
      */
-    static async fsWriteFile(ext: string) {
-        console.log("Current directory is: " + __dirname);
-        var dir = "../../";
-        // if (process.env.CI ? true : false) dir = "../../../";
-        // else dir = "../../";
-        console.log("Previous directory is: " + path.join(__dirname, "../"));
+    static async fsWriteFile(ext: string): Promise<string | null> {
         return new Promise((resolve) => {
-            if (!fs.existsSync(path.join(__dirname, dir, "/Test Files"))) {
+            const dir = process.cwd() + "/" + expectedTexts.testFileDir + "/";
+            console.log("Writing file in: " + dir);
+            if (!fs.existsSync(path.join(dir))) {
                 // If it doesn't exist, create the directory
-                fs.mkdirSync(path.join(__dirname, dir, "/Test Files"));
+                fs.mkdirSync(path.join(dir));
             }
+            const fileNameWithExt: string = "test" + Date.now() + ext;
             fs.writeFile(
-                path.join(
-                    __dirname,
-                    dir,
-                    "/Test Files/test" + Date.now() + ext
-                ),
+                path.join(dir + fileNameWithExt),
                 "SIMS Finance Test File Content " + Date.now(),
                 function (err) {
                     if (err) {
@@ -30,52 +29,79 @@ export default class FileUtils {
                     }
                 }
             );
-            resolve("File created");
+            resolve(expectedTexts.testFileDir + "/" + fileNameWithExt);
         });
-    }
-    /**
-     * This function returns the latest file name from provided directory
-     * @param dirPath
-     * @returns latestFile.name
-     */
-    static getNewestFileNameInDir(dirPath: string): string | null {
-        const files = fs.readdirSync(path.join(__dirname, "../../", dirPath));
-
-        if (files.length === 0) {
-            console.log("No files in the directory");
-            return null;
-        }
-
-        const latestFile = files
-            .map((fileName) => ({
-                name: fileName,
-                time: fs.statSync(path.join(dirPath, fileName)).mtime.getTime()
-            }))
-            .sort((a, b) => b.time - a.time)[0];
-
-        return latestFile ? latestFile.name : null;
     }
     /**
      * This function is for unzipping file from provided directory
      * @param directory
      * @returns
      */
-    static async unzipFile(directory) {
+    static async unzipFile(directory: string) {
         return new Promise((resolve) => {
             console.log("Into unzip file");
             console.log("directory:" + directory);
             const decompress = require("decompress");
-            if (!fs.existsSync(path.join(__dirname, "/PDFDownloads"))) {
+            if (
+                !fs.existsSync(
+                    path.join(process.cwd(), this.pdfDownloadLocation)
+                )
+            ) {
                 // If it doesn't exist, create the directory
-                fs.mkdirSync(path.join(__dirname, "/PDFDownloads"));
+                fs.mkdirSync(
+                    path.join(process.cwd(), this.pdfDownloadLocation)
+                );
             }
-            decompress(directory, __dirname + "/unzip" + Date.now().toString())
-                .then((files) => {
+            const unzipLocation =
+                process.cwd() +
+                this.pdfDownloadLocation +
+                "/unzip" +
+                Date.now().toString();
+
+            console.log("Unzipping in: " + unzipLocation);
+            decompress(directory, unzipLocation)
+                .then((files: unknown) => {
                     resolve(files);
                 })
-                .catch((error) => {
+                .catch((error: any) => {
                     console.log(error);
                 });
+        });
+    }
+    async deleteDirectoryRecursive(directoryPath: string): Promise<void> {
+        try {
+            const entries = await fsPromise.readdir(directoryPath, {
+                withFileTypes: true
+            });
+
+            for (const entry of entries) {
+                const entryPath = path.join(directoryPath, entry.name);
+
+                if (entry.isDirectory()) {
+                    await this.deleteDirectoryRecursive(entryPath);
+                } else {
+                    await fsPromise.unlink(entryPath);
+                }
+            }
+
+            await fsPromise.rmdir(directoryPath);
+        } catch (error) {
+            console.error(`Error deleting directory ${directoryPath}:`, error);
+            throw error;
+        }
+    }
+    static async latestFileNameLookup(directory: string): Promise<string> {
+        console.log(
+            "Looking up latest file name using directory: " + directory
+        );
+        return new Promise((resolve) => {
+            const newestFile = glob
+                .sync(directory)
+                .map((name) => ({ name, ctime: fs.statSync(name).ctime }))
+                .sort((a, b) => b.ctime.getTime() - a.ctime.getTime())[0].name;
+
+            console.log("Returning " + newestFile + " from directory");
+            resolve(newestFile);
         });
     }
 }

@@ -1,12 +1,12 @@
-import test, { BrowserContext, Page } from "@playwright/test";
+import test, { expect } from "@playwright/test";
 import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import ENV from "../config/env";
 import expectedTexts from "../data/expectedTexts.json";
 import SPC420 from "../pages/SPC420";
-import path from "path";
+import NML510 from "../pages/NML510";
 import RSS570 from "../pages/RSS570";
-const { chromium } = require("playwright");
+import PDFUtils from "../utils/PDFUtils";
 
 async function login(page, testInfo) {
     const loginPage = new LoginPage(page, testInfo);
@@ -100,8 +100,7 @@ test.describe(
                 "Go to the screen " + screen,
                 async () => {
                     await homepage.clickHamburgerMenuButton();
-                    await homepage.fillSearchOptions(screen);
-                    await homepage.clickSearchOptionInList();
+                    await homepage.goToScreenUsingMenusOption(screen);
                     return new SPC420(page, testInfo);
                 }
             );
@@ -123,27 +122,30 @@ test.describe(
                     );
                 }
             );
-            await test.step("Upload the file", async () => {
-                await spc420.uploadFile();
-                await spc420.selectSchoolId(expectedTexts.expectedSchoolName);
-                await spc420.clickButtonUsingRole("Update");
-            });
-            await test.step("Delete the uploaded file", async () => {
-                await spc420.verifyUploadedFileDetailsOnTableRecord();
-                await spc420.deleteUploadedFile();
+            const createdFileNameWithExt: string | null =
+                await test.step("Upload the file", async () => {
+                    var createdFileNameWithExt: string | null =
+                        await spc420.uploadFile();
+                    await spc420.selectSchoolId(
+                        expectedTexts.expectedSchoolName
+                    );
+                    await spc420.clickButtonUsingRole("Update");
+                    return createdFileNameWithExt;
+                });
+            expect(createdFileNameWithExt).not.toBeNull();
+            await test.step(`Delete the uploaded file ${createdFileNameWithExt!}`, async () => {
+                await spc420.verifyUploadedFileDetailsOnTableRecord(
+                    createdFileNameWithExt!
+                );
+                await spc420.deleteUploadedFile(createdFileNameWithExt!);
             });
         });
-        test("RSS570 - Crystal Report", async ({ browser }, testInfo) => {
+        test("RSS570 - Crystal Report", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "RSS570 - Crystal Report",
                 description:
                     "This test is for checking if RSS570 Crystal Report is generated for given criteria"
             });
-            // Launch a new browser context
-            const context: BrowserContext = await browser.newContext();
-
-            // Open an initial page
-            let page: Page = await context.newPage();
             //Login
             const homepage =
                 await test.step(`Login using ${ENV.USERID!}`, async () => {
@@ -154,8 +156,7 @@ test.describe(
                 "Go to the screen " + screen,
                 async () => {
                     await homepage.clickHamburgerMenuButton();
-                    await homepage.fillSearchOptions(screen);
-                    await homepage.clickSearchOptionInList();
+                    await homepage.goToScreenUsingMenusOption(screen);
                     return new RSS570(page, testInfo);
                 }
             );
@@ -177,38 +178,106 @@ test.describe(
                     expectedTexts.expectedJobProcessingDialogTitle
                 );
                 await rss570.clickOkBtn();
+            });
+            await test.step("Wait for green icon on Background processing dialog", async () => {
                 await rss570.checkIfDialogExistsWithTitle(
                     expectedTexts.expectedBackgroundProcessingDialogTitle
                 );
                 await rss570.expectGreenIconToBeVisible();
             });
             await test.step("Verify PDF is generated in RSS570", async () => {
-                await rss570.verifyPDFGeneratedWithExtOnRSS570();
+                await rss570.verifyPDFGeneratedWithExtOnScreen(
+                    expectedTexts.RSS570,
+                    rss570.outstandingAccrualsText
+                );
             });
             await test.step("Click on PDF report", async () => {
-                await page.waitForTimeout(2000);
-
-                // context.waitForEvent("page"), // Wait for new page (tab) to open
-                const [newPage] = await Promise.all([
-                    context.waitForEvent("page"),
-                    rss570.clickReportButton() // Adjust selector to open a new tab
-                ]);
-
-                // Ensure new tab loads completely
-                await newPage.waitForLoadState();
-                // Retrieve the current (most recently opened) page
-                const pages: Page[] = context.pages();
-                console.log("Length of pages:" + pages.length);
-                const currentPage = pages[1]; // Get the last opened page
-
-                for (let i = 0; i < pages.length; i++) {
-                    console.log("Title:" + pages[i].title());
+                await page.waitForTimeout(1000);
+                const downloadPromise = page.waitForEvent("download");
+                await rss570.clickSaveAllButton();
+                const download = await downloadPromise;
+                await PDFUtils.unzipDownloadedZip(download);
+                const unzipDir = process.cwd() + "/PDFDownloads/unzip*/";
+                const pdfText: string | null =
+                    await PDFUtils.readLatestPDFFromLatestUnzipDir(unzipDir);
+                await rss570.expectTextNotToBeNull(pdfText);
+                expect(pdfText).toContain(expectedTexts.expectedSchoolID);
+                expect(pdfText).toContain(expectedTexts.expectedSchoolName);
+                expect(pdfText).toContain(
+                    "Sorted By:\n" +
+                        expectedTexts.expectedSupplierOrNominalSortRSS570
+                );
+                expect(pdfText).toContain(ENV.USERID!.toUpperCase());
+                //"Sorted By:\nS"
+            });
+        });
+        test("NML510 - Trial Balance Report", async ({ page }, testInfo) => {
+            test.info().annotations.push({
+                type: "NML510 - Trial Balance Report",
+                description:
+                    "This test is for checking if NML510 Trial Balance Report is generated for given criteria"
+            });
+            //Login
+            const homepage =
+                await test.step(`Login using ${ENV.USERID!}`, async () => {
+                    return await login(page, testInfo);
+                });
+            const screen = expectedTexts.NML510;
+            const nml510 = await test.step(
+                "Go to the screen " + screen,
+                async () => {
+                    await homepage.clickHamburgerMenuButton();
+                    await homepage.goToScreenUsingMenusOption(screen);
+                    return new NML510(page, testInfo);
                 }
+            );
+            await test.step("Verify valid page elements are visible", async () => {
+                await nml510.expectPageElementsVisibilityOnLoad();
+            });
+            await test.step("Enter school Id and click submit", async () => {
+                await nml510.selectSchoolId(expectedTexts.expectedSchoolName);
+                await nml510.clickSubmitBtn();
+            });
 
-                // Verify the title of the new tab
-                const title = await currentPage.title(); // Replace with the expected title
-                console.log("Current page title:", title);
-                await rss570.verifyPDFTabTitle(title);
+            await test.step("Submit job on job processing dialog and wait for green icon on Background processing dialog", async () => {
+                await nml510.checkIfDialogExistsWithTitle(
+                    expectedTexts.expectedJobProcessingDialogTitle
+                );
+                await nml510.clickOkBtn();
+            });
+            await test.step("Wait for green icon on Background processing dialog", async () => {
+                await nml510.checkIfDialogExistsWithTitle(
+                    expectedTexts.expectedBackgroundProcessingDialogTitle
+                );
+                await nml510.expectGreenIconToBeVisible();
+            });
+            await test.step(
+                "Verify PDF report is generated in NML510 with text " +
+                    nml510.trialBalanceText,
+                async () => {
+                    await nml510.verifyPDFGeneratedWithExtOnScreen(
+                        expectedTexts.NML510,
+                        nml510.trialBalanceText
+                    );
+                }
+            );
+            await test.step("Click on PDF report", async () => {
+                await page.waitForTimeout(2500);
+                const downloadPromise = page.waitForEvent("download");
+                await nml510.clickSaveAllButton();
+                const download = await downloadPromise;
+                await PDFUtils.unzipDownloadedZip(download);
+                const unzipDir = process.cwd() + "/PDFDownloads/unzip*/";
+                const pdfText: string | null =
+                    await PDFUtils.readLatestPDFFromLatestUnzipDir(unzipDir);
+                await nml510.expectTextNotToBeNull(pdfText);
+                expect(pdfText).toContain(expectedTexts.expectedSchoolID);
+                expect(pdfText).toContain(expectedTexts.expectedSchoolName);
+                expect(pdfText).toContain("Name : NML510_01");
+                expect(pdfText).toContain(ENV.USERID!.toUpperCase());
+            });
+            await test.step("Click on Close", async () => {
+                await nml510.click(nml510.closeBtnLocator);
             });
         });
     }

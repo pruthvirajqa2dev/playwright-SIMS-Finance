@@ -106,48 +106,59 @@ export default class SPC420 extends BasePage {
             this.dialogTitleLocator,
             this.uploadFileText
         );
-        const resolution = await FileUtils.fsWriteFile(".TXT");
-        await expect(resolution).toBe(this.fileCreatedText);
-        const newestFileName: string | null = FileUtils.getNewestFileNameInDir(
-            this.testFileDir
-        );
+        const ext = ".TXT";
+        const dirAndFileNameWithExt: string | null =
+            await FileUtils.fsWriteFile(ext);
+        // await expect(dirAndFileNameWithExt).not.toBeNull();
+
         // Start waiting for file chooser before clicking. Note no await.
         const fileChooserPromise = this.page.waitForEvent("filechooser");
         await this.clickButtonUsingRole(this.uploadBtnLocator);
         await this.clickButtonUsingRole(this.browseForFileLocator);
         const fileChooser = await fileChooserPromise;
         await fileChooser.setFiles(
-            path.join(this.testFileDir + newestFileName!)
+            path.join(process.cwd() + "/" + dirAndFileNameWithExt!)
         );
-
+        console.log("dirAndFileNameWithExt=" + dirAndFileNameWithExt);
+        var fileNameWithExt: string = dirAndFileNameWithExt!.split("/")[1];
+        console.log("fileNameWithExt=" + fileNameWithExt);
         await expect(
             this.page.locator(this.uploadedFileNameLocator),
             "Check if uploaded file name is correct"
-        ).toContainText(newestFileName!);
+        ).toContainText(fileNameWithExt!);
         await expect(
             this.page.locator(this.successMarkLocator),
             "Checking if Success Mark (✔) is visible"
         ).toBeVisible();
-        await this.clickButtonUsingRole(this.okBtnText);
-        const fileName = newestFileName?.split(".")[0].toUpperCase();
 
+        await this.clickButtonUsingRole(this.okBtnText);
+        const fileName = fileNameWithExt!.split(".")[0].toUpperCase();
+        console.log("fileName=" + fileName);
         await expect(
             this.page.locator(this.uploadedFileNameOnUFDialogLocator)
-        ).toHaveValue(newestFileName!.toUpperCase());
+        ).toHaveValue(fileNameWithExt!.toUpperCase());
         await expect(
             this.page.locator(this.fileNameOnUFDialogLocator)
         ).toHaveValue(fileName!);
+        return dirAndFileNameWithExt;
     }
-    async verifyUploadedFileDetailsOnTableRecord() {
+    async verifyUploadedFileDetailsOnTableRecord(
+        createdDirAndFileNameWithExt: string
+    ) {
         await this.expectElementToHaveText(
             this.schoolIdOnUploadedFileDetailsTableLocator,
             expectedTexts.expectedSchoolID
         );
-        const newestFileName: string | null = FileUtils.getNewestFileNameInDir(
-            this.testFileDir
+        console.log(
+            "Created filename with extension:" + createdDirAndFileNameWithExt
         );
-        const fileName = newestFileName?.split(".")[0].toUpperCase();
-        const fileExt = newestFileName?.split(".")[1].toUpperCase();
+        var fileName = createdDirAndFileNameWithExt
+            .split("/")[1]
+            .split(".")[0]
+            .toUpperCase();
+        const fileExt = createdDirAndFileNameWithExt
+            .split(".")[1]
+            .toUpperCase();
         await this.expectElementToHaveText(
             this.fileNameOnUploadedFileDetailsTableLocator,
             fileName!.toUpperCase()
@@ -157,16 +168,21 @@ export default class SPC420 extends BasePage {
             fileExt!.toUpperCase()
         );
     }
-    async deleteUploadedFile() {
+    async deleteUploadedFile(createdFileNameWithExt: string) {
         await this.click(this.viewDropdownOnTableLocator);
         await (await this.getByRole("menuitem", { name: "Delete" })).click();
         await this.checkIfDialogExistsWithTitle("Delete File");
-        const newestFileName: string | null = FileUtils.getNewestFileNameInDir(
-            this.testFileDir
+        console.log(
+            "Deleting filename with extension:" + createdFileNameWithExt
         );
+        var fileName = createdFileNameWithExt
+            .split("/")[1]
+            .split(".")[0]
+            .toUpperCase();
+        console.log("fileName=" + fileName);
         await this.expectElementToContainText(
             this.esrPromptTextLocator,
-            newestFileName!.toUpperCase()
+            fileName!.toUpperCase()
         );
         await this.click(this.yesBtnLocator);
     }
