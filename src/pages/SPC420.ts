@@ -21,20 +21,17 @@ export default class SPC420 extends BasePage {
     private readonly spc420TreeItemWithDynTextLocator = '.esr_tree>>text="%"';
     private readonly spc420SubTreeItemWithDynTextLocator =
         '.esr_tree_open>>text="%"';
-    private readonly downArrowLocator =
-        '.fa-angle-down[data-control_type="TREE_IMAGE"]';
+    _downArrowLocator = '.fa-angle-down[data-control_type="TREE_IMAGE"]';
     private readonly pkgDirLocator = '[data-alias="PACKAGE_DIR"]';
     private readonly uploadFileBtnRoleName = "Click to Upload File";
     private readonly uploadBtnLocator = "Upload";
 
     private readonly uploadFileText = "Upload File";
-    private readonly browseForFileLocator = "Browse for a file";
     private readonly okBtnText = "OK";
     private readonly fileCreatedText = "File created";
     private readonly uploadedFileNameLocator = ".dhx_list-item--name";
     private readonly uploadedFileNameOnUFDialogLocator = "#physical_file";
     private readonly fileNameOnUFDialogLocator = "#rep_name";
-    private readonly successMarkLocator = "*[class^=dhx_item--success-mark]";
     private readonly schoolIdOnUploadedFileDetailsTableLocator =
         '[axes="COMPANY_ID"] > div';
     private readonly fileNameOnUploadedFileDetailsTableLocator =
@@ -171,7 +168,7 @@ export default class SPC420 extends BasePage {
     async deleteUploadedFile(createdFileNameWithExt: string) {
         await this.click(this.viewDropdownOnTableLocator);
         await (await this.getByRole("menuitem", { name: "Delete" })).click();
-        await this.checkIfDialogExistsWithTitle("Delete File");
+        await this.checkIfDialogExistsWithTitle(expectedTexts.deleteFileText);
         console.log(
             "Deleting filename with extension:" + createdFileNameWithExt
         );

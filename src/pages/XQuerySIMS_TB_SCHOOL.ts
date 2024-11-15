@@ -80,7 +80,9 @@ export default class XQuerySIMS_TB_SCHOOL extends BasePage {
         await this.click(this.executeBtnLocator);
     }
     async expectTitleToBeVisible() {
-        await this.expectElementToBeVisible(this.xqueryTitleLocator);
+        await this.expectElementToBeVisibleUsingLocator(
+            this.xqueryTitleLocator
+        );
     }
     /**
      * This function selects school id provided

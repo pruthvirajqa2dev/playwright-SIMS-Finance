@@ -77,8 +77,52 @@ export default abstract class BasePage {
     set closeBtnLocator(locator: string) {
         this._closeBtnLocator = locator;
     }
+    private readonly _breadcrumbLocator = "div[id*=esr_breadcrumb]";
+    public get breadcrumbLocator() {
+        return this._breadcrumbLocator;
+    }
+    private readonly _attachmentBtnLocator = "#esr_attachment_manager";
+    public get attachmentBtnLocator() {
+        return this._attachmentBtnLocator;
+    }
+    private readonly _btnElementListLocator = "div.esr_multibutton";
+    public get btnElementListLocator() {
+        return this._btnElementListLocator;
+    }
+    private readonly _multiBtnLocator = ".multibutton_content";
+    public get multiBtnLocator() {
+        return this._multiBtnLocator;
+    }
+    private readonly _commonDhxBtnLocator = ".dhx_button";
+    public get commonDhxBtnLocator() {
+        return this._commonDhxBtnLocator;
+    }
     private readonly pdfIconLocator =
         "div[style*='background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);']";
+    private readonly _browseForFileLocator = "Browse for a file";
+    public get browseForFileLocator() {
+        return this._browseForFileLocator;
+    }
+    private readonly _fileNameAfterUploadLocator = ".dhx_list-item--name";
+    public get fileNameAfterUploadLocator() {
+        return this._fileNameAfterUploadLocator;
+    }
+    private readonly _successMarkLocator = "*[class^=dhx_item--success-mark]";
+    public get successMarkLocator() {
+        return this._successMarkLocator;
+    }
+    private readonly _upArrowLocator = ".fa-sort-amount-up";
+    public get upArrowLocator() {
+        return this._upArrowLocator;
+    }
+    protected _downArrowLocator = ".fa-sort-amount-down";
+    public get downArrowLocator() {
+        return this._downArrowLocator;
+    }
+    private readonly _sortableGridLocator = ".esr_grid_sort_span ";
+    public get sortableGridLocator() {
+        return this._sortableGridLocator;
+    }
     screenshotPath =
         "test-results/Postchecks/RunOn" +
         new Date().toLocaleDateString("en-GB").replaceAll("/", "") +
@@ -159,7 +203,7 @@ export default abstract class BasePage {
     }
 
     // Assertions
-    async expectElementToBeVisible(locator: string) {
+    async expectElementToBeVisibleUsingLocator(locator: string) {
         await expect(this.page.locator(locator)).toBeVisible();
     }
 
@@ -257,7 +301,7 @@ export default abstract class BasePage {
     async checkIfDialogExistsWithTitle(title: string) {
         const locator: string =
             this.multipleDialogTitleLocator + '>>text="' + title + '"';
-        await this.expectElementToBeVisible(locator);
+        await this.expectElementToBeVisibleUsingLocator(locator);
     }
     /**
      * This function selects school id provided
@@ -345,6 +389,6 @@ export default abstract class BasePage {
     }
 
     async waitForPdfIconLocator() {
-        await this.expectElementToBeVisible(this.pdfIconLocator);
+        await this.expectElementToBeVisibleUsingLocator(this.pdfIconLocator);
     }
 }

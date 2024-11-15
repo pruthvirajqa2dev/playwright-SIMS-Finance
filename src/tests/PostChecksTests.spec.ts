@@ -393,6 +393,24 @@ test.describe(
             });
             await test.step("Fill up the form and click search", async () => {
                 await rss310q.selectSchoolId(expectedTexts.expectedSchoolName);
+                await rss310q.clickSearchBtn();
+            });
+            await test.step("Click random view button and then verify breadcrumbs", async () => {
+                const random = await rss310q.clickRandomViewButton();
+                await rss310q.verifyBreadcrumbs(random);
+            });
+            const uploadedFileName =
+                await test.step("Upload Attachment", async () => {
+                    const filename = await rss310q.uploadAttachment();
+                    return filename;
+                });
+            await test.step(`Verify attachment details for ${uploadedFileName}`, async () => {
+                await rss310q.verifyAttachmentDetails(uploadedFileName);
+                await rss310q.clickOkOnAttachementDetails();
+                await rss310q.verifyUploadedAttachmentsOnAttachmentsDialog(
+                    uploadedFileName
+                );
+                await rss310q.clickCloseBtn();
             });
         });
     }

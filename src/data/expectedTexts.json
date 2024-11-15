@@ -20,5 +20,14 @@
     "expectedYear":"2324",
     "expectedPeriod":"12",
     "exepctedSimsTbDialogText":"SIMS_TB_SCHOOL - SIMS Trial Balance School",
-    "expectedEmailId": "pruthviraj.pardeshi@parentpay.com"
+    "exepctedAttachmentsDialogText":"Attachments",
+    "exepctedAttachmentDetailsDialogText":"Attachment Details",
+    "expectedEmailId": "pruthviraj.pardeshi@parentpay.com",
+    "addFileText":"Add File",
+    "deleteFileText":"Delete File",
+    "savedDateText":"Saved Date",
+    "expectedSearchCriteriaText":"Search Criteria",
+    "expectedHeaderResultsText":"Header Results",
+    "expectedOrderNumberText":"Order Number",
+    "expectedHeaderDetailsText":"Header Details"
 }
