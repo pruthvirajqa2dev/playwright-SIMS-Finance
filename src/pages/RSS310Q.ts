@@ -78,7 +78,7 @@ export default class RSS310Q extends BasePage {
             expectedTexts.expectedHeaderResultsText
         );
         expect(breadcrumbs).toContainEqual(
-            expectedTexts.expectedHeaderResultsText + " (" + paddedString + ")"
+            expectedTexts.expectedHeaderDetailsText + " (" + paddedString + ")"
         );
     }
     /**
@@ -167,7 +167,6 @@ export default class RSS310Q extends BasePage {
             .filter({ hasText: expectedTexts.savedDateText })
             .dblclick();
 
-        // await this.expectElementToBeVisibleUsingLocator();
         await expect(
             this.page
                 .locator(this.documentTitleColoumn)
