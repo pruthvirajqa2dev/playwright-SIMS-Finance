@@ -139,57 +139,104 @@ export default abstract class BasePage {
     async navigateTo(url: string) {
         await this.page.goto(url);
     }
-
+    /**
+     *
+     */
     async navigateBack() {
         await this.page.goBack();
     }
-
+    /**
+     *
+     */
     async navigateForward() {
         await this.page.goForward();
     }
 
     // Common element interaction methods
+    /**
+     *
+     * @param locator
+     */
     async click(locator: string) {
         await this.page.locator(locator).first().click();
     }
+    /**
+     *
+     * @param locator
+     */
     async check(locator: string) {
         await this.page.check(locator);
     }
+    /**
+     *
+     * @param locator
+     */
     async checkAndVerify(locator: string) {
         await this.check(locator);
         await expect(await this.page.isChecked(locator)).toBeTruthy();
     }
-
+    /**
+     *
+     * @param locator
+     * @param text
+     */
     async fill(locator: string, text: string) {
         await this.page.locator(locator).fill(text, { force: true });
     }
-
+    /**
+     *
+     * @param locator
+     * @param text
+     */
     async fillTextAndVerify(locator: string, text: string) {
         // Fill text
         await this.fill(locator, text);
         //Verify Text filled
         await this.expectElementToContainText(locator, text);
     }
+    /**
+     *
+     * @param locator
+     * @param value
+     */
     async selectOption(locator: string, value: string) {
         await this.page.locator(locator).selectOption(value);
     }
 
     // Advanced element interaction methods
+    /**
+     *
+     * @param role
+     * @param options
+     * @returns
+     */
     async getByRole(
         role,
         options?: { name?: string; hidden?: boolean; exact?: boolean }
     ) {
         return this.page.getByRole(role, options);
     }
-
+    /**
+     *
+     * @param label
+     * @returns
+     */
     async getByLabel(label: string) {
         return this.page.getByLabel(label);
     }
-
+    /**
+     *
+     * @param placeholder
+     * @returns
+     */
     async getByPlaceholder(placeholder: string) {
         return this.page.getByPlaceholder(placeholder);
     }
-
+    /**
+     *
+     * @param altText
+     * @returns
+     */
     async getByAltText(altText: string) {
         return this.page.getByAltText(altText);
     }
@@ -203,26 +250,47 @@ export default abstract class BasePage {
     }
 
     // Assertions
+    /**
+     *
+     * @param locator
+     */
     async expectElementToBeVisibleUsingLocator(locator: string) {
         await expect(this.page.locator(locator)).toBeVisible();
     }
-
+    /**
+     *
+     * @param locator
+     */
     async expectElementToBeHidden(locator: string) {
         await expect(this.page.locator(locator)).toBeHidden();
     }
-
+    /**
+     *
+     * @param locator
+     * @param text
+     */
     async expectElementToHaveText(locator: string, text: string) {
         await expect(
             this.page.locator(locator).first(),
             "Check if page element has text :" + text
         ).toHaveText(text);
     }
+    /**
+     *
+     * @param locator
+     * @param text
+     */
     async expectElementToContainText(locator: string, text: string) {
         await expect(
             this.page.locator(locator).first(),
             "Check if page element contains text :" + text
         ).toContainText(text);
     }
+    /**
+     *
+     * @param locator
+     * @param value
+     */
     async expectElementToHaveValue(locator: string, value: string) {
         await expect(
             this.page.locator(locator).first(),
@@ -247,10 +315,17 @@ export default abstract class BasePage {
     }
 
     // Additional methods (as needed)
+    /**
+     *
+     * @param path
+     */
     async screenshot(path: string) {
         await this.page.screenshot({ path });
     }
-
+    /**
+     *
+     * @returns
+     */
     async getURL() {
         return this.page.url();
     }
@@ -343,6 +418,10 @@ export default abstract class BasePage {
     async expectGreenIconToBeVisible() {
         await expect(this.page.locator(this.greenIconLocator)).toBeInViewport();
     }
+    /**
+     *
+     * @param text
+     */
     async expectTextNotToBeNull(text: string | null) {
         expect(text).not.toBeNull();
     }
@@ -387,7 +466,9 @@ export default abstract class BasePage {
     async clickSaveAllButton() {
         await this.click(this.saveAllBtnLocator);
     }
-
+    /**
+     *
+     */
     async waitForPdfIconLocator() {
         await this.expectElementToBeVisibleUsingLocator(this.pdfIconLocator);
     }

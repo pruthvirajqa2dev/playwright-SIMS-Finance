@@ -1,5 +1,4 @@
 import BasePage from "./BasePage";
-import elementAttributes from "../data/elementAttributes.json";
 import expectedTexts from "../data/expectedTexts.json";
 import { expect, Page } from "@playwright/test";
 // <reference lib="dom"/>
@@ -79,6 +78,9 @@ export default class XQuerySIMS_TB_SCHOOL extends BasePage {
     async clickExecuteBtn() {
         await this.click(this.executeBtnLocator);
     }
+    /**
+     *
+     */
     async expectTitleToBeVisible() {
         await this.expectElementToBeVisibleUsingLocator(
             this.xqueryTitleLocator

@@ -42,6 +42,7 @@ export default class RSS310Q extends BasePage {
     }
     /**
      *
+     * @returns
      */
     async clickRandomViewButton(): Promise<number> {
         if (await this.page.locator(this.downArrowLocator).isVisible()) {
@@ -83,6 +84,7 @@ export default class RSS310Q extends BasePage {
     }
     /**
      *
+     * @returns
      */
     async uploadAttachment() {
         //CLick attachments icon
@@ -125,6 +127,7 @@ export default class RSS310Q extends BasePage {
     }
     /**
      *
+     * @param uploadedFileName
      */
     async verifyAttachmentDetails(uploadedFileName: string) {
         //Verify dialog
@@ -151,6 +154,7 @@ export default class RSS310Q extends BasePage {
     }
     /**
      *
+     * @param uploadedFileName
      */
     async verifyUploadedAttachmentsOnAttachmentsDialog(
         uploadedFileName: string
@@ -183,7 +187,9 @@ export default class RSS310Q extends BasePage {
             .textContent();
         expect(savedDate).toContain(new Date().toLocaleDateString("en-GB"));
     }
-
+    /**
+     *
+     */
     async clickCloseBtn() {
         await this.click(this._closeBtnLocator);
     }

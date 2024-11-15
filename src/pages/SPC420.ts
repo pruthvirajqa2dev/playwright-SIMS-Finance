@@ -1,8 +1,5 @@
-import { expect, Page } from "@playwright/test";
-import HomePage from "./HomePage";
+import { expect } from "@playwright/test";
 import BasePage from "./BasePage";
-import * as fs from "fs";
-import { fileURLToPath } from "url";
 import path from "path";
 import expectedTexts from "../data/expectedTexts.json";
 import FileUtils from "../utils/FileUtils";
@@ -85,6 +82,8 @@ export default class SPC420 extends BasePage {
     }
     /**
      *
+     * @param dir
+     * @param subdir
      */
     async verifySubDirectoryOpened(dir: string, subdir: string) {
         //Sub Directory Heading
@@ -96,6 +95,7 @@ export default class SPC420 extends BasePage {
 
     /**
      * Function to upload file using fileChooser class in Playwright
+     * @returns
      */
     async uploadFile() {
         await this.clickButtonUsingRole(this.uploadFileBtnRoleName);
@@ -106,7 +106,6 @@ export default class SPC420 extends BasePage {
         const ext = ".TXT";
         const dirAndFileNameWithExt: string | null =
             await FileUtils.fsWriteFile(ext);
-        // await expect(dirAndFileNameWithExt).not.toBeNull();
 
         // Start waiting for file chooser before clicking. Note no await.
         const fileChooserPromise = this.page.waitForEvent("filechooser");
@@ -139,6 +138,10 @@ export default class SPC420 extends BasePage {
         ).toHaveValue(fileName!);
         return dirAndFileNameWithExt;
     }
+    /**
+     *
+     * @param createdDirAndFileNameWithExt
+     */
     async verifyUploadedFileDetailsOnTableRecord(
         createdDirAndFileNameWithExt: string
     ) {
@@ -165,6 +168,10 @@ export default class SPC420 extends BasePage {
             fileExt!.toUpperCase()
         );
     }
+    /**
+     *
+     * @param createdFileNameWithExt
+     */
     async deleteUploadedFile(createdFileNameWithExt: string) {
         await this.click(this.viewDropdownOnTableLocator);
         await (await this.getByRole("menuitem", { name: "Delete" })).click();

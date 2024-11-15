@@ -13,14 +13,23 @@ export default class LoginPage extends BasePage {
     private readonly passwordInputLocator = ".password";
     private readonly loginBtnLocator = ".go_button";
 
-    //Constructor
-
     //Actions
-
+    /**
+     *
+     * @param username
+     * @param password
+     */
     async fillUsernameAndPassword(username: string, password: string) {
         await this.page.locator(this.usernameInputLocator).fill(username);
         await this.page.locator(this.passwordInputLocator).fill(password);
     }
+    /**
+     *
+     * @param username
+     * @param password
+     * @param testInfo
+     * @returns
+     */
     async login(
         username: string,
         password: string,
@@ -44,6 +53,11 @@ export default class LoginPage extends BasePage {
         const homepage: HomePage = await this.clickLoginBtn(testInfo);
         return homepage;
     }
+    /**
+     *
+     * @param testInfo
+     * @returns
+     */
     async clickLoginBtn(testInfo) {
         await this.page
             .locator(this.loginBtnLocator)

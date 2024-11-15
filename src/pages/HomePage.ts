@@ -64,7 +64,7 @@ export default class HomePage extends BasePage {
         await this.page.locator(this.hamburgerMenuBtnLocator).click();
     }
     /**
-     *
+     *@param screen
      */
     async goToScreenUsingMenusOption(screen: string) {
         await this.click(this.menusLocator);
@@ -72,6 +72,11 @@ export default class HomePage extends BasePage {
         await this.click(this.filterBtnLocator);
         await this.clickScreenLocator(screen);
     }
+    /**
+     *
+     * @param baseText
+     * @returns
+     */
     createDynamicScreenNameRegex(baseText: string) {
         // Escape any special characters in baseText, then build the regex
         const escapedBaseText = baseText.replace(
@@ -81,6 +86,10 @@ export default class HomePage extends BasePage {
         const regexPattern = `${escapedBaseText} \\s*-?\\s*.*`; // Match anything after baseText
         return new RegExp(regexPattern, "i"); // Case-insensitive regex
     }
+    /**
+     *
+     * @param screen
+     */
     async clickScreenLocator(screen: string) {
         await this.page
             .locator(this.filteredMenuItemLocator)
@@ -115,6 +124,9 @@ export default class HomePage extends BasePage {
                 throw error;
             });
     }
+    /**
+     *
+     */
     async clickLogoutLabel() {
         await this.page
             .getByLabel(this.logoutLabel)
@@ -124,11 +136,16 @@ export default class HomePage extends BasePage {
                 throw error;
             });
     }
+    /**
+     *
+     */
     async logout() {
         await this.clickProfileMenu();
         await this.clickLogoutLabel();
     }
-
+    /**
+     *
+     */
     async verifyVisibilityYesNoButton() {
         await expect(
             this.page.locator(this.yesBtnLocator),
@@ -139,6 +156,9 @@ export default class HomePage extends BasePage {
             "Expect no button to be visible"
         ).toBeVisible();
     }
+    /**
+     *
+     */
     async clickyesBtnLocator() {
         await this.verifyVisibilityYesNoButton();
         await this.page
