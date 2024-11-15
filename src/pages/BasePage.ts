@@ -472,4 +472,12 @@ export default abstract class BasePage {
     async waitForPdfIconLocator() {
         await this.expectElementToBeVisibleUsingLocator(this.pdfIconLocator);
     }
+    /**
+     *
+     * @param page
+     * @param url
+     */
+    async verifyPageURL(page: Page, url) {
+        expect(page.url()).toContain(url);
+    }
 }

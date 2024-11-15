@@ -14,8 +14,8 @@ export default class HomePage extends BasePage {
     private readonly hamburgerMenuBtnLocator = "#banner_navigation_navigate";
     private readonly recentHistorySearchInputLocator =
         "input[type='text']:visible";
-    private readonly searchResult = ".ui-menu-item-wrapper";
-    private readonly profileMenuDropdown = "#esr_user_profile_menu";
+    private readonly searchResultLocator = ".ui-menu-item-wrapper";
+    private readonly profileMenuDropdownLocator = "#esr_user_profile_menu";
     private readonly logoutLabel = "Click to Logout";
     private readonly menusLocator = "[name*='_esr_nav_ESR_NAV_PANE']";
     private readonly filterInputLocator =
@@ -23,6 +23,7 @@ export default class HomePage extends BasePage {
     private readonly filterBtnLocator = "#esr_tree_filter_button";
     private readonly filteredMenuItemLocator =
         "div.esr_tree_selectable[name*=_esr_nav_ESR_MENUS_TREE_]";
+    private readonly helpLinkLocator = "[aria-label=Help]";
     //Constructor
 
     //Actions
@@ -110,14 +111,14 @@ export default class HomePage extends BasePage {
      * This function clicks first search option displayed on the search list ***UNUSED***
      */
     async clickSearchOptionInList() {
-        await this.page.locator(this.searchResult).first().click();
+        await this.page.locator(this.searchResultLocator).first().click();
     }
     /**
      *This function clicks on profile menu
      */
     async clickProfileMenu() {
         await this.page
-            .locator(this.profileMenuDropdown)
+            .locator(this.profileMenuDropdownLocator)
             .click()
             .catch((error) => {
                 console.error(`Error clicking profile menu dropdown: ${error}`);
@@ -168,5 +169,11 @@ export default class HomePage extends BasePage {
                 console.error(`Error clicking yes button: ${error}`);
                 throw error;
             });
+    }
+    /**
+     *
+     */
+    async clickHelpLink() {
+        await this.click(this.helpLinkLocator);
     }
 }

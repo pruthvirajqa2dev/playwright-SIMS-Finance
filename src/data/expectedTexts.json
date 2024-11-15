@@ -28,6 +28,8 @@
     "savedDateText":"Saved Date",
     "expectedSearchCriteriaText":"Search Criteria",
     "expectedHeaderResultsText":"Header Results",
-    "expectedOrderNumberText":"Order Number",
+    "expectedOrderNumberText":"Order Number",    
+    "tenant": "sfdemosite130",
+    "expectedHelpUrl":"/help/int/webhelp/int.htm",
     "expectedHeaderDetailsText":"Header Details"
 }

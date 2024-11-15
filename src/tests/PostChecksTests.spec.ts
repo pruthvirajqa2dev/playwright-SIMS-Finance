@@ -142,6 +142,7 @@ test.describe(
                 await spc420.deleteUploadedFile(createdFileNameWithExt!);
             });
         });
+        //Test case 3
         test("RSS570 - Crystal Report", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "RSS570 - Crystal Report",
@@ -213,6 +214,7 @@ test.describe(
                 //"Sorted By:\nS"
             });
         });
+        //Test case 4
         test("NML510 - Trial Balance Report", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "NML510 - Trial Balance Report",
@@ -282,6 +284,7 @@ test.describe(
                 await nml510.click(nml510.closeBtnLocator);
             });
         });
+        //Test case 5
         test("SIMS_TB_SCHOOL - XQuery Report - Execute", async ({
             page
         }, testInfo) => {
@@ -324,6 +327,7 @@ test.describe(
                 await simsTbSchool.clickCloseBtnOnNewTab(newTab);
             });
         });
+        //Test case 6
         test("SIMS_TB_SCHOOL - XQuery Report - Distribute", async ({
             page
         }, testInfo) => {
@@ -368,6 +372,7 @@ test.describe(
                 await simsTbSchool.clickOkBtn();
             });
         });
+        //Test case 7
         test("RSS310Q - Attachments", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "RSS310Q - Attachments",
@@ -411,6 +416,33 @@ test.describe(
                     uploadedFileName
                 );
                 await rss310q.clickCloseBtn();
+            });
+        });
+        //Test case 8
+        test("Help screen", async ({ page }, testInfo) => {
+            test.info().annotations.push({
+                type: "Help screen",
+                description:
+                    "This test is for checking if help screen is working"
+            });
+            //Login
+            const homepage =
+                await test.step(`Login using ${ENV.USERID!}`, async () => {
+                    return await login(page, testInfo);
+                });
+            await test.step("Click help screen", async () => {
+                const [newTab] = await Promise.all([
+                    page.waitForEvent("popup"), // Wait for the new tab to open
+                    homepage.clickHelpLink() // Click the button that opens the new tab
+                ]);
+                await newTab.waitForLoadState();
+                homepage.verifyPageURL(
+                    newTab,
+                    `${process.env.URL}` +
+                        "/" +
+                        expectedTexts.tenant +
+                        expectedTexts.expectedHelpUrl
+                );
             });
         });
     }
