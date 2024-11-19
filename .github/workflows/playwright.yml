@@ -1,17 +1,19 @@
 name: Playwright Tests
+
 on:
     workflow_dispatch:
     push:
         branches: [Main]
     pull_request:
         branches: [Main]
+
 jobs:
     playwright-test:
         name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }})
         if: ${{ always() }}
         timeout-minutes: 60
         continue-on-error: true
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
         permissions:
             contents: read
             pages: write
@@ -19,6 +21,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
+                os: [ubuntu-latest, windows-latest] # Add Windows support
                 project: [chromium]
                 shardIndex: [1, 2]
                 shardTotal: [2]
@@ -30,21 +33,21 @@ jobs:
             - name: Install dependencies
               run: npm ci
             - name: Install Playwright Browsers
-              run: npx playwright install --with-deps
+              run: |
+                  npx playwright install --with-deps
+                  if ("${{ matrix.os }}" = "windows-latest" ); then npm install -g windows-build-tools; fi
             - name: Run Playwright tests
               run: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
-
             - uses: actions/upload-artifact@v4
               if: ${{ !cancelled() }}
               with:
-                  name: blob-report-${{ matrix.shardIndex }}
+                  name: blob-report-${{ matrix.os }}-${{ matrix.shardIndex }}
                   path: blob-report
                   retention-days: 30
 
     merge-reports:
         name: Merging executed reports
-        # needs: [playwright-test]
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-latest # Keep merging reports on a single OS for simplicity
         needs: [playwright-test]
         permissions:
             contents: read
@@ -65,6 +68,10 @@ jobs:
                   merge-multiple: true
             - name: Merge Playwright reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
+            - name: Create Timestamped Directory
+              run: mkdir -p playwright-report/$(date +%Y-%m-%d_%H-%M-%S)
+            - name: Move Merged Report
+              run: mv playwright-report playwright-report/$(date +%Y-%m-%d_%H-%M-%S)
             - name: Upload combined Playwright HTML Report
               uses: actions/upload-artifact@v4
               with:
