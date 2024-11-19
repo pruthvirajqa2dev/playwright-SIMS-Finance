@@ -68,25 +68,25 @@ jobs:
             - name: Set Report Directory Environment Variable
               run: echo "REPORT_DIR=$(date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_ENV
             - name: Debug REPORT_DIR
-              run: echo "REPORT_DIR=$REPORT_DIR"
+              run: echo "REPORT_DIR=${{ env.REPORT_DIR }}"
             - name: Create Timestamped Directory
-              run: mkdir -p playwright-report-$REPORT_DIR/
+              run: mkdir -p playwright-report-${{ env.REPORT_DIR }}/
             - name: Delay
               run: sleep 10 # Adjust the delay as needed
             - name: Move Merged Report
-              run: mv playwright-report/* playwright-report-$REPORT_DIR/
+              run: mv playwright-report/* playwright-report-${{ env.REPORT_DIR }}/
             - name: Upload combined Playwright HTML Report
               uses: actions/upload-artifact@v4
               with:
                   name: html-report
-                  path: playwright-report-$REPORT_DIR/
+                  path: playwright-report-${{ env.REPORT_DIR }}/
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v1
               with:
                   name: html-reports-to-pages
-                  path: playwright-report-$REPORT_DIR/
+                  path: playwright-report-${{ env.REPORT_DIR }}/
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v1
@@ -94,3 +94,4 @@ jobs:
                   artifact_name: html-reports-to-pages
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  REPORT_DIR: ${{ env.REPORT_DIR }}
