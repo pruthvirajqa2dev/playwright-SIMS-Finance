@@ -75,14 +75,14 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: html-report
-                  path: playwright-report/
+                  path: playwright-report-$REPORT_DIR/
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v1
               with:
                   name: html-reports-to-pages
-                  path: playwright-report/
+                  path: playwright-report-$REPORT_DIR/
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v1
