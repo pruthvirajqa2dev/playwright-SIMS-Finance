@@ -51,6 +51,8 @@ jobs:
             pages: write
             id-token: write
         steps:
+            - name: Debug Previous Reports URL
+              run: echo  URL is:"${{ secrets.PREVIOUS_REPORTS_URL }}"
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
