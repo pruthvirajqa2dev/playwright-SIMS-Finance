@@ -25,7 +25,6 @@ export default class SPC420 extends BasePage {
 
     private readonly uploadFileText = "Upload File";
     private readonly okBtnText = "OK";
-    private readonly fileCreatedText = "File created";
     private readonly uploadedFileNameLocator = ".dhx_list-item--name";
     private readonly uploadedFileNameOnUFDialogLocator = "#physical_file";
     private readonly fileNameOnUFDialogLocator = "#rep_name";
@@ -77,7 +76,7 @@ export default class SPC420 extends BasePage {
         const subDirLocator = await this.page.locator(
             this.spc420SubTreeItemWithDynTextLocator.replace("%", subdir)
         );
-        await expect(subDirLocator).toBeVisible;
+        expect(subDirLocator).toBeVisible;
         await subDirLocator.click();
     }
     /**
@@ -97,7 +96,7 @@ export default class SPC420 extends BasePage {
      * Function to upload file using fileChooser class in Playwright
      * @returns
      */
-    async uploadFile() {
+    async uploadFile(): Promise<string> {
         await this.clickButtonUsingRole(this.uploadFileBtnRoleName);
         await this.expectElementToHaveText(
             this.dialogTitleLocator,
@@ -136,7 +135,7 @@ export default class SPC420 extends BasePage {
         await expect(
             this.page.locator(this.fileNameOnUFDialogLocator)
         ).toHaveValue(fileName!);
-        return dirAndFileNameWithExt;
+        return dirAndFileNameWithExt!;
     }
     /**
      *

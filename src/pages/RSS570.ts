@@ -1,6 +1,6 @@
 import BasePage from "./BasePage";
 import elementAttributes from "../data/elementAttributes.json";
-import { expect, Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 // <reference lib="dom"/>
 
 /**
@@ -13,7 +13,7 @@ export default class RSS570 extends BasePage {
     private readonly supplierOrNominalSortInputLocator = "#supplier_or_normal";
     private readonly currnecyCheckBoxLocator = "#currency_control_0";
     private readonly _outstandingAccrualsText = "Outstanding Accruals";
-    public get outstandingAccrualsText() {
+    public get outstandingAccrualsText(): string {
         return this._outstandingAccrualsText;
     }
     //Actions
@@ -23,9 +23,7 @@ export default class RSS570 extends BasePage {
      */
     async expectPageElementsVisibilityOnLoad() {
         //Page Heading
-        await expect(
-            this.isHeadingVisibleByText(this.pageHeadingText)
-        ).toBeTruthy();
+        expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
         await expect(
             this.page.getByRole("heading", {
                 name: this.outstandingAccrualsText,

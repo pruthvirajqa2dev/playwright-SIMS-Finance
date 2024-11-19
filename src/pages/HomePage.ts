@@ -1,5 +1,4 @@
-import { expect, Page } from "@playwright/test";
-import exp from "constants";
+import { expect } from "@playwright/test";
 import BasePage from "./BasePage";
 /**
  * @author: @pruthvirajqa2dev
@@ -78,7 +77,7 @@ export default class HomePage extends BasePage {
      * @param baseText
      * @returns
      */
-    createDynamicScreenNameRegex(baseText: string) {
+    createDynamicScreenNameRegex(baseText: string): RegExp {
         // Escape any special characters in baseText, then build the regex
         const escapedBaseText = baseText.replace(
             /[.*+?^=!:${}()|\[\]\/\\]/g,

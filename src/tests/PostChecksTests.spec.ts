@@ -1,4 +1,4 @@
-import test, { expect } from "@playwright/test";
+import test, { expect, Page, TestInfo } from "@playwright/test";
 import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import ENV from "../config/env";
@@ -10,7 +10,7 @@ import PDFUtils from "../utils/PDFUtils";
 import XQuerySIMS_TB_SCHOOL from "../pages/XQuerySIMS_TB_SCHOOL";
 import RSS310Q from "../pages/RSS310Q";
 
-async function login(page, testInfo) {
+async function login(page: Page, testInfo: TestInfo) {
     const loginPage = new LoginPage(page, testInfo);
     // await page.setViewportSize({ width: 1266, height: 586 });
     //Login using username and password
@@ -401,7 +401,8 @@ test.describe(
                 await rss310q.clickSearchBtn();
             });
             await test.step("Click random view button and then verify breadcrumbs", async () => {
-                const random = await rss310q.clickRandomViewButton();
+                const random: [string[], number] =
+                    await rss310q.clickRandomViewButton();
                 await rss310q.verifyBreadcrumbs(random);
             });
             const uploadedFileName =

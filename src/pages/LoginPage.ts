@@ -1,8 +1,8 @@
-import test, { Page } from "@playwright/test";
 import HomePage from "./HomePage";
 import BasePage from "./BasePage";
 import * as fs from "fs";
 import * as path from "path";
+import { TestInfo } from "@playwright/test";
 /**
  * @author: @pruthvirajqa2dev
  * SIMS Finance Login page class with locators
@@ -33,8 +33,8 @@ export default class LoginPage extends BasePage {
     async login(
         username: string,
         password: string,
-        testInfo: { title: string; attach: (arg0: void) => any }
-    ) {
+        testInfo: TestInfo
+    ): Promise<HomePage> {
         await this.navigateTo("/");
         await this.fillUsernameAndPassword(username, password);
 
@@ -58,7 +58,7 @@ export default class LoginPage extends BasePage {
      * @param testInfo
      * @returns
      */
-    async clickLoginBtn(testInfo) {
+    async clickLoginBtn(testInfo: any): Promise<HomePage> {
         await this.page
             .locator(this.loginBtnLocator)
             .click()

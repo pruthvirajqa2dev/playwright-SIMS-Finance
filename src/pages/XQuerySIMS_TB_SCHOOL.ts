@@ -12,7 +12,7 @@ export default class XQuerySIMS_TB_SCHOOL extends BasePage {
     private readonly pageHeadingText = "XQUERY - SIMS Trial Balance School";
     private readonly _prominentText =
         "SIMS_TB_SCHOOL-SIMS Trial Balance School";
-    public get prominentText() {
+    public get prominentText(): string {
         return this._prominentText;
     }
     private readonly yearDropdownLocator = "#p_ye_ar";
@@ -21,14 +21,14 @@ export default class XQuerySIMS_TB_SCHOOL extends BasePage {
     _submitBtnLocator = "#submit_button";
     _submitBtnLocatorDistribute = "#distribute_via_workflow";
 
-    public get submitBtnLocator() {
+    public get submitBtnLocator(): string {
         return this._submitBtnLocator;
     }
     public set submitBtnLocator(value) {
         this._submitBtnLocator = value;
     }
     private readonly _xqueryTitleLocator = ".TITLE_XQ";
-    public get xqueryTitleLocator() {
+    public get xqueryTitleLocator(): string {
         return this._xqueryTitleLocator;
     }
     private readonly xquerySchoolIdIconLocator = "#p_comp_icon";
@@ -46,9 +46,7 @@ export default class XQuerySIMS_TB_SCHOOL extends BasePage {
      */
     async expectPageElementsVisibilityOnLoad() {
         //Page Heading
-        await expect(
-            this.isHeadingVisibleByText(this.pageHeadingText)
-        ).toBeTruthy();
+        expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
         await expect(
             this.page.getByRole("heading", {
                 name: this.prominentText,

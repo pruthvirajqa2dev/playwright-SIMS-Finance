@@ -1,7 +1,6 @@
 import BasePage from "./BasePage";
-import elementAttributes from "../data/elementAttributes.json";
 import expectedTexts from "../data/expectedTexts.json";
-import { expect, Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 import FileUtils from "../utils/FileUtils";
 import path from "path";
 // <reference lib="dom"/>
@@ -13,6 +12,11 @@ import path from "path";
 export default class RSS310Q extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "RSS310Q - Purchase Orders";
+    private readonly orderNoColumnHeaderLocator = "th[id=ORD_NO]";
+    private readonly orderNoColumnValuesLocator = "td[axes*='ORD_NO']";
+    private readonly sortIconLocator = "span.esr_grid_sort_span.fa";
+    private readonly upSortIconLocator = "fa-sort-amount-up";
+    private readonly downSortIconLocator = "fa-sort-amount-down";
     private readonly searchBtnLocator = "#search_button";
     _okBtnLocator: string = "#ok";
     private readonly fileTitleLocator = "#file_title";
@@ -22,7 +26,6 @@ export default class RSS310Q extends BasePage {
     private readonly fileExtColoumn = "[axes='FILE_EXT']";
     private readonly savedDateColoumn = "[axes='SAVED_DATE']";
     _closeBtnLocator = "#esr_close_button";
-    // [axes="DOCUMENT_TITLE"]
     //Actions
     /**
      * @author: @pruthvirajqa2dev
@@ -30,9 +33,7 @@ export default class RSS310Q extends BasePage {
      */
     async expectPageElementsVisibilityOnLoad() {
         //Page Heading
-        await expect(
-            this.isHeadingVisibleByText(this.pageHeadingText)
-        ).toBeTruthy();
+        expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
     }
     /**
      *
@@ -44,30 +45,59 @@ export default class RSS310Q extends BasePage {
      *
      * @returns
      */
-    async clickRandomViewButton(): Promise<number> {
-        if (await this.page.locator(this.downArrowLocator).isVisible()) {
-            await this.page
-                .locator(this.sortableGridLocator)
-                .locator("..")
-                .filter({ hasText: expectedTexts.expectedOrderNumberText })
-                .dblclick();
+    async clickRandomViewButton(): Promise<[string[], number]> {
+        // Define the selector for the column header and its sort icon
+        var orderNoColumnHeader = this.page.locator(
+            this.orderNoColumnHeaderLocator
+        );
+        // Function to check if the column is sorted in ascending order
+        var isAscending = async (): Promise<boolean> => {
+            var sortIcon = this.page.locator(this.sortIconLocator).first();
+            const iconClass =
+                (await sortIcon.getAttribute("class"))?.trim() || "";
+            return iconClass?.includes(this.upSortIconLocator) ?? false;
+        };
+        // Function to check if the column is sorted in descending order
+        var isDescending = async (): Promise<boolean> => {
+            var sortIcon = this.page.locator(this.sortIconLocator).first();
+            const iconClass =
+                (await sortIcon.getAttribute("class"))?.trim() || "";
+            return iconClass?.includes(this.downSortIconLocator) ?? false;
+        };
+        // Ensure the column is sorted in ascending order
+        if (!(await isAscending())) {
+            await orderNoColumnHeader.click({ force: true }); // First click
+            await this.page.waitForTimeout(3000);
+            if (await isDescending()) {
+                await orderNoColumnHeader.click({ force: true }); // Second click if initially sorted descending
+                await this.page.waitForTimeout(3000);
+            }
         }
-        const random = Math.floor(Math.random() * 9) + 1;
-        console.log("Random number is: " + random);
+        // Verify the column is now sorted in ascending order
+        expect(await isAscending()).toBeTruthy();
+        // Perform your next action
+        console.log(
+            "Column is sorted in ascending order. Proceeding with next steps..."
+        );
+        const random = Math.floor(Math.random() * 9);
+        console.log("Random index is: " + random);
+        const orderNumberValue: string[] = await this.page
+            .locator(this.orderNoColumnValuesLocator)
+            .allTextContents();
         await this.page
             .locator(this.btnElementListLocator)
             .filter({ hasText: "View" })
-            .nth(random - 1)
+            .nth(random)
             .click();
-        return random;
+        return [orderNumberValue, random];
     }
     /**
      *
      * @param random
      */
-    async verifyBreadcrumbs(random: number) {
-        const paddedString = random.toString().padStart(9, "0");
-        console.log("paddedString:" + paddedString);
+    async verifyBreadcrumbs(random: [string[], number]) {
+        const paddedString = random[0][random[1]].toString().padStart(9, "0");
+        console.log("paddedString:" + paddedString.trim());
         const breadcrumbs = await this.page
             .locator(this.breadcrumbLocator)
             .allTextContents();
@@ -79,14 +109,17 @@ export default class RSS310Q extends BasePage {
             expectedTexts.expectedHeaderResultsText
         );
         expect(breadcrumbs).toContainEqual(
-            expectedTexts.expectedHeaderDetailsText + " (" + paddedString + ")"
+            expectedTexts.expectedHeaderDetailsText +
+                " (" +
+                paddedString.trim() +
+                ")"
         );
     }
     /**
      *
      * @returns
      */
-    async uploadAttachment() {
+    async uploadAttachment(): Promise<string> {
         //CLick attachments icon
         await this.click(this.attachmentBtnLocator);
         //Verify dialog

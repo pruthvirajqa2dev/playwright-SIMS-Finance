@@ -1,7 +1,5 @@
 import BasePage from "./BasePage";
-import elementAttributes from "../data/elementAttributes.json";
-import expectedTexts from "../data/expectedTexts.json";
-import { expect, Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 // <reference lib="dom"/>
 
 /**
@@ -12,11 +10,11 @@ export default class NML510 extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "NML510 - Trial Balance Report";
     private readonly _trialBalanceText = "Trial Balance by Cost Centre";
-    public get trialBalanceText() {
+    public get trialBalanceText(): string {
         return this._trialBalanceText;
     }
     _submitBtnLocator = "#submit_button";
-    public get submitBtnLocator() {
+    public get submitBtnLocator(): string {
         return this._submitBtnLocator;
     }
     //Actions
@@ -26,9 +24,7 @@ export default class NML510 extends BasePage {
      */
     async expectPageElementsVisibilityOnLoad() {
         //Page Heading
-        await expect(
-            this.isHeadingVisibleByText(this.pageHeadingText)
-        ).toBeTruthy();
+        expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
     }
 
     /**

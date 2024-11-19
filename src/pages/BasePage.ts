@@ -12,11 +12,11 @@ export default abstract class BasePage {
     }
     //Locators
     private readonly _dialogTitleLocator = ".ui-dialog-title";
-    public get dialogTitleLocator() {
+    public get dialogTitleLocator(): string {
         return this._dialogTitleLocator;
     }
     private readonly _dialogContentLocator = "#control_span_esr_prompt";
-    public get dialogContentLocator() {
+    public get dialogContentLocator(): string {
         return this._dialogContentLocator;
     }
     public readonly testFileDir = "/Test Files/*.TXT";
@@ -25,102 +25,98 @@ export default abstract class BasePage {
     private readonly multipleDialogTitleLocator = "*[id^=ui-id]";
     private readonly _selectBtnForSchoolLocator =
         "td:right-of(td[axes='COMP_DESC']:has-text('%'))>button[aria-label='Click to Select Record']";
-    public get selectBtnForSchoolLocator() {
+    public get selectBtnForSchoolLocator(): string {
         return this._selectBtnForSchoolLocator;
     }
     private readonly _yesBtnLocator = "#esr_messagebox_yes";
     private readonly _esrPromptTextLocator = "div[id*=esr_prompt]";
-    public get yesBtnLocator() {
+    public get yesBtnLocator(): string {
         return this._yesBtnLocator;
     }
-    public get esrPromptTextLocator() {
+    public get esrPromptTextLocator(): string {
         return this._esrPromptTextLocator;
     }
     private readonly _noBtnLocator = "#esr_messagebox_no";
-    public get noBtnLocator() {
+    public get noBtnLocator(): string {
         return this._noBtnLocator;
     }
     protected _submitBtnLocator = "#submit";
     protected _submitBtnLocator1 = "#submit_button";
-    public get submitBtnLocator() {
+    public get submitBtnLocator(): string {
         return this._submitBtnLocator;
     }
-    public get submitBtnLocator1() {
+    public get submitBtnLocator1(): string {
         return this._submitBtnLocator1;
     }
     protected _okBtnLocator = "#btn_ok";
-    public get okBtnLocator() {
+    public get okBtnLocator(): string {
         return this._okBtnLocator;
     }
     private readonly _greenIconLocator = '.faicon > i[style*="color:green"]';
-    public get greenIconLocator() {
+    public get greenIconLocator(): string {
         return this._greenIconLocator;
     }
     private readonly _reportLocator = "#spc_rep_0";
-    public get reportLocator() {
+    public get reportLocator(): string {
         return this._reportLocator;
     }
     private readonly _secondReportLocator = "#spc_rep_1";
-    public get secondReportLocator() {
+    public get secondReportLocator(): string {
         return this._secondReportLocator;
     }
     private readonly _saveAllBtnLocator = "#save_all";
-    public get saveAllBtnLocator() {
+    public get saveAllBtnLocator(): string {
         return this._saveAllBtnLocator;
     }
 
     protected _closeBtnLocator = "#btn_close";
-    public get closeBtnLocator() {
+    public get closeBtnLocator(): string {
         return this._closeBtnLocator;
     }
-    // Setter
-    set closeBtnLocator(locator: string) {
-        this._closeBtnLocator = locator;
-    }
     private readonly _breadcrumbLocator = "div[id*=esr_breadcrumb]";
-    public get breadcrumbLocator() {
+    public get breadcrumbLocator(): string {
         return this._breadcrumbLocator;
     }
     private readonly _attachmentBtnLocator = "#esr_attachment_manager";
-    public get attachmentBtnLocator() {
+    public get attachmentBtnLocator(): string {
         return this._attachmentBtnLocator;
     }
     private readonly _btnElementListLocator = "div.esr_multibutton";
-    public get btnElementListLocator() {
+    public get btnElementListLocator(): string {
         return this._btnElementListLocator;
     }
     private readonly _multiBtnLocator = ".multibutton_content";
-    public get multiBtnLocator() {
+    public get multiBtnLocator(): string {
         return this._multiBtnLocator;
     }
     private readonly _commonDhxBtnLocator = ".dhx_button";
-    public get commonDhxBtnLocator() {
+    public get commonDhxBtnLocator(): string {
         return this._commonDhxBtnLocator;
     }
     private readonly pdfIconLocator =
         "div[style*='background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);']";
     private readonly _browseForFileLocator = "Browse for a file";
-    public get browseForFileLocator() {
+    public get browseForFileLocator(): string {
         return this._browseForFileLocator;
     }
     private readonly _fileNameAfterUploadLocator = ".dhx_list-item--name";
-    public get fileNameAfterUploadLocator() {
+    public get fileNameAfterUploadLocator(): string {
         return this._fileNameAfterUploadLocator;
     }
     private readonly _successMarkLocator = "*[class^=dhx_item--success-mark]";
-    public get successMarkLocator() {
+    public get successMarkLocator(): string {
         return this._successMarkLocator;
     }
     private readonly _upArrowLocator = ".fa-sort-amount-up";
-    public get upArrowLocator() {
+    public get upArrowLocator(): string {
         return this._upArrowLocator;
     }
     protected _downArrowLocator = ".fa-sort-amount-down";
-    public get downArrowLocator() {
+    public get downArrowLocator(): string {
         return this._downArrowLocator;
     }
     private readonly _sortableGridLocator = ".esr_grid_sort_span ";
-    public get sortableGridLocator() {
+    public get sortableGridLocator(): string {
         return this._sortableGridLocator;
     }
     screenshotPath =
@@ -213,7 +209,7 @@ export default abstract class BasePage {
     async getByRole(
         role,
         options?: { name?: string; hidden?: boolean; exact?: boolean }
-    ) {
+    ): Promise<Locator> {
         return this.page.getByRole(role, options);
     }
     /**
@@ -221,7 +217,7 @@ export default abstract class BasePage {
      * @param label
      * @returns
      */
-    async getByLabel(label: string) {
+    async getByLabel(label: string): Promise<Locator> {
         return this.page.getByLabel(label);
     }
     /**
@@ -229,15 +225,15 @@ export default abstract class BasePage {
      * @param placeholder
      * @returns
      */
-    async getByPlaceholder(placeholder: string) {
+    async getByPlaceholder(placeholder: string): Promise<Locator> {
         return this.page.getByPlaceholder(placeholder);
     }
     /**
      *
      * @param altText
-     * @returns
+     * @returns Promise<Locator>
      */
-    async getByAltText(altText: string) {
+    async getByAltText(altText: string): Promise<Locator> {
         return this.page.getByAltText(altText);
     }
     /**
@@ -245,7 +241,7 @@ export default abstract class BasePage {
      * @param text
      * @returns
      */
-    async getByText(text: string) {
+    async getByText(text: string): Promise<Locator> {
         return await this.page.getByText(text);
     }
 
@@ -326,7 +322,7 @@ export default abstract class BasePage {
      *
      * @returns
      */
-    async getURL() {
+    async getURL(): Promise<string> {
         return this.page.url();
     }
 
@@ -343,7 +339,7 @@ export default abstract class BasePage {
      * @param headingText
      * @returns
      */
-    async isHeadingVisibleByText(headingText: string) {
+    async isHeadingVisibleByText(headingText: string): Promise<boolean> {
         return (
             await this.getByRole("heading", { name: headingText })
         ).isVisible();
@@ -351,7 +347,6 @@ export default abstract class BasePage {
     /**
      * This function clicks the heading on page located by provided text
      * @param headingText
-     * @returns
      */
     async clickHeadingByText(headingText: string) {
         await (await this.getByRole("heading", { name: headingText })).click();
