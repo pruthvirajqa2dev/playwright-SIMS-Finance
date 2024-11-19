@@ -51,13 +51,13 @@ jobs:
             pages: write
             id-token: write
         steps:
+            - uses: actions/checkout@v4
             - name: Update Previous Reports URL
               run: |
                   LATEST_REPORT_URL="https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber"
                   gh secret set PREVIOUS_REPORTS_URL --body "$LATEST_REPORT_URL"
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
                   node-version: lts/*
