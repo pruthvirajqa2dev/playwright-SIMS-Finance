@@ -69,6 +69,8 @@ jobs:
               run: echo "REPORT_DIR=$(date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_ENV
             - name: Create Timestamped Directory
               run: mkdir -p playwright-report-$REPORT_DIR/
+            - name: Delay
+              run: sleep 10 # Adjust the delay as needed
             - name: Move Merged Report
               run: mv playwright-report/* playwright-report-$REPORT_DIR/
             - name: Upload combined Playwright HTML Report
