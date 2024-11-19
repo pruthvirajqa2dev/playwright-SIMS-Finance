@@ -55,6 +55,8 @@ jobs:
               run: |
                   LATEST_REPORT_URL="https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber"
                   gh secret set PREVIOUS_REPORTS_URL --body "$LATEST_REPORT_URL"
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
@@ -95,8 +97,6 @@ jobs:
               run: echo "REPORT_DIR=${{ env.REPORT_DIR }}"
             - name: Create Timestamped Directory
               run: mkdir -p playwright-report-${{ env.REPORT_DIR }}/
-            - name: Delay
-              run: sleep 10 # Adjust the delay as needed
             - name: Move Merged Report
               run: mv playwright-report/* playwright-report-${{ env.REPORT_DIR }}/
             - name: Upload combined Playwright HTML Report
