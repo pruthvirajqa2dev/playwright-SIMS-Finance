@@ -51,12 +51,36 @@ jobs:
             pages: write
             id-token: write
         steps:
+            - name: Update Previous Reports URL
+              run: |
+                  LATEST_REPORT_URL="https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber"
+                  gh secret set PREVIOUS_REPORTS_URL --body "$LATEST_REPORT_URL"
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
                   node-version: lts/*
             - name: Install dependencies
               run: npm ci
+              # Download previous Pages artifact
+            - name: Download Previous Reports
+              run: |
+                  mkdir -p previous-reports
+                  curl -L -o previous-reports.zip ${{ secrets.PREVIOUS_REPORTS_URL }}
+                  unzip -o previous-reports.zip -d previous-reports
+
+            # Download current artifacts
+            - name: Download Current Artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  path: current-reports
+                  pattern: blob-report-*
+                  merge-multiple: true
+
+            # Merge both current and previous reports
+            - name: Merge Playwright Reports
+              run: |
+                  npx playwright merge-reports --reporter html previous-reports current-reports
+
             - name: Download artifacts
               uses: actions/download-artifact@v4
               with:
