@@ -70,6 +70,12 @@ jobs:
                   path: all-blob-reports
                   pattern: blob-report-*
                   merge-multiple: true
+            - name: Verify Report Artifacts
+                run: |
+                    ls -lh ./all-blob-reports
+                    for file in ./all-blob-reports/*.zip; do
+                      unzip -t "$file" || exit 1
+                    done
             - name: Merge Playwright reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
             - name: Upload combined Playwright HTML Report
