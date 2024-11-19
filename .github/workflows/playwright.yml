@@ -67,6 +67,8 @@ jobs:
               run: npx playwright merge-reports --reporter html ./all-blob-reports
             - name: Set Report Directory Environment Variable
               run: echo "REPORT_DIR=$(date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_ENV
+            - name: Debug REPORT_DIR
+              run: echo "REPORT_DIR=$REPORT_DIR"
             - name: Create Timestamped Directory
               run: mkdir -p playwright-report-$REPORT_DIR/
             - name: Delay
