@@ -9,7 +9,7 @@ on:
 
 jobs:
     playwright-test:
-        name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }})
+        name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }} - ${{ matrix.os }})
         if: ${{ always() }}
         timeout-minutes: 60
         continue-on-error: true
@@ -21,7 +21,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [ubuntu-latest, windows-latest] # Add Windows support
+                os: [ubuntu-latest, windows-latest] # Supports both Ubuntu and Windows
                 project: [chromium]
                 shardIndex: [1, 2]
                 shardTotal: [2]
@@ -33,9 +33,14 @@ jobs:
             - name: Install dependencies
               run: npm ci
             - name: Install Playwright Browsers
+              shell: bash
               run: |
-                  npx playwright install --with-deps
-                  if ("${{ matrix.os }}" == "windows-latest" ); then npm install -g windows-build-tools; fi
+                  if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+                    npx playwright install --with-deps;
+                  else
+                    npx playwright install;
+                    npm install -g windows-build-tools;
+                  fi
             - name: Run Playwright tests
               run: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
             - uses: actions/upload-artifact@v4
@@ -47,7 +52,7 @@ jobs:
 
     merge-reports:
         name: Merging executed reports
-        runs-on: ubuntu-latest # Keep merging reports on a single OS for simplicity
+        runs-on: ubuntu-latest
         needs: [playwright-test]
         permissions:
             contents: read
