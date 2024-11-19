@@ -65,10 +65,12 @@ jobs:
                   merge-multiple: true
             - name: Merge Playwright reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
+            - name: Set Report Directory Environment Variable
+              run: echo "REPORT_DIR=$(date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_ENV
             - name: Create Timestamped Directory
-              run: mkdir -p playwright-report/$(date +%Y-%m-%d_%H-%M-%S)
+              run: mkdir -p playwright-report-$REPORT_DIR/
             - name: Move Merged Report
-              run: mv playwright-report/* playwright-report/$(date +%Y-%m-%d_%H-%M-%S)
+              run: mv playwright-report/* playwright-report-$REPORT_DIR/
             - name: Upload combined Playwright HTML Report
               uses: actions/upload-artifact@v4
               with:
