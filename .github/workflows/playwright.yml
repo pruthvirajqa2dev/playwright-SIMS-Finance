@@ -83,17 +83,8 @@ jobs:
             - name: Check if gh-pages branch exists
               run: |
                   git fetch origin
-                  if git show-ref --verify --quiet refs/heads/gh-pages; then
-                    echo "gh-pages branch exists."
-                  else
-                    echo "gh-pages branch does not exist. Creating it."
-                    git checkout --orphan gh-pages
-                    git pull origin gh-pages || echo "No changes to pull"
-                    git rm -rf .
-                    git commit --allow-empty -m "Create gh-pages branch"
-                    git push origin gh-pages
-                  fi
-                  git pull origin gh-pages || echo "No changes to pull"
+                  git checkout gh-pages  # Checkout the existing gh-pages branch
+                  git pull --rebase origin gh-pages || echo "No changes to pull"
             - name: Download Existing Reports from GitHub Pages
               run: |
                   git clone --depth 1 --branch gh-pages https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber existing-reports
@@ -118,11 +109,6 @@ jobs:
             - name: Highlight Current Run
               run: |
                   cp -r published-reports/$TIMESTAMP published-reports/latest
-            - name: Commit and Push Changes to gh-pages
-              run: |
-                  git add .
-                  git commit -m "Add new reports for $TIMESTAMP"
-                  git push origin gh-pages
             - name: Upload Combined Reports for Pages
               uses: actions/upload-artifact@v4
               with:
