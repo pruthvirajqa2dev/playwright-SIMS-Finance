@@ -91,6 +91,7 @@ jobs:
                     git rm -rf .
                     git commit --allow-empty -m "Create gh-pages branch"
                     git push origin gh-pages
+                  fi
             - name: Download Existing Reports from GitHub Pages
               run: |
                   git clone --depth 1 --branch gh-pages https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber existing-reports
