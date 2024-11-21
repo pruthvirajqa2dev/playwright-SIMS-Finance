@@ -106,19 +106,19 @@ jobs:
                   else
                     echo "Error playwright-report directory is empty or missing!" && exit 1
                   fi
-                  - name: Update Index Page
-                  run: |
-                      INDEX_FILE="published-reports/index.html"
-                      TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
-                      echo "<html><body><h1>Playwright Reports</h1><table border='1'><tr><th>Run Timestamp</th><th>Report Link</th></tr>" > $INDEX_FILE
-                      for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); do
-                          TIMESTAMP=$(basename $dir)
-                          if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
-                              LINK="<a href='./$TIMESTAMP/index.html'>$TIMESTAMP</a>"
-                              echo "<tr><td>$TIMESTAMP</td><td>$LINK</td></tr>" >> $INDEX_FILE
-                          fi
-                      done
-                      echo "</table></body></html>" >> $INDEX_FILE
+            - name: Update Index Page
+              run: |
+                  INDEX_FILE="published-reports/index.html"
+                  TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
+                  echo "<html><body><h1>Playwright Reports</h1><table border='1'><tr><th>Run Timestamp</th><th>Report Link</th></tr>" > $INDEX_FILE
+                  for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); do
+                      TIMESTAMP=$(basename $dir)
+                      if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
+                          LINK="<a href='./$TIMESTAMP/index.html'>$TIMESTAMP</a>"
+                          echo "<tr><td>$TIMESTAMP</td><td>$LINK</td></tr>" >> $INDEX_FILE
+                      fi
+                  done
+                  echo "</table></body></html>" >> $INDEX_FILE
             - name: Highlight Current Run
               run: |
                   cp -r published-reports/$TIMESTAMP published-reports/latest
