@@ -1,10 +1,12 @@
 name: Playwright Tests
+
 on:
     workflow_dispatch:
     push:
         branches: [Main]
     pull_request:
         branches: [Main]
+
 jobs:
     playwright-test:
         name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }})
@@ -14,25 +16,34 @@ jobs:
         runs-on: ubuntu-latest
         permissions:
             contents: read
-            pages: write
-            id-token: write
         strategy:
             fail-fast: false
             matrix:
                 project: [chromium]
                 shardIndex: [1, 2]
                 shardTotal: [2]
+
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
                   node-version: lts/*
+
             - name: Install dependencies
               run: npm ci
+
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps
+
             - name: Run Playwright tests
-              run: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
+              run: |
+                  npx playwright test --project=${{ matrix.project }} \
+                  --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
+
+            - uses: actions/cache@v3
+              with:
+                  path: blob-report-${{ matrix.shardIndex }}
+                  key: playwright-blob-report-${{ matrix.shardIndex }}
 
             - uses: actions/upload-artifact@v4
               if: ${{ !cancelled() }}
@@ -43,41 +54,27 @@ jobs:
 
     merge-reports:
         name: Merging executed reports
-        # needs: [playwright-test]
-        runs-on: ubuntu-latest
         needs: [playwright-test]
+        runs-on: ubuntu-latest
         permissions:
             contents: read
             pages: write
             id-token: write
+
         steps:
-            - name: Debug Previous Reports URL
-              run: echo  URL is:"${{ secrets.PREVIOUS_REPORTS_URL }}"
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
                   node-version: lts/*
+
             - name: Install dependencies
               run: npm ci
-              # Download previous Pages artifact
-            - name: Download Previous Reports
-              run: |
-                  mkdir -p previous-reports
-                  curl -L -o previous-reports.zip ${{ secrets.PREVIOUS_REPORTS_URL }}
-                  unzip -o previous-reports.zip -d previous-reports
 
-            # Download current artifacts
-            - name: Download Current Artifacts
-              uses: actions/download-artifact@v4
+            - name: Restore Cached Reports
+              uses: actions/cache@v3
               with:
-                  path: current-reports
-                  pattern: blob-report-*
-                  merge-multiple: true
-
-            # Merge both current and previous reports
-            - name: Merge Playwright Reports
-              run: |
-                  npx playwright merge-reports --reporter html previous-reports current-reports
+                  path: all-blob-reports
+                  key: playwright-blob-report
 
             - name: Download artifacts
               uses: actions/download-artifact@v4
@@ -85,28 +82,50 @@ jobs:
                   path: all-blob-reports
                   pattern: blob-report-*
                   merge-multiple: true
+
             - name: Merge Playwright reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
-            - name: Set Report Directory Environment Variable
-              run: echo "REPORT_DIR=$(date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_ENV
-            - name: Debug REPORT_DIR
-              run: echo "REPORT_DIR=${{ env.REPORT_DIR }}"
-            - name: Create Timestamped Directory
-              run: mkdir -p playwright-report-${{ env.REPORT_DIR }}/
-            - name: Move Merged Report
-              run: mv playwright-report/* playwright-report-${{ env.REPORT_DIR }}/
-            - name: Upload combined Playwright HTML Report
+
+            - name: Add Timestamp to Reports
+              run: |
+                  TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
+                  mkdir -p published-reports/$TIMESTAMP
+                  cp -r playwright-report/* published-reports/$TIMESTAMP
+                  echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+
+            - name: Generate Index Page
+              run: |
+                  INDEX_FILE="published-reports/index.html"
+                  mkdir -p published-reports
+                  echo "<html><body><h1>Playwright Reports</h1><table border='1'><tr><th>Run Timestamp</th><th>Report Link</th></tr>" > $INDEX_FILE
+                  for dir in published-reports/*; do
+                    if [ -d "$dir" ]; then
+                      TIMESTAMP=$(basename $dir)
+                      LINK="<a href='./$TIMESTAMP/index.html'>$TIMESTAMP</a>"
+                      echo "<tr><td>$TIMESTAMP</td><td>$LINK</td></tr>" >> $INDEX_FILE
+                    fi
+                  done
+                  echo "</table></body></html>" >> $INDEX_FILE
+
+            - name: Highlight Current Run
+              run: |
+                  cp -r published-reports/$TIMESTAMP published-reports/latest
+
+            - name: Upload Combined Reports for Pages
               uses: actions/upload-artifact@v4
               with:
-                  name: html-report
-                  path: playwright-report-${{ env.REPORT_DIR }}/
+                  name: html-reports
+                  path: published-reports/
+
             - name: Setup Pages
               uses: actions/configure-pages@v2
-            - name: Upload artifact
+
+            - name: Upload to GitHub Pages
               uses: actions/upload-pages-artifact@v1
               with:
                   name: html-reports-to-pages
-                  path: playwright-report-${{ env.REPORT_DIR }}/
+                  path: published-reports/
+
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v1
@@ -114,4 +133,3 @@ jobs:
                   artifact_name: html-reports-to-pages
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  REPORT_DIR: ${{ env.REPORT_DIR }}
