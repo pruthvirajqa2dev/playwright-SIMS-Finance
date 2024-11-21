@@ -80,11 +80,17 @@ jobs:
               run: |
                   git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
                   git config --global user.name "pruthvirajqa2dev"
-            - name: Check if gh-pages branch exists
+            - name: Stash untracked files
+              run: |
+                  git stash push -m "Stashing untracked report files" --include-untracked
+            - name: Pull from gh-pages branch
               run: |
                   git fetch origin
                   git checkout gh-pages  # Checkout the existing gh-pages branch
                   git pull --rebase origin gh-pages || echo "No changes to pull"
+            - name: Restore stashed untracked files
+              run: |
+                  git stash pop || echo "No stashed files to restore"
             - name: Download Existing Reports from GitHub Pages
               run: |
                   git clone --depth 1 --branch gh-pages https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber existing-reports
@@ -109,6 +115,11 @@ jobs:
             - name: Highlight Current Run
               run: |
                   cp -r published-reports/$TIMESTAMP published-reports/latest
+            - name: Commit Current Report to GitHub Pages
+              run: |
+                  git add published-reports/
+                  git commit -m "Update Playwright reports with $TIMESTAMP"
+                  git push origin gh-pages
             - name: Upload Combined Reports for Pages
               uses: actions/upload-artifact@v4
               with:
