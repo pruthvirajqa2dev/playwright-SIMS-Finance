@@ -10,19 +10,12 @@ on:
 jobs:
     playwright-test:
         name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }})
-        if: ${{ always() }}
-        timeout-minutes: 60
-        continue-on-error: true
         runs-on: ubuntu-latest
-        permissions:
-            contents: read
         strategy:
-            fail-fast: false
             matrix:
                 project: [chromium]
                 shardIndex: [1, 2]
                 shardTotal: [2]
-
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
@@ -40,27 +33,29 @@ jobs:
                   npx playwright test --project=${{ matrix.project }} \
                   --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
 
-            - uses: actions/cache@v3
+            - name: Ensure Blob Report Directory Exists
+              run: |
+                  mkdir -p blob-report-${{ matrix.shardIndex }}
+
+            - name: Cache Playwright Reports
+              uses: actions/cache@v3
               with:
                   path: blob-report-${{ matrix.shardIndex }}
                   key: playwright-blob-report-${{ matrix.shardIndex }}
+                  restore-keys: |
+                      playwright-blob-report-
 
             - uses: actions/upload-artifact@v4
               if: ${{ !cancelled() }}
               with:
                   name: blob-report-${{ matrix.shardIndex }}
-                  path: blob-report
+                  path: blob-report-${{ matrix.shardIndex }}
                   retention-days: 30
 
     merge-reports:
         name: Merging executed reports
-        needs: [playwright-test]
         runs-on: ubuntu-latest
-        permissions:
-            contents: write
-            pages: write
-            id-token: write
-
+        needs: [playwright-test]
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
@@ -75,8 +70,10 @@ jobs:
               with:
                   path: all-blob-reports
                   key: playwright-blob-report
+                  restore-keys: |
+                      playwright-blob-report-
 
-            - name: Download artifacts
+            - name: Download Artifacts for Merging Reports
               uses: actions/download-artifact@v4
               with:
                   path: all-blob-reports
@@ -90,7 +87,7 @@ jobs:
               run: |
                   git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
                   git config --global user.name "pruthvirajqa2dev"
-                  git clone --depth 1 --branch gh-pages https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber/ existing-reports
+                  git clone --depth 1 --branch gh-pages https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber existing-reports
                   mkdir -p published-reports
                   cp -r existing-reports/* published-reports/ || true
 
