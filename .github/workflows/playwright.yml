@@ -85,6 +85,10 @@ jobs:
 
             - name: Merge Playwright reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
+            - name: Configure Git User
+              run: |
+                  git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
+                  git config --global user.name "pruthvirajqa2dev"
 
             - name: Check if gh-pages branch exists
               run: |
