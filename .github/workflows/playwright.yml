@@ -88,6 +88,7 @@ jobs:
                   else
                     echo "gh-pages branch does not exist. Creating it."
                     git checkout --orphan gh-pages
+                    git pull origin gh-pages || echo "No changes to pull"
                     git rm -rf .
                     git commit --allow-empty -m "Create gh-pages branch"
                     git push origin gh-pages
