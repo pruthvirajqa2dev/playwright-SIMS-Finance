@@ -57,7 +57,7 @@ jobs:
         needs: [playwright-test]
         runs-on: ubuntu-latest
         permissions:
-            contents: read
+            contents: write
             pages: write
             id-token: write
 
@@ -86,24 +86,29 @@ jobs:
             - name: Merge Playwright reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
 
-            - name: Add Timestamp to Reports
+            - name: Download Existing Reports from GitHub Pages
+              run: |
+                  git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
+                  git config --global user.name "pruthvirajqa2dev"
+                  git clone --depth 1 --branch gh-pages https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber/ existing-reports
+                  mkdir -p published-reports
+                  cp -r existing-reports/* published-reports/ || true
+
+            - name: Add Current Report with Timestamp
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
                   mkdir -p published-reports/$TIMESTAMP
                   cp -r playwright-report/* published-reports/$TIMESTAMP
                   echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
 
-            - name: Generate Index Page
+            - name: Update Index Page
               run: |
                   INDEX_FILE="published-reports/index.html"
-                  mkdir -p published-reports
                   echo "<html><body><h1>Playwright Reports</h1><table border='1'><tr><th>Run Timestamp</th><th>Report Link</th></tr>" > $INDEX_FILE
-                  for dir in published-reports/*; do
-                    if [ -d "$dir" ]; then
-                      TIMESTAMP=$(basename $dir)
-                      LINK="<a href='./$TIMESTAMP/index.html'>$TIMESTAMP</a>"
-                      echo "<tr><td>$TIMESTAMP</td><td>$LINK</td></tr>" >> $INDEX_FILE
-                    fi
+                  for dir in $(ls -d published-reports/*/); do
+                    TIMESTAMP=$(basename $dir)
+                    LINK="<a href='./$TIMESTAMP/index.html'>$TIMESTAMP</a>"
+                    echo "<tr><td>$TIMESTAMP</td><td>$LINK</td></tr>" >> $INDEX_FILE
                   done
                   echo "</table></body></html>" >> $INDEX_FILE
 
@@ -120,14 +125,7 @@ jobs:
             - name: Setup Pages
               uses: actions/configure-pages@v2
 
-            - name: Upload to GitHub Pages
-              uses: actions/upload-pages-artifact@v1
-              with:
-                  name: html-reports-to-pages
-                  path: published-reports/
-
             - name: Deploy to GitHub Pages
-              id: deployment
               uses: actions/deploy-pages@v1
               with:
                   artifact_name: html-reports-to-pages
