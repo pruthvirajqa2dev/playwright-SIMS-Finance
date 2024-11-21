@@ -125,12 +125,8 @@ jobs:
               with:
                   name: html-reports
                   path: published-reports/
-            - name: Check Artifact Status
-              run: |
-                  echo "Checking if the artifact is uploaded successfully..."
-                  curl -s "https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber/actions/runs/${{ github.run_id }}/artifacts" | grep "html-reports"
             - name: Wait for Artifact to be available
-              run: sleep 20 # Wait for 30 seconds to allow artifact processing
+              run: sleep 30 # Wait for 30 seconds to allow artifact processing
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Deploy to GitHub Pages
