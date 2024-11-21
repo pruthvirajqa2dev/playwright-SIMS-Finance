@@ -129,6 +129,11 @@ jobs:
               run: sleep 30 # Wait for 30 seconds to allow artifact processing
             - name: Setup Pages
               uses: actions/configure-pages@v2
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v1
+              with:
+                  name: upload-html-reports
+                  path: published-reports/
             - name: Deploy to GitHub Pages
               uses: actions/deploy-pages@v1
               with:
