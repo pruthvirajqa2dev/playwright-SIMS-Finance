@@ -125,6 +125,8 @@ jobs:
               with:
                   name: html-reports
                   path: published-reports/
+            - name: Wait for Artifact to be available
+              run: sleep 20 # Wait for 30 seconds to allow artifact processing
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Deploy to GitHub Pages
