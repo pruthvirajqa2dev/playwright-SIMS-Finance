@@ -109,32 +109,60 @@ jobs:
                   TEST_STATUS="fail"
                   fi
                   echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$TEST_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
-
                   INDEX_FILE="published-reports/index.html"
                   TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
-                  echo "<!DOCTYPE html><html lang='en'> <head> <meta charset='UTF-8'> 
-                  <meta name='viewport' content='width=device-width, initial-scale=1.0'> 
-                  <title>Playwright Reports</title> 
-                  <style> body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; } 
-                  table { width: 90%; margin: 2em auto; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); } 
-                  th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } 
-                  th { background-color: #4CAF50; color: white; } 
-                  tr:nth-child(even) { background-color: #f9f9f9; } 
-                  tr:hover { background-color: #f1f1f1; } .failed { background-color: #ffe6e6 !important; } a { color: #4CAF50; text-decoration: none; } 
-                  a:hover { text-decoration: underline; } 
-                  </style> </head> <body> 
-                  <header> <h1>Playwright Reports</h1> <p>Explore the results of the test runs below.</p> </header> 
-                  <main> <table> <tr> <th>Run Timestamp</th> <th>Report Link</th> <th>Status</th> </tr>" > $INDEX_FILE
-                  for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); 
-                  do TIMESTAMP=$(basename $dir) 
-                  if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; 
-                  then STATUS="Unknown" CSS_CLASS="" 
-                  if [ -f "published-reports/$TIMESTAMP/status.json" ]; then STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json") 
-                  if [ "$STATUS" = "fail" ]; then CSS_CLASS="failed" 
-                  fi fi 
-                  LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>" 
-                  echo "<tr class='$CSS_CLASS'><td>$TIMESTAMP</td><td>$LINK</td><td>$STATUS</td></tr>" >> $INDEX_FILE fi done
-                  echo "</table></main><footer><p>© 2024 Playwright Test Reports. All rights reserved.</p></footer></body></html>" >> $INDEX_FILE
+                  echo "<!DOCTYPE html> 
+                  <html lang='en'>
+                    <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Playwright Reports</title>
+                    <style>
+                    body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; }
+                    table { width: 90%; margin: 2em auto; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+                    th, td { padding: 12px; text-align: left; border: 1px solid #ddd; }
+                    th { background-color: #4CAF50; color: white; }
+                    tr:nth-child(even) { background-color: #f9f9f9; }
+                    tr:hover { background-color: #f1f1f1; }
+                    .failed { background-color: #ffe6e6 !important; }
+                    a { color: #4CAF50; text-decoration: none; }
+                    a:hover { text-decoration: underline; }
+                  </style>
+                  </head><body><header><h1>Playwright Reports</h1><p>Explore the results of the test runs below.</p>
+                  </header>
+                  <main>
+                  <table>
+                  <tr>
+                    <th>Run Timestamp</th>
+                    <th>Report Link</th>
+                    <th>Status</th>
+                  </tr>" > $INDEX_FILE
+                                
+                  # Loop through directories and populate the table
+                  for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); do
+                    TIMESTAMP=$(basename "$dir")
+                    if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
+                      STATUS="Unknown"
+                      CSS_CLASS=""
+                      if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
+                        STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json")
+                        if [ "$STATUS" = "fail" ]; then
+                          CSS_CLASS="failed"
+                        fi
+                      fi
+                      LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
+                      echo "<tr class='$CSS_CLASS'><td>$TIMESTAMP</td><td>$LINK</td><td>$STATUS</td></tr>" >> $INDEX_FILE
+                    fi
+                  done
+                                
+                  # Close the table and HTML structure
+                  echo "</table>
+                  </main>
+                  <footer>
+                    <p>© 2024 Playwright Test Reports. All rights reserved.</p>
+                  </footer>
+                  </body>
+                  </html>" >> $INDEX_FILE
             - name: Commit Current Report to GitHub Pages
               run: |
                   git add published-reports/$TIMESTAMP/
