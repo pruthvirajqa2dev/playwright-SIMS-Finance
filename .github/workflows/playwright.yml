@@ -9,7 +9,7 @@ on:
 
 jobs:
     playwright-test:
-        name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }})
+        name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
         if: ${{ always() }}
         timeout-minutes: 60
         continue-on-error: true
@@ -63,50 +63,26 @@ jobs:
                   node-version: lts/*
             - name: Install dependencies
               run: npm ci
-            - name: Restore Cached Reports
-              uses: actions/cache@v3
-              with:
-                  path: all-blob-reports
-                  key: playwright-blob-report
             - name: Download artifacts
               uses: actions/download-artifact@v4
               with:
-                  path: all-blob-reports
-                  pattern: blob-report-*
-                  merge-multiple: true
+                  name: blob-report
+                  path: blob-report
             - name: Merge Playwright reports
-              run: npx playwright merge-reports --reporter html ./all-blob-reports
-            - name: Configure Git User
-              run: |
-                  git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
-                  git config --global user.name "pruthvirajqa2dev"
-            - name: Stash untracked files
-              run: |
-                  git stash push -m "Stashing untracked report files" --include-untracked
-            - name: Pull from gh-pages branch
-              run: |
-                  git fetch origin
-                  git checkout gh-pages  # Checkout the existing gh-pages branch
-                  git pull --rebase origin gh-pages || echo "No changes to pull"
-            - name: Restore stashed untracked files
-              run: |
-                  git stash pop || echo "No stashed files to restore"
-            - name: Download Existing Reports from GitHub Pages
-              run: |
-                  git clone --depth 1 --branch gh-pages https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber existing-reports
-                  mkdir -p published-reports
-                  cp -r existing-reports/* published-reports/ || true
-            - name: Add Current Report with Timestamp
+              run: npx playwright merge-reports --reporter html blob-report
+
+            - name: Generate timestamped directory
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
                   mkdir -p published-reports/$TIMESTAMP
                   if [ -d "playwright-report" ] && [ "$(ls -A playwright-report)" ]; then
-                    cp -r playwright-report/* published-reports/$TIMESTAMP
-                    echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+                      cp -r playwright-report/* published-reports/$TIMESTAMP
+                      echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
                   else
-                    echo "Error playwright-report directory is empty or missing!" && exit 1
+                      echo "Error: playwright-report directory is empty or missing!" && exit 1
                   fi
-            - name: Update Index Page
+
+            - name: Update index.html
               run: |
                   INDEX_FILE="published-reports/index.html"
                   TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
@@ -119,26 +95,29 @@ jobs:
                       fi
                   done
                   echo "</table></body></html>" >> $INDEX_FILE
-            - name: Highlight Current Run
+
+            - name: Sync latest report
               run: |
-                  cp -r published-reports/$TIMESTAMP published-reports/latest
-            - name: Commit Current Report to GitHub Pages
+                  rm -rf published-reports/latest
+                  ln -sfn $TIMESTAMP published-reports/latest
+
+            - name: Commit updated reports
               run: |
+                  git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
+                  git config --global user.name "pruthvirajqa2dev"
+                  git fetch origin gh-pages
+                  git checkout gh-pages || git checkout --orphan gh-pages
+                  rsync -av --exclude="published-reports" ./published-reports/ ./published-reports/
                   git add published-reports/
                   git commit -m "Update Playwright reports with $TIMESTAMP"
                   git push origin gh-pages
-            - name: Upload Combined Reports for Pages
-              uses: actions/upload-artifact@v4
-              with:
-                  name: upload-html-reports
-                  path: published-reports/
             - name: Setup Pages
               uses: actions/configure-pages@v2
-            - name: Upload artifact
+            - name: Upload artifact for Pages
               uses: actions/upload-pages-artifact@v1
               with:
-                  name: upload-html-reports
                   path: published-reports/
+                  name: upload-html-reports
             - name: Deploy to GitHub Pages
               uses: actions/deploy-pages@v1
               with:
