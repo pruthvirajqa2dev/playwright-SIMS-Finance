@@ -105,11 +105,14 @@ jobs:
             - name: Update Index Page
               run: |
                   INDEX_FILE="published-reports/index.html"
+                  TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
                   echo "<html><body><h1>Playwright Reports</h1><table border='1'><tr><th>Run Timestamp</th><th>Report Link</th></tr>" > $INDEX_FILE
                   for dir in $(ls -d published-reports/*/); do
-                    TIMESTAMP=$(basename $dir)
+                  TIMESTAMP=$(basename $dir)
+                  if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
                     LINK="<a href='./$TIMESTAMP/index.html'>$TIMESTAMP</a>"
                     echo "<tr><td>$TIMESTAMP</td><td>$LINK</td></tr>" >> $INDEX_FILE
+                  fi
                   done
                   echo "</table></body></html>" >> $INDEX_FILE
             - name: Highlight Current Run
