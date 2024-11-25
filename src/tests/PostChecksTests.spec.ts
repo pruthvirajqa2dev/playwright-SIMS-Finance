@@ -12,7 +12,6 @@ import RSS310Q from "../pages/RSS310Q";
 
 async function login(page: Page, testInfo: TestInfo) {
     const loginPage = new LoginPage(page, testInfo);
-    // await page.setViewportSize({ width: 1266, height: 586 });
     //Login using username and password
     const homepage: HomePage = await loginPage.login(
         ENV.USERID!,
@@ -26,7 +25,7 @@ test.describe(
     "Postchecks on environment:" + `${process.env.test_env}`.toUpperCase(),
     () => {
         //Test case 1
-        test.only("Login and Logout", async ({ page }, testInfo) => {
+        test("Login and Logout", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "Login and Logout",
                 description:
