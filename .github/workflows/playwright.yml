@@ -9,7 +9,7 @@ on:
 
 jobs:
     playwright-test:
-        name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
+        name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }})
         if: ${{ always() }}
         timeout-minutes: 60
         continue-on-error: true
@@ -63,61 +63,77 @@ jobs:
                   node-version: lts/*
             - name: Install dependencies
               run: npm ci
+            - name: Restore Cached Reports
+              uses: actions/cache@v3
+              with:
+                  path: all-blob-reports
+                  key: playwright-blob-report
             - name: Download artifacts
               uses: actions/download-artifact@v4
               with:
-                  name: blob-report
-                  path: blob-report
+                  path: all-blob-reports
+                  pattern: blob-report-*
+                  merge-multiple: true
             - name: Merge Playwright reports
-              run: npx playwright merge-reports --reporter html blob-report
-
-            - name: Generate timestamped directory
-              run: |
-                  TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
-                  mkdir -p published-reports/$TIMESTAMP
-                  if [ -d "playwright-report" ] && [ "$(ls -A playwright-report)" ]; then
-                      cp -r playwright-report/* published-reports/$TIMESTAMP
-                      echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
-                  else
-                      echo "Error: playwright-report directory is empty or missing!" && exit 1
-                  fi
-
-            - name: Update index.html
-              run: |
-                  INDEX_FILE="published-reports/index.html"
-                  TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
-                  echo "<html><body><h1>Playwright Reports</h1><table border='1'><tr><th>Run Timestamp</th><th>Report Link</th></tr>" > $INDEX_FILE
-                  for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); do
-                      TIMESTAMP=$(basename $dir)
-                      if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
-                          LINK="<a href='./$TIMESTAMP/index.html'>$TIMESTAMP</a>"
-                          echo "<tr><td>$TIMESTAMP</td><td>$LINK</td></tr>" >> $INDEX_FILE
-                      fi
-                  done
-                  echo "</table></body></html>" >> $INDEX_FILE
-
-            - name: Sync latest report
-              run: |
-                  rm -rf published-reports/latest
-                  ln -sfn $TIMESTAMP published-reports/latest
-
-            - name: Commit updated reports
+              run: npx playwright merge-reports --reporter html ./all-blob-reports
+            - name: Configure Git User
               run: |
                   git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
                   git config --global user.name "pruthvirajqa2dev"
-                  git fetch origin gh-pages
-                  git checkout gh-pages || git checkout --orphan gh-pages
-                  rsync -av --exclude="published-reports" ./published-reports/ ./published-reports/
+            - name: Stash untracked files
+              run: |
+                  git stash push -m "Stashing untracked report files" --include-untracked
+            - name: Pull from gh-pages branch
+              run: |
+                  git fetch origin
+                  git checkout gh-pages  # Checkout the existing gh-pages branch
+                  git pull --rebase origin gh-pages || echo "No changes to pull"
+            - name: Restore stashed untracked files
+              run: |
+                  git stash pop || echo "No stashed files to restore"
+            - name: Download Existing Reports from GitHub Pages
+              run: |
+                  git clone --depth 1 --branch gh-pages https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber existing-reports
+                  mkdir -p published-reports
+                  cp -r existing-reports/* published-reports/ || true
+            - name: Add Current Report with Timestamp
+              run: |
+                  TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
+                  mkdir -p published-reports/$TIMESTAMP
+                  cp -r playwright-report/* published-reports/$TIMESTAMP
+                  echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+            - name: Update Index Page
+              run: |
+                  INDEX_FILE="published-reports/index.html"
+                  echo "<html><body><h1>Playwright Reports</h1><table border='1'><tr><th>Run Timestamp</th><th>Report Link</th></tr>" > $INDEX_FILE
+                  for dir in $(ls -d published-reports/*/); do
+                    TIMESTAMP=$(basename $dir)
+                    LINK="<a href='./$TIMESTAMP/index.html'>$TIMESTAMP</a>"
+                    echo "<tr><td>$TIMESTAMP</td><td>$LINK</td></tr>" >> $INDEX_FILE
+                  done
+                  echo "</table></body></html>" >> $INDEX_FILE
+            - name: Highlight Current Run
+              run: |
+                  cp -r published-reports/$TIMESTAMP published-reports/latest
+            - name: Commit Current Report to GitHub Pages
+              run: |
                   git add published-reports/
                   git commit -m "Update Playwright reports with $TIMESTAMP"
                   git push origin gh-pages
+            - name: Upload Combined Reports for Pages
+              uses: actions/upload-artifact@v4
+              with:
+                  name: upload-html-reports
+                  path: published-reports/
+            - name: Wait for Artifact to be available
+              run: sleep 30 # Wait for 30 seconds to allow artifact processing
             - name: Setup Pages
               uses: actions/configure-pages@v2
-            - name: Upload artifact for Pages
+            - name: Upload artifact
               uses: actions/upload-pages-artifact@v1
               with:
-                  path: published-reports/
                   name: upload-html-reports
+                  path: published-reports/
             - name: Deploy to GitHub Pages
               uses: actions/deploy-pages@v1
               with:
