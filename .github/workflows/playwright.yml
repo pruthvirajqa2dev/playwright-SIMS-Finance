@@ -117,7 +117,7 @@ jobs:
                   echo "</table></body></html>" >> $INDEX_FILE
             - name: Commit Current Report to GitHub Pages
               run: |
-                  git add $TIMESTAMP/
+                  git add published-reports/$TIMESTAMP/
                   git commit -m "Update Playwright reports with $TIMESTAMP"
                   git push origin gh-pages
             - name: Upload Combined Reports for Pages
