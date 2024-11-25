@@ -93,9 +93,9 @@ jobs:
                   git stash pop || echo "No stashed files to restore"
             - name: Download Existing Reports from GitHub Pages
               run: |
-                  git clone --depth 1 --branch gh-pages https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber existing-reports
+                  git clone --depth 1 --branch gh-pages https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber existing-reports/
                   mkdir -p published-reports
-                  cp -r existing-reports/* published-reports/ || true
+                  cp -r existing-reports/* published-reports/
             - name: Add Current Report with Timestamp
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
@@ -115,9 +115,6 @@ jobs:
                   fi
                   done
                   echo "</table></body></html>" >> $INDEX_FILE
-            - name: Highlight Current Run
-              run: |
-                  cp -r published-reports/$TIMESTAMP published-reports/latest
             - name: Commit Current Report to GitHub Pages
               run: |
                   git add published-reports/
