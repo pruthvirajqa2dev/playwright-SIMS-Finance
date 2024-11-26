@@ -32,10 +32,25 @@ jobs:
               run: npm ci
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps
-            - name: Run Playwright tests
+            - name: Run Playwright tests for shard ${{ matrix.shardIndex }}
+              id: run-tests
               run: |
                   npx playwright test --project=${{ matrix.project }} \
                   --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
+                  continue-on-error: true
+            - name: Save Test Status for Shard ${{ matrix.shardIndex }}
+              run: |
+                  if [ $? -ne 0 ]; then
+                    echo "Failed" > shard-${{ matrix.shardIndex }}-status.txt
+                  else
+                    echo "Passed" > shard-${{ matrix.shardIndex }}-status.txt
+              shell: bash
+            - name: Upload Shard Status
+              uses: actions/upload-artifact@v3
+              with:
+                  name: shard-${{ matrix.shardIndex }}-status
+                  path: shard-${{ matrix.shardIndex }}-status.txt
+
             - uses: actions/cache@v3
               with:
                   path: blob-report-${{ matrix.shardIndex }}
@@ -102,15 +117,36 @@ jobs:
                   mkdir -p published-reports/$TIMESTAMP
                   cp -r playwright-report/* published-reports/$TIMESTAMP
                   echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+            - name: Download Shard Statuses
+              uses: actions/download-artifact@v4
+              with:
+                  path: all-shard-statuses
+                  pattern: shard-*-status.txt
+                  merge-multiple: true
+
+            - name: Aggregate Shard Statuses
+              id: aggregate-shard-status
+              run: |
+                  #Initialize the overall status
+                  FINAL_STATUS="passed"
+
+                  #Iterate through all downloaded shard status files
+                  for report in all-shard-statuses/shard-*-status.txt; do
+                    if grep -q "failed" "$report"; then
+                      FINAL_STATUS="failed"
+                      break
+                    fi
+                  done
+                  # Output the final status
+                  echo "Final test status: $FINAL_STATUS"
+                  echo "::set-output name=status::$FINAL_STATUS"
+                  shell: bash
+
             - name: Determine Test Status
               run: |
-                  TEST_STATUS="Pass"
-                  echo playwright-report/index.html
-                  if grep -q "FAIL" playwright-report/index.html; then
-                  TEST_STATUS="Fail"
-                  fi
-                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$TEST_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
-                  echo "TEST_STATUS=$TEST_STATUS" >> $GITHUB_ENV
+                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \" ${{ steps.aggregate-shard-status.outputs.status }}\" }" > "published-reports/$TIMESTAMP/status.json"
+                  echo "Test status from previous job: ${{ steps.aggregate-shard-status.outputs.status }}"
+                  echo "TEST_STATUS=${{ steps.aggregate-shard-status.outputs.status }}" >> $GITHUB_ENV
             - name: Update Index Page
               run: |
 
