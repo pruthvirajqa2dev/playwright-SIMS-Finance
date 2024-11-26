@@ -105,6 +105,7 @@ jobs:
             - name: Determine Test Status
               run: |
                   TEST_STATUS="Pass"
+                  echo playwright-report/index.html
                   if grep -q "FAIL" playwright-report/index.html; then
                   TEST_STATUS="Fail"
                   fi
@@ -166,7 +167,7 @@ jobs:
                   name: upload-html-reports
                   path: published-reports/
             - name: Wait for Artifact to be available
-              run: sleep 30 # Wait for 30 seconds to allow artifact processing
+              run: sleep 10 # Wait for 10 seconds to allow artifact processing
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Upload artifact
