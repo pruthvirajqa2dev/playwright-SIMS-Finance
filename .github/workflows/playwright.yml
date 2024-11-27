@@ -47,7 +47,7 @@ jobs:
                   fi
               shell: bash
             - name: Upload Shard Status
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: shard-${{ matrix.shardIndex }}-status
                   path: shard-${{ matrix.shardIndex }}-status.txt
@@ -132,9 +132,9 @@ jobs:
                   FINAL_STATUS="passed"
 
                   #Iterate through all downloaded shard status files
-                  for report in all-shard-statuses/shard-*-status; do
-                    if grep -q "failed" "$report"; then
-                      FINAL_STATUS="failed"
+                  for report in all-shard-statuses/shard-*-status.txt; do
+                    if grep -q "Failed" "$report"; then
+                      FINAL_STATUS="Failed"
                       break
                     fi
                   done
