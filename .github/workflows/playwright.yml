@@ -37,7 +37,7 @@ jobs:
               run: |
                   npx playwright test --project=${{ matrix.project }} \
                   --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
-                  continue-on-error: true
+              continue-on-error: true
             - name: Save Test Status for Shard ${{ matrix.shardIndex }}
               run: |
                   if [ $? -ne 0 ]; then
