@@ -132,7 +132,7 @@ jobs:
                   FINAL_STATUS="passed"
 
                   #Iterate through all downloaded shard status files
-                  for report in all-shard-statuses/shard-*-status.txt; do
+                  for report in all-shard-statuses/shard-*-status; do
                     if grep -q "failed" "$report"; then
                       FINAL_STATUS="failed"
                       break
