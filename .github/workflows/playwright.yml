@@ -140,14 +140,10 @@ jobs:
                   done
                   # Output the final status
                   echo "Final test status: $FINAL_STATUS"
-                  echo "::set-output name=status::$FINAL_STATUS"
+                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \" $FINAL_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
+                  echo "Test status from previous job: $FINAL_STATUS"
+                  echo "TEST_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
                   shell: bash
-
-            - name: Determine Test Status
-              run: |
-                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \" ${{ steps.aggregate-shard-status.outputs.status }}\" }" > "published-reports/$TIMESTAMP/status.json"
-                  echo "Test status from previous job: ${{ steps.aggregate-shard-status.outputs.status }}"
-                  echo "TEST_STATUS=${{ steps.aggregate-shard-status.outputs.status }}" >> $GITHUB_ENV
             - name: Update Index Page
               run: |
 
