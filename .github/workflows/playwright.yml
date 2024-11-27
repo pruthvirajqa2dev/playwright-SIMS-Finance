@@ -122,7 +122,7 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   path: all-shard-statuses
-                  pattern: shard-*-status.txt
+                  pattern: shard-*-status
                   merge-multiple: true
 
             - name: Aggregate Shard Statuses
