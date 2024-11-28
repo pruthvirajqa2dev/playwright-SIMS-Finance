@@ -37,7 +37,6 @@ jobs:
               run: |
                   npx playwright test --project=${{ matrix.project }} \
                   --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
-              continue-on-error: true
             - name: Save Test Status for Shard ${{ matrix.shardIndex }}
               run: |
                   if [ $? -ne 0 ]; then
@@ -128,17 +127,14 @@ jobs:
             - name: Aggregate Shard Statuses
               id: aggregate-shard-status
               run: |
-                  #Initialize the overall status
-                  FINAL_STATUS="passed"
+                  FINAL_STATUS="Passed"
 
-                  #Iterate through all downloaded shard status files
                   for report in all-shard-statuses/shard-*-status.txt; do
                     if grep -q "Failed" "$report"; then
                       FINAL_STATUS="Failed"
                       break
                     fi
                   done
-                  # Output the final status
                   echo "Final test status: $FINAL_STATUS"
                   echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \" $FINAL_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
                   echo "Test status from previous job: $FINAL_STATUS"
@@ -180,7 +176,7 @@ jobs:
                       CSS_CLASS=""
                       if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
                         STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json")
-                        if [ "$STATUS" = "fail" ]; then
+                        if [ "$STATUS" = "Failed" ]; then
                           CSS_CLASS="failed"
                         fi
                       fi
