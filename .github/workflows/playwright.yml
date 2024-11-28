@@ -6,6 +6,8 @@ on:
         branches: [Main]
     pull_request:
         branches: [Main]
+    schedule:
+        - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
 
 jobs:
     playwright-test:
@@ -159,6 +161,7 @@ jobs:
                   tr:nth-child(even) { background-color:#f9f9f9; }
                   tr:hover { background-color:#f1f1f1; }
                   .failed { background-color:#ffe6e6 !important;}
+                  .passed { background-color:#d4f8d4 !important;}
                   a {color:#4CAF50; text-decoration:none; }
                   a:hover { text-decoration:underline; }</style>
                   </head>
@@ -181,8 +184,12 @@ jobs:
                       CSS_CLASS=""
                       if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
                         STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json")
+                        STATUS=$(echo "$STATUS" | xargs)
                         if [ "$STATUS" = "Failed" ]; then
                           CSS_CLASS="failed"
+                        fi
+                        if [ "$STATUS" = "Passed" ]; then
+                          CSS_CLASS="passed"
                         fi
                       fi
                         LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
@@ -201,7 +208,7 @@ jobs:
                   name: upload-html-reports
                   path: published-reports/
             - name: Wait for Artifact to be available
-              run: sleep 10 # Wait for 10 seconds to allow artifact processing
+              run: sleep 1 # Wait for 1 second to allow artifact processing
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Upload artifact
