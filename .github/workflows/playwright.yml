@@ -36,7 +36,8 @@ jobs:
               id: run-tests
               run: |
                   set +e
-                  npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1; echo "STATUS_CODE: $?">>$GITHUB_ENV;
+                  npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1;
+                  echo "STATUS_CODE=$?" >> $GITHUB_ENV
             - name: Save Test Status for Shard ${{ matrix.shardIndex }}
               if: always()
               run: |
