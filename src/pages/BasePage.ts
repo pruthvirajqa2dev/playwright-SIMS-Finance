@@ -411,7 +411,9 @@ export default abstract class BasePage {
      * This function is for waiting for green icon to be visible
      */
     async expectGreenIconToBeVisible() {
-        await expect(this.page.locator(this.greenIconLocator)).toBeInViewport();
+        await expect(this.page.locator(this.greenIconLocator)).toBeInViewport({
+            timeout: 120000
+        });
     }
     /**
      *

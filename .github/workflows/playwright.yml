@@ -193,7 +193,7 @@ jobs:
                         fi
                       fi
                         LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
-                        echo "<tr class='$CSS_CLASS'><td>$TIMESTAMP</td><td>$LINK</td><td>$STATUS</td></tr>" >> $INDEX_FILE
+                        echo "<tr><td>$TIMESTAMP</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> $INDEX_FILE
                     fi
                   done
                   echo "</table></main><footer><p>© 2024 Playwright Test Reports. All rights reserved.</p></footer></body></html>" >> $INDEX_FILE
