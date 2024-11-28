@@ -35,8 +35,7 @@ jobs:
             - name: Run Playwright tests for shard ${{ matrix.shardIndex }}
               id: run-tests
               run: |
-                  npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1 
-                  || { echo "Exit status: $?"; exit 0; }
+                  npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1; echo "Exit status: $?";
             - name: Save Test Status for Shard ${{ matrix.shardIndex }}
               if: always()
               run: |
