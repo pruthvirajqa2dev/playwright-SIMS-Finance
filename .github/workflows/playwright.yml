@@ -37,6 +37,7 @@ jobs:
               run: |
                   npx playwright test --project=${{ matrix.project }} \
                   --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
+                  echo "Exit status: $?"
             - name: Save Test Status for Shard ${{ matrix.shardIndex }}
               if: always()
               run: |
@@ -45,6 +46,7 @@ jobs:
                   else
                     echo "Passed" > shard-${{ matrix.shardIndex }}-status.txt
                   fi
+              shell: bash
             - name: Upload Shard Status
               if: always()
               uses: actions/upload-artifact@v4
@@ -141,7 +143,7 @@ jobs:
                   echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \" $FINAL_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
                   echo "Test status from previous job: $FINAL_STATUS"
                   echo "TEST_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
-                  shell: bash
+              shell: bash
             - name: Update Index Page
               run: |
 
