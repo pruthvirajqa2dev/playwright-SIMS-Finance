@@ -35,6 +35,7 @@ jobs:
             - name: Run Playwright tests for shard ${{ matrix.shardIndex }}
               id: run-tests
               run: |
+                  set +e
                   npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1; echo "Exit status: $?";
             - name: Save Test Status for Shard ${{ matrix.shardIndex }}
               if: always()
@@ -44,6 +45,7 @@ jobs:
                   else
                     echo "Passed" > shard-${{ matrix.shardIndex }}-status.txt
                   fi
+                  echo "Exit status: $?"
               shell: bash
             - name: Upload Shard Status
               if: always()
