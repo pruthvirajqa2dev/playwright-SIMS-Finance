@@ -38,25 +38,27 @@ jobs:
                   npx playwright test --project=${{ matrix.project }} \
                   --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1
             - name: Save Test Status for Shard ${{ matrix.shardIndex }}
+              if: always()
               run: |
                   if [ $? -ne 0 ]; then
                     echo "Failed" > shard-${{ matrix.shardIndex }}-status.txt
                   else
                     echo "Passed" > shard-${{ matrix.shardIndex }}-status.txt
                   fi
-              shell: bash
             - name: Upload Shard Status
+              if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: shard-${{ matrix.shardIndex }}-status
                   path: shard-${{ matrix.shardIndex }}-status.txt
 
             - uses: actions/cache@v3
+              if: always()
               with:
                   path: blob-report-${{ matrix.shardIndex }}
                   key: playwright-blob-report-${{ matrix.shardIndex }}
             - uses: actions/upload-artifact@v4
-              if: ${{ !cancelled() }}
+              if: always()
               with:
                   name: blob-report-${{ matrix.shardIndex }}
                   path: blob-report
