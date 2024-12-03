@@ -331,10 +331,20 @@ jobs:
               uses: dawidd6/action-send-mail@v3
               with:
                   server_address: smtp.gmail.com
-                  server_port: 587
+                  server_port: 465
+                  secure: true
                   username: ${{ secrets.EMAIL_USERNAME }}
                   password: ${{ secrets.EMAIL_PASSWORD }}
-                  subject: "SIMS Finance- GitHub Action $TEST_STATUS: Playwright Tests"
-                  body: "Hi,\n\nThe Playwright tests have $TEST_STATUS. Latest run was on $TIMESTAMP.\n Please refer the link below to view the report.\nhttps://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber/\n\nRegards,\nSIMS Finance QA Team"
-                  to: "pruthviraj.pardeshi@parentpay.com,princy.rajkumar@parentpay.com"
-                  from: "contactpruthviraj@gmail.com"
+                  subject: "SIMS Finance- GitHub Action: Playwright Tests ${{ env.TEST_STATUS }}"
+                  body: |
+                      Hi,
+
+                      The Playwright tests have ${{ env.TEST_STATUS }}. 
+                      Latest run was on ${{ env.TIMESTAMP }}.
+                      Please refer the link below to view the report.
+                      https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber/
+
+                      Regards,
+                      SIMS Finance QA Team
+                  to: pruthviraj.pardeshi@parentpay.com,princy.rajkumar@parentpay.com
+                  from: ${{ secrets.EMAIL_USERNAME }}
