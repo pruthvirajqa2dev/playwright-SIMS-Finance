@@ -6,18 +6,5 @@
 <body>
     <h1>Playwright Test Reports</h1>
     <div id="report-container"></div>
-
-    <script>
-        // Assuming your reports are in subdirectories with names like 'playwright-report-2024-11-19_12-34-56'
-        const reportDirectories = process.env.REPORT_DIR;
-
-        reportDirectories.forEach(dir => {
-            const iframe = document.createElement('iframe');
-            iframe.src = `${dir}/index.html`;
-            iframe.style.width = '100%';
-            iframe.style.height = '800px'; // Adjust height as needed
-            document.getElementById('report-container').appendChild(iframe);
-        });
-    </script>
 </body>
 </html>
