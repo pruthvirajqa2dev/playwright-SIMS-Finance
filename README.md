@@ -55,7 +55,7 @@ Before running the tests, ensure that the following are installed:
 npm install
 ```
 
-3. **Configure the environment**: Run the following command to install required packages:
+3. **Configure the environment**: 
 
 -   Update the playwright.config.js file with the appropriate baseURL for your application.
 -   If environment variables are needed, create a .env file at the root of the project with the required key-value pairs.
