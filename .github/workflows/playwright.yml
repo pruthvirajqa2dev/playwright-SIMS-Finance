@@ -284,32 +284,11 @@ jobs:
                       .chart-container {
                         width: 90%;
                         margin: 2em auto;
+                        height: 400px;
                         background: white;
                         padding: 20px;
                         border-radius: 8px;
                         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                      }
-                      .chart-wrapper {
-                        height: 400px;
-                        position: relative;
-                      }
-                      .slider-container {
-                        width: 90%;
-                        margin: 1em auto;
-                        padding: 10px;
-                      }
-                      input[type='range'] {
-                        width: 100%;
-                      }
-                      .chart-controls {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        margin-bottom: 1em;
-                      }
-                      .data-point-count {
-                        font-size: 0.9em;
-                        color: #666;
                       }
                     </style>
                     </head>
@@ -319,6 +298,10 @@ jobs:
                         <p>Explore the results of the test runs below.</p>
                       </header>
                       
+                      <div class='chart-container'>
+                        <canvas id='trendsChart'></canvas>
+                      </div>
+
                       <div class='filters'>
                         <input type='date' id='dateFilter' placeholder='Filter by date'>
                         <select id='statusFilter'>
@@ -351,15 +334,6 @@ jobs:
                       FAILED=0
                       FLAKY=0
 
-                      # Read test counts from test-results.json
-                      if [ -f "test-results.json" ]; then
-                        EXECUTED=$(jq '.stats.expected' test-results.json)
-                        FAILED=$(jq '.stats.unexpected' test-results.json)
-                        FLAKY=$(jq '.stats.flaky' test-results.json)
-                        # Calculate passed tests (expected - unexpected - flaky)
-                        PASSED=$(echo "$EXECUTED - $FAILED - $FLAKY" | bc)
-                      fi
-
                       if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
                         STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json")
                         STATUS=$(echo "$STATUS" | xargs)
@@ -369,6 +343,14 @@ jobs:
                         if [ "$STATUS" = "Passed" ]; then
                           CSS_CLASS="passed"
                         fi
+                      fi
+
+                      # Get test counts from test-results.json if it exists
+                      if [ -f "published-reports/$TIMESTAMP/test-results.json" ]; then
+                        EXECUTED=$(jq '.stats.expected' "published-reports/$TIMESTAMP/test-results.json")
+                        PASSED=$(jq '.stats.expected - .stats.unexpected - .stats.flaky' "published-reports/$TIMESTAMP/test-results.json")
+                        FAILED=$(jq '.stats.unexpected' "published-reports/$TIMESTAMP/test-results.json")
+                        FLAKY=$(jq '.stats.flaky' "published-reports/$TIMESTAMP/test-results.json")
                       fi
 
                       LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
@@ -443,102 +425,91 @@ jobs:
                       dateFilter.addEventListener('change', filterTable);
                       statusFilter.addEventListener('change', filterTable);
 
-                      let trendsChart = null;
-
-                      function updateChart(dataPoints) {
-                        const rows = Array.from(document.querySelectorAll('#reportsTable tbody tr'));
-                        const chartData = {
-                          labels: [],
-                          datasets: [
-                            {
-                              label: 'Executed Tests',
-                              data: [],
-                              borderColor: 'rgb(75, 192, 192)',
-                              tension: 0.1
-                            },
-                            {
-                              label: 'Passed Tests',
-                              data: [],
-                              borderColor: 'rgb(75, 192, 75)',
-                              tension: 0.1
-                            },
-                            {
-                              label: 'Failed Tests',
-                              data: [],
-                              borderColor: 'rgb(255, 99, 132)',
-                              tension: 0.1
-                            },
-                            {
-                              label: 'Flaky Tests',
-                              data: [],
-                              borderColor: 'rgb(255, 159, 64)',
-                              tension: 0.1
-                            }
-                          ]
-                        };
-
-                        // Take only the last N rows based on slider
-                        const visibleRows = rows.slice(-dataPoints);
-                        
-                        visibleRows.forEach(row => {
-                          const date = row.cells[0].textContent;
-                          const time = row.cells[1].textContent;
-                          
-                          chartData.labels.push(\`\${date} \${time}\`);
-                          chartData.datasets[0].data.push(parseInt(row.dataset.executed) || 0);
-                          chartData.datasets[1].data.push(parseInt(row.dataset.passed) || 0);
-                          chartData.datasets[2].data.push(parseInt(row.dataset.failed) || 0);
-                          chartData.datasets[3].data.push(parseInt(row.dataset.flaky) || 0);
-                        });
-
-                        document.getElementById('visiblePoints').textContent = visibleRows.length;
-                        document.getElementById('totalPoints').textContent = rows.length;
-
-                        if (trendsChart) {
-                          trendsChart.destroy();
-                        }
-
-                        const ctx = document.getElementById('trendsChart').getContext('2d');
-                        trendsChart = new Chart(ctx, {
-                          type: 'line',
-                          data: chartData,
-                          options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                              y: {
-                                beginAtZero: true,
-                                title: {
-                                  display: true,
-                                  text: 'Number of Tests'
-                                }
-                              },
-                              x: {
-                                title: {
-                                  display: true,
-                                  text: 'Date and Time'
-                                }
-                              }
-                            },
-                            plugins: {
-                              legend: {
-                                position: 'bottom'
-                              }
-                            }
+                      // Add chart initialization
+                      const rows = Array.from(document.querySelectorAll('#reportsTable tbody tr'));
+                      const chartData = {
+                        labels: [],
+                        datasets: [
+                          {
+                            label: 'Executed Tests',
+                            data: [],
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                          },
+                          {
+                            label: 'Passed Tests',
+                            data: [],
+                            borderColor: 'rgb(75, 192, 75)',
+                            tension: 0.1
+                          },
+                          {
+                            label: 'Failed Tests',
+                            data: [],
+                            borderColor: 'rgb(255, 99, 132)',
+                            tension: 0.1
+                          },
+                          {
+                            label: 'Flaky Tests',
+                            data: [],
+                            borderColor: 'rgb(255, 159, 64)',
+                            tension: 0.1
                           }
-                        });
-                      }
+                        ]
+                      };
 
-                      const slider = document.getElementById('dataSlider');
-                      const sliderValue = document.getElementById('sliderValue');
-                      
-                      slider.addEventListener('input', function() {
-                        sliderValue.textContent = this.value;
-                        updateChart(parseInt(this.value));
+                      // Process test results for chart
+                      rows.reverse().forEach(row => {
+                        const date = row.cells[0].textContent;
+                        const time = row.cells[1].textContent;
+                        const status = row.cells[3].textContent;
+                        
+                        // Get test counts from data attributes (you'll need to add these)
+                        const executed = parseInt(row.dataset.executed || '0');
+                        const passed = parseInt(row.dataset.passed || '0');
+                        const failed = parseInt(row.dataset.failed || '0');
+                        const flaky = parseInt(row.dataset.flaky || '0');
+
+                        chartData.labels.push(\`\${date} \${time}\`);
+                        chartData.datasets[0].data.push(executed);
+                        chartData.datasets[1].data.push(passed);
+                        chartData.datasets[2].data.push(failed);
+                        chartData.datasets[3].data.push(flaky);
                       });
 
-                      // Initial chart update
-                      updateChart(parseInt(slider.value));
+                      // Create the chart
+                      const ctx = document.getElementById('trendsChart').getContext('2d');
+                      new Chart(ctx, {
+                        type: 'line',
+                        data: chartData,
+                        options: {
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                              title: {
+                                display: true,
+                                text: 'Number of Tests'
+                              }
+                            },
+                            x: {
+                              title: {
+                                display: true,
+                                text: 'Date and Time'
+                              }
+                            }
+                          },
+                          plugins: {
+                            title: {
+                              display: true,
+                              text: 'Test Execution Trends'
+                            },
+                            legend: {
+                              position: 'bottom'
+                            }
+                          }
+                        }
+                      });
                     });
                   </script>
                   </body></html>" >> $INDEX_FILE
