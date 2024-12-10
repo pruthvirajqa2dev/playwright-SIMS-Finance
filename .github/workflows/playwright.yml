@@ -251,7 +251,7 @@ jobs:
                    echo "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>
                     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                     <title>Playwright Reports</title>
-                    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+                    <script src='https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js'></script>
                     <style>
                       body {font-family:Arial, sans-serif; background-color:#f4f4f9; color:#333;}
                       table {width:90%; margin:2em auto; border-collapse:collapse; background:white; box-shadow:0 2px 8px rgba(0, 0, 0, 0.1); }
@@ -292,6 +292,7 @@ jobs:
                       .chart-wrapper {
                         height: 400px;
                         position: relative;
+                        margin-bottom: 20px;
                       }
                       .slider-container {
                         width: 90%;
@@ -337,7 +338,9 @@ jobs:
                               <th data-sort='status' class='sort-icon'>Status</th>
                             </tr>
                           </thead>
-                          <tbody>" > $INDEX_FILE
+                          <tbody>" >> $INDEX_FILE
+
+                  # Add table rows here
                   for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); do
                     TIMESTAMP=$(basename "$dir")
                     if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
@@ -351,13 +354,20 @@ jobs:
                       FAILED=0
                       FLAKY=0
 
+                      # Debug output
+                      echo "Processing directory: $TIMESTAMP"
+                      echo "Looking for test-results.json in: published-reports/$TIMESTAMP/"
+                      
                       # Read test counts from test-results.json
-                      if [ -f "test-results.json" ]; then
-                        EXECUTED=$(jq '.stats.expected' test-results.json)
-                        FAILED=$(jq '.stats.unexpected' test-results.json)
-                        FLAKY=$(jq '.stats.flaky' test-results.json)
-                        # Calculate passed tests (expected - unexpected - flaky)
+                      if [ -f "published-reports/$TIMESTAMP/test-results.json" ]; then
+                        echo "Found test-results.json"
+                        EXECUTED=$(jq '.stats.expected' "published-reports/$TIMESTAMP/test-results.json")
+                        FAILED=$(jq '.stats.unexpected' "published-reports/$TIMESTAMP/test-results.json")
+                        FLAKY=$(jq '.stats.flaky' "published-reports/$TIMESTAMP/test-results.json")
                         PASSED=$(echo "$EXECUTED - $FAILED - $FLAKY" | bc)
+                        
+                        # Debug output
+                        echo "Test counts - Executed: $EXECUTED, Passed: $PASSED, Failed: $FAILED, Flaky: $FLAKY"
                       fi
 
                       if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
@@ -375,173 +385,134 @@ jobs:
                       echo "<tr data-date='$DATE_PART' data-executed='$EXECUTED' data-passed='$PASSED' data-failed='$FAILED' data-flaky='$FLAKY'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> $INDEX_FILE
                     fi
                   done
-                  echo "</tbody></table></main>
-                  <footer><p>© 2024 Playwright Test Reports. All rights reserved.</p></footer>
-                  <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                      const table = document.getElementById('reportsTable');
-                      const dateFilter = document.getElementById('dateFilter');
-                      const statusFilter = document.getElementById('statusFilter');
-                      let sortDirection = {};
 
-                      // Sorting function
-                      function sortTable(column) {
-                        const tbody = table.querySelector('tbody');
-                        const rows = Array.from(tbody.querySelectorAll('tr'));
-                        const headers = table.querySelectorAll('th');
+                  # Close the table and add the chart container
+                  echo "</tbody></table>
 
-                        // Reset other headers
-                        headers.forEach(header => {
-                          if (header.dataset.sort !== column) {
-                            header.className = 'sort-icon';
-                          }
-                        });
+                        <div class='chart-container'>
+                          <h2>Test Execution Trends</h2>
+                          <div class='chart-controls'>
+                            <div class='data-point-count'>Showing <span id='visiblePoints'>0</span> of <span id='totalPoints'>0</span> data points</div>
+                          </div>
+                          <div class='chart-wrapper'>
+                            <canvas id='trendsChart'></canvas>
+                          </div>
+                          <div class='slider-container'>
+                            <input type='range' id='dataSlider' min='5' max='50' value='10'>
+                            <label for='dataSlider'>Number of data points to show: <span id='sliderValue'>10</span></label>
+                          </div>
+                        </div>
+                      </main>
 
-                        // Toggle sort direction
-                        sortDirection[column] = !sortDirection[column];
-                        const currentHeader = Array.from(headers).find(h => h.dataset.sort === column);
-                        currentHeader.className = sortDirection[column] ? 'sort-asc' : 'sort-desc';
-
-                        rows.sort((a, b) => {
-                          let aVal, bVal;
-                          if (column === 'date') {
-                            aVal = a.dataset.date;
-                            bVal = b.dataset.date;
-                          } else if (column === 'status') {
-                            aVal = a.cells[3].textContent;
-                            bVal = b.cells[3].textContent;
-                          }
-                          return sortDirection[column] ? 
-                            aVal.localeCompare(bVal) : 
-                            bVal.localeCompare(aVal);
-                        });
-
-                        tbody.innerHTML = '';
-                        rows.forEach(row => tbody.appendChild(row));
-                      }
-
-                      // Filtering function
-                      function filterTable() {
-                        const rows = table.querySelectorAll('tbody tr');
-                        const dateValue = dateFilter.value;
-                        const statusValue = statusFilter.value;
-
-                        rows.forEach(row => {
-                          const rowDate = row.dataset.date;
-                          const rowStatus = row.cells[3].textContent.trim();
-                          const dateMatch = !dateValue || rowDate === dateValue;
-                          const statusMatch = !statusValue || rowStatus === statusValue;
-                          row.style.display = dateMatch && statusMatch ? '' : 'none';
-                        });
-                      }
-
-                      // Add event listeners
-                      table.querySelectorAll('th[data-sort]').forEach(header => {
-                        header.addEventListener('click', () => sortTable(header.dataset.sort));
-                      });
-
-                      dateFilter.addEventListener('change', filterTable);
-                      statusFilter.addEventListener('change', filterTable);
-
-                      let trendsChart = null;
-
-                      function updateChart(dataPoints) {
-                        const rows = Array.from(document.querySelectorAll('#reportsTable tbody tr'));
-                        const chartData = {
-                          labels: [],
-                          datasets: [
-                            {
-                              label: 'Executed Tests',
-                              data: [],
-                              borderColor: 'rgb(75, 192, 192)',
-                              tension: 0.1
-                            },
-                            {
-                              label: 'Passed Tests',
-                              data: [],
-                              borderColor: 'rgb(75, 192, 75)',
-                              tension: 0.1
-                            },
-                            {
-                              label: 'Failed Tests',
-                              data: [],
-                              borderColor: 'rgb(255, 99, 132)',
-                              tension: 0.1
-                            },
-                            {
-                              label: 'Flaky Tests',
-                              data: [],
-                              borderColor: 'rgb(255, 159, 64)',
-                              tension: 0.1
-                            }
-                          ]
-                        };
-
-                        // Take only the last N rows based on slider
-                        const visibleRows = rows.slice(-dataPoints);
-                        
-                        visibleRows.forEach(row => {
-                          const date = row.cells[0].textContent;
-                          const time = row.cells[1].textContent;
+                      <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                          console.log('DOM Content Loaded');
                           
-                          chartData.labels.push(\`\${date} \${time}\`);
-                          chartData.datasets[0].data.push(parseInt(row.dataset.executed) || 0);
-                          chartData.datasets[1].data.push(parseInt(row.dataset.passed) || 0);
-                          chartData.datasets[2].data.push(parseInt(row.dataset.failed) || 0);
-                          chartData.datasets[3].data.push(parseInt(row.dataset.flaky) || 0);
-                        });
-
-                        document.getElementById('visiblePoints').textContent = visibleRows.length;
-                        document.getElementById('totalPoints').textContent = rows.length;
-
-                        if (trendsChart) {
-                          trendsChart.destroy();
-                        }
-
-                        const ctx = document.getElementById('trendsChart').getContext('2d');
-                        trendsChart = new Chart(ctx, {
-                          type: 'line',
-                          data: chartData,
-                          options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                              y: {
-                                beginAtZero: true,
-                                title: {
-                                  display: true,
-                                  text: 'Number of Tests'
-                                }
-                              },
-                              x: {
-                                title: {
-                                  display: true,
-                                  text: 'Date and Time'
-                                }
-                              }
-                            },
-                            plugins: {
-                              legend: {
-                                position: 'bottom'
-                              }
+                          // Initialize the chart
+                          function initializeChart() {
+                            console.log('Initializing chart');
+                            const rows = Array.from(document.querySelectorAll('#reportsTable tbody tr'));
+                            console.log('Found rows:', rows.length);
+                            
+                            if (rows.length === 0) {
+                              console.log('No data rows found');
+                              return;
                             }
+
+                            const chartData = {
+                              labels: [],
+                              datasets: [
+                                {
+                                  label: 'Executed Tests',
+                                  data: [],
+                                  borderColor: 'rgb(75, 192, 192)',
+                                  tension: 0.1
+                                },
+                                {
+                                  label: 'Passed Tests',
+                                  data: [],
+                                  borderColor: 'rgb(75, 192, 75)',
+                                  tension: 0.1
+                                },
+                                {
+                                  label: 'Failed Tests',
+                                  data: [],
+                                  borderColor: 'rgb(255, 99, 132)',
+                                  tension: 0.1
+                                },
+                                {
+                                  label: 'Flaky Tests',
+                                  data: [],
+                                  borderColor: 'rgb(255, 159, 64)',
+                                  tension: 0.1
+                                }
+                              ]
+                            };
+
+                            rows.forEach(row => {
+                              const date = row.cells[0].textContent;
+                              const time = row.cells[1].textContent;
+                              
+                              // Debug logging
+                              console.log('Processing row:', {
+                                date,
+                                time,
+                                executed: row.dataset.executed,
+                                passed: row.dataset.passed,
+                                failed: row.dataset.failed,
+                                flaky: row.dataset.flaky
+                              });
+
+                              chartData.labels.push(\`\${date} \${time}\`);
+                              chartData.datasets[0].data.push(parseInt(row.dataset.executed) || 0);
+                              chartData.datasets[1].data.push(parseInt(row.dataset.passed) || 0);
+                              chartData.datasets[2].data.push(parseInt(row.dataset.failed) || 0);
+                              chartData.datasets[3].data.push(parseInt(row.dataset.flaky) || 0);
+                            });
+
+                            const ctx = document.getElementById('trendsChart');
+                            if (!ctx) {
+                              console.error('Canvas element not found');
+                              return;
+                            }
+
+                            console.log('Creating chart with data:', chartData);
+
+                            new Chart(ctx, {
+                              type: 'line',
+                              data: chartData,
+                              options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                  y: {
+                                    beginAtZero: true,
+                                    title: {
+                                      display: true,
+                                      text: 'Number of Tests'
+                                    }
+                                  },
+                                  x: {
+                                    title: {
+                                      display: true,
+                                      text: 'Date and Time'
+                                    }
+                                  }
+                                },
+                                plugins: {
+                                  legend: {
+                                    position: 'bottom'
+                                  }
+                                }
+                              }
+                            });
                           }
+
+                          // Initialize the chart when the page loads
+                          initializeChart();
                         });
-                      }
-
-                      const slider = document.getElementById('dataSlider');
-                      const sliderValue = document.getElementById('sliderValue');
-                      
-                      slider.addEventListener('input', function() {
-                        sliderValue.textContent = this.value;
-                        updateChart(parseInt(this.value));
-                      });
-
-                      // Initial chart update
-                      updateChart(parseInt(slider.value));
-                    });
-                  </script>
-                  </body></html>" >> $INDEX_FILE
+                      </script>
+                    </body></html>" >> $INDEX_FILE
             - name: Commit Current Report to GitHub Pages
               run: |
                   git add published-reports/$TIMESTAMP/
