@@ -89,26 +89,58 @@ jobs:
                   node-version: lts/*
             - name: Install dependencies
               run: npm ci
+            #Restore Cached Reports
             - name: Restore Cached Reports
               uses: actions/cache@v3
               with:
                   path: all-blob-reports
                   key: playwright-blob-report
+            #Download artifacts
             - name: Download artifacts
               uses: actions/download-artifact@v4
               with:
                   path: all-blob-reports
                   pattern: blob-report-*
                   merge-multiple: true
+            #Merge Playwright reports
             - name: Merge Playwright reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
+            #Configure Git User
             - name: Configure Git User
               run: |
                   git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
                   git config --global user.name "pruthvirajqa2dev"
+            #Pull from Main branch
+            - name: Pull from Main branch
+              run: |
+                  git fetch origin
+                  git checkout Main  #Checkout the existing Main branch
+                  git pull --rebase origin Main || echo "No changes to pull"
+            #Parse Test Results and Set Variables
+            - name: Parse Test Results and Set Variables
+              run: node parse-results.js
+            #Use Environment Variables
+            - name: Use Environment Variables
+              run: |
+                  echo "Executed Tests: ${{ env.EXECUTED_TESTS }}"
+                  echo "Passed Tests: ${{ env.PASSED_TESTS }}"
+                  echo "Failed Tests: ${{ env.FAILED_TESTS }}"
+                  echo "Flaky Tests: ${{ env.FLAKY_TESTS }}"
+            #Stash untracked files
             - name: Stash untracked files
               run: |
                   git stash push -m "Stashing untracked report files" --include-untracked
+            #Display JSON report (formatted)
+            - name: Display JSON report (formatted)
+              if: always()
+              run: |
+                  echo "Formatted JSON report:"
+                  echo "Current directory:"
+                  pwd
+                  echo "Files in current directory:"
+                  ls -l
+                  jq '.' test-results.json
+            #Pull from gh-pages branch
             - name: Pull from gh-pages branch
               run: |
                   git fetch origin
@@ -356,10 +388,3 @@ jobs:
             #       to: pruthviraj.pardeshi@parentpay.com
             #       from: ${{ secrets.EMAIL_USERNAME }}
             #       cc: princy.rajkumar@parentpay.com
-            - name: Display JSON report (formatted)
-              if: always()
-              run: |
-                  echo "Formatted JSON report:"
-                  pwd
-                  ls
-                  jq '.' test-results.json

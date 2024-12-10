@@ -8,3 +8,4 @@ node_modules/
 /playwright/.cache/
 /Test Files/
 /PDFDownloads
+test-results.json
