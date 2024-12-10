@@ -338,9 +338,12 @@ jobs:
                   subject: "SIMS Finance- GitHub Action: Playwright Tests ${{ env.TEST_STATUS }}"
                   body: |
                       Hi,
+                      Please find the automated SIMS Finance Playwright Tests Execution Status:
 
-                      The Playwright tests have ${{ env.TEST_STATUS }}. 
-                      Latest run was on ${{ env.TIMESTAMP }}.
+                      🧪 The Playwright tests have ${{ env.TEST_STATUS }}.
+
+                      🕒 Latest run was on ${{ env.TIMESTAMP }}.
+
                       Please refer the link below to view the report.
                       https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber/
 
@@ -348,3 +351,8 @@ jobs:
                       SIMS Finance QA Team
                   to: pruthviraj.pardeshi@parentpay.com,princy.rajkumar@parentpay.com
                   from: ${{ secrets.EMAIL_USERNAME }}
+            - name: Display JSON report (formatted)
+              if: always()
+              run: |
+                  echo "Formatted JSON report:"
+                  jq '.' test-results.json
