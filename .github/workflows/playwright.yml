@@ -249,7 +249,9 @@ jobs:
                   INDEX_FILE="published-reports/index.html"
                   TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
                    echo "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>
-                    <meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Playwright Reports</title>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Playwright Reports</title>
+                    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
                     <style>
                       body {font-family:Arial, sans-serif; background-color:#f4f4f9; color:#333;}
                       table {width:90%; margin:2em auto; border-collapse:collapse; background:white; box-shadow:0 2px 8px rgba(0, 0, 0, 0.1); }
@@ -279,6 +281,15 @@ jobs:
                       .sort-desc::after {
                         content: '↓';
                       }
+                      .chart-container {
+                        width: 90%;
+                        margin: 2em auto;
+                        height: 400px;
+                        background: white;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                      }
                     </style>
                     </head>
                     <body>
@@ -286,6 +297,11 @@ jobs:
                         <h1>Playwright Reports</h1>
                         <p>Explore the results of the test runs below.</p>
                       </header>
+                      
+                      <div class='chart-container'>
+                        <canvas id='trendsChart'></canvas>
+                      </div>
+
                       <div class='filters'>
                         <input type='date' id='dateFilter' placeholder='Filter by date'>
                         <select id='statusFilter'>
@@ -313,6 +329,11 @@ jobs:
                       
                       STATUS="Unknown"
                       CSS_CLASS=""
+                      EXECUTED=0
+                      PASSED=0
+                      FAILED=0
+                      FLAKY=0
+
                       if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
                         STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json")
                         STATUS=$(echo "$STATUS" | xargs)
@@ -322,10 +343,18 @@ jobs:
                         if [ "$STATUS" = "Passed" ]; then
                           CSS_CLASS="passed"
                         fi
-                        echo "TEST_STATUS=$STATUS" >> $GITHUB_ENV
                       fi
-                        LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
-                        echo "<tr data-date='$DATE_PART'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> $INDEX_FILE
+
+                      # Get test counts from test-results.json if it exists
+                      if [ -f "published-reports/$TIMESTAMP/test-results.json" ]; then
+                        EXECUTED=$(jq '.stats.expected' "published-reports/$TIMESTAMP/test-results.json")
+                        PASSED=$(jq '.stats.expected - .stats.unexpected - .stats.flaky' "published-reports/$TIMESTAMP/test-results.json")
+                        FAILED=$(jq '.stats.unexpected' "published-reports/$TIMESTAMP/test-results.json")
+                        FLAKY=$(jq '.stats.flaky' "published-reports/$TIMESTAMP/test-results.json")
+                      fi
+
+                      LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
+                      echo "<tr data-date='$DATE_PART' data-executed='$EXECUTED' data-passed='$PASSED' data-failed='$FAILED' data-flaky='$FLAKY'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> $INDEX_FILE
                     fi
                   done
                   echo "</tbody></table></main>
@@ -395,6 +424,92 @@ jobs:
 
                       dateFilter.addEventListener('change', filterTable);
                       statusFilter.addEventListener('change', filterTable);
+
+                      // Add chart initialization
+                      const rows = Array.from(document.querySelectorAll('#reportsTable tbody tr'));
+                      const chartData = {
+                        labels: [],
+                        datasets: [
+                          {
+                            label: 'Executed Tests',
+                            data: [],
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                          },
+                          {
+                            label: 'Passed Tests',
+                            data: [],
+                            borderColor: 'rgb(75, 192, 75)',
+                            tension: 0.1
+                          },
+                          {
+                            label: 'Failed Tests',
+                            data: [],
+                            borderColor: 'rgb(255, 99, 132)',
+                            tension: 0.1
+                          },
+                          {
+                            label: 'Flaky Tests',
+                            data: [],
+                            borderColor: 'rgb(255, 159, 64)',
+                            tension: 0.1
+                          }
+                        ]
+                      };
+
+                      // Process test results for chart
+                      rows.reverse().forEach(row => {
+                        const date = row.cells[0].textContent;
+                        const time = row.cells[1].textContent;
+                        const status = row.cells[3].textContent;
+                        
+                        // Get test counts from data attributes (you'll need to add these)
+                        const executed = parseInt(row.dataset.executed || '0');
+                        const passed = parseInt(row.dataset.passed || '0');
+                        const failed = parseInt(row.dataset.failed || '0');
+                        const flaky = parseInt(row.dataset.flaky || '0');
+
+                        chartData.labels.push(\`\${date} \${time}\`);
+                        chartData.datasets[0].data.push(executed);
+                        chartData.datasets[1].data.push(passed);
+                        chartData.datasets[2].data.push(failed);
+                        chartData.datasets[3].data.push(flaky);
+                      });
+
+                      // Create the chart
+                      const ctx = document.getElementById('trendsChart').getContext('2d');
+                      new Chart(ctx, {
+                        type: 'line',
+                        data: chartData,
+                        options: {
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                              title: {
+                                display: true,
+                                text: 'Number of Tests'
+                              }
+                            },
+                            x: {
+                              title: {
+                                display: true,
+                                text: 'Date and Time'
+                              }
+                            }
+                          },
+                          plugins: {
+                            title: {
+                              display: true,
+                              text: 'Test Execution Trends'
+                            },
+                            legend: {
+                              position: 'bottom'
+                            }
+                          }
+                        }
+                      });
                     });
                   </script>
                   </body></html>" >> $INDEX_FILE
