@@ -280,7 +280,68 @@ jobs:
                       <title>Playwright Test Results</title>
                       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                       <style>
-                          /* Add your existing styles here */
+                          body {
+                              font-family: Arial, sans-serif;
+                              margin: 0;
+                              padding: 20px;
+                              background-color: #f5f5f5;
+                          }
+
+                          header {
+                              text-align: center;
+                              margin-bottom: 2em;
+                              color: #333;
+                          }
+
+                          main {
+                              max-width: 1200px;
+                              margin: 0 auto;
+                          }
+
+                          table {
+                              width: 100%;
+                              border-collapse: collapse;
+                              background: white;
+                              box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                              margin-bottom: 2em;
+                              border-radius: 8px;
+                          }
+
+                          th, td {
+                              padding: 12px 15px;
+                              text-align: left;
+                              border-bottom: 1px solid #ddd;
+                          }
+
+                          th {
+                              background-color: #f8f9fa;
+                              font-weight: bold;
+                              color: #333;
+                          }
+
+                          tr:hover {
+                              background-color: #f5f5f5;
+                          }
+
+                          td a {
+                              color: #007bff;
+                              text-decoration: none;
+                          }
+
+                          td a:hover {
+                              text-decoration: underline;
+                          }
+
+                          .passed {
+                              color: #28a745;
+                              font-weight: bold;
+                          }
+
+                          .failed {
+                              color: #dc3545;
+                              font-weight: bold;
+                          }
+
                           .chart-container {
                               width: 90%;
                               margin: 2em auto;
@@ -289,11 +350,92 @@ jobs:
                               border-radius: 8px;
                               box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
                           }
+
                           .chart-wrapper {
                               height: 400px;
                               position: relative;
+                              margin-bottom: 20px;
                           }
-                          /* Add other styles as needed */
+
+                          .chart-controls {
+                              display: flex;
+                              justify-content: space-between;
+                              align-items: center;
+                              margin-bottom: 1em;
+                              padding: 10px;
+                              background: #f8f9fa;
+                              border-radius: 4px;
+                          }
+
+                          .data-point-count {
+                              font-size: 0.9em;
+                              color: #666;
+                          }
+
+                          .slider-container {
+                              width: 100%;
+                              padding: 10px;
+                              background: #f8f9fa;
+                              border-radius: 4px;
+                              margin-top: 1em;
+                          }
+
+                          input[type='range'] {
+                              width: 100%;
+                              margin: 10px 0;
+                          }
+
+                          label {
+                              display: block;
+                              margin-bottom: 5px;
+                              color: #666;
+                          }
+
+                          h2 {
+                              color: #333;
+                              margin-bottom: 1em;
+                              padding-bottom: 0.5em;
+                              border-bottom: 1px solid #eee;
+                          }
+
+                          .filters {
+                              margin-bottom: 20px;
+                              display: flex;
+                              gap: 10px;
+                          }
+
+                          .filters input,
+                          .filters select {
+                              padding: 8px;
+                              border: 1px solid #ddd;
+                              border-radius: 4px;
+                              font-size: 14px;
+                          }
+
+                          .sort-icon {
+                              cursor: pointer;
+                          }
+
+                          .sort-icon:after {
+                              content: '↕';
+                              margin-left: 5px;
+                              font-size: 0.8em;
+                          }
+
+                          @media (max-width: 768px) {
+                              body {
+                                  padding: 10px;
+                              }
+
+                              th, td {
+                                  padding: 8px 10px;
+                              }
+
+                              .chart-container {
+                                  width: 95%;
+                                  padding: 10px;
+                              }
+                          }
                       </style>
                   </head>
                   <body>
@@ -366,90 +508,181 @@ jobs:
                               </div>
                           </div>
                       </main>
-                  EOL
 
-                  # Add the JavaScript with historical data
-                  echo "<script>const historicalData = ${HISTORICAL_DATA};" >> "$INDEX_FILE"
-                  
-                  cat >> "$INDEX_FILE" << 'EOL'
-                      document.addEventListener('DOMContentLoaded', function() {
-                          // Filter out entries where executed count is 0 or undefined
-                          const validRuns = historicalData.runs.filter(run => 
-                              run.executed && run.executed > 0
-                          );
+                      <!-- Add the JavaScript with historical data and functionality -->
+                      <script>const historicalData = ${HISTORICAL_DATA};</script>
+                      <script>
+                          document.addEventListener('DOMContentLoaded', function() {
+                              // Sorting functionality
+                              const table = document.getElementById('reportsTable');
+                              const headers = table.querySelectorAll('th[data-sort]');
+                              let sortDirection = 'asc';
 
-                          const chartData = {
-                              labels: validRuns.map(run => {
-                                  const [date, time] = run.timestamp.split('_');
-                                  return `${date} ${time.replace(/-/g, ':')}`;
-                              }),
-                              datasets: [
-                                  {
-                                      label: 'Executed Tests',
-                                      data: validRuns.map(run => run.executed),
-                                      borderColor: 'rgb(75, 192, 192)',
-                                      tension: 0.1
-                                  },
-                                  {
-                                      label: 'Passed Tests',
-                                      data: validRuns.map(run => run.passed),
-                                      borderColor: 'rgb(75, 192, 75)',
-                                      tension: 0.1
-                                  },
-                                  {
-                                      label: 'Failed Tests',
-                                      data: validRuns.map(run => run.failed),
-                                      borderColor: 'rgb(255, 99, 132)',
-                                      tension: 0.1
-                                  },
-                                  {
-                                      label: 'Flaky Tests',
-                                      data: validRuns.map(run => run.flaky),
-                                      borderColor: 'rgb(255, 159, 64)',
-                                      tension: 0.1
-                                  }
-                              ]
-                          };
-
-                          const ctx = document.getElementById('trendsChart').getContext('2d');
-                          const chart = new Chart(ctx, {
-                              type: 'line',
-                              data: chartData,
-                              options: {
-                                  responsive: true,
-                                  maintainAspectRatio: false,
-                                  scales: {
-                                      y: {
-                                          beginAtZero: true,
-                                          title: {
-                                              display: true,
-                                              text: 'Number of Tests'
+                              headers.forEach(header => {
+                                  header.addEventListener('click', () => {
+                                      const column = header.dataset.sort;
+                                      const rows = Array.from(table.querySelectorAll('tbody tr'));
+                                      
+                                      rows.sort((a, b) => {
+                                          let aValue, bValue;
+                                          
+                                          if (column === 'date') {
+                                              aValue = a.cells[0].textContent + ' ' + a.cells[1].textContent;
+                                              bValue = b.cells[0].textContent + ' ' + b.cells[1].textContent;
+                                          } else if (column === 'status') {
+                                              aValue = a.cells[3].textContent;
+                                              bValue = b.cells[3].textContent;
                                           }
-                                      },
-                                      x: {
-                                          title: {
-                                              display: true,
-                                              text: 'Date and Time'
+                                          
+                                          if (sortDirection === 'asc') {
+                                              return aValue.localeCompare(bValue);
+                                          } else {
+                                              return bValue.localeCompare(aValue);
                                           }
-                                      }
-                                  },
-                                  plugins: {
-                                      legend: {
-                                          position: 'bottom'
-                                      }
-                                  }
+                                      });
+                                      
+                                      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                                      
+                                      const tbody = table.querySelector('tbody');
+                                      tbody.innerHTML = '';
+                                      rows.forEach(row => tbody.appendChild(row));
+                                  });
+                              });
+
+                              // Filtering functionality
+                              const dateFilter = document.getElementById('dateFilter');
+                              const statusFilter = document.getElementById('statusFilter');
+
+                              function filterTable() {
+                                  const rows = table.querySelectorAll('tbody tr');
+                                  const dateValue = dateFilter.value;
+                                  const statusValue = statusFilter.value.toLowerCase();
+
+                                  rows.forEach(row => {
+                                      const date = row.cells[0].textContent;
+                                      const status = row.cells[3].textContent.toLowerCase();
+                                      const dateMatch = !dateValue || date === dateValue;
+                                      const statusMatch = !statusValue || status === statusValue;
+                                      
+                                      row.style.display = dateMatch && statusMatch ? '' : 'none';
+                                  });
+
+                                  updateChart();
                               }
-                          });
 
-                          // Update visible points count
-                          document.getElementById('totalPoints').textContent = validRuns.length;
-                          const slider = document.getElementById('dataSlider');
-                          slider.max = validRuns.length;
-                          slider.value = Math.min(10, validRuns.length);
-                          document.getElementById('sliderValue').textContent = slider.value;
-                          document.getElementById('visiblePoints').textContent = slider.value;
-                      });
-                  </script>
+                              dateFilter.addEventListener('change', filterTable);
+                              statusFilter.addEventListener('change', filterTable);
+
+                              // Chart functionality
+                              function updateChart() {
+                                  const visibleRows = Array.from(table.querySelectorAll('tbody tr'))
+                                      .filter(row => row.style.display !== 'none');
+                                  
+                                  if (visibleRows.length === 0) {
+                                      console.log('No visible rows found');
+                                      return;
+                                  }
+
+                                  const chartData = {
+                                      labels: [],
+                                      datasets: [
+                                          {
+                                              label: 'Executed Tests',
+                                              data: [],
+                                              borderColor: 'rgb(75, 192, 192)',
+                                              tension: 0.1
+                                          },
+                                          {
+                                              label: 'Passed Tests',
+                                              data: [],
+                                              borderColor: 'rgb(75, 192, 75)',
+                                              tension: 0.1
+                                          },
+                                          {
+                                              label: 'Failed Tests',
+                                              data: [],
+                                              borderColor: 'rgb(255, 99, 132)',
+                                              tension: 0.1
+                                          },
+                                          {
+                                              label: 'Flaky Tests',
+                                              data: [],
+                                              borderColor: 'rgb(255, 159, 64)',
+                                              tension: 0.1
+                                          }
+                                      ]
+                                  };
+
+                                  visibleRows.forEach(row => {
+                                      const date = row.cells[0].textContent;
+                                      const time = row.cells[1].textContent;
+                                      
+                                      chartData.labels.push(`${date} ${time}`);
+                                      chartData.datasets[0].data.push(parseInt(row.dataset.executed) || 0);
+                                      chartData.datasets[1].data.push(parseInt(row.dataset.passed) || 0);
+                                      chartData.datasets[2].data.push(parseInt(row.dataset.failed) || 0);
+                                      chartData.datasets[3].data.push(parseInt(row.dataset.flaky) || 0);
+                                  });
+
+                                  if (window.testChart) {
+                                      window.testChart.destroy();
+                                  }
+
+                                  const ctx = document.getElementById('trendsChart').getContext('2d');
+                                  window.testChart = new Chart(ctx, {
+                                      type: 'line',
+                                      data: chartData,
+                                      options: {
+                                          responsive: true,
+                                          maintainAspectRatio: false,
+                                          scales: {
+                                              y: {
+                                                  beginAtZero: true,
+                                                  title: {
+                                                      display: true,
+                                                      text: 'Number of Tests'
+                                                  }
+                                              },
+                                              x: {
+                                                  title: {
+                                                      display: true,
+                                                      text: 'Date and Time'
+                                                  }
+                                              }
+                                          },
+                                          plugins: {
+                                              legend: {
+                                                  position: 'bottom'
+                                              }
+                                          }
+                                      }
+                                  });
+
+                                  // Update visible points count
+                                  document.getElementById('visiblePoints').textContent = visibleRows.length;
+                                  document.getElementById('totalPoints').textContent = table.querySelectorAll('tbody tr').length;
+                              }
+
+                              // Initialize chart
+                              updateChart();
+
+                              // Slider functionality
+                              const slider = document.getElementById('dataSlider');
+                              const sliderValue = document.getElementById('sliderValue');
+                              
+                              slider.addEventListener('input', function() {
+                                  sliderValue.textContent = this.value;
+                                  const rows = Array.from(table.querySelectorAll('tbody tr'));
+                                  const maxVisible = parseInt(this.value);
+                                  
+                                  rows.forEach((row, index) => {
+                                      row.style.display = index < maxVisible ? '' : 'none';
+                                  });
+                                  
+                                  updateChart();
+                              });
+                          });
+                      </script>
                   </body>
                   </html>
                   EOL
