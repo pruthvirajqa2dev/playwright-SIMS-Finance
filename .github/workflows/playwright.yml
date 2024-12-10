@@ -355,4 +355,6 @@ jobs:
               if: always()
               run: |
                   echo "Formatted JSON report:"
+                  pwd
+                  ls
                   jq '.' test-results.json
