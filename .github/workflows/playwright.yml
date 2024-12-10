@@ -160,22 +160,29 @@ jobs:
                     }
                   }' > merged-results.json
 
-                  # Merge the results using jq
-                  jq -s '
-                    reduce .[1:][] as $item (.[0];
-                      .suites += $item.suites |
-                      .errors += $item.errors |
-                      .stats.expected += $item.stats.expected |
-                      .stats.skipped += $item.stats.skipped |
-                      .stats.unexpected += $item.stats.unexpected |
-                      .stats.flaky += $item.stats.flaky |
-                      .stats.duration += $item.stats.duration |
-                      if .stats.startTime == null or ($item.stats.startTime < .stats.startTime) then
-                        .stats.startTime = $item.stats.startTime
-                      else . end |
-                      if .config == null then .config = $item.config else . end
-                    )
-                  ' merged-results.json test-results/test-results-*.json > test-results.json
+                  # Check if test result files exist
+                  if ls test-results/test-results-*.json 1> /dev/null 2>&1; then
+                    # Merge the results using jq
+                    jq -s '
+                      reduce .[1:][] as $item (.[0];
+                        .suites += $item.suites |
+                        .errors += $item.errors |
+                        .stats.expected += $item.stats.expected |
+                        .stats.skipped += $item.stats.skipped |
+                        .stats.unexpected += $item.stats.unexpected |
+                        .stats.flaky += $item.stats.flaky |
+                        .stats.duration += $item.stats.duration |
+                        if .stats.startTime == null or ($item.stats.startTime < .stats.startTime) then
+                          .stats.startTime = $item.stats.startTime
+                        else . end |
+                        if .config == null then .config = $item.config else . end
+                      )
+                    ' merged-results.json test-results/test-results-*.json > test-results.json
+                    echo "Successfully merged test results"
+                  else
+                    echo "No test result files found to merge"
+                    cp merged-results.json test-results.json
+                  fi
 
             # Parse Test Results and Set Variables
             - name: Parse Test Results and Set Variables
@@ -245,7 +252,10 @@ jobs:
                   echo "TEST_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
               shell: bash
             - name: Update Index Page
+              if: always()
               run: |
+                  set -e  # Exit on error
+                  
                   INDEX_FILE="published-reports/index.html"
                   
                   # Ensure test-history.json exists and is readable
@@ -255,8 +265,7 @@ jobs:
                   fi
 
                   # Read historical data and verify it's valid JSON
-                  HISTORICAL_DATA=$(cat published-reports/test-history.json)
-                  if ! echo "$HISTORICAL_DATA" | jq empty; then
+                  if ! HISTORICAL_DATA=$(jq '.' published-reports/test-history.json 2>/dev/null); then
                     echo "Warning: Invalid JSON in test-history.json"
                     HISTORICAL_DATA='{"runs":[]}'
                   fi
@@ -490,6 +499,8 @@ jobs:
             #       cc: princy.rajkumar@parentpay.com
             - name: Update Historical Test Data
               run: |
+                  set -e  # Exit on error
+                  
                   # Create historical data file if it doesn't exist
                   mkdir -p published-reports
                   if [ ! -f "published-reports/test-history.json" ]; then
@@ -498,39 +509,64 @@ jobs:
 
                   # Get current test counts from the merged results
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
-                  EXECUTED=$(jq '.stats.expected' test-results.json)
-                  FAILED=$(jq '.stats.unexpected' test-results.json)
-                  FLAKY=$(jq '.stats.flaky' test-results.json)
-                  PASSED=$(echo "$EXECUTED - $FAILED - $FLAKY" | bc)
+                  
+                  if [ -f "test-results.json" ]; then
+                    echo "Reading test results from test-results.json"
+                    
+                    # Extract values with error checking
+                    EXECUTED=$(jq -r '.stats.expected // 0' test-results.json)
+                    FAILED=$(jq -r '.stats.unexpected // 0' test-results.json)
+                    FLAKY=$(jq -r '.stats.flaky // 0' test-results.json)
+                    
+                    # Ensure values are numbers
+                    if [[ ! "$EXECUTED" =~ ^[0-9]+$ ]] || [[ ! "$FAILED" =~ ^[0-9]+$ ]] || [[ ! "$FLAKY" =~ ^[0-9]+$ ]]; then
+                      echo "Error: Invalid numeric values in test results"
+                      exit 1
+                    fi
+                    
+                    PASSED=$(echo "$EXECUTED - $FAILED - $FLAKY" | bc)
 
-                  # Debug output
-                  echo "Test counts for $TIMESTAMP:"
-                  echo "Executed: $EXECUTED"
-                  echo "Failed: $FAILED"
-                  echo "Flaky: $FLAKY"
-                  echo "Passed: $PASSED"
+                    # Debug output
+                    echo "Test counts for $TIMESTAMP:"
+                    echo "Executed: $EXECUTED"
+                    echo "Failed: $FAILED"
+                    echo "Flaky: $FLAKY"
+                    echo "Passed: $PASSED"
 
-                  # Add new entry to history
-                  NEW_ENTRY=$(jq -n \
-                    --arg ts "$TIMESTAMP" \
-                    --arg ex "$EXECUTED" \
-                    --arg pa "$PASSED" \
-                    --arg fa "$FAILED" \
-                    --arg fl "$FLAKY" \
-                    '{
-                      "timestamp": $ts,
-                      "executed": $ex|tonumber,
-                      "passed": $pa|tonumber,
-                      "failed": $fa|tonumber,
-                      "flaky": $fl|tonumber
-                    }')
+                    # Validate counts
+                    if [ "$EXECUTED" -ge 0 ] && [ "$PASSED" -ge 0 ] && [ "$FAILED" -ge 0 ] && [ "$FLAKY" -ge 0 ]; then
+                      # Add new entry to history
+                      NEW_ENTRY=$(jq -n \
+                        --arg ts "$TIMESTAMP" \
+                        --arg ex "$EXECUTED" \
+                        --arg pa "$PASSED" \
+                        --arg fa "$FAILED" \
+                        --arg fl "$FLAKY" \
+                        '{
+                          "timestamp": $ts,
+                          "executed": $ex|tonumber,
+                          "passed": $pa|tonumber,
+                          "failed": $fa|tonumber,
+                          "flaky": $fl|tonumber
+                        }')
 
-                  # Update history file
-                  jq --argjson entry "$NEW_ENTRY" '.runs += [$entry]' published-reports/test-history.json > temp.json && mv temp.json published-reports/test-history.json
-
-                  # Debug output
-                  echo "Updated test history:"
-                  cat published-reports/test-history.json
+                      # Update history file with backup
+                      cp published-reports/test-history.json published-reports/test-history.json.bak
+                      if jq --argjson entry "$NEW_ENTRY" '.runs += [$entry]' published-reports/test-history.json > temp.json; then
+                        mv temp.json published-reports/test-history.json
+                        echo "Successfully updated test history"
+                      else
+                        echo "Error updating test history, restoring backup"
+                        mv published-reports/test-history.json.bak published-reports/test-history.json
+                        exit 1
+                      fi
+                    else
+                      echo "Error: Invalid test counts detected"
+                      exit 1
+                    fi
+                  else
+                    echo "Warning: test-results.json not found"
+                  fi
 
                   # Commit and push the updated history
                   git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
@@ -557,5 +593,4 @@ jobs:
                     HISTORICAL_DATA='{"runs":[]}'
                   fi
 
-                  # Continue with the rest of your index.html generation...
-                  # [Previous index.html generation code remains the same]
+
