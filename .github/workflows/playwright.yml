@@ -270,215 +270,201 @@ jobs:
                     HISTORICAL_DATA='{"runs":[]}'
                   fi
 
-                  # Start generating index.html
-                  cat > "$INDEX_FILE" << 'EOL'
-                  <!DOCTYPE html>
-                  <html lang="en">
-                  <head>
-                      <meta charset="UTF-8">
-                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                      <title>Playwright Test Results</title>
-                      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                      <style>
-                          /* Add your existing styles here */
-                          .chart-container {
-                              width: 90%;
-                              margin: 2em auto;
-                              background: white;
-                              padding: 20px;
-                              border-radius: 8px;
-                              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                          }
-                          .chart-wrapper {
-                              height: 400px;
-                              position: relative;
-                          }
-                          /* Add other styles as needed */
-                      </style>
-                  </head>
-                  <body>
-                      <header>
-                          <h1>Playwright Test Results</h1>
-                      </header>
-                      <main>
-                          <table id="reportsTable">
-                              <thead>
-                                  <tr>
-                                      <th>Date</th>
-                                      <th>Time</th>
-                                      <th>Report</th>
-                                      <th>Status</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                  EOL
-
-                  # Add table rows
-                  for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); do
-                      TIMESTAMP=$(basename "$dir")
-                      if [[ $TIMESTAMP =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$ ]]; then
-                          DATE_PART=$(echo $TIMESTAMP | cut -d'_' -f1)
-                          TIME_PART=$(echo $TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
-                          
-                          STATUS="Unknown"
-                          CSS_CLASS=""
-                          EXECUTED=0
-                          PASSED=0
-                          FAILED=0
-                          FLAKY=0
-
-                          if [ -f "$dir/test-results.json" ]; then
-                              EXECUTED=$(jq -r '.stats.expected // 0' "$dir/test-results.json")
-                              FAILED=$(jq -r '.stats.unexpected // 0' "$dir/test-results.json")
-                              FLAKY=$(jq -r '.stats.flaky // 0' "$dir/test-results.json")
-                              PASSED=$(echo "$EXECUTED - $FAILED - $FLAKY" | bc)
-                          fi
-
-                          if [ -f "$dir/status.json" ]; then
-                              STATUS=$(jq -r '.status' "$dir/status.json")
-                              if [ "$STATUS" = "Failed" ]; then
-                                  CSS_CLASS="failed"
-                              elif [ "$STATUS" = "Passed" ]; then
-                                  CSS_CLASS="passed"
-                              fi
-                          fi
-
-                          echo "<tr data-date='$DATE_PART' data-executed='$EXECUTED' data-passed='$PASSED' data-failed='$FAILED' data-flaky='$FLAKY'><td>$DATE_PART</td><td>$TIME_PART</td><td><a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a></td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> "$INDEX_FILE"
-                      fi
+                      LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
+                      echo "<tr data-date='$DATE_PART' data-executed='$EXECUTED' data-passed='$PASSED' data-failed='$FAILED' data-flaky='$FLAKY'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> $INDEX_FILE
+                    fi
                   done
 
-                  # Add chart container and close HTML
-                  cat >> "$INDEX_FILE" << 'EOL'
-                              </tbody>
-                          </table>
+                  # Close the table and add the chart container
+                  echo "</tbody></table>
 
-                          <div class="chart-container">
-                              <h2>Test Execution Trends</h2>
-                              <div class="chart-controls">
-                                  <div class="data-point-count">Showing <span id="visiblePoints">0</span> of <span id="totalPoints">0</span> data points</div>
-                              </div>
-                              <div class="chart-wrapper">
-                                  <canvas id="trendsChart"></canvas>
-                              </div>
-                              <div class="slider-container">
-                                  <input type="range" id="dataSlider" min="5" max="50" value="10">
-                                  <label for="dataSlider">Number of data points to show: <span id="sliderValue">10</span></label>
-                              </div>
+                        <div class='chart-container'>
+                          <h2>Test Execution Trends</h2>
+                          <div class='chart-controls'>
+                            <div class='data-point-count'>Showing <span id='visiblePoints'>0</span> of <span id='totalPoints'>0</span> data points</div>
                           </div>
+                          <div class='chart-wrapper'>
+                            <canvas id='trendsChart'></canvas>
+                          </div>
+                          <div class='slider-container'>
+                            <input type='range' id='dataSlider' min='5' max='50' value='10'>
+                            <label for='dataSlider'>Number of data points to show: <span id='sliderValue'>10</span></label>
+                          </div>
+                        </div>
                       </main>
-                  EOL
 
-                  # Add the JavaScript with historical data
-                  echo "<script>const historicalData = ${HISTORICAL_DATA};" >> "$INDEX_FILE"
-                  
-                  cat >> "$INDEX_FILE" << 'EOL'
-                      document.addEventListener('DOMContentLoaded', function() {
-                          // Filter out entries where executed count is 0 or undefined
-                          const validRuns = historicalData.runs.filter(run => 
-                              run.executed && run.executed > 0
-                          );
+                      <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                          console.log('DOM Content Loaded');
+                          
+                          // Initialize the chart
+                          function initializeChart() {
+                            console.log('Initializing chart');
+                            const rows = Array.from(document.querySelectorAll('#reportsTable tbody tr'));
+                            console.log('Found rows:', rows.length);
+                            
+                            if (rows.length === 0) {
+                              console.log('No data rows found');
+                              return;
+                            }
 
-                          const chartData = {
-                              labels: validRuns.map(run => {
-                                  const [date, time] = run.timestamp.split('_');
-                                  return `${date} ${time.replace(/-/g, ':')}`;
-                              }),
+                            const chartData = {
+                              labels: [],
                               datasets: [
-                                  {
-                                      label: 'Executed Tests',
-                                      data: validRuns.map(run => run.executed),
-                                      borderColor: 'rgb(75, 192, 192)',
-                                      tension: 0.1
-                                  },
-                                  {
-                                      label: 'Passed Tests',
-                                      data: validRuns.map(run => run.passed),
-                                      borderColor: 'rgb(75, 192, 75)',
-                                      tension: 0.1
-                                  },
-                                  {
-                                      label: 'Failed Tests',
-                                      data: validRuns.map(run => run.failed),
-                                      borderColor: 'rgb(255, 99, 132)',
-                                      tension: 0.1
-                                  },
-                                  {
-                                      label: 'Flaky Tests',
-                                      data: validRuns.map(run => run.flaky),
-                                      borderColor: 'rgb(255, 159, 64)',
-                                      tension: 0.1
-                                  }
+                                {
+                                  label: 'Executed Tests',
+                                  data: [],
+                                  borderColor: 'rgb(75, 192, 192)',
+                                  tension: 0.1
+                                },
+                                {
+                                  label: 'Passed Tests',
+                                  data: [],
+                                  borderColor: 'rgb(75, 192, 75)',
+                                  tension: 0.1
+                                },
+                                {
+                                  label: 'Failed Tests',
+                                  data: [],
+                                  borderColor: 'rgb(255, 99, 132)',
+                                  tension: 0.1
+                                },
+                                {
+                                  label: 'Flaky Tests',
+                                  data: [],
+                                  borderColor: 'rgb(255, 159, 64)',
+                                  tension: 0.1
+                                }
                               ]
-                          };
+                            };
 
-                          const ctx = document.getElementById('trendsChart').getContext('2d');
-                          const chart = new Chart(ctx, {
+                            rows.forEach(row => {
+                              const date = row.cells[0].textContent;
+                              const time = row.cells[1].textContent;
+                              
+                              // Debug logging
+                              console.log('Processing row:', {
+                                date,
+                                time,
+                                executed: row.dataset.executed,
+                                passed: row.dataset.passed,
+                                failed: row.dataset.failed,
+                                flaky: row.dataset.flaky
+                              });
+
+                              chartData.labels.push(\`\${date} \${time}\`);
+                              chartData.datasets[0].data.push(parseInt(row.dataset.executed) || 0);
+                              chartData.datasets[1].data.push(parseInt(row.dataset.passed) || 0);
+                              chartData.datasets[2].data.push(parseInt(row.dataset.failed) || 0);
+                              chartData.datasets[3].data.push(parseInt(row.dataset.flaky) || 0);
+                            });
+
+                            const ctx = document.getElementById('trendsChart');
+                            if (!ctx) {
+                              console.error('Canvas element not found');
+                              return;
+                            }
+
+                            console.log('Creating chart with data:', chartData);
+
+                            new Chart(ctx, {
                               type: 'line',
                               data: chartData,
                               options: {
-                                  responsive: true,
-                                  maintainAspectRatio: false,
-                                  scales: {
-                                      y: {
-                                          beginAtZero: true,
-                                          title: {
-                                              display: true,
-                                              text: 'Number of Tests'
-                                          }
-                                      },
-                                      x: {
-                                          title: {
-                                              display: true,
-                                              text: 'Date and Time'
-                                          }
-                                      }
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                  y: {
+                                    beginAtZero: true,
+                                    title: {
+                                      display: true,
+                                      text: 'Number of Tests'
+                                    }
                                   },
-                                  plugins: {
-                                      legend: {
-                                          position: 'bottom'
-                                      }
+                                  x: {
+                                    title: {
+                                      display: true,
+                                      text: 'Date and Time'
+                                    }
                                   }
+                                },
+                                plugins: {
+                                  legend: {
+                                    position: 'bottom'
+                                  }
+                                }
                               }
-                          });
+                            });
+                          }
 
-                          // Update visible points count
-                          document.getElementById('totalPoints').textContent = validRuns.length;
-                          const slider = document.getElementById('dataSlider');
-                          slider.max = validRuns.length;
-                          slider.value = Math.min(10, validRuns.length);
-                          document.getElementById('sliderValue').textContent = slider.value;
-                          document.getElementById('visiblePoints').textContent = slider.value;
-                      });
-                  </script>
-                  </body>
-                  </html>
-                  EOL
+                          // Initialize the chart when the page loads
+                          initializeChart();
+                        });
+                  # Read historical data for the chart
+                  HISTORICAL_DATA=$(cat published-reports/test-history.json)
+                  
+                  # Modify the script section to filter valid data points
+                  echo "<script>
+                    const historicalData = ${HISTORICAL_DATA};
+                    
+                    document.addEventListener('DOMContentLoaded', function() {
+                      // Filter out entries where executed count is 0 or undefined
+                      const validRuns = historicalData.runs.filter(run => 
+                        run.executed && run.executed > 0
+                      );
 
-            # Commit Current Report to GitHub Pages
+                      const chartData = {
+                        labels: validRuns.map(run => {
+                          const [date, time] = run.timestamp.split('_');
+                          return \`\${date} \${time.replace(/-/g, ':')}\`;
+                        }),
+                        datasets: [
+                          {
+                            label: 'Executed Tests',
+                            data: validRuns.map(run => run.executed),
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                          },
+                          {
+                            label: 'Passed Tests',
+                            data: validRuns.map(run => run.passed),
+                            borderColor: 'rgb(75, 192, 75)',
+                            tension: 0.1
+                          },
+                          {
+                            label: 'Failed Tests',
+                            data: validRuns.map(run => run.failed),
+                            borderColor: 'rgb(255, 99, 132)',
+                            tension: 0.1
+                          },
+                          {
+                            label: 'Flaky Tests',
+                            data: validRuns.map(run => run.flaky),
+                            borderColor: 'rgb(255, 159, 64)',
+                            tension: 0.1
+                          }
+                        ]
+                      };
+
             - name: Commit Current Report to GitHub Pages
               run: |
                   git add published-reports/$TIMESTAMP/
                   git commit -m "Update Playwright reports with $TIMESTAMP"
                   git push origin gh-pages
-            # Upload Combined Reports for Pages
             - name: Upload Combined Reports for Pages
               uses: actions/upload-artifact@v4
               with:
                   name: upload-html-reports
                   path: published-reports/
-            # Wait for Artifact to be available
             - name: Wait for Artifact to be available
               run: sleep 1 # Wait for 1 second to allow artifact processing
-            # Setup Pages
             - name: Setup Pages
               uses: actions/configure-pages@v2
-            # Upload artifact
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v1
               with:
                   name: upload-html-reports
                   path: published-reports/
-            # Deploy to GitHub Pages
             - name: Deploy to GitHub Pages
               uses: actions/deploy-pages@v1
               with:
