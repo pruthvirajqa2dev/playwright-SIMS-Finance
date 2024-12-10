@@ -40,10 +40,19 @@ jobs:
                   set +e
                   npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1;
                   echo "STATUS_CODE=$?" >> $GITHUB_ENV
+                  #Rename the results file to include shard index
+                  mv test-results.json test-results-${{ matrix.shardIndex }}.json
                   echo "Current directory:"
                   pwd
                   echo "Files in current directory:"
                   ls -l
+            - name: Upload Test Results for Shard ${{ matrix.shardIndex }}
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: test-results-${{ matrix.shardIndex }}
+                  path: test-results-${{ matrix.shardIndex }}.json
+                  retention-days: 30
             - name: Save Test Status for Shard ${{ matrix.shardIndex }}
               if: always()
               run: |
@@ -102,6 +111,24 @@ jobs:
                   path: all-blob-reports
                   pattern: blob-report-*
                   merge-multiple: true
+            #Add these steps before the merge
+            - name: Install jq
+              run: sudo apt-get install -y jq
+
+            - name: Download Test Results from Shards
+              uses: actions/download-artifact@v4
+              with:
+                  path: test-results
+                  pattern: test-results-*
+                  merge-multiple: true
+
+            - name: List Downloaded Results
+              run: |
+                  echo "Contents of test-results directory:"
+                  ls -la test-results/
+                  echo "Full path of test results:"
+                  find test-results/ -name "*.json"
+
             #Merge Playwright reports
             - name: Merge Playwright reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
@@ -116,9 +143,43 @@ jobs:
                   git fetch origin
                   git checkout Main  #Checkout the existing Main branch
                   git pull --rebase origin Main || echo "No changes to pull"
+            - name: Merge Test Results
+              run: |
+                  #Create a template for the merged file
+                  echo '{
+                    "config": null,
+                    "suites": [],
+                    "errors": [],
+                    "stats": {
+                      "startTime": null,
+                      "duration": 0,
+                      "expected": 0,
+                      "skipped": 0,
+                      "unexpected": 0,
+                      "flaky": 0
+                    }
+                  }' > merged-results.json
+
+                  # Merge the results using jq
+                  jq -s '
+                    reduce .[1:][] as $item (.[0];
+                      .suites += $item.suites |
+                      .errors += $item.errors |
+                      .stats.expected += $item.stats.expected |
+                      .stats.skipped += $item.stats.skipped |
+                      .stats.unexpected += $item.stats.unexpected |
+                      .stats.flaky += $item.stats.flaky |
+                      .stats.duration += $item.stats.duration |
+                      if .stats.startTime == null or ($item.stats.startTime < .stats.startTime) then
+                        .stats.startTime = $item.stats.startTime
+                      else . end |
+                      if .config == null then .config = $item.config else . end
+                    )
+                  ' merged-results.json test-results/test-results-*.json > test-results.json
+
             #Parse Test Results and Set Variables
             - name: Parse Test Results and Set Variables
-              run: node parse-results.js
+              run: node ./src/config/parse-json-report.js
             #Use Environment Variables
             - name: Use Environment Variables
               run: |
