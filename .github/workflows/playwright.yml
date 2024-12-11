@@ -674,6 +674,13 @@ jobs:
                   </body>
                   </html>
                   EOL
+            #Pull from gh-pages branch
+            - name: Pull from gh-pages branch
+              run: |
+                  git fetch origin
+                  git checkout gh-pages  #Checkout the existing Main branch
+                  git pull --rebase origin gh-pages || echo "No changes to pull"
+
             #Commit Current Report to GitHub Pages
             - name: Commit Current Report to GitHub Pages
               run: |
