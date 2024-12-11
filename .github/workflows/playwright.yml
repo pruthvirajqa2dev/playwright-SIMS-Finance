@@ -657,7 +657,7 @@ jobs:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             #Notify on Execution
             - name: Notify on Execution
-              if: always()
+              if: success()
               uses: dawidd6/action-send-mail@v3
               with:
                   server_address: smtp.gmail.com
