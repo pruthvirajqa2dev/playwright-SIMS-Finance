@@ -253,6 +253,31 @@ jobs:
                   if [ ! -f "test-results-history/consolidated.json" ]; then
                       echo '{"runs":[]}' > test-results-history/consolidated.json
                   fi
+                   # Create/update consolidated.json with the current run's data
+                  CURRENT_RUN="{
+                    \"timestamp\": \"$TIMESTAMP\",
+                    \"counts\": {
+                      \"executed\": ${{ env.EXECUTED_TESTS }},
+                      \"passed\": ${{ env.PASSED_TESTS }},
+                      \"failed\": ${{ env.FAILED_TESTS }},
+                      \"flaky\": ${{ env.FLAKY_TESTS }}
+                    }
+                  }"
+
+                  # Update consolidated history
+                  if [ ! -f "test-results-history/consolidated.json" ]; then
+                      mkdir -p test-results-history
+                      echo "{\"runs\":[]}" > test-results-history/consolidated.json
+                  fi
+
+                  # Add new run data to consolidated.json
+                  jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+
+                  # Keep only last 30 days of data
+                  jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+
+                  # Make consolidated history available for the HTML template
+                  CONSOLIDATED_HISTORY=$(cat test-results-history/consolidated.json)
                   # Read consolidated history with error handling
                   if ! CONSOLIDATED_HISTORY=$(jq '.' test-results-history/consolidated.json 2>/dev/null); then
                       echo "Warning: Invalid JSON in consolidated.json, creating new one"
@@ -349,7 +374,6 @@ jobs:
                           <option value='Failed'>Failed</option>
                         </select>
                       </div>
-                      <main>
                       <div class="dashboard-container">
                         <div class="table-container">
                           <table id='reportsTable'>
@@ -402,10 +426,10 @@ jobs:
                       </div>
                   </div>
                   </div>
-                      </main>
                   <footer><p>© 2024 Playwright Test Reports. All rights reserved.</p></footer>
                   <script>
-                  const testHistory = $CONSOLIDATED_HISTORY;
+                    const testHistory = $CONSOLIDATED_HISTORY;
+                    console.log("testHistory: ",testHistory);
                     document.addEventListener('DOMContentLoaded', function() {
                       const table = document.getElementById('reportsTable');
                       const dateFilter = document.getElementById('dateFilter');
