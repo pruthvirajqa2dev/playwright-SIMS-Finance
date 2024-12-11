@@ -276,6 +276,15 @@ jobs:
                   # Keep only last 30 days of data
                   jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
 
+                  # Commit the consolidated.json changes
+                  git add test-results-history/consolidated.json
+                  git commit -m "Update test history with run from $TIMESTAMP" || echo "No changes to commit"
+                  git push origin Main || echo "No changes to push"
+
+                  # Now switch to gh-pages and continue with the rest
+                  git checkout gh-pages
+                  git pull --rebase origin gh-pages || echo "No changes to pull"
+
                   # Make consolidated history available for the HTML template
                   CONSOLIDATED_HISTORY=$(cat test-results-history/consolidated.json)
                   # Read consolidated history with error handling
