@@ -137,6 +137,56 @@ jobs:
               run: |
                   git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
                   git config --global user.name "pruthvirajqa2dev"
+            #Pull from Main branch
+            - name: Pull from Main branch
+              run: |
+                  git fetch origin
+                  git checkout Main  #Checkout the existing Main branch
+                  git pull --rebase origin Main || echo "No changes to pull"
+            - name: Merge Test Results
+              run: |
+                  #Create a template for the merged file
+                  echo '{
+                    "config": null,
+                    "suites": [],
+                    "errors": [],
+                    "stats": {
+                      "startTime": null,
+                      "duration": 0,
+                      "expected": 0,
+                      "skipped": 0,
+                      "unexpected": 0,
+                      "flaky": 0
+                    }
+                  }' > merged-results.json
+
+                  # Merge the results using jq
+                  jq -s '
+                    reduce .[1:][] as $item (.[0];
+                      .suites += $item.suites |
+                      .errors += $item.errors |
+                      .stats.expected += $item.stats.expected |
+                      .stats.skipped += $item.stats.skipped |
+                      .stats.unexpected += $item.stats.unexpected |
+                      .stats.flaky += $item.stats.flaky |
+                      .stats.duration += $item.stats.duration |
+                      if .stats.startTime == null or ($item.stats.startTime < .stats.startTime) then
+                        .stats.startTime = $item.stats.startTime
+                      else . end |
+                      if .config == null then .config = $item.config else . end
+                    )
+                  ' merged-results.json test-results/test-results-*.json > test-results.json
+
+            #Parse Test Results and Set Variables
+            - name: Parse Test Results and Set Variables
+              run: node ./src/config/parse-json-report.js
+            #Use Environment Variables
+            - name: Use Environment Variables
+              run: |
+                  echo "Executed Tests: ${{ env.EXECUTED_TESTS }}"
+                  echo "Passed Tests: ${{ env.PASSED_TESTS }}"
+                  echo "Failed Tests: ${{ env.FAILED_TESTS }}"
+                  echo "Flaky Tests: ${{ env.FLAKY_TESTS }}"
 
             #Stash untracked files
             - name: Stash untracked files
