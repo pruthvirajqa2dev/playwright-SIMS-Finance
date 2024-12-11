@@ -81,7 +81,6 @@ jobs:
                   name: blob-report-${{ matrix.shardIndex }}
                   path: blob-report
                   retention-days: 30
-
     merge-reports:
         name: Merging executed reports
         needs: [playwright-test]
@@ -98,20 +97,20 @@ jobs:
                   node-version: lts/*
             - name: Install dependencies
               run: npm ci
-            #Restore Cached Reports
+            # Restore Cached Reports
             - name: Restore Cached Reports
               uses: actions/cache@v3
               with:
                   path: all-blob-reports
                   key: playwright-blob-report
-            #Download artifacts
+            # Download artifacts
             - name: Download artifacts
               uses: actions/download-artifact@v4
               with:
                   path: all-blob-reports
                   pattern: blob-report-*
                   merge-multiple: true
-            #Add these steps before the merge
+            # Add these steps before the merge
             - name: Install jq
               run: sudo apt-get install -y jq
 
@@ -129,7 +128,7 @@ jobs:
                   echo "Full path of test results:"
                   find test-results/ -name "*.json"
 
-            #Merge Playwright reports
+            # Merge Playwright reports
             - name: Merge Playwright reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
             #Configure Git User
@@ -335,7 +334,6 @@ jobs:
                   if [ ! -f "test-results-history/consolidated.json" ]; then
                       echo '{"runs":[]}' > test-results-history/consolidated.json
                   fi
-
                   # Read consolidated history with error handling
                   if ! CONSOLIDATED_HISTORY=$(jq '.' test-results-history/consolidated.json 2>/dev/null); then
                       echo "Warning: Invalid JSON in consolidated.json, creating new one"
@@ -444,10 +442,6 @@ jobs:
                           }
                       </style>
                   </head>
-                  EOL
-
-                  # Add the table structure
-                  cat >> "$INDEX_FILE" << 'EOL'
                   <body>
                       <header>
                           <h1>Playwright Test Results</h1>
@@ -474,7 +468,7 @@ jobs:
                                   <tbody>
                                   EOL
 
-                  # Add table rows
+                  # Add table rows dynamically
                   for dir in published-reports/*/; do
                       if [ -d "$dir" ]; then
                           TIMESTAMP=$(basename "$dir")
@@ -499,7 +493,7 @@ jobs:
                       fi
                   done
 
-                  # Close table and add graph container
+                  # Add JavaScript and close HTML
                   cat >> "$INDEX_FILE" << 'EOL'
                               </tbody>
                           </table>
@@ -693,13 +687,11 @@ jobs:
               with:
                   name: upload-html-reports
                   path: published-reports/
-            #Wait for Artifact to be available
-            - name: Wait for Artifact to be available
-              run: sleep 1 # Wait for 1 second to allow artifact processing
             #Setup Pages
             - name: Setup Pages
               uses: actions/configure-pages@v2
-            #Upload artifact
+
+            # Upload artifact
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v1
               with:
@@ -712,7 +704,8 @@ jobs:
                   artifact_name: upload-html-reports
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #Notify on Execution
+
+            # Notify on Execution
             - name: Notify on Execution
               if: success()
               uses: dawidd6/action-send-mail@v3
