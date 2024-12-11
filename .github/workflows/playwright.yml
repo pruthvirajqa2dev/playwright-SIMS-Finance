@@ -405,7 +405,7 @@ jobs:
                       </main>
                   <footer><p>© 2024 Playwright Test Reports. All rights reserved.</p></footer>
                   <script>
-                  const testHistory = $CONSOLIDATED_HISTORY;"
+                  const testHistory = $CONSOLIDATED_HISTORY;
                     document.addEventListener('DOMContentLoaded', function() {
                       const table = document.getElementById('reportsTable');
                       const dateFilter = document.getElementById('dateFilter');
