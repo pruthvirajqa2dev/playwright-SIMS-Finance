@@ -293,6 +293,8 @@ jobs:
                   git fetch origin
                   git checkout gh-pages  # Checkout the existing gh-pages branch
                   git pull --rebase origin gh-pages || echo "No changes to pull"
+                  # Create index.html with properly escaped JavaScript
+                  cat << 'EOF' > published-reports/index.html
                   INDEX_FILE="published-reports/index.html"
                   TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
                    echo "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>
@@ -517,8 +519,8 @@ jobs:
                               const chartData = {
                                   labels: filteredData.map(run => {
                                       const [date, time] = run.timestamp.split('_');
-                                      return `${date}\n${time.replace(/-/g, ':')}`;  // Fixed: Return the formatted date/time
-                                  }),
+                                      return \`\${date}\\n\${time.replace(/-/g, ':')}\`;  // Escaped template literal
+                          }),
                                   datasets: [
                                       {
                                           label: 'Executed Tests',
@@ -548,9 +550,9 @@ jobs:
                                           tension: 0.1,
                                           fill: false
                                       }
+                                          
                                   ]
                               };
-
                               if (chart) {
                                   chart.destroy();
                               }
@@ -581,14 +583,13 @@ jobs:
                                           legend: {
                                               position: 'bottom'
                                           },
-                                          tooltip: {
-                                              callbacks: {
-                                                  label: function(context) {
-                                                      return `${context.dataset.label}: ${context.parsed.y}`;  // Fixed: Return proper tooltip
-                                                  }
+                                         tooltip: {
+                                          callbacks: {
+                                              label: function(context) {
+                                                  return \`\${context.dataset.label}: \${context.parsed.y}\`;  // Escaped template literal
                                               }
                                           }
-                                      }
+                                        }
                                   }
                               });
                           }
@@ -600,7 +601,10 @@ jobs:
                           updateChart(timeRangeSelect.value);
                         });
                       </script>                          
-                  </body></html>" >> $INDEX_FILE
+                  </body></html>
+                  EOF" >> $INDEX_FILE
+                  # Replace the CONSOLIDATED_HISTORY placeholder
+                  sed -i "s|\${CONSOLIDATED_HISTORY}|$CONSOLIDATED_HISTORY|" published-reports/index.html
             - name: Commit Current Report to GitHub Pages
               run: |
                   git add published-reports/$TIMESTAMP/
@@ -651,4 +655,3 @@ jobs:
                       SIMS Finance QA Team
                   to: pruthviraj.pardeshi@parentpay.com
                   from: ${{ secrets.EMAIL_USERNAME }}
-                  cc: princy.rajkumar@parentpay.com
