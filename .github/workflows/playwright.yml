@@ -246,6 +246,9 @@ jobs:
               shell: bash
             - name: Update Index Page
               run: |
+                  git fetch origin
+                  git checkout Main  # Checkout the existing Main branch
+                  git pull --rebase origin Main || echo "No changes to pull"
                   # Initialize consolidated.json if it doesn't exist
                   if [ ! -f "test-results-history/consolidated.json" ]; then
                       echo '{"runs":[]}' > test-results-history/consolidated.json
@@ -256,6 +259,9 @@ jobs:
                       CONSOLIDATED_HISTORY='{"runs":[]}'
                       echo "$CONSOLIDATED_HISTORY" > test-results-history/consolidated.json
                   fi
+                  git fetch origin
+                  git checkout gh-pages  # Checkout the existing gh-pages branch
+                  git pull --rebase origin gh-pages || echo "No changes to pull"
                   INDEX_FILE="published-reports/index.html"
                   TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
                    echo "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>
