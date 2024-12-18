@@ -311,7 +311,11 @@ jobs:
                       .passed { background-color:#d4f8d4 !important;}
                       a {color:#4CAF50; text-decoration:none; }
                       a:hover { text-decoration:underline; }
-                      .filters { margin: 20px auto; width: 90%; }
+                      .filters {
+                              margin-bottom: 20px;
+                              display: flex;
+                              gap: 10px;
+                          }
                       .filters input, .filters select { 
                         padding: 8px;
                         margin: 0 10px;
@@ -435,7 +439,7 @@ jobs:
                   <footer><p>© 2024 Playwright Test Reports. All rights reserved.</p></footer>
                   <script>
                     const testHistory = $CONSOLIDATED_HISTORY;
-                    console.log("testHistory: ",testHistory);
+                    console.log("testHistory: "+ testHistory);
                     document.addEventListener('DOMContentLoaded', function() {
                       const table = document.getElementById('reportsTable');
                       const dateFilter = document.getElementById('dateFilter');
@@ -495,7 +499,12 @@ jobs:
 
                       // Add event listeners
                       table.querySelectorAll('th[data-sort]').forEach(header => {
-                        header.addEventListener('click', () => sortTable(header.dataset.sort));
+                      const sortType = header.dataset.sort;
+                      if (sortType) {
+                        header.addEventListener('click', () => sortTable(sortType));  
+                      } else {
+                        console.warn("No data-sort attribute defined for this header.");
+                      }
                       });
 
                       dateFilter.addEventListener('change', filterTable);
@@ -555,7 +564,7 @@ jobs:
                                   chart.destroy();
                               }
                                   
-                              const ctx = document.getElementById('trendsChart').getContext("2d");
+                              const ctx = document.getElementById('trendsChart').getContext('2d');
                               chart = new Chart(ctx, {
                                   type: 'line',
                                   data: chartData,
