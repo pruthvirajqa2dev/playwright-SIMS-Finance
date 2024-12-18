@@ -647,11 +647,11 @@ jobs:
 
                       🕒 Latest run was on ${{ env.TIMESTAMP }}.
 
-                      Please refer the link below to view the report.
+                      Please refer the link below to view the report and graphical representation here:
                       https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber/
 
                       Regards,
                       SIMS Finance QA Team
                   to: pruthviraj.pardeshi@parentpay.com
                   from: ${{ secrets.EMAIL_USERNAME }}
-                  #cc: princy.rajkumar@parentpay.com
+                  cc: princy.rajkumar@parentpay.com
