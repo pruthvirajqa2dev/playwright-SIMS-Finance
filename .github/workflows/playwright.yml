@@ -579,9 +579,9 @@ jobs:
                                   }
                                 }
                               }
-                            }
-                          });
                                   }}
+                          });
+                                  }
                                               
                           timeRangeSelect.addEventListener('change', function() {
                               updateChart(this.value);
