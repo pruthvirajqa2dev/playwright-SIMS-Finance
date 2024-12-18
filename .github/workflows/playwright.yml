@@ -555,7 +555,7 @@ jobs:
                                   chart.destroy();
                               }
                                   
-                              const ctx = document.getElementById('trendsChart').getContext('2d');
+                              const ctx = document.getElementById('trendsChart').getContext("2d");
                               chart = new Chart(ctx, {
                                   type: 'line',
                                   data: chartData,
