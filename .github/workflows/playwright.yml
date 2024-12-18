@@ -441,7 +441,7 @@ jobs:
                   <footer><p>© 2024 Playwright Test Reports. All rights reserved.</p></footer>
                   <script>
                     const testHistory = $CONSOLIDATED_HISTORY;
-                    console.log("testHistory: "+ testHistory);
+                    //console.log("testHistory: "+ testHistory);
                     document.addEventListener('DOMContentLoaded', function() {
                       const table = document.getElementById('reportsTable');
                       const dateFilter = document.getElementById('dateFilter');
@@ -662,4 +662,4 @@ jobs:
                       SIMS Finance QA Team
                   to: pruthviraj.pardeshi@parentpay.com
                   from: ${{ secrets.EMAIL_USERNAME }}
-                  cc: princy.rajkumar@parentpay.com
+                  #cc: princy.rajkumar@parentpay.com
