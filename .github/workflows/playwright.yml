@@ -254,16 +254,18 @@ jobs:
                       echo '{"runs":[]}' > test-results-history/consolidated.json
                   fi
                    # Create/update consolidated.json with the current run's data
-                  CURRENT_RUN="{
-                    \"timestamp\": \"$TIMESTAMP\",
-                    \"counts\": {
-                      \"executed\": ${{ env.EXECUTED_TESTS }},
-                      \"passed\": ${{ env.PASSED_TESTS }},
-                      \"failed\": ${{ env.FAILED_TESTS }},
-                      \"flaky\": ${{ env.FLAKY_TESTS }}
+                  CURRENT_RUN=$(cat <<EOF
+                  {
+                    "timestamp": "$TIMESTAMP",
+                    "counts": {
+                      "executed": $EXECUTED_TESTS,
+                      "passed": $PASSED_TESTS,
+                      "failed": $FAILED_TESTS,
+                      "flaky": $FLAKY_TESTS
                     }
-                  }"
-
+                  }
+                  EOF
+                  )
                   # Update consolidated history
                   if [ ! -f "test-results-history/consolidated.json" ]; then
                       mkdir -p test-results-history
