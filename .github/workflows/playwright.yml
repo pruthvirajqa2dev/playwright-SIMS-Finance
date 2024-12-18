@@ -505,7 +505,7 @@ jobs:
                       if (sortType) {
                         header.addEventListener('click', () => sortTable(sortType));  
                       } else {
-                        console.warn("No data-sort attribute defined for this header.");
+                        console.warn(\"No data-sort attribute defined for this header.\");
                       }
                       });
 
