@@ -535,32 +535,32 @@ jobs:
                                             {
                                               label: 'Executed',
                                               data: executedData,
-                                              borderColor: 'rgba(54, 162, 235, 1)', // Solid blue
-                                              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                              borderColor: '#007BFF', // Bright blue
+                                              backgroundColor: 'rgba(0, 123, 255, 0.2)',
                                               borderWidth: 2,
                                               borderDash: [], // Solid line
                                             },
                                             {
                                               label: 'Passed',
                                               data: passedData,
-                                              borderColor: 'rgba(75, 192, 192, 1)', // Solid teal
-                                              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                              borderColor: '#28A745', // Vibrant green
+                                              backgroundColor: 'rgba(40, 167, 69, 0.2)',
                                               borderWidth: 2,
                                               borderDash: [5, 5], // Dashed line
                                             },
                                             {
                                               label: 'Failed',
                                               data: failedData,
-                                              borderColor: 'rgba(255, 99, 132, 1)', // Solid red
-                                              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                              borderColor: '#DC3545', // Bold red
+                                              backgroundColor: 'rgba(220, 53, 69, 0.2)',
                                               borderWidth: 2,
                                               borderDash: [], // Solid line
                                             },
                                             {
                                               label: 'Flaky',
                                               data: flakyData,
-                                              borderColor: 'rgba(153, 102, 255, 1)', // Solid purple
-                                              backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                              borderColor: '#FFC107', // Bright yellow
+                                              backgroundColor: 'rgba(255, 193, 7, 0.2)',
                                               borderWidth: 2,
                                               borderDash: [10, 5], // Dashed line
                                             }
@@ -570,7 +570,13 @@ jobs:
                               responsive: true,
                               plugins: {
                                 legend: {
-                                  position: 'top'
+                                  position: 'top',
+                                  labels: {
+                                    usePointStyle: true, // Show dots instead of boxes in the legend
+                                    font: {
+                                      size: 12
+                                    }
+                                  }
                                 }
                               },
                               scales: {
