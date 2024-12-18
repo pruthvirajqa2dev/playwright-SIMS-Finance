@@ -511,10 +511,10 @@ jobs:
 
                       dateFilter.addEventListener('change', filterTable);
                       statusFilter.addEventListener('change', filterTable);
-                        // Graph functionality
-                          const timeRangeSelect = document.getElementById('timeRange');
-                          let chart = null;
-                          function updateChart(days) {
+                      // Graph functionality
+                      const timeRangeSelect = document.getElementById('timeRange');
+                      let chart = null;
+                      function updateChart(days) {
                           // Extract data for the chart
                           const labels = testHistory.runs.map(run => run.timestamp.replace(/_/g, ' ')); // Dates
                           const executedData = testHistory.runs.map(run => run.counts.executed);
@@ -579,16 +579,15 @@ jobs:
                                   }
                                 }
                               }
-                                  }}
-                          });
                                   }
-                                              
-                          timeRangeSelect.addEventListener('change', function() {
-                              updateChart(this.value);
                           });
-                        // Initialize chart
-                          updateChart(timeRangeSelect.value);
-                        });
+                        }
+                      timeRangeSelect.addEventListener('change', function() {
+                              updateChart(this.value);
+                      });
+                      // Initialize chart
+                        updateChart(timeRangeSelect.value);
+                      });
                       </script>                          
                   </body></html>" >> $INDEX_FILE
             - name: Commit Current Report to GitHub Pages
