@@ -542,13 +542,17 @@ jobs:
                                   label: 'Passed Tests',
                                   data: passedData,
                                   borderColor: 'green',
-                                  fill: false
+                                  fill: false,
+                                  borderWidth: 2,
+                                  borderDash: [5, 5]
                                 },
                                 {
                                   label: 'Failed Tests',
                                   data: failedData,
                                   borderColor: 'red',
-                                  fill: false
+                                  fill: false,
+                                  borderWidth: 2,
+                                  borderDash: [5, 5]
                                 },
                                 {
                                   label: 'Flaky Tests',
@@ -569,7 +573,7 @@ jobs:
                                 x: {
                                   title: {
                                     display: true,
-                                    text: 'Date'
+                                    text: 'Date & Timestamp'
                                   }
                                 },
                                 y: {
