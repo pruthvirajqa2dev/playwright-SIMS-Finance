@@ -14,12 +14,13 @@ jsonReport.suites.forEach(suite => {
     subSuite.specs.forEach(spec => {
       spec.tests.forEach(test => {
         executedTests++;
-        const testResult = test.results[0]; // Assuming one result per test
-        if (testResult.status === 'passed') {
-          passedTests++;
-        } else if (testResult.status === 'failed') {
-          failedTests++;
-        }
+        test.results.forEach(testResult=>{
+          if (testResult.status === 'passed') {
+            passedTests++;
+          } else if (testResult.status === 'failed') {
+            failedTests++;
+          }
+        })
       });
     });
   });
