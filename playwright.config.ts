@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import logger from "./src/logging/logger";
 
 /**
  * Read environment variables from file.
@@ -21,6 +22,9 @@ if (process.env.test_env) {
     });
     process.env.test_env = defaultEnv;
 }
+logger.info(`Test environment: ${process.env.test_env || "development"}`);
+logger.info(`Browser: ${process.env.BROWSER || "chromium"}`);
+
 // if (!process.env.NODE_ENV) {
 //     require("dotenv").config({ path: `${__dirname}//src//config//.env` });
 // } else {

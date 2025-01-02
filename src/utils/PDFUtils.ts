@@ -9,19 +9,19 @@ export default class PDFUtils {
      * @param pdfPath
      * @returns
      */
-    static async readPDF(pdfPath) {
+    static async readPDF(pdfPath: string): Promise<string> {
         return new Promise((resolve) => {
             const filePath = path.resolve(pdfPath);
             const dataBuffer = fs.readFileSync(filePath);
-            pdf(dataBuffer).then(function (data) {
+            pdf(dataBuffer).then((data: string | PromiseLike<string>) => {
                 resolve(data);
             });
         });
     }
     static async unzipDownloadedZip(download: Download) {
-        const downloadDirPath = process.cwd() + "/PDFDownloads/";
+        const downloadDirPath = `${process.cwd()}/PDFDownloads/`;
         const downloadedZipFileName = download.suggestedFilename();
-        console.log("Zip Filename: " + downloadedZipFileName);
+        console.log(`Zip Filename: ${downloadedZipFileName}`);
         const filePath = downloadDirPath + downloadedZipFileName;
         await download.saveAs(filePath);
 

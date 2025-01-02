@@ -121,7 +121,7 @@ export default abstract class BasePage {
     }
     screenshotPath =
         "test-results/Postchecks/RunOn" +
-        new Date().toLocaleDateString("en-GB").replaceAll("/", "") +
+        new Date().toLocaleDateString("en-GB").replace(/\//g, "") +
         "/" +
         "Hour " +
         new Date().getHours();
@@ -351,7 +351,6 @@ export default abstract class BasePage {
     async clickHeadingByText(headingText: string) {
         await (await this.getByRole("heading", { name: headingText })).click();
     }
-
     /**
      * This function wraps the function to find the element using role
      * @param name

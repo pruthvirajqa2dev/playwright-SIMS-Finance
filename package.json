@@ -19,6 +19,11 @@
     "dotenv": "^16.4.5",
     "glob": "^11.0.0",
     "pdf-parse": "^1.1.1",
-    "playwright-merge-html-reports": "^0.2.8"
+    "playwright-merge-html-reports": "^0.2.8",
+    "postmark": "^4.0.5",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "winston": "^3.17.0"
   }
 }

@@ -3,6 +3,7 @@ import * as path from "path";
 import { glob } from "glob";
 import fsPromise from "fs/promises";
 import expectedTexts from "../data/expectedTexts.json";
+import logger from "../logging/logger";
 
 export default class FileUtils {
     private static readonly pdfDownloadLocation = "/PDFDownloads";
@@ -91,8 +92,8 @@ export default class FileUtils {
         }
     }
     static async latestFileNameLookup(directory: string): Promise<string> {
-        console.log(
-            "Looking up latest file name using directory: " + directory
+        logger.info(
+            `Looking up latest file name using directory: ${directory}`
         );
         return new Promise((resolve) => {
             const newestFile = glob
@@ -100,7 +101,7 @@ export default class FileUtils {
                 .map((name) => ({ name, ctime: fs.statSync(name).ctime }))
                 .sort((a, b) => b.ctime.getTime() - a.ctime.getTime())[0].name;
 
-            console.log("Returning " + newestFile + " from directory");
+            logger.info(`Returning ${newestFile} from directory`);
             resolve(newestFile);
         });
     }
