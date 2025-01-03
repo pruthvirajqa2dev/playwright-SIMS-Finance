@@ -18,7 +18,7 @@ jsonReport.suites.forEach(suite => {
           console.log(`The ${executedTests} test result is :${testResult.status}`);
           if (testResult.status === 'passed') {
             passedTests++;
-          } else if (testResult.status === 'failed') {
+          } else if (testResult.status === 'failed'||'timedOut') {
             failedTests++;
           }
         })
