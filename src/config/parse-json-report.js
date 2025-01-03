@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { default: logger } = require('../logging/logger');
 
 // Load the JSON report
 const jsonReport = JSON.parse(fs.readFileSync('test-results.json', 'utf-8'));
@@ -16,7 +15,6 @@ jsonReport.suites.forEach(suite => {
       spec.tests.forEach(test => {
         executedTests++;
         test.results.forEach(testResult=>{
-          // logger.info(`The ${executedTests} test result is :${testResult.status}`);
           console.log(`The ${executedTests} test result is :${testResult.status}`);
           if (testResult.status === 'passed') {
             passedTests++;
