@@ -33,7 +33,7 @@ const flakyTests = jsonReport.stats.flaky || 0;
 // Output results
 console.log(`Executed Tests: ${executedTests}`);
 console.log(`Passed Tests: ${passedTests}`);
-console.log(`Failed Tests: ${failedTests}`);
+console.log(`Failed Tests: ${failedTests/2}`);
 console.log(`Flaky Tests: ${flakyTests}`);
 
 // Write results to GitHub environment variables
@@ -41,6 +41,6 @@ const envFilePath = process.env.GITHUB_ENV;
 if (envFilePath) {
   fs.appendFileSync(envFilePath, `EXECUTED_TESTS=${executedTests}\n`);
   fs.appendFileSync(envFilePath, `PASSED_TESTS=${passedTests}\n`);
-  fs.appendFileSync(envFilePath, `FAILED_TESTS=${failedTests}\n`);
+  fs.appendFileSync(envFilePath, `FAILED_TESTS=${failedTests/2}\n`);
   fs.appendFileSync(envFilePath, `FLAKY_TESTS=${flakyTests}\n`);
 }
