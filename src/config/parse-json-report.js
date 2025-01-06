@@ -2,7 +2,7 @@ const fs = require('fs');
 
 // Load the JSON report
 const jsonReport = JSON.parse(fs.readFileSync('test-results.json', 'utf-8'));
-
+console.log("JSON Report content:"+fs.readFileSync('test-results.json', 'utf-8'))
 // Initialize counters
 let executedTests = 0;
 let passedTests = 0;

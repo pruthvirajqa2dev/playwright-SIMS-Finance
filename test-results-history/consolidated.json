@@ -5,7 +5,7 @@
       "counts": {
         "executed": 9,
         "passed": 0,
-        "failed": 18,
+        "failed": 9,
         "flaky": 0
       }
     },
@@ -14,7 +14,7 @@
       "counts": {
         "executed": 9,
         "passed": 0,
-        "failed": 18,
+        "failed": 9,
         "flaky": 0
       }
     },
@@ -23,7 +23,7 @@
       "counts": {
         "executed": 9,
         "passed": 0,
-        "failed": 18,
+        "failed": 9,
         "flaky": 0
       }
     },
@@ -32,7 +32,7 @@
       "counts": {
         "executed": 9,
         "passed": 0,
-        "failed": 18,
+        "failed": 9,
         "flaky": 0
       }
     },

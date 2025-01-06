@@ -259,8 +259,8 @@ jobs:
                     "timestamp": "$TIMESTAMP",
                     "counts": {
                       "executed": $EXECUTED_TESTS,
-                      "passed": $PASSED_TESTS,
-                      "failed": $FAILED_TESTS,
+                      "passed": $($PASSED_TESTS/2),
+                      "failed": $($FAILED_TESTS/2),
                       "flaky": $FLAKY_TESTS
                     }
                   }
