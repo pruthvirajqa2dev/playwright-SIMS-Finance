@@ -515,6 +515,22 @@ jobs:
                       const timeRangeSelect = document.getElementById('timeRange');
                       let chart = null;
                       function updateChart(days) {
+                          // Filter data based on selected time range
+                          const now = new Date();
+                          let filteredRuns = [...testHistory.runs];
+                          
+                          if (days !== 'all') {
+                              const daysAgo = new Date();
+                              daysAgo.setDate(now.getDate() - parseInt(days));
+                              
+                              filteredRuns = testHistory.runs.filter(run => {
+                                  const runDate = new Date(run.timestamp.split('_')[0]);
+                                  return runDate >= daysAgo;
+                              });
+                          }
+                          // Sort runs by date
+                          filteredRuns.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                          
                           // Extract data for the chart
                           const labels = testHistory.runs.map(run => run.timestamp.replace(/_/g, ' ')); // Dates
                           const executedData = testHistory.runs.map(run => run.counts.executed);
