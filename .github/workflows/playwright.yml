@@ -424,7 +424,7 @@ jobs:
                                 <th data-sort='status' class='sort-icon'>Status</th>
                              </tr>
                           </thead>
-                          <tbody id="tableBody">" > $INDEX_FILE
+                          <tbody id='tableBody'>" > $INDEX_FILE
                   for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); do
                     TIMESTAMP=$(basename "$dir")
                     if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
@@ -449,21 +449,21 @@ jobs:
                     fi
                   done
                   echo "</tbody></table>          
-                  <div id="loading" class="loading">Loading...</div>
-                  <div class="pagination" id="pagination"></div>
+                  <div id='loading' class='loading'>Loading...</div>
+                  <div class='pagination' id='pagination'></div>
                   </div>
-                  <div class="graph-container">
+                  <div class='graph-container'>
                           <h2>Test Execution Trends</h2>
-                        <div class="graph-wrapper">
-                            <canvas id="trendsChart"></canvas>
+                        <div class='graph-wrapper'>
+                            <canvas id='trendsChart'></canvas>
                         </div>
-                      <div class="controls">
-                            <label for="timeRange">Time Range:</label>
-                            <select id="timeRange">
-                                <option value="7">Last 7 days</option>
-                                <option value="14">Last 14 days</option>
-                                <option value="30">Last 30 days</option>
-                                <option value="all">All time</option>
+                      <div class='controls'>
+                            <label for='timeRange'>Time Range:</label>
+                            <select id='timeRange'>
+                                <option value='7'>Last 7 days</option>
+                                <option value='14'>Last 14 days</option>
+                                <option value='30'>Last 30 days</option>
+                                <option value='all'>All time</option>
                             </select>
                       </div>
                   </div>
