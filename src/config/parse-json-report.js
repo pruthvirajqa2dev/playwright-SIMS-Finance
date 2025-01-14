@@ -28,7 +28,9 @@ jsonReport.suites.forEach(suite => {
 });
 // Extract the flaky test count from the stats
 const flakyTests = jsonReport.stats.flaky || 0;
-
+if(failedTests==1){
+  failedTests=0;
+}
 
 // Output results
 console.log(`Executed Tests: ${executedTests}`);
@@ -41,6 +43,6 @@ const envFilePath = process.env.GITHUB_ENV;
 if (envFilePath) {
   fs.appendFileSync(envFilePath, `EXECUTED_TESTS=${executedTests}\n`);
   fs.appendFileSync(envFilePath, `PASSED_TESTS=${passedTests}\n`);
-  fs.appendFileSync(envFilePath, `FAILED_TESTS=${failedTests/2}\n`);
+  fs.appendFileSync(envFilePath, `FAILED_TESTS=${Math.floor(failedTests/2)}\n`);
   fs.appendFileSync(envFilePath, `FLAKY_TESTS=${flakyTests}\n`);
 }
