@@ -371,33 +371,6 @@ jobs:
                                   min-width: 100%;
                               }
                           }
-                    .pagination {
-                        display: flex;
-                        justify-content: center;
-                        gap: 10px;
-                        margin: 20px 0;
-                    }
-                    .pagination button {
-                        padding: 8px 16px;
-                        border: 1px solid #ddd;
-                        background: white;
-                        cursor: pointer;
-                    }
-                    .pagination button.active {
-                        background: #4CAF50;
-                        color: white;
-                    }
-                    .pagination button:disabled {
-                        background: #ddd;
-                        cursor: not-allowed;
-                    }
-                      
-                    /* Loading indicator */
-                    .loading {
-                        text-align: center;
-                        padding: 20px;
-                        display: none;
-
                     </style>
                     </head>
                     <body>
@@ -424,7 +397,7 @@ jobs:
                                 <th data-sort='status' class='sort-icon'>Status</th>
                              </tr>
                           </thead>
-                          <tbody id='tableBody'>" > $INDEX_FILE
+                          <tbody>" > $INDEX_FILE
                   for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); do
                     TIMESTAMP=$(basename "$dir")
                     if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
@@ -448,22 +421,19 @@ jobs:
                         echo "<tr data-date='$DATE_PART'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> $INDEX_FILE
                     fi
                   done
-                  echo "</tbody></table>          
-                  <div id='loading' class='loading'>Loading...</div>
-                  <div class='pagination' id='pagination'></div>
-                  </div>
-                  <div class='graph-container'>
+                  echo "</tbody></table></div>
+                  <div class="graph-container">
                           <h2>Test Execution Trends</h2>
-                        <div class='graph-wrapper'>
-                            <canvas id='trendsChart'></canvas>
+                        <div class="graph-wrapper">
+                            <canvas id="trendsChart"></canvas>
                         </div>
-                      <div class='controls'>
-                            <label for='timeRange'>Time Range:</label>
-                            <select id='timeRange'>
-                                <option value='7'>Last 7 days</option>
-                                <option value='14'>Last 14 days</option>
-                                <option value='30'>Last 30 days</option>
-                                <option value='all'>All time</option>
+                      <div class="controls">
+                            <label for="timeRange">Time Range:</label>
+                            <select id="timeRange">
+                                <option value="7">Last 7 days</option>
+                                <option value="14">Last 14 days</option>
+                                <option value="30">Last 30 days</option>
+                                <option value="all">All time</option>
                             </select>
                       </div>
                   </div>
@@ -471,113 +441,8 @@ jobs:
                   <footer><p>© 2024 Playwright Test Reports. All rights reserved.</p></footer>
                   <script>
                     const testHistory = $CONSOLIDATED_HISTORY;
+                    //console.log("testHistory: "+ testHistory);
                     document.addEventListener('DOMContentLoaded', function() {
-                      const ITEMS_PER_PAGE = 10;
-                      let currentPage = 1;
-                      let allData = [];
-
-                      // Function to filter data for last 30 days
-                      function filterLast30Days(data) {
-                          const thirtyDaysAgo = new Date();
-                          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                          return data.filter(item => new Date(item.date) >= thirtyDaysAgo);
-                      }
-
-                      // Function to render table rows
-                      function renderTableRows(data, page) {
-                          const tbody = document.getElementById('tableBody');
-                          const start = (page - 1) * ITEMS_PER_PAGE;
-                          const end = start + ITEMS_PER_PAGE;
-                          const paginatedData = data.slice(start, end);
-
-                          tbody.innerHTML = '';
-                          paginatedData.forEach(item => {
-                              const row = document.createElement('tr');
-                              row.dataset.date = item.date;
-                              row.innerHTML = `
-                                  <td>${item.date}</td>
-                                  <td>${item.time}</td>
-                                  <td>${item.link}</td>
-                                  <td class="${item.status.toLowerCase()}">${item.status}</td>
-                              `;
-                              tbody.appendChild(row);
-                          });
-                      }
-
-                      // Function to update pagination controls
-                      function updatePagination(totalItems) {
-                          const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-                          const pagination = document.getElementById('pagination');
-                          pagination.innerHTML = '';
-
-                          // Previous button
-                          const prevButton = document.createElement('button');
-                          prevButton.textContent = '←';
-                          prevButton.disabled = currentPage === 1;
-                          prevButton.onclick = () => {
-                              if (currentPage > 1) {
-                                  currentPage--;
-                                  renderTableRows(allData, currentPage);
-                                  updatePagination(allData.length);
-                              }
-                          };
-                          pagination.appendChild(prevButton);
-
-                          // Page numbers
-                          for (let i = 1; i <= totalPages; i++) {
-                              const button = document.createElement('button');
-                              button.textContent = i;
-                              button.classList.toggle('active', i === currentPage);
-                              button.onclick = () => {
-                                  currentPage = i;
-                                  renderTableRows(allData, currentPage);
-                                  updatePagination(allData.length);
-                              };
-                              pagination.appendChild(button);
-                          }
-
-                          // Next button
-                          const nextButton = document.createElement('button');
-                          nextButton.textContent = '→';
-                          nextButton.disabled = currentPage === totalPages;
-                          nextButton.onclick = () => {
-                              if (currentPage < totalPages) {
-                                  currentPage++;
-                                  renderTableRows(allData, currentPage);
-                                  updatePagination(allData.length);
-                              }
-                          };
-                          pagination.appendChild(nextButton);
-                      }
-
-                      // Initialize table data
-                      function initializeTable() {
-                          const loading = document.getElementById('loading');
-                          loading.style.display = 'block';
-
-                          // Process directory data
-                          const processedData = [];
-                          // ... your existing directory processing logic here ...
-                          // Convert your existing data to this format:
-                          processedData.push({
-                              date: DATE_PART,
-                              time: TIME_PART,
-                              link: LINK,
-                              status: STATUS
-                          });
-                          
-                          // Filter for last 30 days
-                          allData = filterLast30Days(processedData);
-                          
-                          // Initial render
-                          renderTableRows(allData, currentPage);
-                          updatePagination(allData.length);
-                          loading.style.display = 'none';
-                      }
-                          
-                      // Initialize the table
-                      initializeTable();
-                          
                       const table = document.getElementById('reportsTable');
                       const dateFilter = document.getElementById('dateFilter');
                       const statusFilter = document.getElementById('statusFilter');
@@ -650,8 +515,6 @@ jobs:
                       const timeRangeSelect = document.getElementById('timeRange');
                       let chart = null;
                       function updateChart(days) {
-                          // Limit data points to improve performance
-                          const maxDataPoints = 30;
                           // Filter data based on selected time range
                           const now = new Date();
                           let filteredRuns = [...testHistory.runs];
@@ -665,9 +528,6 @@ jobs:
                                   return runDate >= daysAgo;
                               });
                           }
-                          // Take only the most recent data points up to maxDataPoints
-                          filteredRuns = filteredRuns.slice(0, maxDataPoints);
-
                           // Sort runs by date
                           filteredRuns.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
                           
