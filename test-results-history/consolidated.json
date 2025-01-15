@@ -14,7 +14,7 @@
       "counts": {
         "executed": 9,
         "passed": 9,
-        "failed": 1,
+        "failed": 0,
         "flaky": 2
       }
     },

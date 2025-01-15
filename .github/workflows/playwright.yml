@@ -415,7 +415,7 @@ jobs:
                              </tr>
                           </thead>
                           <tbody>" > $INDEX_FILE
-                  for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort); do
+                  for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort -r); do
                     TIMESTAMP=$(basename "$dir")
                     if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
                       DATE_PART=$(echo $TIMESTAMP | cut -d'_' -f1)
