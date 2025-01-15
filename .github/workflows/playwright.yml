@@ -371,6 +371,23 @@ jobs:
                                   min-width: 100%;
                               }
                           }
+                    .pagination {
+                        display: flex;
+                        justify-content: center;
+                        margin: 20px 0;
+                    }
+                    .pagination button {
+                        padding: 10px 15px;
+                        margin: 0 5px;
+                        border: none;
+                        background-color: #4CAF50;
+                        color: white;
+                        cursor: pointer;
+                    }
+                    .pagination button.disabled {
+                        background-color: #ddd;
+                        cursor: not-allowed;
+                    }
                     </style>
                     </head>
                     <body>
@@ -421,7 +438,12 @@ jobs:
                         echo "<tr data-date='$DATE_PART'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> $INDEX_FILE
                     fi
                   done
-                  echo "</tbody></table></div>
+                  echo "</tbody></table>
+                    <div class='pagination'>
+                    <button id='prevPage' class='disabled'>Previous</button>
+                    <button id='nextPage'>Next</button>
+                  </div>
+                  </div>
                   <div class="graph-container">
                           <h2>Test Execution Trends</h2>
                         <div class="graph-wrapper">
@@ -447,6 +469,13 @@ jobs:
                       const dateFilter = document.getElementById('dateFilter');
                       const statusFilter = document.getElementById('statusFilter');
                       let sortDirection = {};
+                      // Pagination variables
+                      const rowsPerPage = 10;
+                      let currentPage = 1;
+                      const rows = Array.from(table.querySelectorAll('tbody tr'));
+                      const totalPages = Math.ceil(rows.length / rowsPerPage);
+                      const prevPageButton = document.getElementById('prevPage');
+                      const nextPageButton = document.getElementById('nextPage');
 
                       // Sorting function
                       function sortTable(column) {
@@ -482,6 +511,7 @@ jobs:
 
                         tbody.innerHTML = '';
                         rows.forEach(row => tbody.appendChild(row));
+                        updatePagination();
                       }
 
                       // Filtering function
@@ -497,7 +527,25 @@ jobs:
                           const statusMatch = !statusValue || rowStatus === statusValue;
                           row.style.display = dateMatch && statusMatch ? '' : 'none';
                         });
+                        updatePagination();
                       }
+                      // Pagination functions
+                      function updatePagination() {
+                        rows.forEach((row, index) => {
+                          row.style.display = (index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage) ? '' : 'none';
+                        });
+                        prevPageButton.classList.toggle('disabled', currentPage === 1);
+                        nextPageButton.classList.toggle('disabled', currentPage === totalPages);
+                      }
+
+                      function goToPage(page) {
+                        if (page < 1 || page > totalPages) return;
+                        currentPage = page;
+                        updatePagination();
+                      }
+
+                      prevPageButton.addEventListener('click', () => goToPage(currentPage - 1));
+                      nextPageButton.addEventListener('click', () => goToPage(currentPage + 1));
 
                       // Add event listeners
                       table.querySelectorAll('th[data-sort]').forEach(header => {
@@ -617,6 +665,7 @@ jobs:
                       });
                       // Initialize chart
                         updateChart(timeRangeSelect.value);
+                      updatePagination();
                       });
                       </script>                          
                   </body></html>" >> $INDEX_FILE
