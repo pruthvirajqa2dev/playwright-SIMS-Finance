@@ -462,6 +462,9 @@ jobs:
                       const statusFilter = document.getElementById('statusFilter');
                       let sortDirection = {};
                       
+                      const originalRows = Array.from(table.querySelectorAll('tbody tr'));
+                      let filteredRows = [...originalRows];
+                      
                       // Pagination variables
                       const rowsPerPage = 10;
                       let currentPage = 1;
@@ -511,14 +514,19 @@ jobs:
                         const rows = table.querySelectorAll('tbody tr');
                         const dateValue = dateFilter.value;
                         const statusValue = statusFilter.value;
-
-                        filteredRows = Array.from(rows).filter(row => {
+                            // Reset to original rows if no filters
+                        if (!dateValue && !statusValue) {
+                          filteredRows = [...originalRows];
+                        } else{
+                          filteredRows = Array.from(rows).filter(row => {
                           const rowDate = row.dataset.date;
                           const rowStatus = row.cells[3].textContent.trim();
                           const dateMatch = !dateValue || rowDate === dateValue;
                           const statusMatch = !statusValue || rowStatus.include(statusValue);
                           return dateMatch && statusMatch;
                         });
+
+                         }
                         currentPage = 1; // Reset to first page when filtering
                         updatePagination();
                       }
