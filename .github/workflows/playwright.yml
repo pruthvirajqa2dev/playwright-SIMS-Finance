@@ -468,7 +468,6 @@ jobs:
                       // Pagination variables
                       const rowsPerPage = 10;
                       let currentPage = 1;
-                      let filteredRows = Array.from(table.querySelectorAll('tbody tr'));
                       const totalPages = () => Math.ceil(filteredRows.length / rowsPerPage);
                       const prevPageButton = document.getElementById('prevPage');
                       const nextPageButton = document.getElementById('nextPage');
@@ -522,7 +521,7 @@ jobs:
                           const rowDate = row.dataset.date;
                           const rowStatus = row.cells[3].textContent.trim();
                           const dateMatch = !dateValue || rowDate === dateValue;
-                          const statusMatch = !statusValue || rowStatus.include(statusValue);
+                          const statusMatch = !statusValue || rowStatus.includes(statusValue);
                           return dateMatch && statusMatch;
                         });
 
