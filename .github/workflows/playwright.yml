@@ -207,14 +207,6 @@ jobs:
                   git fetch origin
                   git checkout gh-pages  # Checkout the existing gh-pages branch
                   git pull --rebase origin gh-pages || echo "No changes to pull"
-            - name: Restore stashed untracked files
-              run: |
-                  git stash pop || echo "No stashed files to restore"
-            - name: Download Existing Reports from GitHub Pages
-              run: |
-                  git clone --depth 1 --branch gh-pages https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber existing-reports/
-                  mkdir -p published-reports
-                  cp -r existing-reports/* published-reports/
             - name: Add Current Report with Timestamp
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
@@ -469,18 +461,18 @@ jobs:
                       const dateFilter = document.getElementById('dateFilter');
                       const statusFilter = document.getElementById('statusFilter');
                       let sortDirection = {};
+                      
                       // Pagination variables
                       const rowsPerPage = 10;
                       let currentPage = 1;
-                      const rows = Array.from(table.querySelectorAll('tbody tr'));
-                      const totalPages = Math.ceil(rows.length / rowsPerPage);
+                      let filteredRows = Array.from(table.querySelectorAll('tbody tr'));
+                      const totalPages = () => Math.ceil(filteredRows.length / rowsPerPage);
                       const prevPageButton = document.getElementById('prevPage');
                       const nextPageButton = document.getElementById('nextPage');
 
                       // Sorting function
                       function sortTable(column) {
                         const tbody = table.querySelector('tbody');
-                        const rows = Array.from(tbody.querySelectorAll('tr'));
                         const headers = table.querySelectorAll('th');
 
                         // Reset other headers
@@ -495,7 +487,7 @@ jobs:
                         const currentHeader = Array.from(headers).find(h => h.dataset.sort === column);
                         currentHeader.className = sortDirection[column] ? 'sort-asc' : 'sort-desc';
 
-                        rows.sort((a, b) => {
+                        filteredRows.sort((a, b) => {
                           let aVal, bVal;
                           if (column === 'date') {
                             aVal = a.dataset.date;
@@ -510,7 +502,7 @@ jobs:
                         });
 
                         tbody.innerHTML = '';
-                        rows.forEach(row => tbody.appendChild(row));
+                        filteredRows.forEach(row => tbody.appendChild(row));
                         updatePagination();
                       }
 
@@ -520,26 +512,33 @@ jobs:
                         const dateValue = dateFilter.value;
                         const statusValue = statusFilter.value;
 
-                        rows.forEach(row => {
+                        filteredRows = Array.from(rows).filter(row => {
                           const rowDate = row.dataset.date;
                           const rowStatus = row.cells[3].textContent.trim();
                           const dateMatch = !dateValue || rowDate === dateValue;
-                          const statusMatch = !statusValue || rowStatus === statusValue;
-                          row.style.display = dateMatch && statusMatch ? '' : 'none';
+                          const statusMatch = !statusValue || rowStatus.include(statusValue);
+                          return dateMatch && statusMatch;
                         });
+                        currentPage = 1; // Reset to first page when filtering
                         updatePagination();
                       }
                       // Pagination functions
                       function updatePagination() {
-                        rows.forEach((row, index) => {
-                          row.style.display = (index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage) ? '' : 'none';
-                        });
+                        const tbody = table.querySelector('tbody');
+                        tbody.innerHTML = ''; // Clear the table
+
+                        const start = (currentPage - 1) * rowsPerPage;
+                        const end = start + rowsPerPage;
+                        const paginatedRows = filteredRows.slice(start, end);
+
+                        paginatedRows.forEach(row => tbody.appendChild(row));
+
                         prevPageButton.classList.toggle('disabled', currentPage === 1);
-                        nextPageButton.classList.toggle('disabled', currentPage === totalPages);
+                        nextPageButton.classList.toggle('disabled', currentPage === totalPages());
                       }
 
                       function goToPage(page) {
-                        if (page < 1 || page > totalPages) return;
+                        if (page < 1 || page > totalPages()) return;
                         currentPage = page;
                         updatePagination();
                       }
@@ -557,7 +556,7 @@ jobs:
                       }
                       });
 
-                      dateFilter.addEventListener('change', filterTable);
+                      dateFilter.addEventListener('input', filterTable);
                       statusFilter.addEventListener('change', filterTable);
                       // Graph functionality
                       const timeRangeSelect = document.getElementById('timeRange');
@@ -665,7 +664,7 @@ jobs:
                       });
                       // Initialize chart
                         updateChart(timeRangeSelect.value);
-                      updatePagination();
+                        filterTable();
                       });
                       </script>                          
                   </body></html>" >> $INDEX_FILE
@@ -679,8 +678,6 @@ jobs:
               with:
                   name: upload-html-reports
                   path: published-reports/
-            - name: Wait for Artifact to be available
-              run: sleep 1 # Wait for 1 second to allow artifact processing
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Upload artifact
