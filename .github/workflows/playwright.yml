@@ -518,7 +518,7 @@ jobs:
                         if (!dateValue && !statusValue) {
                           filteredRows = [...originalRows];
                         } else{
-                          filteredRows = Array.from(rows).filter(row => {
+                          filteredRows = originalRows.filter(row => {
                           const rowDate = row.dataset.date;
                           const rowStatus = row.cells[3].textContent.trim();
                           const dateMatch = !dateValue || rowDate === dateValue;
