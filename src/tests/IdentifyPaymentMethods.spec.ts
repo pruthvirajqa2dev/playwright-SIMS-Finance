@@ -10,6 +10,8 @@ import path from "path";
 import PDFUtils from "../utils/PDFUtils";
 import FileUtils from "../utils/FileUtils";
 
+let fileContent: string = "";
+
 async function login(page: Page, testInfo: TestInfo) {
     const loginPage = new LoginPage(page, testInfo);
     //Login using username and password
@@ -32,7 +34,7 @@ test.describe(
                     "This test is for performing identification of payment methods for supplier in a tenant for user " +
                     ENV.USERID!
             });
-            const chequeOrBacs = "BACS";
+            const chequeOrBacs = "CHQ";
             //Login
             const homepage =
                 await test.step(`Login using ${ENV.USERID!}`, async () => {
@@ -81,9 +83,6 @@ test.describe(
                 const suppliers = await prl210.getSuppliersElements();
                 let supplierCount = suppliers.length;
                 logger.info(`Total Supplier Count=${supplierCount}`);
-                if (supplierCount === 1) {
-                    return 0;
-                }
                 let iterator = 0;
                 let suppList: string[] = [];
                 for (const supplier of suppliers) {
@@ -105,9 +104,6 @@ test.describe(
                     logger.info(`Iteration ${iterator++}`);
                     page.waitForLoadState("load");
                     await prl210.clickCancelButton();
-                    if (count == 1) {
-                        break;
-                    }
                 }
                 suppList = Array.from(mapOfSuppliers.values()).flat();
                 logger.info(`supplist:${suppList}`);
@@ -121,66 +117,24 @@ test.describe(
                         new Date().getHours() +
                         new Date().getMinutes()
                 );
-                // const unzipDir = process.cwd() + "/PDFDownloads/unzip*/";
-
-                // await PDFUtils.readLatestPDFFromLatestUnzipDir(unzipDir);
-                const dir = path.join(process.cwd(), expectedTexts.testFileDir);
-                // `${process.cwd()}/${expectedTexts.testFileDir}/`;
-                fs.writeFile(
-                    `${dir}/${chequeOrBacs + timestamp}.TXT`,
-                    suppList.toString(),
-                    (err) => {
-                        `Error while creating a file ${err}`;
-                    }
+                const fileName = chequeOrBacs + timestamp + ".TXT";
+                // const dir = path.join(process.cwd(), expectedTexts.testFileDir);
+                const filePath = path.resolve(
+                    __dirname,
+                    "../..",
+                    expectedTexts.testFileDir,
+                    fileName
                 );
-                // const fullPath = path.join(
-                //     __dirname,
-                //     "../../",
-                //     expectedTexts.testFileDir,
-                //     filePath
-                // );
-                // logger.info(`fullpath: ${fullPath}`);
+                await FileUtils.writeFileAsync(filePath, suppList.toString());
 
-                // const fileName = await FileUtils.latestFileNameLookup(
-                //     `${dir}/${chequeOrBacs + timestamp}.TXT`
-                // );
-                const filePath = `${dir}/${chequeOrBacs + timestamp}.TXT`;
-                const resolvedFilePath = path.resolve(filePath);
-                if (!fs.existsSync(resolvedFilePath)) {
-                    console.error(
-                        `File does not exist at path: ${resolvedFilePath}`
-                    );
-                } else {
-                    const fileContent = fs.readFileSync(
-                        resolvedFilePath,
-                        "utf-8"
-                    );
-                    console.log(fileContent);
-                }
-                // const dataBuffer = fs.readFileSync(resolvedFilePath);
-                // logger.info(dataBuffer);
-                logger.info(`Current Working Directory:${process.cwd()}`);
-                logger.info(`Current __dirname:${__dirname}`);
+                logger.info("Content written to file successfully");
 
-                if (!fs.existsSync(filePath)) {
-                    logger.error(`File does not exist at path: ${filePath}`);
-                } else {
-                    logger.info("File exists. Attempting to read...");
-                    try {
-                        const fileContent = fs.readFileSync(filePath);
-                        logger.info(
-                            `File content:\n${fileContent.toString("hex")}`
-                        );
-                    } catch (error) {
-                        logger.error(`Error reading file: ${error.message}`);
-                    }
-                }
+                const fileContent = await FileUtils.readFileAsync(filePath);
+                logger.info("File content read successfully");
+                console.log("File content inside: " + fileContent); // This will print the content of the file
 
-                // const readFileContent: string = await PDFUtils.readPDF(
-                //     `${dir}/${chequeOrBacs + timestamp}.TXT`
-                // );
-                // const arr: string[] = readFileContent.split(",");
-                // logger.info(`Content: ${arr.length}`);
+                // Use fileContent here
+                console.log("File content outside: " + fileContent);
             });
         });
     }

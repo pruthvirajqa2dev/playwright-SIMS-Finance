@@ -9,3 +9,4 @@ node_modules/
 /Test Files/
 /PDFDownloads
 test-results.json
+logs/app.log

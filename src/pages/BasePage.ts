@@ -1,8 +1,15 @@
 import base, { expect, Locator, Page } from "@playwright/test";
 import expectedTexts from "../data/expectedTexts.json";
+import logger from "../logging/logger";
 /**
  * @author: @pruthvirajqa2dev
  * Base page class to inherit basic page functionality
+ */
+/**
+ * The `BasePage` class serves as an abstract base class for all page objects in the application.
+ * It provides common locators and methods for interacting with web elements and performing actions on the page.
+ *
+ * @abstract
  */
 export default abstract class BasePage {
     protected page: Page;
@@ -119,6 +126,17 @@ export default abstract class BasePage {
     public get sortableGridLocator(): string {
         return this._sortableGridLocator;
     }
+
+    private readonly _sortIconLocator = "span.esr_grid_sort_span.fa";
+    public get sortIconLocator(): string {
+        return this._sortIconLocator;
+    }
+
+    private readonly _searchBtnLocator = "#search_button";
+    public get searchBtnLocator() {
+        return this._searchBtnLocator;
+    }
+    private readonly esrMsgBoxOkBtnLocator = "#esr_messagebox_ok";
     screenshotPath =
         "test-results/Postchecks/RunOn" +
         new Date().toLocaleDateString("en-GB").replace(/\//g, "") +
@@ -160,6 +178,13 @@ export default abstract class BasePage {
      *
      * @param locator
      */
+    async dblClick(locator: string) {
+        await this.page.locator(locator).first().dblclick();
+    }
+    /**
+     *
+     * @param locator
+     */
     async check(locator: string) {
         await this.page.check(locator);
     }
@@ -177,6 +202,7 @@ export default abstract class BasePage {
      * @param text
      */
     async fill(locator: string, text: string) {
+        await this.page.locator(locator).click();
         await this.page.locator(locator).fill(text, { force: true });
     }
     /**
@@ -186,9 +212,24 @@ export default abstract class BasePage {
      */
     async fillTextAndVerify(locator: string, text: string) {
         // Fill text
+        logger.info(`Fill text ${text} in locator ${locator}`);
         await this.fill(locator, text);
         //Verify Text filled
+        logger.info(`Expecting text ${text} in locator ${locator}`);
         await this.expectElementToContainText(locator, text);
+    }
+    /**
+     *
+     * @param locator
+     * @param text
+     */
+    async fillTextAndVerifyValue(locator: string, value: string) {
+        // Fill text
+        logger.info(`Fill text ${value} in locator ${locator}`);
+        await this.fill(locator, value);
+        //Verify Text filled
+        logger.info(`Expecting value ${value} in locator ${locator}`);
+        await this.expectElementToContainText(locator, value);
     }
     /**
      *
@@ -242,7 +283,7 @@ export default abstract class BasePage {
      * @returns
      */
     async getByText(text: string): Promise<Locator> {
-        return await this.page.getByText(text);
+        return await this.page.getByText(text, { exact: true });
     }
 
     // Assertions
@@ -250,8 +291,15 @@ export default abstract class BasePage {
      *
      * @param locator
      */
-    async expectElementToBeVisibleUsingLocator(locator: string) {
-        await expect(this.page.locator(locator)).toBeVisible();
+    async expectElementToBeVisibleUsingLocator(
+        locator: string,
+        p0?: { timeout: number }
+    ) {
+        if (typeof p0 !== "undefined") {
+            await expect(this.page.locator(locator).first()).toBeVisible(p0);
+        } else {
+            await expect(this.page.locator(locator).first()).toBeVisible();
+        }
     }
     /**
      *
@@ -350,6 +398,14 @@ export default abstract class BasePage {
      */
     async clickHeadingByText(headingText: string) {
         await (await this.getByRole("heading", { name: headingText })).click();
+    }
+
+    /**
+     *
+     * @param text
+     */
+    async clickElementByText(text: string) {
+        await (await this.getByText(text)).click();
     }
     /**
      * This function wraps the function to find the element using role
@@ -475,5 +531,88 @@ export default abstract class BasePage {
      */
     async verifyPageURL(page: Page, url) {
         expect(page.url()).toContain(url);
+    }
+    /**
+     *@description This function is for clicking search button
+     */
+    async clickSearchBtn() {
+        await this.click(this.searchBtnLocator);
+    }
+    /**
+     *
+     * @param text
+     * @description
+     */
+    async clickEsrMultiBtnUsingText(text: string) {
+        await this.page
+            .locator(this.btnElementListLocator)
+            .filter({ hasText: text })
+            .first()
+            .click();
+    }
+    /**
+     *
+     * @param title
+     */
+    async verifyDialogTitle(title: string) {
+        await expect(
+            this.page.locator(this._dialogTitleLocator).first()
+        ).toHaveText(title);
+    }
+
+    /**
+     * @description This method is used to double click the record using text
+     */
+    async dblClickRecordFromLookupPopup(recordLocator: string, text: string) {
+        await this.page
+            .locator(recordLocator)
+            .filter({ hasText: text })
+            .dblclick();
+    }
+    /**
+     *
+     * @param locator
+     */
+    async scrollToElementUsingHandle(locator: string) {
+        const elementHandle = await this.page.locator(locator).elementHandle();
+        await elementHandle?.scrollIntoViewIfNeeded();
+    }
+    /**
+     *
+     */
+    async verifyVisibilityYesNoButton() {
+        await expect(
+            this.page.locator(this.yesBtnLocator),
+            "Expect yes button to be visible"
+        ).toBeVisible();
+        await expect(
+            this.page.locator(this.noBtnLocator),
+            "Expect no button to be visible"
+        ).toBeVisible();
+    }
+    /**
+     *
+     */
+    async clickYesBtnLocator() {
+        await this.verifyVisibilityYesNoButton();
+        await this.page
+            .locator(this.yesBtnLocator)
+            .click()
+            .catch((error) => {
+                console.error(`Error clicking yes button: ${error}`);
+                throw error;
+            });
+    }
+    /**
+     *
+     */
+    async clickMsgBoxOkBtn() {
+        await this.page
+            .locator(this.esrMsgBoxOkBtnLocator)
+            .click()
+            .catch((error) => {
+                console.error(`Error clicking ok button: ${error}`);
+                throw error;
+            });
     }
 }

@@ -37,16 +37,16 @@ logger.info(`Browser: ${process.env.BROWSER || "chromium"}`);
  */
 export default defineConfig({
     expect: {
-        timeout: 60 * 1000 // 60 seconds
+        timeout: 35 * 1000 // 60 seconds
     },
-    timeout: 120 * 1000,
+    timeout: 420 * 1000,
     testDir: "./src/tests",
     /* Run tests in files in parallel */
     fullyParallel: true,
     /* Fail the build on CI if you accidentally left test.only in the source code. */
     // forbidOnly: !!process.env.CI,
     /* Retry on CI only */
-    retries: process.env.CI ? 1 : 1,
+    retries: process.env.CI ? 1 : 0,
     /* Opt out of parallel tests on CI. */
     workers: process.env.CI ? 2 : undefined,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */

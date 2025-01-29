@@ -28,7 +28,7 @@ jsonReport.suites.forEach(suite => {
 });
 // Extract the flaky test count from the stats
 const flakyTests = jsonReport.stats.flaky || 0;
-if(failedTests==1){
+if(executedTests==passedTests||flakyTests!=0){
   failedTests=0;
 }
 

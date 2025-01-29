@@ -1,11 +1,30 @@
 import BasePage from "./BasePage";
-import elementAttributes from "../data/elementAttributes.json";
 import { expect } from "@playwright/test";
 // <reference lib="dom"/>
 
 /**
  * @author: @pruthvirajqa2dev
  * This page class is for PRL210 screen related page elements and actions on them
+ */
+/**
+ * Represents the PRL210 page, which is part of the Purchase Ledger Suppliers module.
+ * This class provides methods to interact with various elements on the PRL210 page.
+ *
+ * @extends BasePage
+ *
+ * @remarks
+ * This class includes methods to verify the visibility of key page elements,
+ * retrieve supplier elements, interact with the Contact Details and Payment Details tabs,
+ * and get supplier name and payment method details.
+ *
+ * @example
+ * const prl210Page = new PRL210();
+ * await prl210Page.expectPageElementsVisibilityOnLoad();
+ * const suppliers = await prl210Page.getSuppliersElements();
+ * await prl210Page.clickContactDetailsTabCard();
+ * const supplierName = await prl210Page.getSupplierNameFromDetails();
+ *
+ * @author @pruthvirajqa2dev
  */
 export default class PRL210 extends BasePage {
     //Locators and Texts

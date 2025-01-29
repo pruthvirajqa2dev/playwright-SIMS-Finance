@@ -9,15 +9,45 @@ import path from "path";
  * @author: @pruthvirajqa2dev
  * This page class is for RSS310Q screen related page elements and actions on them
  */
+/**
+ * Represents the RSS310Q page object model.
+ * This class provides methods to interact with and verify elements on the RSS310Q - Purchase Orders page.
+ * 
+ * @extends BasePage
+ * 
+ * @remarks
+ * This class includes methods to:
+ * - Verify the visibility of key page elements upon loading.
+ * - Click a random "View" button after ensuring the order number column is sorted in ascending order.
+ * - Verify breadcrumbs based on a randomly selected order number.
+ * - Upload an attachment and verify its details.
+ * - Verify uploaded attachments on the attachments dialog.
+ * - Click the "OK" button on the attachment details dialog.
+ * - Click the "Close" button on the attachments dialog.
+ * 
+ * @example
+ * ```typescript
+ * const rss310QPage = new RSS310Q();
+ * await rss310QPage.expectPageElementsVisibilityOnLoad();
+ * const [orderNumbers, randomIndex] = await rss310QPage.clickRandomViewButton();
+ * await rss310QPage.verifyBreadcrumbs([orderNumbers, randomIndex]);
+ * const uploadedFileName = await rss310QPage.uploadAttachment();
+ * await rss310QPage.verifyAttachmentDetails(uploadedFileName);
+ * await rss310QPage.clickOkOnAttachementDetails();
+ * await rss310QPage.verifyUploadedAttachmentsOnAttachmentsDialog(uploadedFileName);
+ * await rss310QPage.clickCloseBtn();
+ * ```
+ * 
+ * @author Pruthviraj Pardeshi
+ */
 export default class RSS310Q extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "RSS310Q - Purchase Orders";
     private readonly orderNoColumnHeaderLocator = "th[id=ORD_NO]";
     private readonly orderNoColumnValuesLocator = "td[axes*='ORD_NO']";
-    private readonly sortIconLocator = "span.esr_grid_sort_span.fa";
     private readonly upSortIconLocator = "fa-sort-amount-up";
     private readonly downSortIconLocator = "fa-sort-amount-down";
-    private readonly searchBtnLocator = "#search_button";
+
     _okBtnLocator: string = "#ok";
     private readonly fileTitleLocator = "#file_title";
     private readonly fileNameLocator = "#filename";
@@ -35,12 +65,7 @@ export default class RSS310Q extends BasePage {
         //Page Heading
         expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
     }
-    /**
-     *
-     */
-    async clickSearchBtn() {
-        await this.click(this.searchBtnLocator);
-    }
+   
     /**
      *
      * @returns

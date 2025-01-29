@@ -3,6 +3,8 @@
     "expectedLogoutDialogContent" : "'Logout' Are you sure?",
     "SPC420":"SPC420",
     "PRL210":"PRL210",
+    "PRL614Q":"PRL614Q",
+    "PRL300Q":"PRL300Q",
     "RSS570":"RSS570",
     "NML510":"NML510",
     "RSS310Q":"RSS310Q",
@@ -32,5 +34,16 @@
     "expectedOrderNumberText":"Order Number",    
     "tenant": "sfdemosite130",
     "expectedHelpUrl":"/help/int/webhelp/int.htm",
-    "expectedHeaderDetailsText":"Header Details"
+    "expectedHeaderDetailsText":"Header Details",
+    "newText":"New",
+    "invoiceType":"Non Purchase Order Invoice",
+    "invoiceDate":"01/09/2023",
+    "expectedPeriodAndYear": "2324/01",
+    "expectedAddText":"Add",
+    "selectText":"Select",
+    "errorPromptMessage":"The Net Total for all Matched Lines",
+    "pleaseWaitText":"Please wait...",
+    "pendingText":"Pending",
+    "recordSelectionText":"Record Selection",
+    "newBalanceNegativeText":"New Balance will be negative. Do you want to continue?"
 }

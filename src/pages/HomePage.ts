@@ -4,6 +4,47 @@ import BasePage from "./BasePage";
  * @author: @pruthvirajqa2dev
  * Home page class for SIMS Finance Home page elements
  */
+/**
+ * Represents the HomePage class which extends the BasePage.
+ * This class contains locators and actions specific to the Home Page of the application.
+ *
+ * @class HomePage
+ * @extends {BasePage}
+ *
+ * @property {string} pageHeadingText - The text for the page heading.
+ * @property {string} newsMessageHeadingText - The text for the news message heading.
+ * @property {string} userMessageHeadingText - The text for the user message heading.
+ * @property {string} tasksHeadingText - The text for the tasks heading.
+ * @property {string} hamburgerMenuBtnLocator - The locator for the hamburger menu button.
+ * @property {string} recentHistorySearchInputLocator - The locator for the recent history search input.
+ * @property {string} searchResultLocator - The locator for the search result.
+ * @property {string} profileMenuDropdownLocator - The locator for the profile menu dropdown.
+ * @property {string} logoutLabel - The label text for the logout option.
+ * @property {string} menusLocator - The locator for the menus.
+ * @property {string} filterInputLocator - The locator for the filter input.
+ * @property {string} filterBtnLocator - The locator for the filter button.
+ * @property {string} filteredMenuItemLocator - The locator for the filtered menu item.
+ * @property {string} helpLinkLocator - The locator for the help link.
+ *
+ * @method expectPageElementsVisibilityOnLoad - Verifies key page elements are visible after loading.
+ * @method clickHamburgerMenuButton - Clicks on the hamburger menu button.
+ * @method goToScreenUsingMenusOption - Navigates to a screen using the menus option.
+ * @param {string} screen - The screen to navigate to.
+ * @method createDynamicScreenNameRegex - Creates a dynamic regex for screen names.
+ * @param {string} baseText - The base text to create the regex from.
+ * @returns {RegExp} - The generated regex.
+ * @method clickScreenLocator - Clicks on a screen locator.
+ * @param {string} screen - The screen to click on.
+ * @method fillSearchOptions - Enters search criteria into the search textbox.
+ * @param {string} search - The search criteria.
+ * @method clickSearchOptionInList - Clicks the first search option displayed on the search list.
+ * @method clickProfileMenu - Clicks on the profile menu.
+ * @method clickLogoutLabel - Clicks on the logout label.
+ * @method logout - Logs out the user.
+ * @method verifyVisibilityYesNoButton - Verifies the visibility of Yes and No buttons.
+ * @method clickyesBtnLocator - Clicks the Yes button.
+ * @method clickHelpLink - Clicks on the help link.
+ */
 export default class HomePage extends BasePage {
     //Locators
     private readonly pageHeadingText = "SIMS Finance";

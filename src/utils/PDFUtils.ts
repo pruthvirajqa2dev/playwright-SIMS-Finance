@@ -13,8 +13,8 @@ export default class PDFUtils {
         return new Promise((resolve) => {
             const filePath = path.resolve(pdfPath);
             const dataBuffer = fs.readFileSync(filePath);
-            pdf(dataBuffer).then((data: string | PromiseLike<string>) => {
-                resolve(data);
+            pdf(dataBuffer).then((data) => {
+                resolve(data.text);
             });
         });
     }

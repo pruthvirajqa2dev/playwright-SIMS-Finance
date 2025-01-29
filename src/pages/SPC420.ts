@@ -9,6 +9,49 @@ import FileUtils from "../utils/FileUtils";
  * @author: @pruthvirajqa2dev
  * This page class is for SPC420 screen related page elements and actions on them
  */
+/**
+ * @class SPC420
+ * @extends BasePage
+ * @classdesc This class represents the SPC420 page and provides methods to interact with its elements and perform actions.
+ *
+ * @property {string} pageHeadingText - The text for the page heading.
+ * @property {string} serverDirectoriesText - The text for the server directories heading.
+ * @property {string} packageDetailsText - The text for the package details heading.
+ * @property {string} direcotoryDetailsText - The text for the directory details heading.
+ * @property {string} spc420TreeItemWithDynTextLocator - The locator for tree items with dynamic text.
+ * @property {string} spc420SubTreeItemWithDynTextLocator - The locator for sub-tree items with dynamic text.
+ * @property {string} _downArrowLocator - The locator for the down arrow icon.
+ * @property {string} pkgDirLocator - The locator for the package directory.
+ * @property {string} uploadFileBtnRoleName - The role name for the upload file button.
+ * @property {string} uploadBtnLocator - The locator for the upload button.
+ * @property {string} uploadFileText - The text for the upload file dialog.
+ * @property {string} okBtnText - The text for the OK button.
+ * @property {string} uploadedFileNameLocator - The locator for the uploaded file name.
+ * @property {string} uploadedFileNameOnUFDialogLocator - The locator for the uploaded file name on the upload file dialog.
+ * @property {string} fileNameOnUFDialogLocator - The locator for the file name on the upload file dialog.
+ * @property {string} schoolIdOnUploadedFileDetailsTableLocator - The locator for the school ID on the uploaded file details table.
+ * @property {string} fileNameOnUploadedFileDetailsTableLocator - The locator for the file name on the uploaded file details table.
+ * @property {string} extOnUploadedFileDetailsTableLocator - The locator for the file extension on the uploaded file details table.
+ * @property {string} viewDropdownOnTableLocator - The locator for the view dropdown on the table.
+ *
+ * @method expectPageElementsVisibilityOnLoad - Verifies that key page elements are visible after loading.
+ * @method clickSubDirectoryInDirectory - Clicks the subdirectory in the given directory, if it is already open. Else it double clicks the directory and then clicks the subdirectory.
+ * @param {string} dir - The directory name.
+ * @param {string} subdir - The subdirectory name.
+ *
+ * @method verifySubDirectoryOpened - Verifies that the subdirectory is opened.
+ * @param {string} dir - The directory name.
+ * @param {string} subdir - The subdirectory name.
+ *
+ * @method uploadFile - Uploads a file using the fileChooser class in Playwright.
+ * @returns {Promise<string>} - The directory and file name with extension.
+ *
+ * @method verifyUploadedFileDetailsOnTableRecord - Verifies the uploaded file details on the table record.
+ * @param {string} createdDirAndFileNameWithExt - The created directory and file name with extension.
+ *
+ * @method deleteUploadedFile - Deletes the uploaded file.
+ * @param {string} createdFileNameWithExt - The created file name with extension.
+ */
 export default class SPC420 extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "SPC420 - File Manager";
