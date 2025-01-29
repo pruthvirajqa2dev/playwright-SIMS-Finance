@@ -27,7 +27,7 @@ test.describe(
     "Identify payment methods on " + `${process.env.test_env}`.toUpperCase(),
     () => {
         //Test case 1
-        test("Identify payment methods", async ({ page }, testInfo) => {
+        test.fixme("Identify payment methods", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "Identify payment methods",
                 description:

@@ -40,9 +40,9 @@ export default class PDFUtils {
         );
         console.log("PDF File name is: " + fileName);
         const pdfData: any = await PDFUtils.readPDF(fileName);
-        console.log("PDF data from " + fileName + " : " + pdfData.text);
-        if (pdfData.text !== "") {
-            return pdfData.text;
+        console.log("PDF data from " + fileName + " : " + pdfData);
+        if (pdfData !== "") {
+            return pdfData;
         } else return null;
     }
     static async testDownloadAndUnzipPDF() {
@@ -64,7 +64,7 @@ export default class PDFUtils {
         );
         console.log("PDF File name is: " + pdfFileName);
         const data: any = await PDFUtils.readPDF(pdfFileName);
-        console.log("PDF data from " + pdfFileName + " : " + data.text);
+        console.log("PDF data from " + pdfFileName + " : " + data);
         // Extract text from the PDF
     }
 }
