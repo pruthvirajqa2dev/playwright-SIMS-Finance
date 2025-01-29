@@ -3,16 +3,16 @@
     {
       "timestamp": "2025-01-29_09-11-06",
       "counts": {
-        "executed": 10,
+        "executed": 8,
         "passed": 8,
-        "failed": 1,
+        "failed": 0,
         "flaky": 0
       }
     },
     {
       "timestamp": "2025-01-29_08-30-09",
       "counts": {
-        "executed": 10,
+        "executed": 9,
         "passed": 6,
         "failed": 3,
         "flaky": 0
@@ -21,7 +21,7 @@
     {
       "timestamp": "2025-01-29_07-20-50",
       "counts": {
-        "executed": 10,
+        "executed": 9,
         "passed": 6,
         "failed": 3,
         "flaky": 0
@@ -30,7 +30,7 @@
     {
       "timestamp": "2025-01-29_07-18-16",
       "counts": {
-        "executed": 10,
+        "executed": 9,
         "passed": 6,
         "failed": 3,
         "flaky": 0
