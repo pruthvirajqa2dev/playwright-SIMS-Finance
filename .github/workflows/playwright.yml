@@ -698,29 +698,29 @@ jobs:
                   artifact_name: upload-html-reports
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - name: Notify on Execution
-              if: success()
-              uses: dawidd6/action-send-mail@v4
-              with:
-                  server_address: smtp.gmail.com
-                  server_port: 465
-                  secure: true
-                  username: ${{ secrets.EMAIL_USERNAME }}
-                  password: ${{ secrets.EMAIL_PASSWORD }}
-                  subject: "SIMS Finance- GitHub Action: Playwright Tests ${{ env.TEST_STATUS }}"
-                  body: |
-                      Hi,
-                      Please find the automated SIMS Finance Playwright Tests Execution Status:
+            # - name: Notify on Execution
+            #   if: success()
+            #   uses: dawidd6/action-send-mail@v4
+            #   with:
+            #       server_address: smtp.gmail.com
+            #       server_port: 465
+            #       secure: true
+            #       username: ${{ secrets.EMAIL_USERNAME }}
+            #       password: ${{ secrets.EMAIL_PASSWORD }}
+            #       subject: "SIMS Finance- GitHub Action: Playwright Tests ${{ env.TEST_STATUS }}"
+            #       body: |
+            #           Hi,
+            #           Please find the automated SIMS Finance Playwright Tests Execution Status:
 
-                      🧪 The Playwright tests have ${{ env.TEST_STATUS }}.
+            #           🧪 The Playwright tests have ${{ env.TEST_STATUS }}.
 
-                      🕒 Latest run was on ${{ env.TIMESTAMP }}.
+            #           🕒 Latest run was on ${{ env.TIMESTAMP }}.
 
-                      Please refer the link below to view the report and graphical representation here:
-                      https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber/
+            #           Please refer the link below to view the report and graphical representation here:
+            #           https://pruthvirajqa2dev.github.io/SIMS-Finance--pw-non-cucumber/
 
-                      Regards,
-                      SIMS Finance QA Team
-                  to: pruthviraj.pardeshi@parentpay.com
-                  from: ${{ secrets.EMAIL_USERNAME }}
-                  cc: princy.rajkumar@parentpay.com
+            #           Regards,
+            #           SIMS Finance QA Team
+            #       to: pruthviraj.pardeshi@parentpay.com
+            #       from: ${{ secrets.EMAIL_USERNAME }}
+            #       cc: princy.rajkumar@parentpay.com
