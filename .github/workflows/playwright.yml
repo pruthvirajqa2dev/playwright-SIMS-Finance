@@ -698,7 +698,7 @@ jobs:
             - name: Deploy to GitHub Pages
               uses: actions/deploy-pages@v1
               with:
-                  artifact_name: upload-html-reports
+                  artifact_name: upload-html-reports-pages
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             # - name: Notify on Execution
