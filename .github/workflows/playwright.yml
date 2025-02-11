@@ -104,6 +104,9 @@ jobs:
               with:
                   path: all-blob-reports
                   key: playwright-blob-report
+                  restore-keys: |
+                      playwright-blob-report-${{ runner.os }}-
+                      playwright-blob-report-
             #Download artifacts
             - name: Download artifacts
               uses: actions/download-artifact@v4
