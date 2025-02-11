@@ -685,11 +685,11 @@ jobs:
                   git add published-reports/$TIMESTAMP/
                   git commit -m "Update Playwright reports with $TIMESTAMP"
                   git push origin gh-pages
-            - name: Upload Combined Reports for Pages
-              uses: actions/upload-artifact@v4
-              with:
-                  name: upload-html-reports-${{ github.run_id }}
-                  path: published-reports/
+            # - name: Upload Combined Reports for Pages
+            #   uses: actions/upload-artifact@v4
+            #   with:
+            #       name: upload-html-reports-${{ github.run_id }}
+            #       path: published-reports/
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Upload artifact
