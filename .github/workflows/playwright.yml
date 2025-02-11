@@ -688,7 +688,7 @@ jobs:
             - name: Upload Combined Reports for Pages
               uses: actions/upload-artifact@v4
               with:
-                  name: upload-html-reports
+                  name: pages-artifact
                   path: published-reports/
             - name: Setup Pages
               uses: actions/configure-pages@v2
