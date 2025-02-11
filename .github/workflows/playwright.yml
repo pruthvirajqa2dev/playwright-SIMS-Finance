@@ -691,12 +691,12 @@ jobs:
                   name: upload-html-reports-${{ github.run_id }}
                   path: published-reports/
             - name: Setup Pages
-              uses: actions/configure-pages@v2
-            # - name: Upload artifact
-            #   uses: actions/upload-pages-artifact@v3
-            #   with:
-            #       name: upload-html-reports-${{ github.run_id }}
-            #       path: published-reports/
+              uses: actions/configure-pages@v3
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  name: upload-html-reports-${{ github.run_id }}
+                  path: published-reports/
             - name: Deploy to GitHub Pages
               uses: actions/deploy-pages@v1
               with:
