@@ -696,7 +696,7 @@ jobs:
                   name: upload-html-reports-pages
                   path: published-reports/
             - name: Deploy to GitHub Pages
-              uses: actions/deploy-pages@v1
+              uses: actions/deploy-pages@v3
               with:
                   artifact_name: upload-html-reports-pages
               env:
