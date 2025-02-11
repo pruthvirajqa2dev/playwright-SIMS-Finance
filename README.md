@@ -46,8 +46,8 @@ Before running the tests, ensure that the following are installed:
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/pruthvirajqa2dev/SIMS-Finance--pw-non-cucumber.git
-    cd SIMS-Finance--pw-non-cucumber
+    git clone https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance.git
+    cd playwright-SIMS-Finance
     ```
 2. **Install dependencies**: Run the following command to install required packages:
 
