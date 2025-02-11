@@ -695,12 +695,12 @@ jobs:
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
-                  name: upload-html-reports
+                  name: pages-artifact
                   path: published-reports/
             - name: Deploy to GitHub Pages
               uses: actions/deploy-pages@v1
               with:
-                  artifact_name: upload-html-reports
+                  artifact_name: pages-artifact
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             # - name: Notify on Execution
