@@ -688,7 +688,7 @@ jobs:
             - name: Upload Combined Reports for Pages
               uses: actions/upload-artifact@v4
               with:
-                  name: upload-html-reports-${{ github.run_id }}
+                  name: upload-html-reports-pages
                   path: published-reports/
             - name: Setup Pages
               uses: actions/configure-pages@v3
@@ -696,7 +696,7 @@ jobs:
               uses: actions/upload-pages-artifact@v3
               with:
                   name: upload-html-reports-pages
-                  path: published-reports/
+                  # path: published-reports/
     deploy:
         # Add a dependency to the merge-reports job
         needs: merge-reports
