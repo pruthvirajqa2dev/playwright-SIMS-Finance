@@ -693,7 +693,7 @@ jobs:
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Upload artifact
-              uses: actions/upload-pages-artifact@v2.0.0
+              uses: actions/upload-pages-artifact@v3
               with:
                   name: github-pages
                   path: published-reports/
