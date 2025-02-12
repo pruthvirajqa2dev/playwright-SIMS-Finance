@@ -25,7 +25,7 @@ test.describe(
     "Postchecks on environment:" + `${process.env.test_env}`.toUpperCase(),
     () => {
         //Test case 1
-        test.only("Login and Logout", async ({ page }, testInfo) => {
+        test("Login and Logout", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "Login and Logout",
                 description:
