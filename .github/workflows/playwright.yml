@@ -696,7 +696,7 @@ jobs:
               uses: actions/upload-pages-artifact@v3
               with:
                   name: upload-html-reports-pages
-                  # path: published-reports/
+                  path: published-reports/
     deploy:
         # Add a dependency to the merge-reports job
         needs: merge-reports
