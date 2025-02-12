@@ -688,14 +688,14 @@ jobs:
             - name: Upload Combined Reports for Pages
               uses: actions/upload-artifact@v4
               with:
-                  name: upload-html-reports-pages
+                  name: github-pages
                   path: published-reports/
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Upload artifact
-              uses: actions/upload-pages-artifact@v1
+              uses: actions/upload-pages-artifact@v3
               with:
-                  name: upload-html-reports-pages
+                  name: github-pages
                   path: published-reports/
     deploy:
         # Add a dependency to the merge-reports job
@@ -718,7 +718,7 @@ jobs:
               id: deployment
               uses: actions/deploy-pages@v3 # or specific "vX.X.X" version tag for this action
               with:
-                  artifact_name: upload-html-reports-pages
+                  artifact_name: github-pages
 
         # - name: Deploy to GitHub Pages
         #   uses: actions/deploy-pages@v3
