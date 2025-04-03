@@ -101,7 +101,7 @@ test.describe(
                 "Go to the screen " + screen,
                 async () => {
                     await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingMenusOption(screen);
+                    await homepage.goToScreenUsingRecentHistory(screen);
                     return new SPC420(page, testInfo);
                 }
             );
@@ -158,7 +158,7 @@ test.describe(
                 "Go to the screen " + screen,
                 async () => {
                     await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingMenusOption(screen);
+                    await homepage.goToScreenUsingRecentHistory(screen);
                     return new RSS570(page, testInfo);
                 }
             );
@@ -230,7 +230,7 @@ test.describe(
                 "Go to the screen " + screen,
                 async () => {
                     await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingMenusOption(screen);
+                    await homepage.goToScreenUsingRecentHistory(screen);
                     return new NML510(page, testInfo);
                 }
             );
@@ -302,7 +302,7 @@ test.describe(
                 "Go to the screen " + screen,
                 async () => {
                     await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingMenusOption(screen);
+                    await homepage.goToScreenUsingRecentHistory(screen);
                     return new XQuerySIMS_TB_SCHOOL(page, testInfo);
                 }
             );
@@ -345,7 +345,7 @@ test.describe(
                 "Go to the screen " + screen,
                 async () => {
                     await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingMenusOption(screen);
+                    await homepage.goToScreenUsingRecentHistory(screen);
                     return new XQuerySIMS_TB_SCHOOL(page, testInfo);
                 }
             );
@@ -388,7 +388,7 @@ test.describe(
                 "Go to the screen " + screen,
                 async () => {
                     await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingMenusOption(screen);
+                    await homepage.goToScreenUsingRecentHistory(screen);
                     return new RSS310Q(page, testInfo);
                 }
             );

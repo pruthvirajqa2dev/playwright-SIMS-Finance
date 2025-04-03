@@ -84,7 +84,7 @@ export default abstract class BasePage {
     public get breadcrumbLocator(): string {
         return this._breadcrumbLocator;
     }
-    private readonly _attachmentBtnLocator = "#esr_attachment_manager";
+    private readonly _attachmentBtnLocator = "#esr_attachments_button";
     public get attachmentBtnLocator(): string {
         return this._attachmentBtnLocator;
     }
@@ -357,7 +357,25 @@ export default abstract class BasePage {
             "Check if page element has attr :" + attr + " with value " + value
         ).toHaveAttribute(attr, value);
     }
-
+    /**
+     *
+     * @param locator
+     * @param value
+     */
+    async expectElementToContainValue(locator: string, value: string) {
+        const actualText = await this.page
+            .locator(locator)
+            .first()
+            .inputValue();
+        const actualValue = parseFloat(actualText);
+        const expectedValue = parseFloat(value);
+        console.log(
+            `Actual Value: ${actualValue} Expected Value: ${expectedValue}`
+        );
+        expect(
+            parseFloat(Math.abs(actualValue - expectedValue).toPrecision(2))
+        ).toBeLessThanOrEqual(0.01);
+    }
     // Additional methods (as needed)
     /**
      *

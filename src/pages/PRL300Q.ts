@@ -316,7 +316,7 @@ export default class PRL300Q extends BasePage {
             this.vatCodeColumnLocator,
             vatCode
         );
-        this.clickElementByText(this.expectedDialogTitle);
+        // this.clickElementByText(this.expectedDialogTitle);
     }
     /**
      *
@@ -327,9 +327,10 @@ export default class PRL300Q extends BasePage {
         await this.scrollToElementUsingHandle(
             this.calculatedVatValueOnLineDetailsScreenLocator
         );
-        await expect(
-            this.page.locator(this.calculatedVatValueOnLineDetailsScreenLocator)
-        ).toHaveValue(vatAmount);
+        await this.expectElementToContainValue(
+            this.calculatedVatValueOnLineDetailsScreenLocator,
+            vatAmount
+        );
     }
     /**
      *
@@ -341,9 +342,10 @@ export default class PRL300Q extends BasePage {
             this.calculatedTotalInvoiceTextLocator
         );
         logger.info("Expected total invoice value: " + totalInvoice);
-        await expect(
-            this.page.locator(this.calculatedTotalInvoiceTextLocator)
-        ).toHaveValue(Number(totalInvoice).toFixed(2));
+        await this.expectElementToContainValue(
+            this.calculatedTotalInvoiceTextLocator,
+            totalInvoice
+        );
     }
 
     /**

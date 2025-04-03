@@ -58,9 +58,6 @@ export default class SPC420 extends BasePage {
     private readonly serverDirectoriesText = "Server Directories";
     private readonly packageDetailsText = "Package Details";
     private readonly direcotoryDetailsText = "Directory Details";
-    private readonly spc420TreeItemWithDynTextLocator = '.esr_tree>>text="%"';
-    private readonly spc420SubTreeItemWithDynTextLocator =
-        '.esr_tree_open>>text="%"';
     _downArrowLocator = '.fa-angle-down[data-control_type="TREE_IMAGE"]';
     private readonly pkgDirLocator = '[data-alias="PACKAGE_DIR"]';
     private readonly uploadFileBtnRoleName = "Click to Upload File";
@@ -100,25 +97,16 @@ export default class SPC420 extends BasePage {
      * @param subdir
      */
     async clickSubDirectoryInDirectory(dir: string, subdir: string) {
-        if (await this.page.locator(this.downArrowLocator).isVisible()) {
-            const dirLocator = await this.page.locator(
-                this.spc420TreeItemWithDynTextLocator.replace("%", dir)
-            );
-            await expect(dirLocator).toBeVisible();
-        } else {
-            await this.page
-                .locator(
-                    this.spc420TreeItemWithDynTextLocator.replace("%", dir)
-                )
-                .dblclick();
-            const dirLocator = await this.page.locator(
-                this.spc420TreeItemWithDynTextLocator.replace("%", dir)
-            );
-            await expect(dirLocator).toBeVisible();
-        }
-        const subDirLocator = await this.page.locator(
-            this.spc420SubTreeItemWithDynTextLocator.replace("%", subdir)
-        );
+        // if (await this.page.locator(this.downArrowLocator).isVisible()) {
+        const dirLocator = await this.page.getByRole("treeitem", {
+            name: "%".replace("%", dir)
+            // exact: true
+        });
+        await expect(dirLocator).toBeVisible();
+        const subDirLocator = await this.page.getByRole("treeitem", {
+            name: "%".replace("%", subdir),
+            exact: true
+        });
         expect(subDirLocator).toBeVisible;
         await subDirLocator.click();
     }

@@ -47,8 +47,7 @@ import { expect, Page } from "@playwright/test";
 export default class XQuerySIMS_TB_SCHOOL extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "XQUERY - SIMS Trial Balance School";
-    private readonly _prominentText =
-        "SIMS_TB_SCHOOL-SIMS Trial Balance School";
+    private readonly _prominentText = "Parameters";
     public get prominentText(): string {
         return this._prominentText;
     }

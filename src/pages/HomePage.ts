@@ -64,6 +64,8 @@ export default class HomePage extends BasePage {
     private readonly filteredMenuItemLocator =
         "div.esr_tree_selectable[name*=_esr_nav_ESR_MENUS_TREE_]";
     private readonly helpLinkLocator = "[aria-label=Help]";
+    private readonly recentHistoryMenuOptionLocator =
+        "[aria-label='Your Last 20 Accessed Options']";
     //Constructor
 
     //Actions
@@ -112,6 +114,23 @@ export default class HomePage extends BasePage {
         await this.fill(this.filterInputLocator, screen);
         await this.click(this.filterBtnLocator);
         await this.clickScreenLocator(screen);
+    }
+    /**
+     * Navigates to a specified screen using the recent history menu.
+     *
+     * @param screen - The name of the screen to navigate to.
+     *
+     * This method performs the following steps:
+     * 1. Clicks on the recent history menu option.
+     * 2. Fills the search options with the provided screen name.
+     * 3. Clicks on the locator corresponding to the specified screen.
+     *
+     * Ensure that the locators and screen name are correctly configured before calling this method.
+     */
+    async goToScreenUsingRecentHistory(screen: string) {
+        await this.click(this.recentHistoryMenuOptionLocator);
+        await this.fillSearchOptions(screen);
+        await this.clickSearchOptionInList();
     }
     /**
      *
