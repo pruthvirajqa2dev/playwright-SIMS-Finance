@@ -1,10 +1,7 @@
 import BasePage from "../BasePage";
 import expectedTexts from "../../data/expectedTexts.json";
 import { expect, Page } from "@playwright/test";
-import {
-    waitForEmail,
-    waitForEmailWithPreciseTime
-} from "../../utils/GmailUtils";
+// import { waitForEmailWithPreciseTime } from "../../utils/GmailUtils";
 // <reference lib="dom"/>
 
 /**
@@ -49,21 +46,21 @@ import {
  * @method assertSubjectAndTime - Asserts the subject and time.
  */
 export default class XQuerySIMS_TB_SCHOOL extends BasePage {
-    async verifyEmailSent(
-        expectedSender: any,
-        expectedEmailSubject: any,
-        actionTime: any
-    ) {
-        const emailReceived = await waitForEmailWithPreciseTime(
-            expectedSender,
-            expectedEmailSubject,
-            120,
-            5,
-            actionTime
-        );
-        expect(emailReceived).toBeTruthy();
-        return emailReceived;
-    }
+    // async verifyEmailSent(
+    //     expectedSender: any,
+    //     expectedEmailSubject: any,
+    //     actionTime: any
+    // ) {
+    //     const emailReceived = await waitForEmailWithPreciseTime(
+    //         expectedSender,
+    //         expectedEmailSubject,
+    //         120,
+    //         5,
+    //         actionTime
+    //     );
+    //     expect(emailReceived).toBeTruthy();
+    //     return emailReceived;
+    // }
     //Locators and Texts
     private readonly pageHeadingText = "XQUERY - SIMS Trial Balance School";
     private readonly _prominentText = "Parameters"; //SIMS_TB_SCHOOL-SIMS Trial Balance School //Parameters

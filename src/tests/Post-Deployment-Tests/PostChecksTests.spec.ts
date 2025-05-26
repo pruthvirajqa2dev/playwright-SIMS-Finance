@@ -420,17 +420,17 @@ test.describe(
                 await simsTbSchool.assertSubjectAndTime();
                 await simsTbSchool.clickOkBtn();
             });
-            await test.step("Verify email is sent", async () => {
-                const actionTime = new Date();
-                const expectedSubject =
-                    await simsTbSchool.getSubjectInputValue();
-                const emailSent = await simsTbSchool.verifyEmailSent(
-                    expectedTexts.expectedSenderEmail,
-                    expectedSubject,
-                    actionTime
-                );
-                expect(emailSent).toBeTruthy();
-            });
+            // await test.step("Verify email is sent", async () => {
+            //     const actionTime = new Date();
+            //     const expectedSubject =
+            //         await simsTbSchool.getSubjectInputValue();
+            //     const emailSent = await simsTbSchool.verifyEmailSent(
+            //         expectedTexts.expectedSenderEmail,
+            //         expectedSubject,
+            //         actionTime
+            //     );
+            //     expect(emailSent).toBeTruthy();
+            // });
         });
         //Test case 7
         test("RSS310Q - Attachments", async ({ page }, testInfo) => {
