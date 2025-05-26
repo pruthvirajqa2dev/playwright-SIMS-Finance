@@ -10,3 +10,7 @@ node_modules/
 /PDFDownloads
 test-results.json
 logs/app.log
+src/utils/SetupGmail.ts
+src/utils/token.json
+src/utils/GmailUtils.ts
+src/utils/credentials.json

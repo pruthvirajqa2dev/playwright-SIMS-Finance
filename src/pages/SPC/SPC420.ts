@@ -1,8 +1,8 @@
 import { expect } from "@playwright/test";
-import BasePage from "./BasePage";
+import BasePage from "../BasePage";
 import path from "path";
-import expectedTexts from "../data/expectedTexts.json";
-import FileUtils from "../utils/FileUtils";
+import expectedTexts from "../../data/expectedTexts.json";
+import FileUtils from "../../utils/FileUtils";
 // <reference lib="dom"/>
 
 /**

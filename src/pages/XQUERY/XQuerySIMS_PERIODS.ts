@@ -1,15 +1,15 @@
-import BasePage from "./BasePage";
-import expectedTexts from "../data/expectedTexts.json";
+import BasePage from "../BasePage";
+import expectedTexts from "../../data/expectedTexts.json";
 import { expect, Page } from "@playwright/test";
 // <reference lib="dom"/>
 
 /**
  * @author: @pruthvirajqa2dev
- * This page class is for XQuery SIMS_TB_SCHOOL screen related page elements and actions on them
+ * This page class is for XQuery SIMS_PERIODS screen related page elements and actions on them
  */
 /**
- * Represents the XQuerySIMS_TB_SCHOOL page.
- * This class provides methods to interact with and verify elements on the XQuerySIMS_TB_SCHOOL page.
+ * Represents the XQuerySIMS_PERIODS page.
+ * This class provides methods to interact with and verify elements on the XQuerySIMS_PERIODS page.
  *
  * @extends BasePage
  *
@@ -47,7 +47,8 @@ import { expect, Page } from "@playwright/test";
 export default class XQuerySIMS_TB_SCHOOL extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "XQUERY - SIMS Trial Balance School";
-    private readonly _prominentText = "Parameters";
+    private readonly _prominentText =
+        "SIMS_TB_SCHOOL-SIMS Trial Balance School";
     public get prominentText(): string {
         return this._prominentText;
     }

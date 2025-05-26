@@ -1,5 +1,5 @@
-import BasePage from "./BasePage";
-import elementAttributes from "../data/elementAttributes.json";
+import BasePage from "../BasePage";
+import elementAttributes from "../../data/elementAttributes.json";
 import { expect } from "@playwright/test";
 // <reference lib="dom"/>
 
@@ -10,15 +10,15 @@ import { expect } from "@playwright/test";
 /**
  * Represents the RSS570 page, which extends the BasePage class.
  * This class contains locators, texts, and actions specific to the RSS570 page.
- * 
+ *
  * @class
  * @extends BasePage
- * 
+ *
  * @property {string} pageHeadingText - The text of the page heading.
  * @property {string} supplierOrNominalSortInputLocator - The locator for the supplier or nominal sort input field.
  * @property {string} currnecyCheckBoxLocator - The locator for the currency check box.
  * @property {string} _outstandingAccrualsText - The text for outstanding accruals.
- * 
+ *
  * @method get outstandingAccrualsText - Gets the text for outstanding accruals.
  * @method expectPageElementsVisibilityOnLoad - Verifies that key page elements are visible after loading.
  * @method fillSupplierOrNominalSortInput - Fills the supplier or nominal sort input field with the given option and verifies it.

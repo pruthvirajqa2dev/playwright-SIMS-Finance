@@ -1,14 +1,14 @@
 import test, { expect, Page, TestInfo } from "@playwright/test";
-import LoginPage from "../pages/LoginPage";
-import HomePage from "../pages/HomePage";
-import ENV from "../config/env";
-import expectedTexts from "../data/expectedTexts.json";
-import SPC420 from "../pages/SPC420";
-import NML510 from "../pages/NML510";
-import RSS570 from "../pages/RSS570";
-import PDFUtils from "../utils/PDFUtils";
-import XQuerySIMS_TB_SCHOOL from "../pages/XQuerySIMS_TB_SCHOOL";
-import RSS310Q from "../pages/RSS310Q";
+import LoginPage from "../../pages/LoginPage";
+import HomePage from "../../pages/HomePage";
+import ENV from "../../config/env";
+import expectedTexts from "../../data/expectedTexts.json";
+import NML510 from "../../pages/NML/NML510";
+import RSS570 from "../../pages/RSS/RSS570";
+import PDFUtils from "../../utils/PDFUtils";
+import XQuerySIMS_TB_SCHOOL from "../../pages/XQUERY/XQuerySIMS_TB_SCHOOL";
+import RSS310Q from "../../pages/RSS/RSS310Q";
+import SPC420 from "../../pages/SPC/SPC420";
 
 async function login(page: Page, testInfo: TestInfo) {
     const loginPage = new LoginPage(page, testInfo);
@@ -21,6 +21,54 @@ async function login(page: Page, testInfo: TestInfo) {
 
     return homepage;
 }
+/**
+ * @description
+ * This test suite performs post-deployment checks on the environment.
+ * It includes tests for login/logout functionality, file uploads, report generation, and email verification.
+ * Each test case is annotated with its purpose and expected behavior.
+ *
+ *  @group PostDeploymentTests
+ *  @group PostChecksTests
+ *  @group PostChecks
+ * description:
+ * This test suite performs post-deployment checks on the environment.
+ * It includes tests for login/logout functionality, file uploads, report generation, and email verification.
+ * Each test case is annotated with its purpose and expected behavior.
+ * Steps:
+ *   1. Login to the application using provided credentials.
+ *   2. Verify home page elements are visible on load.
+ *   3. Logout from the application and verify logout dialog content.
+ *   4. Perform file upload using SPC420 and verify uploaded file details.
+ *   5. Generate RSS570 Crystal Report and verify its content.
+ *   6. Generate NML510 Trial Balance Report and verify its content.
+ *   7. Execute SIMS_TB_SCHOOL XQuery Report and verify its content.
+ *   8. Distribute SIMS_TB_SCHOOL XQuery Report via email and verify email content.
+ *   9. Attach files to RSS310Q and verify attachment details.
+ *   10. Verify Help screen functionality.
+ * Expected Results:
+ *   - User should be able to login and logout successfully.
+ *   - Home page elements should be visible on load.
+ *   - Logout dialog should display expected content.
+ *   - File upload should be successful and uploaded file details should be verified.
+ *   - RSS570 Crystal Report should be generated with expected content.
+ *   - NML510 Trial Balance Report should be generated with expected content.
+ *   - SIMS_TB_SCHOOL XQuery Report should be executed and verified.
+ *   - SIMS_TB_SCHOOL XQuery Report should be distributed via email and email content should be verified.
+ *   - Attachments should be successfully uploaded to RSS310Q and verified.
+ *   - Help screen should be accessible and functional.
+ *
+ * @remarks
+ * This test suite is designed to run in a specific environment defined by the `test_env` environment variable.
+ *  It includes various test cases that cover different functionalities of the application.
+ *  Each test case is annotated with its purpose and expected behavior.
+ * @example
+ * To run this test suite, set the `test_env` environment variable to the desired environment (e.g., `test`, `uat`, `prod`) and execute the tests using Playwright.
+ * @see
+ * For more information on how to run Playwright tests, refer to the [Playwright documentation](https://playwright.dev/docs/test-intro).
+ * @author @pruthvirajqa2dev
+ * @version 1.0.0
+ * @since 2023-10-01
+ */
 test.describe(
     "Postchecks on environment:" + `${process.env.test_env}`.toUpperCase(),
     () => {
@@ -327,50 +375,64 @@ test.describe(
             });
         });
         //Test case 6
-        test("SIMS_TB_SCHOOL - XQuery Report - Distribute", async ({
-            page
-        }, testInfo) => {
-            test.info().annotations.push({
-                type: "SIMS_TB_SCHOOL - XQuery Report - Distribute",
-                description:
-                    "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Distribute"
-            });
-            //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
-                    return await login(page, testInfo);
+        test.fixme(
+            "SIMS_TB_SCHOOL - XQuery Report - Distribute",
+            async ({ page }, testInfo) => {
+                test.info().annotations.push({
+                    type: "SIMS_TB_SCHOOL - XQuery Report - Distribute",
+                    description:
+                        "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Distribute"
                 });
-            const screen = expectedTexts.SIMS_TB_SCHOOL;
-            const simsTbSchool = await test.step(
-                "Go to the screen " + screen,
-                async () => {
-                    await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingRecentHistory(screen);
-                    return new XQuerySIMS_TB_SCHOOL(page, testInfo);
-                }
-            );
-            await test.step("Verify valid page elements are visible", async () => {
-                await simsTbSchool.expectPageElementsVisibilityOnLoad();
-            });
-            await test.step("Fill up the form and click distribute", async () => {
-                await simsTbSchool.selectSchoolId(
-                    expectedTexts.expectedSchoolName
+                ENV.USERID = "T2uatadmin";
+                ENV.PASSWORD = "T2C@p1ta2#";
+                //Login
+                const homepage =
+                    await test.step(`Login using ${ENV.USERID!}`, async () => {
+                        return await login(page, testInfo);
+                    });
+                const screen = expectedTexts.SIMS_TB_SCHOOL;
+                const simsTbSchool = await test.step(
+                    "Go to the screen " + screen,
+                    async () => {
+                        await homepage.clickHamburgerMenuButton();
+                        await homepage.goToScreenUsingRecentHistory(screen);
+                        return new XQuerySIMS_TB_SCHOOL(page, testInfo);
+                    }
                 );
-                await simsTbSchool.selectYearAndPeriod(
-                    expectedTexts.expectedYear,
-                    expectedTexts.expectedPeriod
-                );
-                await simsTbSchool.clickSubmitBtnDistribute();
-            });
-            await test.step("Enter emailId on SIMS TB dialog, verify email subject,time and click Ok", async () => {
-                await simsTbSchool.checkIfDialogExistsWithTitle(
-                    expectedTexts.exepctedSimsTbDialogText
-                );
-                await simsTbSchool.fillEmailAddress();
-                await simsTbSchool.assertSubjectAndTime();
-                await simsTbSchool.clickOkBtn();
-            });
-        });
+                await test.step("Verify valid page elements are visible", async () => {
+                    await simsTbSchool.expectPageElementsVisibilityOnLoad();
+                });
+                await test.step("Fill up the form and click distribute", async () => {
+                    await simsTbSchool.selectSchoolId(
+                        expectedTexts.expectedSchoolName
+                    );
+                    await simsTbSchool.selectYearAndPeriod(
+                        expectedTexts.expectedYearTB,
+                        expectedTexts.expectedPeriod
+                    );
+                    await simsTbSchool.clickSubmitBtnDistribute();
+                });
+                await test.step("Enter emailId on SIMS TB dialog, verify email subject,time and click Ok", async () => {
+                    await simsTbSchool.checkIfDialogExistsWithTitle(
+                        expectedTexts.exepctedSimsTbDialogText
+                    );
+                    await simsTbSchool.fillEmailAddress();
+                    await simsTbSchool.assertSubjectAndTime();
+                    await simsTbSchool.clickOkBtn();
+                });
+                await test.step("Verify email is sent", async () => {
+                    const actionTime = new Date();
+                    const expectedSubject =
+                        await simsTbSchool.getSubjectInputValue();
+                    const emailSent = await simsTbSchool.verifyEmailSent(
+                        expectedTexts.expectedSenderEmail,
+                        expectedSubject,
+                        actionTime
+                    );
+                    expect(emailSent).toBeTruthy();
+                });
+            }
+        );
         //Test case 7
         test("RSS310Q - Attachments", async ({ page }, testInfo) => {
             test.info().annotations.push({

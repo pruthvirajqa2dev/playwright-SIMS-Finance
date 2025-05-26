@@ -1,5 +1,5 @@
-import logger from "../logging/logger";
-import BasePage from "./BasePage";
+import logger from "../../logging/logger";
+import BasePage from "../BasePage";
 import { expect } from "@playwright/test";
 // <reference lib="dom"/>
 

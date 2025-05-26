@@ -1,4 +1,4 @@
-import BasePage from "./BasePage";
+import BasePage from "../BasePage";
 import { expect } from "@playwright/test";
 // <reference lib="dom"/>
 

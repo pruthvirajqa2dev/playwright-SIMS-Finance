@@ -3,7 +3,7 @@ import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import ENV from "../config/env";
 import expectedTexts from "../data/expectedTexts.json";
-import PRL210 from "../pages/PRL210";
+import PRL210 from "../pages/PRL/PRL210";
 import logger from "../logging/logger";
 import * as fs from "fs";
 import path from "path";

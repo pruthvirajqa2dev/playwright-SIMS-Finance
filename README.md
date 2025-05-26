@@ -97,19 +97,19 @@ SIMS-Finance--pw-non-cucumber/
 │
 ├── playwright.yml          # yml configuration for github actions workflow jobs
 ├── src/tests/              # Contains all test files
-│   ├── login.spec.js       # Example test case
-│   ├── finance.spec.js     # Finance module tests
+│   ├── login.spec.ts       # Example test case
+│   ├── finance.spec.ts     # Finance module tests
 │
 ├── src/pages/                  # Page Object Model (POM) files
-│   ├── LoginPage.js        # Encapsulates login-related actions
-│   ├── FinancePage.js      # Encapsulates finance-specific actions
+│   ├── LoginPage.ts       # Encapsulates login-related actions
+│   ├── FinancePage.ts      # Encapsulates finance-specific actions
 │
 ├── src/utils/                  # Utilities for common functions
-│   ├── PDFUtils.js         # Reusable methods for handling PDF content
-│   ├── FileUtils.js        # Reusable methods for handling File operations
+│   ├── PDFUtils.ts         # Reusable methods for handling PDF content
+│   ├── FileUtils.ts        # Reusable methods for handling File operations
 │
 ├── .prettierrc.json        # Prettier configuration
-├── playwright.config.js    # Playwright configuration
+├── playwright.config.ts    # Playwright configuration
 ├── package.json            # Node.js dependencies and scripts
 ├── .gitignore              # Ignored files and folders
 └── README.md               # Project documentation

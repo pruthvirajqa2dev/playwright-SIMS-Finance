@@ -194,7 +194,7 @@ export default abstract class BasePage {
      */
     async checkAndVerify(locator: string) {
         await this.check(locator);
-        await expect(await this.page.isChecked(locator)).toBeTruthy();
+        expect(await this.page.isChecked(locator)).toBeTruthy();
     }
     /**
      *

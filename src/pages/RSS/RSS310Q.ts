@@ -1,7 +1,7 @@
-import BasePage from "./BasePage";
-import expectedTexts from "../data/expectedTexts.json";
+import BasePage from "../BasePage";
+import expectedTexts from "../../data/expectedTexts.json";
 import { expect } from "@playwright/test";
-import FileUtils from "../utils/FileUtils";
+import FileUtils from "../../utils/FileUtils";
 import path from "path";
 // <reference lib="dom"/>
 
@@ -12,9 +12,9 @@ import path from "path";
 /**
  * Represents the RSS310Q page object model.
  * This class provides methods to interact with and verify elements on the RSS310Q - Purchase Orders page.
- * 
+ *
  * @extends BasePage
- * 
+ *
  * @remarks
  * This class includes methods to:
  * - Verify the visibility of key page elements upon loading.
@@ -24,7 +24,7 @@ import path from "path";
  * - Verify uploaded attachments on the attachments dialog.
  * - Click the "OK" button on the attachment details dialog.
  * - Click the "Close" button on the attachments dialog.
- * 
+ *
  * @example
  * ```typescript
  * const rss310QPage = new RSS310Q();
@@ -37,7 +37,7 @@ import path from "path";
  * await rss310QPage.verifyUploadedAttachmentsOnAttachmentsDialog(uploadedFileName);
  * await rss310QPage.clickCloseBtn();
  * ```
- * 
+ *
  * @author Pruthviraj Pardeshi
  */
 export default class RSS310Q extends BasePage {
@@ -65,7 +65,7 @@ export default class RSS310Q extends BasePage {
         //Page Heading
         expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
     }
-   
+
     /**
      *
      * @returns

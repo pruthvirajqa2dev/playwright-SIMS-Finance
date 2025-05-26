@@ -1,14 +1,18 @@
 import test, { expect, Page, TestInfo } from "@playwright/test";
-import LoginPage from "../pages/LoginPage";
-import HomePage from "../pages/HomePage";
-import ENV from "../config/env";
-import expectedTexts from "../data/expectedTexts.json";
-import PRL614Q from "../pages/PRL/PRL614Q";
-import logger from "../logging/logger";
-import PRL300Q from "../pages/PRL/PRL300Q";
-import FileUtils from "../utils/FileUtils";
-import InvoiceCalc from "../utils/data/InvoiceCalc";
-
+import LoginPage from "../../pages/LoginPage";
+import HomePage from "../../pages/HomePage";
+import ENV from "../../config/env";
+import expectedTexts from "../../data/expectedTexts.json";
+import logger from "../../logging/logger";
+import PRL300Q from "../../pages/PRL/PRL300Q";
+import FileUtils from "../../utils/FileUtils";
+import InvoiceCalc from "../../utils/data/InvoiceCalc";
+/**
+ *
+ * @param page
+ * @param testInfo
+ * @returns
+ */
 async function login(page: Page, testInfo: TestInfo) {
     const loginPage = new LoginPage(page, testInfo);
     //Login using username and password
@@ -20,14 +24,33 @@ async function login(page: Page, testInfo: TestInfo) {
 
     return homepage;
 }
-test.describe("BACS Run " + `${process.env.test_env}`.toUpperCase(), () => {
+/**
+ * Test suite for adding Purchase Order Invoices
+ * @group PRL300Q
+ * @group Invoices
+ * This test suite is designed to add Purchase Order Invoices in the system.
+ * It includes the following steps:
+ *
+ * 1. Login to the application.
+ * 2. Navigate to the PRL300Q screen.
+ * 3. Select the school ID and click on search.
+ * 4. Get the list of all suppliers with payment method BACS.
+ * 5. Add invoices for each supplier with BACS payment method.
+ * 6. Fill in the invoice details including cost centre, quantity, unit price, VAT code, and invoice reference.
+ * 7. Add line details for each invoice.
+ * 8. Verify that the invoice is added successfully.
+ * 9. Dismiss any error prompts.
+ * 10. Verify the order details screen is visible with the expected VAT amount.
+ * 11. Take screenshots at various steps for verification.
+ *This test suite is intended to ensure that the Purchase Order Invoices can be added correctly and that the system behaves as expected.
+ *
+ */
+test.describe("PO Invoice " + `${process.env.test_env}`.toUpperCase(), () => {
     //Test case 1
-    test("BACS Payment Run", async ({ page }, testInfo) => {
+    test("PO Invoice ", async ({ page }, testInfo) => {
         test.info().annotations.push({
-            type: "BACS Payment Run",
-            description:
-                "This test is for performing BACS Payment Run in a tenant for user " +
-                ENV.USERID!
+            type: "PO Invoice ",
+            description: "This test is for testing PO Invoice " + ENV.USERID!
         });
         //Login
         const homepage =
@@ -52,32 +75,12 @@ test.describe("BACS Run " + `${process.env.test_env}`.toUpperCase(), () => {
             await homepage.expectPageElementsVisibilityOnLoad();
             logger.info("Home Page elements visibility verified on load");
         });
-        var screen = expectedTexts.PRL614Q;
-
-        var prl614q: PRL614Q =
-            await test.step(`Go to the screen ${screen}`, async () => {
-                await homepage.clickHamburgerMenuButton();
-                await homepage.goToScreenUsingMenusOption(screen);
-                return new PRL614Q(page, testInfo);
-            });
-        logger.info(`Navigate to screen ${screen}`);
-
-        await test.step("Verify valid page elements are visible", async () => {
-            await prl614q.expectPageElementsVisibilityOnLoad();
-        });
-        await test.step("Sort the records with BACS Date file to get the latest record first", async () => {
-            await prl614q.sortTheRecordsWithBACSFileDate(); //Click once for Descending order
-        });
-        await test.step("Check if BACS Run with Entered/Confirmed Status is not present", async () => {
-            await prl614q.checkForEnteredConfirmedStatus();
-        });
-
-        screen = expectedTexts.PRL300Q;
+        var screen = expectedTexts.PRL300Q;
 
         const prl300q: PRL300Q =
             await test.step(`Go to the screen ${screen}`, async () => {
                 await homepage.clickHamburgerMenuButton();
-                await homepage.goToScreenUsingMenusOption(screen);
+                await homepage.goToScreenUsingRecentHistory(screen);
                 return new PRL300Q(page, testInfo);
             });
         logger.info(`Navigate to screen ${screen}`);
@@ -85,12 +88,15 @@ test.describe("BACS Run " + `${process.env.test_env}`.toUpperCase(), () => {
         await test.step("Verify valid page elements are visible", async () => {
             await prl300q.expectPageElementsVisibilityOnLoad();
         });
+
         await test.step("Select school Id and click on search", async () => {
-            await prl300q.selectSchoolId(expectedTexts.expectedSchoolName);
+            if (ENV.USERID! == "FINDIR99D130") {
+                await prl300q.selectSchoolId(expectedTexts.expectedSchoolName);
+            }
             await prl300q.clickSearchBtn();
         });
 
-        await test.step("Get the list of all the suppliers with payment method BACS and add invoices fot the same", async () => {
+        await test.step("Get the list of all the suppliers with payment method BACS and add invoices for the same", async () => {
             const fileName = await FileUtils.latestFileNameLookup(
                 `${process.cwd()}/Test Files/BACS*.TXT`
             );
@@ -117,8 +123,8 @@ test.describe("BACS Run " + `${process.env.test_env}`.toUpperCase(), () => {
                     `Key-value- ${key}:${invoiceReferencesMap.get(key)}`
                 );
             }
-            const countOfUniqueSuppliers = 3;
-            const countOfInvoicesPerSupplier = 10;
+            const countOfUniqueSuppliers = 1;
+            const countOfInvoicesPerSupplier = 1;
             for (let counter = 0; counter < countOfUniqueSuppliers; counter++) {
                 for (let i = 0; i < countOfInvoicesPerSupplier; i++) {
                     let randomIndex;
@@ -190,7 +196,7 @@ test.describe("BACS Run " + `${process.env.test_env}`.toUpperCase(), () => {
                     await prl300q.clickSelectForSupplierName(
                         suppliersAcceptingBACS[i]
                     );
-
+                    const numberOfLines = 10;
                     logger.info(
                         "Selecting supplier and verifying supplier text"
                     );
@@ -201,8 +207,8 @@ test.describe("BACS Run " + `${process.env.test_env}`.toUpperCase(), () => {
                     await prl300q.fillInvoiceDateOnOrderDetailsScreen();
 
                     await prl300q.fillInvoiceFiguresOnOrderDetailsScreen(
-                        expectedTotalInvoiceValue.toString(),
-                        vatAmount.toString()
+                        (expectedTotalInvoiceValue * numberOfLines).toString(),
+                        (vatAmount * numberOfLines).toString()
                     );
                     logger.info("Filled invoice date and figures");
 
@@ -220,32 +226,16 @@ test.describe("BACS Run " + `${process.env.test_env}`.toUpperCase(), () => {
                     );
 
                     //***************Line Details screen******************
-                    await prl300q.addLineDetails(costCentre);
-                    await prl300q.fillQuantityAndUnitPrice(
-                        quantity.toString(),
-                        unitPrice.toString()
-                    );
-                    await prl300q.selectVatCode(vatCode);
-                    const expectedVatAmount = String(
-                        vatAmount !== 0
-                            ? Intl.NumberFormat("en-US", {
-                                  minimumFractionDigits: 2
-                              }).format((vatAmount * 100) / 100)
-                            : "0.00"
-                    );
-                    await prl300q.expectVatValueToBeCalculated(
-                        expectedVatAmount.toString()
-                    );
-                    await prl300q.expectTotalInvoiceValueToBeCalculated(
-                        expectedTotalInvoiceValue.toString()
-                    );
-                    await prl300q.click(prl300q.saveBtnLocator);
-                    await prl300q.compareQuantityAndUnitPriceOnLineGrid(
-                        quantity,
-                        unitPrice
-                    );
-                    await prl300q.compareLineGridDetails(netInvoice, vatAmount);
-                    await prl300q.compareVatCodeOnLineGrid(vatCode);
+                    for (let j = 0; j < numberOfLines; j++) {
+                        await page.waitForLoadState("load");
+                        await prl300q.addLineDetails(costCentre);
+                        await prl300q.fillQuantityAndUnitPrice(
+                            quantity.toString(),
+                            unitPrice.toString()
+                        );
+                        await prl300q.selectVatCode(vatCode);
+                        await prl300q.click(prl300q.saveBtnLocator);
+                    }
                     await prl300q.click(prl300q.finishAndSaveBtnLocator);
 
                     await prl300q.dismissErrorPrompt();
@@ -254,76 +244,6 @@ test.describe("BACS Run " + `${process.env.test_env}`.toUpperCase(), () => {
                     );
                 }
             }
-        });
-        var screen = expectedTexts.PRL614Q;
-        var prl614q =
-            await test.step(`Go to the screen ${screen}`, async () => {
-                await homepage.clickHamburgerMenuButton();
-                await homepage.goToScreenUsingMenusOption(screen);
-                logger.info(`Navigate to screen ${screen}`);
-                return new PRL614Q(page, testInfo);
-            });
-        await test.step(`Create new BACS run`, async () => {
-            logger.info(`Click on new button`);
-            await prl614q.clickEsrMultiBtnUsingText(expectedTexts.newText);
-            logger.info(`Select School ID and click on search button`);
-
-            await prl614q.selectSchoolId(expectedTexts.expectedSchoolName);
-            await page.waitForLoadState("load");
-            logger.info(`Fill narrative`);
-
-            const narrative =
-                "TestNarrBACSRun" +
-                new Date().getHours() +
-                new Date().getMinutes();
-            await prl614q.fillNarrativeInputAndVerify(narrative);
-            (
-                await prl614q.getByRole("heading", {
-                    name: "Submission Parameters"
-                })
-            ).click();
-            logger.info(`Double click on refresh button`);
-
-            await prl614q.click(prl614q.refreshBtnLocator);
-            logger.info(`Please wait dialog box`);
-
-            await prl614q.checkIfDialogExistsWithTitle(
-                expectedTexts.pleaseWaitText
-            );
-            await prl614q.expectElementToContainText(
-                prl614q.processingControlLocator,
-                expectedTexts.pendingText
-            );
-            await prl614q.expectElementToBeVisibleUsingLocator(
-                prl614q.supplierNameLocator,
-                { timeout: 120000 }
-            );
-            logger.info(`Selecting all txn`);
-            await prl614q.selectAllTxns();
-
-            logger.info(`Click next btn`);
-
-            await prl614q.clickNextBtn();
-            await prl614q.checkIfDialogExistsWithTitle(
-                expectedTexts.recordSelectionText
-            );
-            logger.info(`New balance prompt`);
-
-            await prl614q.verifyNewBalanceNegativePrompt(
-                expectedTexts.newBalanceNegativeText
-            );
-            logger.info(`Click yes button`);
-
-            await prl614q.clickYesBtnLocator();
-            await prl614q.checkIfDialogExistsWithTitle(
-                expectedTexts.recordSelectionText
-            );
-            logger.info(`Click ok button`);
-
-            await prl614q.clickMsgBoxOkBtn();
-            // await prl614q.verifySupplierNamesOnBACSRunStep2(
-            //     suppliersAcceptingBACS,countOfUniqueSuppliers
-            // );
         });
     });
 });

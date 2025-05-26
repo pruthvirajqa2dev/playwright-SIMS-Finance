@@ -1,7 +1,7 @@
-import BasePage from "./BasePage";
+import BasePage from "../BasePage";
 import { expect } from "@playwright/test";
-import expectedTexts from "../data/expectedTexts.json";
-import logger from "../logging/logger";
+import expectedTexts from "../../data/expectedTexts.json";
+import logger from "../../logging/logger";
 // <reference lib="dom"/>
 
 /**
@@ -79,7 +79,12 @@ export default class PRL300Q extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "PRL300Q - Invoices/Credit Notes";
     private readonly expectedDialogTitle = "Invoice/Credit Note";
+    private readonly _creditNoteLabel = "Credit Note";
+    public get creditNoteLabel() {
+        return this._creditNoteLabel;
+    }
     private readonly nonPurchaseOrderInvoiceRadioBtnLocator = "#invoice_type2";
+    private readonly creditNoteRadioBtnLocator = "#invoice_type3";
     private readonly _selectBtnLocator = "#select_button";
     public get selectBtnLocator() {
         return this._selectBtnLocator;
@@ -155,6 +160,7 @@ export default class PRL300Q extends BasePage {
     private readonly summartDetailsTitleLocator = "*[id*=summary_details]";
     private readonly totalVatLocator = "#tot_vat";
     private readonly okBtnOnDetailsScreenLocator = "#ok_button";
+    private readonly documentTypeLabel = "Document Type";
 
     //Actions
     /**
@@ -169,6 +175,12 @@ export default class PRL300Q extends BasePage {
      */
     async checkNonPurchaseOrderInvoiceRadioBtn() {
         await this.checkAndVerify(this.nonPurchaseOrderInvoiceRadioBtnLocator);
+    }
+    /**
+     * @description This method is used to check the Non Purchase Order Invoice Radio Button
+     */
+    async checkCreditNoteRadioBtn() {
+        await this.checkAndVerify(this.creditNoteRadioBtnLocator);
     }
     /**
      * @description This method is used to click the select button for provided supplier
@@ -470,5 +482,14 @@ export default class PRL300Q extends BasePage {
                 : "0.00"
         );
         await this.click(this.okBtnOnDetailsScreenLocator);
+    }
+    /**
+     * @description This method is used to select document type
+     * @param documentType
+     */
+    async selectDocumentType(documentType: string) {
+        await this.page
+            .getByLabel(this.documentTypeLabel)
+            .selectOption(documentType);
     }
 }
