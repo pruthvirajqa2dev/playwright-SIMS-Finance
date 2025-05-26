@@ -14,3 +14,4 @@ src/utils/SetupGmail.ts
 src/utils/token.json
 src/utils/GmailUtils.ts
 src/utils/credentials.json
+logs/app.log
