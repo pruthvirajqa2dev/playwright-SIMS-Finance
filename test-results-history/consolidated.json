@@ -1,6 +1,15 @@
 {
   "runs": [
     {
+      "timestamp": "2025-06-17_08-37-07",
+      "counts": {
+        "executed": 8,
+        "passed": 7,
+        "failed": 0,
+        "flaky": 0
+      }
+    },
+    {
       "timestamp": "2025-06-16_08-37-49",
       "counts": {
         "executed": 8,
@@ -259,15 +268,6 @@
         "passed": 8,
         "failed": 0,
         "flaky": 1
-      }
-    },
-    {
-      "timestamp": "2025-05-22_08-35-20",
-      "counts": {
-        "executed": 8,
-        "passed": 8,
-        "failed": 0,
-        "flaky": 0
       }
     }
   ]
