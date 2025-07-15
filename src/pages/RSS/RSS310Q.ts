@@ -3,7 +3,11 @@ import expectedTexts from "../../data/expectedTexts.json";
 import { expect } from "@playwright/test";
 import FileUtils from "../../utils/FileUtils";
 import path from "path";
-// <reference lib="dom"/>
+import * as XLSX from "xlsx";
+import {
+    getLedgerOptions,
+    getFundOptions
+} from "../../utils/GL Code Helper/glCodehelper";
 
 /**
  * @author: @pruthvirajqa2dev
@@ -56,6 +60,56 @@ export default class RSS310Q extends BasePage {
     private readonly fileExtColoumn = "[axes='FILE_EXT']";
     private readonly savedDateColoumn = "[axes='SAVED_DATE']";
     _closeBtnLocator = "#esr_close_button";
+    private readonly costCentreLookupIconLocator = "img#c1_part_code_lookup";
+    private readonly costCentreCodeColumnLocator = "[axes='C1_PART_CODE']";
+    private readonly selectButtonLocator = "button[aria-label='Select code']";
+    private readonly _descrColumnLocator = "[axes='DESCR']";
+    public get descrColumnLocator() {
+        return this._descrColumnLocator;
+    }
+
+    private readonly _fundCodeColumnLocator = "[axes='E2_PART_CODE']";
+    public get fundCodeColumnLocator() {
+        return this._fundCodeColumnLocator;
+    }
+    private readonly _ledgerCodeColumnLocator = "[axes='E1_PART_CODE']";
+    public get ledgerCodeColumnLocator() {
+        return this._ledgerCodeColumnLocator;
+    }
+    private readonly nextPageButtonLocator =
+        "*[data-uid$=glcodepartlookup_GL_CODE_PART_GRID_next]";
+    private readonly _costCentreInputLocator = "#c1_part_code";
+    public get costCentreInputLocator() {
+        return this._costCentreInputLocator;
+    }
+    private readonly _ledgerCodeInputLocator = "#e1_part_code";
+    public get ledgerCodeInputLocator() {
+        return this._ledgerCodeInputLocator;
+    }
+    private readonly _ledgerCodeDescriptionInputLocator =
+        "[for='e1_part_code'][type='descr']";
+    public get ledgerCodeDescriptionInputLocator() {
+        return this._ledgerCodeDescriptionInputLocator;
+    }
+    private readonly _fundCodeInputLocator = "#e2_part_code";
+    public get fundCodeInputLocator() {
+        return this._fundCodeInputLocator;
+    }
+    private readonly _fundCodeDescriptionInputLocator =
+        "[for='e2_part_code'][type='descr']";
+    public get fundCodeDescriptionInputLocator() {
+        return this._fundCodeDescriptionInputLocator;
+    }
+    private readonly _ledgerCodeLookupIconLocator = "#e1_part_code_lookup";
+    public get ledgerCodeLookupIconLocator() {
+        return this._ledgerCodeLookupIconLocator;
+    }
+    private readonly _fundCodeLookupIconLocator = "#e2_part_code_lookup";
+    public get fundCodeLookupIconLocator() {
+        return this._fundCodeLookupIconLocator;
+    }
+    // private readonly costCentreCodeLocator =""
+
     //Actions
     /**
      * @author: @pruthvirajqa2dev
@@ -250,5 +304,176 @@ export default class RSS310Q extends BasePage {
      */
     async clickCloseBtn() {
         await this.click(this._closeBtnLocator);
+    }
+    async clickNewMultiBtn() {
+        await this.clickEsrMultiBtnUsingText("New");
+    }
+    async enterSupplierId(supplierId: string) {
+        await (
+            await this.getByRole("textbox", { name: "Supplier", exact: true })
+        ).fill(supplierId);
+        await (await this.getByHeading("Header Details")).click();
+    }
+
+    async clickNewLineBtn() {
+        await (
+            await this.getByRole("button", { name: "New" })
+        ).scrollIntoViewIfNeeded();
+        await (await this.getByRole("button", { name: "New" })).click();
+    }
+    async clickCloseBtnOnDialog() {
+        await (
+            await this.getByRole("button", { name: "Close", exact: true })
+        ).dblclick();
+    }
+    async enterLineDetails() {
+        await this.clickFreeFormatBtn();
+        await (await this.getByLabel("Description")).fill("Test Description");
+        await (await this.getByLabel("Quantity")).fill("10");
+        await (await this.getByLabel("Unit Price")).fill("100");
+        await (await this.getByLocator("#vat_code")).selectOption("ZER");
+
+        // await (await this.getByLabel("Cost Centre")).fill(expectedTexts.expectedCostCenter);
+        await (
+            await this.getByRole("heading", { name: "Product Details" })
+        ).click();
+        await (await this.getByLabel("Ledger")).fill("750100");
+        await (
+            await this.getByRole("heading", { name: "Product Details" })
+        ).click();
+        await (await this.getByLabel("Fund Code")).fill("01");
+        await (
+            await this.getByRole("heading", { name: "Product Details" })
+        ).click();
+        await (
+            await this.getByRole("button", { name: "Save", exact: true })
+        ).click();
+    }
+    async clickFreeFormatBtn() {
+        await (await this.getByText("Free Format")).click();
+    }
+    async verifyLineDetails() {
+        await expect(
+            await this.getByLabel("GL Code", { exact: true })
+        ).toBeVisible();
+        await expect(
+            await this.getByLabel("GL Code", { exact: true })
+        ).toContainText("750100");
+    }
+    async extractGLCode() {
+        await this.extractCostCentre();
+    }
+    async extractCostCentre() {
+        await this.click(this.costCentreLookupIconLocator);
+        await this.checkIfDialogExistsWithTitle(
+            expectedTexts.expectedCostCentreDialogTitle
+        );
+
+        const glCodeRows: string[][] = [
+            [
+                "Cost Centre Code",
+                "Cost Centre Description",
+                "Ledger Code",
+                "Ledger Description",
+                "Fund Code",
+                "Fund Description"
+            ]
+        ];
+        const pageCount = 1;
+        for (let i = 0; i < pageCount; i++) {
+            const costCenterCode = await this.extractTableColumnForExcel(
+                this.costCentreCodeColumnLocator
+            );
+            const costCenterDescr = await this.extractTableColumnForExcel(
+                this.descrColumnLocator
+            );
+            const costCenterCodes = costCenterCode.map((row) => row[0]);
+            const costCenterDescrs = costCenterDescr.map((row) => row[0]);
+            for (let i = 0; i < costCenterCode.length; i++) {
+                if (i != 0) await this.click(this.costCentreLookupIconLocator);
+                await (await this.getByLocator(this.selectButtonLocator))
+                    .nth(i)
+                    .click();
+
+                const ledgerCodeOption = await getLedgerOptions(this.page);
+                console.log("Got the ledger Code list");
+                var ledgerCount = 0;
+                for (const ledger of ledgerCodeOption) {
+                    console.log("Attempt " + ledgerCount);
+                    if (ledgerCount != 0)
+                        await this.click(this.ledgerCodeLookupIconLocator);
+                    await (await this.getByLocator(this.selectButtonLocator))
+                        .nth(ledgerCount++)
+                        .click();
+                    const fundCodeOptions = await getFundOptions(this.page);
+                    var fundCount = 0;
+                    for (const fund of fundCodeOptions) {
+                        await (
+                            await this.getByLocator(this.selectButtonLocator)
+                        )
+                            .nth(fundCount++)
+                            .click();
+                        glCodeRows.push([
+                            costCenterCodes[i],
+                            costCenterDescrs[i],
+                            ledger.code,
+                            ledger.description,
+                            fund.code,
+                            fund.description
+                        ]);
+                    }
+                }
+            }
+
+            // const isLastPage = i === 5;
+            // if (!isLastPage) {
+            //     await this.click(this.nextPageButtonLocator);
+            // }
+        }
+        console.log(glCodeRows);
+        // Create worksheet and workbook
+        const worksheet = XLSX.utils.aoa_to_sheet(glCodeRows);
+        const workbook = XLSX.utils.book_new();
+        const today = new Date();
+        const formattedDate = today.toISOString().split("T")[0]; // '2025-07-15'
+        XLSX.utils.book_append_sheet(workbook, worksheet, formattedDate);
+
+        // Write to file
+        XLSX.writeFile(workbook, "Extracted-GLCode.xlsx");
+    }
+    async extractTableColumnForExcel(
+        columnLocator: string
+    ): Promise<string[][]> {
+        let data = await (
+            await this.getByLocator(columnLocator)
+        ).allTextContents();
+        const cleanedData = data.map((text) => text.trim());
+        console.log(cleanedData);
+
+        const dataToExcel = cleanedData.map((data) => [data]);
+
+        return dataToExcel;
+    }
+    async extractCostCentreCode() {
+        let codes = await (
+            await this.getByLocator(this.costCentreCodeColumnLocator)
+        ).allTextContents();
+        const cleanedCodes = codes.map((text) => text.trim());
+        console.log(cleanedCodes);
+
+        const dataToExcel = cleanedCodes.map((code) => [code]);
+        dataToExcel.unshift(["Cost Centre Code"]);
+        return dataToExcel;
+    }
+    async extractCostCentreDescription() {
+        let descr = await (
+            await this.getByLocator(this.descrColumnLocator)
+        ).allTextContents();
+        const cleanedDescr = descr.map((text) => text.trim());
+        console.log(cleanedDescr);
+
+        const dataToExcel = cleanedDescr.map((code) => [code]);
+        dataToExcel.unshift(["Description"]);
+        return dataToExcel;
     }
 }

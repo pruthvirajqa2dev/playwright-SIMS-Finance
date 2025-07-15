@@ -4,7 +4,32 @@ import { glob } from "glob";
 import fsPromise from "fs/promises";
 import expectedTexts from "../data/expectedTexts.json";
 import logger from "../logging/logger";
-
+/**
+ * Utility class for file operations.
+ * Provides methods to read, write, unzip files, and manage directories.
+ * @module FileUtils
+ * @version 1.0.0
+ * This module provides methods to read and write files, unzip files,
+ * and manage directories in a Node.js environment.
+ * @example
+ * import FileUtils from './FileUtils';
+ * const filePath = 'path/to/file.txt';
+ * const content = 'Hello, World!';
+ * await FileUtils.writeFileAsync(filePath, content);
+ * const fileContent = await FileUtils.readFileAsync(filePath);
+ * console.log(fileContent);
+ * @author Pruthviraj
+ * This class provides methods to read and write files, unzip files,
+ * and manage directories in a Node.js environment.
+ * * @see {@link https://nodejs.org/api/fs.html | Node.js fs module}
+ * * @see {@link https://www.npmjs.com/package/glob | glob package}
+ * * @see {@link https://www.npmjs.com/package/decompress | decompress package}
+ * * @see {@link https://www.npmjs.com/package/expectedTexts | expectedTexts.json}
+ * * @see {@link https://www.npmjs.com/package/logger | logger module}
+ * * @see {@link https://www.npmjs.com/package/fs/promises | fs/promises module}
+ * * @see {@link https://www.npmjs.com/package/path | path module}
+ * * @see {@link https://www.npmjs.com/package/fs | fs module}
+ */
 export default class FileUtils {
     private static readonly pdfDownloadLocation = "/PDFDownloads";
     /**

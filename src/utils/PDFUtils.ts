@@ -3,6 +3,22 @@ import * as fs from "fs";
 import * as path from "path";
 import pdf from "pdf-parse";
 import FileUtils from "./FileUtils";
+/**
+ * PDFUtils.ts
+ * Utility class for handling PDF files.
+ * @module PDFUtils
+ * @version 1.0.0
+ * This module provides methods to read PDF content, unzip downloaded ZIP files,
+ * and read the latest PDF from the latest unzipped directory.
+ * It is designed to be used in a Node.js environment.
+ * @example
+ * import PDFUtils from './PDFUtils';
+ * const pdfContent = await PDFUtils.readPDF('path/to/pdf/file.pdf');
+ * console.log(pdfContent);
+ * @author Pruthviraj
+ * This class provides methods to read PDF content, unzip downloaded ZIP files,
+ * and read the latest PDF from the latest unzipped directory.
+ */
 export default class PDFUtils {
     /**
      * Read PDF content from provided pdfPath

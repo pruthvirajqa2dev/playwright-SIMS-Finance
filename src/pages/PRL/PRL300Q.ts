@@ -275,7 +275,7 @@ export default class PRL300Q extends BasePage {
      */
     async selectCostCenter(costCenter: string) {
         await this.click(this.costCenterLookupIconLocator);
-        expect(
+        await expect(
             this.page.locator(this.costCenterLookupPopupLocator)
         ).toBeVisible();
         await this.dblClickRecordFromLookupPopup(

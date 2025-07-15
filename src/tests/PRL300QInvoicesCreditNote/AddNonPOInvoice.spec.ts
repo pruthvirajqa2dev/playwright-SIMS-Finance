@@ -3,10 +3,13 @@ import LoginPage from "../../pages/LoginPage";
 import HomePage from "../../pages/HomePage";
 import ENV from "../../config/env";
 import expectedTexts from "../../data/expectedTexts.json";
+import paths from "../../data/paths.json";
 import logger from "../../logging/logger";
 import PRL300Q from "../../pages/PRL/PRL300Q";
 import FileUtils from "../../utils/FileUtils";
-import InvoiceCalc from "../../utils/data/InvoiceCalc";
+import { InvoiceDataParser } from "../../utils/parsers/InvoiceDataParser";
+import { ExcelHandler } from "../../utils/Excel/ExcelHandler";
+import InvoiceCalc from "../../utils/InvoiceCalc";
 /**
  *
  * @param page
@@ -156,51 +159,61 @@ test.describe(
                 }
                 const countOfUniqueSuppliers = 1;
                 const countOfInvoicesPerSupplier = 1;
+                //Handler and parser for invoice data
+                const invoiceHandler = new ExcelHandler(
+                    paths.invoiceDataFilePath
+                );
+                const invoiceParser = new InvoiceDataParser(invoiceHandler);
+                const invoiceData = invoiceParser.parse(
+                    paths.invoiceDataSheetName
+                );
+
                 for (
                     let counter = 0;
                     counter < countOfUniqueSuppliers;
                     counter++
                 ) {
                     for (let i = 0; i < countOfInvoicesPerSupplier; i++) {
-                        let randomIndex;
                         const costCentre =
-                            InvoiceCalc.costCentreArr[
-                                Math.floor(
-                                    Math.random() *
-                                        InvoiceCalc.costCentreArr.length
-                                )
-                            ];
+                            invoiceData[
+                                Math.floor(Math.random() * invoiceData.length)
+                            ].costCentre;
+
                         logger.info("Cost Centre: " + costCentre);
-                        randomIndex = Math.floor(
-                            Math.random() * InvoiceCalc.quantArr.length
-                        );
-                        logger.info("Random Index quantity: " + randomIndex);
+                        const randomQuantity =
+                            invoiceData[
+                                Math.floor(Math.random() * invoiceData.length)
+                            ].quantity;
 
-                        const quantity = InvoiceCalc.quantArr[randomIndex];
-                        logger.info("Quantity: " + quantity);
-                        randomIndex = Math.floor(
-                            Math.random() * InvoiceCalc.unitPriceArr.length
-                        );
-                        logger.info("Random Index unit price: " + randomIndex);
-                        const unitPrice = InvoiceCalc.unitPriceArr[randomIndex];
-                        logger.info("Unit Price: " + unitPrice);
+                        logger.info("Quantity: " + randomQuantity);
 
-                        randomIndex = Math.floor(
-                            Math.random() * InvoiceCalc.vatCodeArr.length
-                        );
-                        logger.info("Random Index vatcode: " + randomIndex);
-                        const vatCode = InvoiceCalc.vatCodeArr[randomIndex];
+                        const randomUnitPrice =
+                            invoiceData[
+                                Math.floor(Math.random() * invoiceData.length)
+                            ].unitPrice;
+                        logger.info("Unit Price: " + randomUnitPrice);
 
-                        logger.info("VAT Code: " + vatCode);
-                        const vatPercent = InvoiceCalc.calcVatPercent(vatCode);
-                        logger.info("VAT Percent: " + vatPercent);
+                        const randomVatCode =
+                            invoiceData[
+                                Math.floor(Math.random() * invoiceData.length)
+                            ].vatCode;
+                        logger.info("Vat Code: " + randomVatCode);
+
+                        const randomVatPercent =
+                            InvoiceCalc.calcVatPercent(randomVatCode) ?? 0;
+                        logger.info("Vat Percent: " + randomVatPercent);
+
                         let netInvoice = parseFloat(
-                            String(Math.floor(quantity * unitPrice * 100) / 100)
+                            String(
+                                Math.floor(
+                                    randomQuantity * randomUnitPrice * 100
+                                ) / 100
+                            )
                         );
                         logger.info("Net Invoice: " + netInvoice);
                         const vatAmount =
                             Math.round(
-                                ((netInvoice * vatPercent) / 100) * 100
+                                ((netInvoice * randomVatPercent) / 100) * 100
                             ) / 100;
                         logger.info("VAT Amount: " + vatAmount);
                         const expectedTotalInvoiceValue =
@@ -233,7 +246,7 @@ test.describe(
                         await prl300q.clickSelectForSupplierName(
                             suppliersAcceptingBACS[i]
                         );
-                        const numberOfLines = 10;
+                        const numberOfLines = 1; // Assuming 1 line for simplicity
                         logger.info(
                             "Selecting supplier and verifying supplier text"
                         );
@@ -287,10 +300,10 @@ test.describe(
                             await page.waitForLoadState("load");
                             await prl300q.addLineDetails(costCentre);
                             await prl300q.fillQuantityAndUnitPrice(
-                                quantity.toString(),
-                                unitPrice.toString()
+                                randomQuantity.toString(),
+                                randomUnitPrice.toString()
                             );
-                            await prl300q.selectVatCode(vatCode);
+                            await prl300q.selectVatCode(randomVatCode);
                             await prl300q.click(prl300q.saveBtnLocator);
                         }
                         await prl300q.click(prl300q.finishAndSaveBtnLocator);

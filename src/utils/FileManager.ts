@@ -1,6 +1,28 @@
 const fs = require("fs");
 const path = require("path");
-
+/**
+ * FileManager.ts
+ * Utility class for managing file operations such as reading and writing content to files.
+ * @module FileManager
+ * @version 1.0.0
+ * This module provides methods to create a folder, write content to a file,
+ * and read content from a file in a Node.js environment.
+ * @example
+ * import FileManager from './FileManager';
+ * const fileManager = new FileManager('data', 'example.txt');
+ * // fileManager.writeContent('Hello, World!');
+ * const content = fileManager.readContent();
+ * console.log(content);
+ * @author Pruthviraj
+ * This class provides methods to create a folder, write content to a file,
+ * and read content from a file in a Node.js environment.
+ * @see {@link https://nodejs.org/api/fs.html | Node.js fs module}
+ * * @see {@link https://nodejs.org/api/path.html | Node.js path module}
+ * * @see {@link https://www.npmjs.com/package/fs | fs package}
+ * * * @see {@link https://www.npmjs.com/package/path | path package}
+ * * * @see {@link https://www.npmjs.com/package/node | node package}
+ * * @see {@link https://www.npmjs.com/package/typescript | typescript package}
+ */
 class FileManager {
     private folderPath: string;
     private filePath: string;

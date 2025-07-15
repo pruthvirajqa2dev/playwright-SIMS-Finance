@@ -258,8 +258,11 @@ export default abstract class BasePage {
      * @param label
      * @returns
      */
-    async getByLabel(label: string): Promise<Locator> {
-        return this.page.getByLabel(label);
+    async getByLabel(
+        label: string,
+        options?: { name?: string; hidden?: boolean; exact?: boolean }
+    ): Promise<Locator> {
+        return this.page.getByLabel(label, options);
     }
     /**
      *
@@ -285,7 +288,18 @@ export default abstract class BasePage {
     async getByText(text: string): Promise<Locator> {
         return await this.page.getByText(text, { exact: true });
     }
+    /**
+     * This function returns located element using provided heading
+     * @param heading
+     * @returns
+     */
+    async getByHeading(heading: string): Promise<Locator> {
+        return this.page.getByRole("heading", { name: heading, exact: true });
+    }
 
+    async getByLocator(locator: string): Promise<Locator> {
+        return this.page.locator(locator);
+    }
     // Assertions
     /**
      *
