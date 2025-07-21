@@ -18,46 +18,52 @@ async function login(page: Page, testInfo: TestInfo) {
 }
 
 test.describe(
-    "Extract gl code on environment:" +
-        `${process.env.test_env}`.toUpperCase(),
+    "Extract gl code on environment:" + `${process.env.test_env}`.toUpperCase(),
     () => {
-        test("RSS310Q - Purchase Order", async ({ page }, testInfo) => {
-            test.info().annotations.push({
-                type: "RSS310Q - Purchase Order",
-                description:
-                    "This test is for creating purchase order to RSS310Q"
-            });
-            //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
-                    return await login(page, testInfo);
+        test(
+            "Extract gl code on environment:" + `${process.env.test_env}`,
+            async ({ page }, testInfo) => {
+                test.info().annotations.push({
+                    type: "RSS310Q - Purchase Order",
+                    description:
+                        "This test is for creating purchase order to RSS310Q"
                 });
-            const screen = expectedTexts.RSS310Q;
-            const rss310q = await test.step(
-                "Go to the screen " + screen,
-                async () => {
-                    await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingRecentHistory(screen);
-                    return new RSS310Q(page, testInfo);
-                }
-            );
-            await test.step("Verify valid page elements are visible", async () => {
-                await rss310q.expectPageElementsVisibilityOnLoad();
-            });
-            await test.step("Fill up the form and click search", async () => {
-                await rss310q.selectSchoolId(expectedTexts.expectedSchoolName);
-                await rss310q.clickSearchBtn();
-            });
-            await test.step("Click New and enter line details", async () => {
-                await rss310q.clickNewMultiBtn();
-                await rss310q.enterSupplierId("00001");
-                await rss310q.clickCloseBtnOnDialog();
-                await rss310q.clickNewLineBtn();
-                await rss310q.checkIfDialogExistsWithTitle(
-            expectedTexts.expectedPODialogTitle
+                ENV.USERID = "T4findir99";
+                ENV.PASSWORD = "T4LETmeSKI4#";
+                //Login
+                const homepage =
+                    await test.step(`Login using ${ENV.USERID!}`, async () => {
+                        return await login(page, testInfo);
+                    });
+                const screen = expectedTexts.RSS310Q;
+                const rss310q = await test.step(
+                    "Go to the screen " + screen,
+                    async () => {
+                        await homepage.clickHamburgerMenuButton();
+                        await homepage.goToScreenUsingRecentHistory(screen);
+                        return new RSS310Q(page, testInfo);
+                    }
+                );
+                await test.step("Verify valid page elements are visible", async () => {
+                    await rss310q.expectPageElementsVisibilityOnLoad();
+                });
+                await test.step("Fill up the form and click search", async () => {
+                    await rss310q.selectSchoolId(
+                        expectedTexts.expectedSchoolName
+                    );
+                    await rss310q.clickSearchBtn();
+                });
+                await test.step("Click New and enter line details", async () => {
+                    await rss310q.clickNewMultiBtn();
+                    await rss310q.enterSupplierId("00001");
+                    await rss310q.clickCloseBtnOnDialog();
+                    await rss310q.clickNewLineBtn();
+                    await rss310q.checkIfDialogExistsWithTitle(
+                        expectedTexts.expectedPODialogTitle
+                    );
+                    await rss310q.extractGLCode();
+                });
+            }
         );
-                await rss310q.extractGLCode();
-            });
-        });
     }
 );

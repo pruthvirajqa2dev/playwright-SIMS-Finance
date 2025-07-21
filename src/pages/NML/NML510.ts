@@ -25,10 +25,6 @@ import { expect } from "@playwright/test";
 export default class NML510 extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "NML510 - Trial Balance Report";
-    private readonly _trialBalanceText = "Trial Balance by Cost Centre";
-    public get trialBalanceText(): string {
-        return this._trialBalanceText;
-    }
     _submitBtnLocator = "#submit_button";
     public get submitBtnLocator(): string {
         return this._submitBtnLocator;

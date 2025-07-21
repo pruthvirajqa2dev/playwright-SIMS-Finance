@@ -1,5 +1,6 @@
 import BasePage from "../BasePage";
 import { expect } from "@playwright/test";
+import labels from "../../data/labels.json";
 // <reference lib="dom"/>
 
 /**
@@ -31,8 +32,6 @@ export default class PRL210 extends BasePage {
     private readonly pageHeadingText = "PRL210 - Purchase Ledger Suppliers";
     private readonly supplierLocator =
         "[data-internal-ref] > [axes='SUPPLIER']";
-    private readonly contactDetailsText = "Contact Details";
-    private readonly paymentDetailsText = "Payment Details";
     private readonly supplierNameLocator = "#supp_name";
     private readonly paymentMethodLocator = "#pay_method_0";
     private readonly cancelBtnLocator = "#cancel_button";
@@ -56,13 +55,13 @@ export default class PRL210 extends BasePage {
      *
      */
     async clickContactDetailsTabCard() {
-        await (await this.getByText(this.contactDetailsText)).nth(0).click();
+        await (await this.getByText(labels.contactDetailsLbl)).nth(0).click();
     }
     /**
      *
      */
     async clickPaymentDetailsTabCard() {
-        await (await this.getByText(this.paymentDetailsText)).nth(0).click();
+        await (await this.getByText(labels.paymentDetailsLbl)).nth(0).click();
     }
 
     /**

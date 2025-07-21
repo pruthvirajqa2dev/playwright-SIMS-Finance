@@ -1,5 +1,7 @@
 import BasePage from "../BasePage";
 import elementAttributes from "../../data/elementAttributes.json";
+import roles from "../../data/roles.json";
+import labels from "../../data/labels.json";
 import { expect } from "@playwright/test";
 // <reference lib="dom"/>
 
@@ -29,10 +31,6 @@ export default class RSS570 extends BasePage {
     private readonly pageHeadingText = "RSS570 - Outstanding Accruals";
     private readonly supplierOrNominalSortInputLocator = "#supplier_or_normal";
     private readonly currnecyCheckBoxLocator = "#currency_control_0";
-    private readonly _outstandingAccrualsText = "Outstanding Accruals";
-    public get outstandingAccrualsText(): string {
-        return this._outstandingAccrualsText;
-    }
     //Actions
     /**
      * @author: @pruthvirajqa2dev
@@ -42,8 +40,8 @@ export default class RSS570 extends BasePage {
         //Page Heading
         expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
         await expect(
-            this.page.getByRole("heading", {
-                name: this.outstandingAccrualsText,
+            await this.getByRole(roles.headingRole, {
+                name: labels.outstandingAccrualsLbl,
                 exact: true
             })
         ).toBeVisible();

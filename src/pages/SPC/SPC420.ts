@@ -2,6 +2,8 @@ import { expect } from "@playwright/test";
 import BasePage from "../BasePage";
 import path from "path";
 import expectedTexts from "../../data/expectedTexts.json";
+import labels from "../../data/labels.json";
+import roles from "../../data/roles.json";
 import FileUtils from "../../utils/FileUtils";
 // <reference lib="dom"/>
 
@@ -55,13 +57,8 @@ import FileUtils from "../../utils/FileUtils";
 export default class SPC420 extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "SPC420 - File Manager";
-    private readonly serverDirectoriesText = "Server Directories";
-    private readonly packageDetailsText = "Package Details";
-    private readonly direcotoryDetailsText = "Directory Details";
     _downArrowLocator = '.fa-angle-down[data-control_type="TREE_IMAGE"]';
     private readonly pkgDirLocator = '[data-alias="PACKAGE_DIR"]';
-    private readonly uploadFileBtnRoleName = "Click to Upload File";
-    private readonly uploadBtnLocator = "Upload";
 
     private readonly uploadFileText = "Upload File";
     private readonly okBtnText = "OK";
@@ -85,9 +82,9 @@ export default class SPC420 extends BasePage {
         //Page Heading
         await this.isHeadingVisibleByText(this.pageHeadingText);
         //Server Directories heading
-        await this.isHeadingVisibleByText(this.serverDirectoriesText);
+        await this.isHeadingVisibleByText(labels.serverDirectoriesLbl);
         //Package details heading
-        await this.isHeadingVisibleByText(this.packageDetailsText);
+        await this.isHeadingVisibleByText(labels.packageDetailsLbl);
     }
     /**
      * @author: @pruthvirajqa2dev
@@ -98,12 +95,15 @@ export default class SPC420 extends BasePage {
      */
     async clickSubDirectoryInDirectory(dir: string, subdir: string) {
         // if (await this.page.locator(this.downArrowLocator).isVisible()) {
-        const dirLocator = await this.page.getByRole("treeitem", {
+        // const dirLocator = await this.page.getByRole("treeitem", {
+        //     name: "%".replace("%", dir)
+        //     // exact: true
+        // });
+        const dirLocator = await this.getByRole(roles.treeitemRole, {
             name: "%".replace("%", dir)
-            // exact: true
         });
         await expect(dirLocator).toBeVisible();
-        const subDirLocator = await this.page.getByRole("treeitem", {
+        const subDirLocator = await this.getByRole(roles.treeitemRole, {
             name: "%".replace("%", subdir),
             exact: true
         });
@@ -117,7 +117,7 @@ export default class SPC420 extends BasePage {
      */
     async verifySubDirectoryOpened(dir: string, subdir: string) {
         //Sub Directory Heading
-        await this.isHeadingVisibleByText(this.direcotoryDetailsText);
+        await this.isHeadingVisibleByText(labels.directoryDetailsLbl);
         const pkgDirLocator = this.page.locator(this.pkgDirLocator);
         const packageName = dir.split(" ")[0] + "_" + subdir;
         await expect(pkgDirLocator).toContainText(packageName);
@@ -128,7 +128,7 @@ export default class SPC420 extends BasePage {
      * @returns
      */
     async uploadFile(): Promise<string> {
-        await this.clickButtonUsingRole(this.uploadFileBtnRoleName);
+        await this.clickButtonUsingRole(labels.clickToUploadFileLbl);
         await this.expectElementToHaveText(
             this.dialogTitleLocator,
             this.uploadFileText
@@ -139,8 +139,8 @@ export default class SPC420 extends BasePage {
 
         // Start waiting for file chooser before clicking. Note no await.
         const fileChooserPromise = this.page.waitForEvent("filechooser");
-        await this.clickButtonUsingRole(this.uploadBtnLocator);
-        await this.clickButtonUsingRole(this.browseForFileLocator);
+        await this.clickButtonUsingRole(labels.uploadLbl);
+        await this.clickButtonUsingRole(labels.browseForAFileLbl);
         const fileChooser = await fileChooserPromise;
         await fileChooser.setFiles(
             path.join(process.cwd() + "/" + dirAndFileNameWithExt!)
@@ -204,7 +204,9 @@ export default class SPC420 extends BasePage {
      */
     async deleteUploadedFile(createdFileNameWithExt: string) {
         await this.click(this.viewDropdownOnTableLocator);
-        await (await this.getByRole("menuitem", { name: "Delete" })).click();
+        await (
+            await this.getByRole(roles.menuitemRole, { name: labels.deleteLbl })
+        ).click();
         await this.checkIfDialogExistsWithTitle(expectedTexts.deleteFileText);
         console.log(
             "Deleting filename with extension:" + createdFileNameWithExt

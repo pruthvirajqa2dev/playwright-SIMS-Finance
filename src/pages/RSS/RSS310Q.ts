@@ -1,13 +1,22 @@
 import BasePage from "../BasePage";
 import expectedTexts from "../../data/expectedTexts.json";
+import labels from "../../data/labels.json";
+import roles from "../../data/roles.json";
+import elementAttr from "../../data/elementAttributes.json";
 import { expect } from "@playwright/test";
 import FileUtils from "../../utils/FileUtils";
 import path from "path";
 import * as XLSX from "xlsx";
 import {
+    getRandomAmount,
+    getRandomIntegerAmount,
+    VAT_CODES
+} from "../../utils/models/Purchase Orders/dataGenerator";
+import {
     getLedgerOptions,
     getFundOptions
 } from "../../utils/GL Code Helper/glCodehelper";
+import { ExcelHandler, SheetData } from "../../utils/Excel/ExcelHandler";
 
 /**
  * @author: @pruthvirajqa2dev
@@ -108,6 +117,11 @@ export default class RSS310Q extends BasePage {
     public get fundCodeLookupIconLocator() {
         return this._fundCodeLookupIconLocator;
     }
+
+    private readonly purchaseOrderNumberLocator =
+        "label[data-alias='ORDER_NO_0']";
+    private readonly closeBtnOnDialogLocator = "button[title='Close']";
+    private readonly vatCodeLocator = "#vat_code";
     // private readonly costCentreCodeLocator =""
 
     //Actions
@@ -125,7 +139,6 @@ export default class RSS310Q extends BasePage {
      * @returns
      */
     async clickRandomViewButton(): Promise<[string[], number]> {
-        // Define the selector for the column header and its sort icon
         var orderNoColumnHeader = this.page.locator(
             this.orderNoColumnHeaderLocator
         );
@@ -133,14 +146,16 @@ export default class RSS310Q extends BasePage {
         var isAscending = async (): Promise<boolean> => {
             var sortIcon = this.page.locator(this.sortIconLocator).first();
             const iconClass =
-                (await sortIcon.getAttribute("class"))?.trim() || "";
+                (await sortIcon.getAttribute(elementAttr.classAttr))?.trim() ||
+                "";
             return iconClass?.includes(this.upSortIconLocator) ?? false;
         };
         // Function to check if the column is sorted in descending order
         var isDescending = async (): Promise<boolean> => {
             var sortIcon = this.page.locator(this.sortIconLocator).first();
             const iconClass =
-                (await sortIcon.getAttribute("class"))?.trim() || "";
+                (await sortIcon.getAttribute(elementAttr.classAttr))?.trim() ||
+                "";
             return iconClass?.includes(this.downSortIconLocator) ?? false;
         };
         // Ensure the column is sorted in ascending order
@@ -165,7 +180,7 @@ export default class RSS310Q extends BasePage {
             .allTextContents();
         await this.page
             .locator(this.btnElementListLocator)
-            .filter({ hasText: "View" })
+            .filter({ hasText: labels.viewLbl })
             .nth(random)
             .click();
         return [orderNumberValue, random];
@@ -219,7 +234,7 @@ export default class RSS310Q extends BasePage {
         //await this.clickButtonUsingRole(this.browseForFileLocator);
         await this.page
             .locator(this.commonDhxBtnLocator)
-            .filter({ hasText: this.browseForFileLocator })
+            .filter({ hasText: labels.browseForAFileLbl })
             .dblclick();
         const fileChooser = await fileChooserPromise;
         await fileChooser.setFiles(
@@ -306,59 +321,119 @@ export default class RSS310Q extends BasePage {
         await this.click(this._closeBtnLocator);
     }
     async clickNewMultiBtn() {
-        await this.clickEsrMultiBtnUsingText("New");
+        await this.clickEsrMultiBtnUsingText(labels.newlbl);
     }
     async enterSupplierId(supplierId: string) {
         await (
-            await this.getByRole("textbox", { name: "Supplier", exact: true })
+            await this.getByRole(roles.textboxRole, {
+                name: labels.supplierLbl,
+                exact: true
+            })
         ).fill(supplierId);
-        await (await this.getByHeading("Header Details")).click();
+        await (await this.getByHeading(labels.headerDetailsLbl)).click();
     }
 
     async clickNewLineBtn() {
         await (
-            await this.getByRole("button", { name: "New" })
+            await this.getByRole(roles.btnRole, { name: labels.newlbl })
         ).scrollIntoViewIfNeeded();
-        await (await this.getByRole("button", { name: "New" })).click();
+        await (
+            await this.getByRole(roles.btnRole, { name: labels.newlbl })
+        ).click();
     }
     async clickCloseBtnOnDialog() {
-        await (
-            await this.getByRole("button", { name: "Close", exact: true })
-        ).dblclick();
+        await this.click(this.closeBtnOnDialogLocator);
     }
     async enterLineDetails() {
         await this.clickFreeFormatBtn();
-        await (await this.getByLabel("Description")).fill("Test Description");
-        await (await this.getByLabel("Quantity")).fill("10");
-        await (await this.getByLabel("Unit Price")).fill("100");
-        await (await this.getByLocator("#vat_code")).selectOption("ZER");
-
-        // await (await this.getByLabel("Cost Centre")).fill(expectedTexts.expectedCostCenter);
         await (
-            await this.getByRole("heading", { name: "Product Details" })
-        ).click();
-        await (await this.getByLabel("Ledger")).fill("750100");
+            await this.getByLabel(labels.descriptionLbl, { exact: true })
+        ).fill(expectedTexts.expectedDescription);
         await (
-            await this.getByRole("heading", { name: "Product Details" })
-        ).click();
-        await (await this.getByLabel("Fund Code")).fill("01");
+            await this.getByLabel(labels.quantityLbl, { exact: true })
+        ).fill("1");
+        const randomAmt = await getRandomAmount(100, 999);
+        const randomIndex = await getRandomIntegerAmount(0, 4);
+        console.log("Entering amount in Unit price:" + randomAmt);
+        console.log("Index for vatcode:" + randomIndex);
         await (
-            await this.getByRole("heading", { name: "Product Details" })
+            await this.getByLabel(labels.unitPriceLbl, { exact: true })
+        ).fill(randomAmt.toString());
+        await (
+            await this.getByLocator(this.vatCodeLocator)
+        ).selectOption(VAT_CODES[randomIndex]);
+        const excelHandler = new ExcelHandler(
+            expectedTexts.glCodeExcelWorkBookNameRead
+        );
+        const sheetData = excelHandler.readSheet(
+            expectedTexts.glCodeExcelSheetNameRead
+        );
+        console.log("sheetdata:" + sheetData);
+        const randomRow: Record<string, any> | null =
+            excelHandler.getRandomRowAsObject(sheetData);
+        console.log(
+            "Random costCentreCodeHeader:" +
+                randomRow?.[expectedTexts.costCentreCodeHeader]
+        );
+        console.log(
+            "Random ledgerCodeHeader:" +
+                randomRow?.[expectedTexts.ledgerCodeHeader]
+        );
+        console.log(
+            "Random fundCodeHeader:" + randomRow?.[expectedTexts.fundCodeHeader]
+        );
+        await (
+            await this.getByLabel(labels.costCentreLbl, { exact: true })
+        ).fill(randomRow?.[expectedTexts.costCentreCodeHeader]);
+        await (
+            await this.getByRole(roles.headingRole, {
+                name: labels.productDetailsLbl
+            })
         ).click();
         await (
-            await this.getByRole("button", { name: "Save", exact: true })
+            await this.getByLabel(labels.ledgerLbl, { exact: true })
+        ).fill(randomRow?.[expectedTexts.ledgerCodeHeader]);
+        await (
+            await this.getByRole(roles.headingRole, {
+                name: labels.productDetailsLbl
+            })
         ).click();
+        await this.page.keyboard.press("Tab");
+        await (
+            await this.getByLabel(labels.fundCodeLbl, { exact: true })
+        ).fill(randomRow?.[expectedTexts.fundCodeHeader]);
+        await (
+            await this.getByRole(roles.headingRole, {
+                name: labels.productDetailsLbl
+            })
+        ).click();
+        await (
+            await this.getByRole(roles.btnRole, {
+                name: labels.saveLbl,
+                exact: true
+            })
+        ).click();
+        return randomRow;
     }
     async clickFreeFormatBtn() {
-        await (await this.getByText("Free Format")).click();
+        await (await this.getByText(labels.freeFormatLbl)).click();
     }
-    async verifyLineDetails() {
+    async verifyLineDetails(enteredRow: Record<string, any> | null) {
         await expect(
-            await this.getByLabel("GL Code", { exact: true })
-        ).toBeVisible();
+            await this.getByLabel(expectedTexts.expectedGLCodeLabel, {
+                exact: true
+            })
+        ).toContainText(enteredRow?.[expectedTexts.costCentreCodeHeader]);
         await expect(
-            await this.getByLabel("GL Code", { exact: true })
-        ).toContainText("750100");
+            await this.getByLabel(expectedTexts.expectedGLCodeLabel, {
+                exact: true
+            })
+        ).toContainText(enteredRow?.[expectedTexts.ledgerCodeHeader]);
+        await expect(
+            await this.getByLabel(expectedTexts.expectedGLCodeLabel, {
+                exact: true
+            })
+        ).toContainText(enteredRow?.[expectedTexts.fundCodeHeader]);
     }
     async extractGLCode() {
         await this.extractCostCentre();
@@ -400,8 +475,10 @@ export default class RSS310Q extends BasePage {
                 var ledgerCount = 0;
                 for (const ledger of ledgerCodeOption) {
                     console.log("Attempt " + ledgerCount);
-                    if (ledgerCount != 0)
+                    if (ledgerCount != 0) {
+                        await this.page.waitForLoadState();
                         await this.click(this.ledgerCodeLookupIconLocator);
+                    }
                     await (await this.getByLocator(this.selectButtonLocator))
                         .nth(ledgerCount++)
                         .click();
@@ -435,11 +512,11 @@ export default class RSS310Q extends BasePage {
         const worksheet = XLSX.utils.aoa_to_sheet(glCodeRows);
         const workbook = XLSX.utils.book_new();
         const today = new Date();
-        const formattedDate = today.toISOString().split("T")[0]; // '2025-07-15'
+        const formattedDate = today.toISOString().split("T")[0];
         XLSX.utils.book_append_sheet(workbook, worksheet, formattedDate);
 
         // Write to file
-        XLSX.writeFile(workbook, "Extracted-GLCode.xlsx");
+        XLSX.writeFile(workbook, expectedTexts.glCodeExcelWorkBookNameWrite);
     }
     async extractTableColumnForExcel(
         columnLocator: string
@@ -475,5 +552,37 @@ export default class RSS310Q extends BasePage {
         const dataToExcel = cleanedDescr.map((code) => [code]);
         dataToExcel.unshift(["Description"]);
         return dataToExcel;
+    }
+    async clickSummaryBtn() {
+        await this.clickButtonUsingRole(this.summaryBtnLabel);
+    }
+    async enterEmailAddress(emailAddress: string) {
+        await (
+            await this.getByLabel(labels.emailAddressLbl, {
+                exact: true
+            })
+        ).fill(emailAddress);
+    }
+    async clickCompleteOrderBtn() {
+        await this.clickButtonUsingRole(labels.completeOrderLbl);
+    }
+
+    async getOrderNumber(): Promise<string | null> {
+        return (
+            await this.getByLocator(this.purchaseOrderNumberLocator)
+        ).textContent();
+    }
+    async getExpectedSubject() {
+        const orderNumber = await this.getOrderNumber();
+        const staticText1 = expectedTexts.expectedStaticSubjectText1;
+        const staticText2 = expectedTexts.expectedStaticSubjectText2;
+        const expectedSubject =
+            staticText1 +
+            expectedTexts.expectedSchoolName +
+            staticText2 +
+            expectedTexts.expectedSchoolID +
+            " / " +
+            orderNumber;
+        return expectedSubject;
     }
 }

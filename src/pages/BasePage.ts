@@ -1,6 +1,7 @@
 import base, { expect, Locator, Page } from "@playwright/test";
 import expectedTexts from "../data/expectedTexts.json";
 import logger from "../logging/logger";
+import { waitForEmailWithPreciseTime } from "../utils/GmailUtils";
 /**
  * @author: @pruthvirajqa2dev
  * Base page class to inherit basic page functionality
@@ -102,10 +103,7 @@ export default abstract class BasePage {
     }
     private readonly pdfIconLocator =
         "div[style*='background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);']";
-    private readonly _browseForFileLocator = "Browse for a file";
-    public get browseForFileLocator(): string {
-        return this._browseForFileLocator;
-    }
+    
     private readonly _fileNameAfterUploadLocator = ".dhx_list-item--name";
     public get fileNameAfterUploadLocator(): string {
         return this._fileNameAfterUploadLocator;
@@ -137,6 +135,9 @@ export default abstract class BasePage {
         return this._searchBtnLocator;
     }
     private readonly esrMsgBoxOkBtnLocator = "#esr_messagebox_ok";
+    protected readonly summaryBtnLabel = "Summary";
+    
+
     screenshotPath =
         "test-results/Postchecks/RunOn" +
         new Date().toLocaleDateString("en-GB").replace(/\//g, "") +
@@ -646,5 +647,20 @@ export default abstract class BasePage {
                 console.error(`Error clicking ok button: ${error}`);
                 throw error;
             });
+    }
+    async verifyEmailSent(
+        expectedSender: any,
+        expectedEmailSubject: any,
+        actionTime: any
+    ) {
+        const emailReceived = await waitForEmailWithPreciseTime(
+            expectedSender,
+            expectedEmailSubject,
+            120,
+            5,
+            actionTime
+        );
+        expect(emailReceived).toBeTruthy();
+        return emailReceived;
     }
 }

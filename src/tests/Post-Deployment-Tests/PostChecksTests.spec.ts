@@ -375,64 +375,6 @@ test.describe(
             });
         });
         //Test case 6
-        test.skip("SIMS_TB_SCHOOL - XQuery Report - Distribute", async ({
-            page
-        }, testInfo) => {
-            test.info().annotations.push({
-                type: "SIMS_TB_SCHOOL - XQuery Report - Distribute",
-                description:
-                    "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Distribute"
-            });
-            ENV.USERID = "T2uatadmin";
-            ENV.PASSWORD = "T2C@p1ta2#";
-            //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
-                    return await login(page, testInfo);
-                });
-            const screen = expectedTexts.SIMS_TB_SCHOOL;
-            const simsTbSchool = await test.step(
-                "Go to the screen " + screen,
-                async () => {
-                    await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingRecentHistory(screen);
-                    return new XQuerySIMS_TB_SCHOOL(page, testInfo);
-                }
-            );
-            await test.step("Verify valid page elements are visible", async () => {
-                await simsTbSchool.expectPageElementsVisibilityOnLoad();
-            });
-            await test.step("Fill up the form and click distribute", async () => {
-                await simsTbSchool.selectSchoolId(
-                    expectedTexts.expectedSchoolName
-                );
-                await simsTbSchool.selectYearAndPeriod(
-                    expectedTexts.expectedYearTB,
-                    expectedTexts.expectedPeriod
-                );
-                await simsTbSchool.clickSubmitBtnDistribute();
-            });
-            await test.step("Enter emailId on SIMS TB dialog, verify email subject,time and click Ok", async () => {
-                await simsTbSchool.checkIfDialogExistsWithTitle(
-                    expectedTexts.exepctedSimsTbDialogText
-                );
-                await simsTbSchool.fillEmailAddress();
-                await simsTbSchool.assertSubjectAndTime();
-                await simsTbSchool.clickOkBtn();
-            });
-            // await test.step("Verify email is sent", async () => {
-            //     const actionTime = new Date();
-            //     const expectedSubject =
-            //         await simsTbSchool.getSubjectInputValue();
-            //     const emailSent = await simsTbSchool.verifyEmailSent(
-            //         expectedTexts.expectedSenderEmail,
-            //         expectedSubject,
-            //         actionTime
-            //     );
-            //     expect(emailSent).toBeTruthy();
-            // });
-        });
-        //Test case 7
         test("RSS310Q - Attachments", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "RSS310Q - Attachments",
@@ -479,7 +421,7 @@ test.describe(
                 await rss310q.clickCloseBtn();
             });
         });
-        //Test case 8
+        //Test case 7
         test("Help screen", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "Help screen",

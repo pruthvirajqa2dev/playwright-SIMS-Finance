@@ -46,17 +46,17 @@ export default class LoginPage extends BasePage {
         await this.navigateTo("/");
         await this.fillUsernameAndPassword(username, password);
 
-        console.log("Path is " + this.screenshotPath + "/" + testInfo.title);
-        if (
-            !fs.existsSync(path.join(this.screenshotPath, "/", testInfo.title))
-        ) {
-            fs.mkdirSync(path.join(this.screenshotPath, "/", testInfo.title), {
-                recursive: true
-            });
-        }
-        await this.page.screenshot({
-            path: this.screenshotPath + "/Login.png"
-        });
+        // console.log("Path is " + this.screenshotPath + "/" + testInfo.title);
+        // if (
+        //     !fs.existsSync(path.join(this.screenshotPath, "/", testInfo.title))
+        // ) {
+        //     fs.mkdirSync(path.join(this.screenshotPath, "/", testInfo.title), {
+        //         recursive: true
+        //     });
+        // }
+        // await this.page.screenshot({
+        //     path: this.screenshotPath + "/Login.png"
+        // });
 
         const homepage: HomePage = await this.clickLoginBtn(testInfo);
         return homepage;

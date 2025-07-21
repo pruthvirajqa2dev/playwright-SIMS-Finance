@@ -1,3 +1,5 @@
 {
-   "dataTextAttr":"data-text"
+   "dataTextAttr":"data-text",
+   "classAttr":"class",
+   "dataOriginalValAttr":"data-originalvalue"
 }

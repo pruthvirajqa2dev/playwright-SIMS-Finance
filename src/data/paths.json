@@ -1,0 +1,4 @@
+{
+    "invoiceDataFilePath":"src/utils/data/invoice-data.xlsx",
+    "invoiceDataSheetName":"Sheet1"
+}

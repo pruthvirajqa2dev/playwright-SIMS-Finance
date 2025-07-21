@@ -1,6 +1,9 @@
 import logger from "../../logging/logger";
 import BasePage from "../BasePage";
 import { expect } from "@playwright/test";
+import labels from "../../data/labels.json";
+import elementAttributes from "../../data/elementAttributes.json";
+import roles from "../../data/roles.json";
 // <reference lib="dom"/>
 
 /**
@@ -77,7 +80,7 @@ export default class PRL614Q extends BasePage {
      * @author: @pruthvirajqa2dev
      */
     async clickBACSFileDate() {
-        await this.clickElementByText(this.BACSFileDateText);
+        await this.clickElementByText(labels.bacsFileDateLbl);
     }
     /**
      *@description This method is used to sort the records with BACS File Date
@@ -91,14 +94,18 @@ export default class PRL614Q extends BasePage {
         var isAscending = async (): Promise<boolean> => {
             var sortIcon = this.page.locator(this.sortIconLocator).first();
             const iconClass =
-                (await sortIcon.getAttribute("class"))?.trim() || "";
+                (
+                    await sortIcon.getAttribute(elementAttributes.classAttr)
+                )?.trim() || "";
             return iconClass?.includes(this.upArrowLocator) ?? false;
         };
         // Function to check if the column is sorted in descending order
         var isDescending = async (): Promise<boolean> => {
             var sortIcon = this.page.locator(this.sortIconLocator).first();
             const iconClass =
-                (await sortIcon.getAttribute("class"))?.trim() || "";
+                (
+                    await sortIcon.getAttribute(elementAttributes.classAttr)
+                )?.trim() || "";
             return iconClass?.includes(this.downArrowLocator) ?? false;
         };
 
@@ -125,13 +132,13 @@ export default class PRL614Q extends BasePage {
     async fillNarrativeInputAndVerify(narrative: string) {
         await this.fill(this.narrativeInputLocator, narrative);
         (
-            await this.getByRole("heading", {
-                name: "Submission Parameters"
+            await this.getByRole(roles.headingRole, {
+                name: labels.submissionParametersLbl
             })
         ).click();
         await expect(
             this.page.locator(this.narrativeInputLocator)
-        ).toHaveAttribute("data-originalvalue", narrative);
+        ).toHaveAttribute(elementAttributes.dataOriginalValAttr, narrative);
     }
     /**
      * @description This method is used to select all the transaction rows

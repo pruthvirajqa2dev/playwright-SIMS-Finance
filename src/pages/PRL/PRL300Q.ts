@@ -1,6 +1,7 @@
 import BasePage from "../BasePage";
 import { expect } from "@playwright/test";
 import expectedTexts from "../../data/expectedTexts.json";
+import labels from "../../data/labels.json";
 import logger from "../../logging/logger";
 // <reference lib="dom"/>
 
@@ -79,10 +80,6 @@ export default class PRL300Q extends BasePage {
     //Locators and Texts
     private readonly pageHeadingText = "PRL300Q - Invoices/Credit Notes";
     private readonly expectedDialogTitle = "Invoice/Credit Note";
-    private readonly _creditNoteLabel = "Credit Note";
-    public get creditNoteLabel() {
-        return this._creditNoteLabel;
-    }
     private readonly nonPurchaseOrderInvoiceRadioBtnLocator = "#invoice_type2";
     private readonly creditNoteRadioBtnLocator = "#invoice_type3";
     private readonly _selectBtnLocator = "#select_button";
@@ -160,7 +157,6 @@ export default class PRL300Q extends BasePage {
     private readonly summartDetailsTitleLocator = "*[id*=summary_details]";
     private readonly totalVatLocator = "#tot_vat";
     private readonly okBtnOnDetailsScreenLocator = "#ok_button";
-    private readonly documentTypeLabel = "Document Type";
 
     //Actions
     /**
@@ -210,7 +206,7 @@ export default class PRL300Q extends BasePage {
             logger.info("Clicking on header details");
             await this.page
                 .locator(this.headerDetailLabel)
-                .filter({ hasText: "Header Details" })
+                .filter({ hasText: labels.headerDetailsLbl })
                 .click();
         }
         logger.info("Filling invoice date");
@@ -225,7 +221,7 @@ export default class PRL300Q extends BasePage {
         logger.info("Clicking on header details");
         await this.page
             .locator(this.headerDetailLabel)
-            .filter({ hasText: "Header Details" })
+            .filter({ hasText: labels.headerDetailsLbl })
             .click();
         logger.info(
             "Expecting notification message to contain period and year"
@@ -489,7 +485,7 @@ export default class PRL300Q extends BasePage {
      */
     async selectDocumentType(documentType: string) {
         await this.page
-            .getByLabel(this.documentTypeLabel)
+            .getByLabel(labels.documentTypeLbl)
             .selectOption(documentType);
     }
 }
