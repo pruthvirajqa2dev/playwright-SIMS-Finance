@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import * as fs from "fs";
 
-export type SheetData = (string | number | boolean | null)[][];
+export type SheetData = any[][];
 /**
  * ExcelHandler.ts
  * Utility class for handling Excel files using the XLSX library.
@@ -106,5 +106,20 @@ export class ExcelHandler {
         } catch (error) {
             console.error(`Error saving workbook to "${filePath}":`, error);
         }
+    }
+
+    getRandomRowAsObject(data: SheetData | null): Record<string, any> | null {
+        if (!data || data.length < 2) return null; 
+
+        const [headers, ...rows] = data;
+        const randomIndex = Math.floor(Math.random() * rows.length);
+        const row = rows[randomIndex];
+
+        const rowObject: Record<string, any> = {};
+        headers.forEach((key, i) => {
+            rowObject[key] = row[i];
+        });
+
+        return rowObject;
     }
 }
