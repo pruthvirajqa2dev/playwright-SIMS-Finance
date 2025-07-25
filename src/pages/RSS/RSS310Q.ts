@@ -15,7 +15,7 @@ import {
 import {
     getLedgerOptions,
     getFundOptions
-} from "../../utils/GL Code Helper/glCodehelper";
+} from "../../utils/GLCodeHelper/glCodehelper";
 import { ExcelHandler, SheetData } from "../../utils/Excel/ExcelHandler";
 
 /**
