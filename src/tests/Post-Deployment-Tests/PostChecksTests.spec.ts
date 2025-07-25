@@ -3,6 +3,7 @@ import LoginPage from "../../pages/LoginPage";
 import HomePage from "../../pages/HomePage";
 import ENV from "../../config/env";
 import expectedTexts from "../../data/expectedTexts.json";
+import labels from "../../data/labels.json";
 import NML510 from "../../pages/NML/NML510";
 import RSS570 from "../../pages/RSS/RSS570";
 import PDFUtils from "../../utils/PDFUtils";
@@ -238,7 +239,7 @@ test.describe(
             await test.step("Verify PDF is generated in RSS570", async () => {
                 await rss570.verifyPDFGeneratedWithExtOnScreen(
                     expectedTexts.RSS570,
-                    rss570.outstandingAccrualsText
+                    labels.outstandingAccrualsLbl
                 );
             });
             await test.step("Click on PDF report", async () => {
@@ -304,11 +305,11 @@ test.describe(
             });
             await test.step(
                 "Verify PDF report is generated in NML510 with text " +
-                    nml510.trialBalanceText,
+                    labels.tbByCostCentreLbl,
                 async () => {
                     await nml510.verifyPDFGeneratedWithExtOnScreen(
                         expectedTexts.NML510,
-                        nml510.trialBalanceText
+                        labels.tbByCostCentreLbl
                     );
                 }
             );
