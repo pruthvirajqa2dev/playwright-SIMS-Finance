@@ -11,7 +11,7 @@ import {
     getRandomAmount,
     getRandomIntegerAmount,
     VAT_CODES
-} from "../../utils/models/Purchase Orders/DataGenerator";
+} from "../../utils/models/PO/DataGenerator";
 import { ExcelHandler } from "../../utils/excel/ExcelHandler";
 import { glcodehelper } from "../../utils/glcodehelper";
 /**

@@ -18,8 +18,7 @@ async function login(page: Page, testInfo: TestInfo) {
 }
 
 test.describe(
-    "Test Emails Postchecks on environment:" +
-        `${process.env.test_env}`.toUpperCase(),
+    "RSS310Q - Purchase Order" + `${process.env.test_env}`.toUpperCase(),
     () => {
         //Test case 1
         test("RSS310Q - Purchase Order", async ({ page }, testInfo) => {

@@ -1,7 +1,7 @@
-import RSS310Q from "../../pages/RSS/RSS310Q";
-import expectedTexts from "../../data/expectedTexts.json";
+import RSS310Q from "../pages/RSS/RSS310Q";
+import expectedTexts from "../data/expectedTexts.json";
 
-export class GLCodeHelper {
+export class glcodehelper {
     private page: any;
 
     constructor(page: any) {
