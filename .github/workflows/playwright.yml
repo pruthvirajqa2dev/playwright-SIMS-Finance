@@ -220,8 +220,7 @@ jobs:
               id: aggregate-shard-status
               run: |
                   FINAL_STATUS="Passed"
-
-                  for report in all-shard-statuses/shard-*-status.txt; do
+                  for report in $(find all-shard-statuses -name "shard-*-status.txt"); do
                     if grep -q "Failed" "$report"; then
                       FINAL_STATUS="Failed"
                       break
