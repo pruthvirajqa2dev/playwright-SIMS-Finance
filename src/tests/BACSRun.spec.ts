@@ -9,7 +9,7 @@ import logger from "../logging/logger";
 import PRL300Q from "../pages/PRL/PRL300Q";
 import FileUtils from "../utils/FileUtils";
 import InvoiceCalc from "../utils/InvoiceCalc";
-import { ExcelHandler } from "../utils/Excel/ExcelHandler";
+import { ExcelHandler } from "../utils/excel/ExcelHandler";
 import { InvoiceDataParser } from "../utils/parsers/InvoiceDataParser";
 
 async function login(page: Page, testInfo: TestInfo) {

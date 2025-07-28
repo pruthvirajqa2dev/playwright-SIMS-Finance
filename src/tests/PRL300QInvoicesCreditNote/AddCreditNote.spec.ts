@@ -8,8 +8,10 @@ import logger from "../../logging/logger";
 import PRL300Q from "../../pages/PRL/PRL300Q";
 import FileUtils from "../../utils/FileUtils";
 import InvoiceCalc from "../../utils/InvoiceCalc";
-import { ExcelHandler } from "../../utils/Excel/ExcelHandler";
+import labels from "../../data/labels.json";
+import { ExcelHandler } from "../../utils/excel/ExcelHandler";
 import { InvoiceDataParser } from "../../utils/parsers/InvoiceDataParser";
+
 /**
  *Function to login to the application
  *
@@ -111,7 +113,7 @@ test.describe(
                         expectedTexts.expectedSchoolName
                     );
                 }
-                await prl300q.selectDocumentType(prl300q.creditNoteLabel);
+                await prl300q.selectDocumentType(labels.creditNoteLbl);
                 await prl300q.clickSearchBtn();
             });
 

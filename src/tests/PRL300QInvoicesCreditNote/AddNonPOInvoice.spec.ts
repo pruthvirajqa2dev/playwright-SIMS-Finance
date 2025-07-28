@@ -8,7 +8,7 @@ import logger from "../../logging/logger";
 import PRL300Q from "../../pages/PRL/PRL300Q";
 import FileUtils from "../../utils/FileUtils";
 import { InvoiceDataParser } from "../../utils/parsers/InvoiceDataParser";
-import { ExcelHandler } from "../../utils/Excel/ExcelHandler";
+import { ExcelHandler } from "../../utils/excel/ExcelHandler";
 import InvoiceCalc from "../../utils/InvoiceCalc";
 /**
  *

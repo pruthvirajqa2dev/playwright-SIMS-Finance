@@ -109,7 +109,7 @@ export class ExcelHandler {
     }
 
     getRandomRowAsObject(data: SheetData | null): Record<string, any> | null {
-        if (!data || data.length < 2) return null; 
+        if (!data || data.length < 2) return null;
 
         const [headers, ...rows] = data;
         const randomIndex = Math.floor(Math.random() * rows.length);
