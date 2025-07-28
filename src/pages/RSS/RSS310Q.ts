@@ -12,11 +12,8 @@ import {
     getRandomIntegerAmount,
     VAT_CODES
 } from "../../utils/models/Purchase Orders/dataGenerator";
-import {
-    getLedgerOptions,
-    getFundOptions
-} from "../../utils/GLCodeHelper/glCodehelper";
 import { ExcelHandler, SheetData } from "../../utils/Excel/ExcelHandler";
+import { GLCodeHelper } from "../../utils/GLCodeHelper/glCodehelper";
 
 /**
  * @author: @pruthvirajqa2dev
@@ -469,8 +466,8 @@ export default class RSS310Q extends BasePage {
                 await (await this.getByLocator(this.selectButtonLocator))
                     .nth(i)
                     .click();
-
-                const ledgerCodeOption = await getLedgerOptions(this.page);
+                const glcodehelper = new GLCodeHelper(this.page);
+                const ledgerCodeOption = await glcodehelper.getLedgerOptions();
                 console.log("Got the ledger Code list");
                 var ledgerCount = 0;
                 for (const ledger of ledgerCodeOption) {
@@ -482,7 +479,7 @@ export default class RSS310Q extends BasePage {
                     await (await this.getByLocator(this.selectButtonLocator))
                         .nth(ledgerCount++)
                         .click();
-                    const fundCodeOptions = await getFundOptions(this.page);
+                    const fundCodeOptions = await glcodehelper.getFundOptions();
                     var fundCount = 0;
                     for (const fund of fundCodeOptions) {
                         await (
