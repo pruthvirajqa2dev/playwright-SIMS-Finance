@@ -11,10 +11,9 @@ import {
     getRandomAmount,
     getRandomIntegerAmount,
     VAT_CODES
-} from "../../utils/models/Purchase Orders/dataGenerator";
-import { ExcelHandler, SheetData } from "../../utils/Excel/ExcelHandler";
-import { GLCodeHelper } from "../../utils/GLCodeHelper/glCodehelper";
-
+} from "../../utils/models/Purchase Orders/DataGenerator";
+import { ExcelHandler } from "../../utils/excel/ExcelHandler";
+import { glcodehelper } from "../../utils/glcodehelper";
 /**
  * @author: @pruthvirajqa2dev
  * This page class is for RSS310Q screen related page elements and actions on them
@@ -466,8 +465,8 @@ export default class RSS310Q extends BasePage {
                 await (await this.getByLocator(this.selectButtonLocator))
                     .nth(i)
                     .click();
-                const glcodehelper = new GLCodeHelper(this.page);
-                const ledgerCodeOption = await glcodehelper.getLedgerOptions();
+                const helper = new glcodehelper(this.page);
+                const ledgerCodeOption = await helper.getLedgerOptions();
                 console.log("Got the ledger Code list");
                 var ledgerCount = 0;
                 for (const ledger of ledgerCodeOption) {
@@ -479,7 +478,7 @@ export default class RSS310Q extends BasePage {
                     await (await this.getByLocator(this.selectButtonLocator))
                         .nth(ledgerCount++)
                         .click();
-                    const fundCodeOptions = await glcodehelper.getFundOptions();
+                    const fundCodeOptions = await helper.getFundOptions();
                     var fundCount = 0;
                     for (const fund of fundCodeOptions) {
                         await (
