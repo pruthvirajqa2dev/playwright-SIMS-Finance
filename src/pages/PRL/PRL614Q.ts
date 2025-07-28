@@ -4,7 +4,6 @@ import { expect } from "@playwright/test";
 import labels from "../../data/labels.json";
 import elementAttributes from "../../data/elementAttributes.json";
 import roles from "../../data/roles.json";
-// <reference lib="dom"/>
 
 /**
  * @author: @pruthvirajqa2dev

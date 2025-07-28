@@ -1,7 +1,6 @@
 import BasePage from "../BasePage";
 import expectedTexts from "../../data/expectedTexts.json";
 import { expect, Page } from "@playwright/test";
-// <reference lib="dom"/>
 
 /**
  * @author: @pruthvirajqa2dev

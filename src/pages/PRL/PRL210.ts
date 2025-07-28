@@ -1,7 +1,6 @@
 import BasePage from "../BasePage";
 import { expect } from "@playwright/test";
 import labels from "../../data/labels.json";
-// <reference lib="dom"/>
 
 /**
  * @author: @pruthvirajqa2dev

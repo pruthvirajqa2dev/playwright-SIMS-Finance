@@ -9,7 +9,7 @@ import PRL300Q from "../../pages/PRL/PRL300Q";
 import FileUtils from "../../utils/FileUtils";
 import InvoiceCalc from "../../utils/InvoiceCalc";
 import labels from "../../data/labels.json";
-import { ExcelHandler } from "../../utils/excel/ExcelHandler";
+import { ExcelHandler } from "../../utils/ExcelHandler";
 import { InvoiceDataParser } from "../../utils/parsers/InvoiceDataParser";
 
 /**

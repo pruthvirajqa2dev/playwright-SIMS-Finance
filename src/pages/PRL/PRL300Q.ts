@@ -3,7 +3,6 @@ import { expect } from "@playwright/test";
 import expectedTexts from "../../data/expectedTexts.json";
 import labels from "../../data/labels.json";
 import logger from "../../logging/logger";
-// <reference lib="dom"/>
 
 /**
  * @author: @pruthvirajqa2dev

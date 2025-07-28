@@ -5,7 +5,6 @@ import expectedTexts from "../../data/expectedTexts.json";
 import labels from "../../data/labels.json";
 import roles from "../../data/roles.json";
 import FileUtils from "../../utils/FileUtils";
-// <reference lib="dom"/>
 
 /**
  * @author: @pruthvirajqa2dev

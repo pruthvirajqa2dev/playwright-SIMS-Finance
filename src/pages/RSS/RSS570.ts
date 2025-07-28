@@ -3,7 +3,6 @@ import elementAttributes from "../../data/elementAttributes.json";
 import roles from "../../data/roles.json";
 import labels from "../../data/labels.json";
 import { expect } from "@playwright/test";
-// <reference lib="dom"/>
 
 /**
  * @author: @pruthvirajqa2dev

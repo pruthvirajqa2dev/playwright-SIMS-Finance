@@ -12,7 +12,7 @@ import {
     getRandomIntegerAmount,
     VAT_CODES
 } from "../../utils/models/PO/DataGenerator";
-import { ExcelHandler } from "../../utils/excel/ExcelHandler";
+import { ExcelHandler } from "../../utils/ExcelHandler";
 import { glcodehelper } from "../../utils/glcodehelper";
 /**
  * @author: @pruthvirajqa2dev
@@ -358,15 +358,15 @@ export default class RSS310Q extends BasePage {
         await (
             await this.getByLocator(this.vatCodeLocator)
         ).selectOption(VAT_CODES[randomIndex]);
-        const excelHandler = new ExcelHandler(
+        const handler = new ExcelHandler(
             expectedTexts.glCodeExcelWorkBookNameRead
         );
-        const sheetData = excelHandler.readSheet(
+        const sheetData = handler.readSheet(
             expectedTexts.glCodeExcelSheetNameRead
         );
         console.log("sheetdata:" + sheetData);
         const randomRow: Record<string, any> | null =
-            excelHandler.getRandomRowAsObject(sheetData);
+            handler.getRandomRowAsObject(sheetData);
         console.log(
             "Random costCentreCodeHeader:" +
                 randomRow?.[expectedTexts.costCentreCodeHeader]

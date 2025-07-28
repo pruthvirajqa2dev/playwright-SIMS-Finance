@@ -1,6 +1,5 @@
 import BasePage from "../BasePage";
 import { expect } from "@playwright/test";
-// <reference lib="dom"/>
 
 /**
  * @author: @pruthvirajqa2dev

@@ -1,4 +1,4 @@
-import { ExcelHandler } from "../excel/ExcelHandler";
+import { ExcelHandler } from "../ExcelHandler";
 export interface InvoiceRow {
     costCentre: string;
     quantity: number;
