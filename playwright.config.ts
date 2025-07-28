@@ -39,7 +39,7 @@ export default defineConfig({
     expect: {
         timeout: 35 * 1000 // 60 seconds
     },
-    timeout: 300 * 1000,
+    timeout: 120 * 1000,
     testDir: "./src/tests",
     outputDir: "C:/temp/playwright-test-results",
     /* Run tests in files in parallel */

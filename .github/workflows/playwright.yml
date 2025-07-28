@@ -228,7 +228,7 @@ jobs:
                     fi
                   done
                   echo "Final test status: $FINAL_STATUS"
-                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \" $FINAL_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
+                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
                   echo "Test status from previous job: $FINAL_STATUS"
                   echo "TEST_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
               shell: bash
