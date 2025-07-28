@@ -229,7 +229,7 @@ jobs:
                   echo "Final test status: $FINAL_STATUS"
                   echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
                   echo "Test status from previous job: $FINAL_STATUS"
-                  echo "TEST_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
+                  echo "FINAL_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
               shell: bash
             - name: Update Index Page
               run: |
@@ -419,7 +419,7 @@ jobs:
                         if [ "$STATUS" = "Passed" ]; then
                           CSS_CLASS="passed"
                         fi
-                        echo "TEST_STATUS=$STATUS" >> $GITHUB_ENV
+                        echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
                       fi
                         LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
                         echo "<tr data-date='$DATE_PART'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> $INDEX_FILE
@@ -691,12 +691,12 @@ jobs:
                   secure: true
                   username: ${{ secrets.EMAIL_USERNAME }}
                   password: ${{ secrets.EMAIL_PASSWORD }}
-                  subject: "SIMS Finance- GitHub Action: Playwright Tests ${{ env.TEST_STATUS }}"
+                  subject: "SIMS Finance- GitHub Action: Playwright Tests ${{ env.FINAL_STATUS }}"
                   body: |
                       Hi,
                       Please find the automated SIMS Finance Playwright Tests Execution Status:
 
-                      🧪 The Playwright tests have ${{ env.TEST_STATUS }}.
+                      🧪 The Playwright tests have ${{ env.FINAL_STATUS }}.
 
                       🕒 Latest run was on ${{ env.TIMESTAMP }}.
 
