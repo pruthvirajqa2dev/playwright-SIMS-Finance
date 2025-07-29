@@ -686,6 +686,8 @@ jobs:
               run: |
                   STATUS=$(jq -r '.status' published-reports/$TIMESTAMP/status.json)
                   echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
+            - name: Wait for 7 minutes before sending email
+              run: sleep 420
             - name: Notify on Execution
               if: success()
               uses: dawidd6/action-send-mail@v4
