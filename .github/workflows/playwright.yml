@@ -682,6 +682,10 @@ jobs:
               with:
                   name: github-pages
                   path: published-reports/
+            - name: Set FINAL_STATUS from status.json
+              run: |
+                  STATUS=$(jq -r '.status' published-reports/$TIMESTAMP/status.json)
+                  echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
             - name: Notify on Execution
               if: success()
               uses: dawidd6/action-send-mail@v4
