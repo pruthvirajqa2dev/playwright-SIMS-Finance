@@ -10,16 +10,18 @@ import PDFUtils from "../../utils/PDFUtils";
 import XQuerySIMS_TB_SCHOOL from "../../pages/XQUERY/XQuerySIMS_TB_SCHOOL";
 import RSS310Q from "../../pages/RSS/RSS310Q";
 import SPC420 from "../../pages/SPC/SPC420";
+import { getCredentials } from "../../utils/credentials";
+
+const tenant = expectedTexts.demoSiteKey + expectedTexts.tenantNumber;
+const school = expectedTexts.schoolKey + expectedTexts.schoolNumber;
+const userRole = expectedTexts.userRoleKey;
 
 async function login(page: Page, testInfo: TestInfo) {
     const loginPage = new LoginPage(page, testInfo);
-    //Login using username and password
     const homepage: HomePage = await loginPage.login(
-        ENV.USERID!,
-        ENV.PASSWORD!,
+        getCredentials(tenant, school, userRole),
         testInfo
     );
-
     return homepage;
 }
 /**
@@ -82,10 +84,17 @@ test.describe(
                     ENV.USERID!
             });
             //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
+            const homepage = await test.step(
+                `Login using ` +
+                    tenant +
+                    " " +
+                    school +
+                    ` and role ` +
+                    userRole,
+                async () => {
                     return await login(page, testInfo);
-                });
+                }
+            );
 
             //Logout
             await test.step(`Expect home page elements visible on Load`, async () => {
@@ -141,10 +150,17 @@ test.describe(
                     "This test is for performing File upload to SIMS Finance using SPC420"
             });
             //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
+            const homepage = await test.step(
+                `Login using ` +
+                    tenant +
+                    " " +
+                    school +
+                    ` and role ` +
+                    userRole,
+                async () => {
                     return await login(page, testInfo);
-                });
+                }
+            );
             const screen = expectedTexts.SPC420;
             const spc420 = await test.step(
                 "Go to the screen " + screen,
@@ -198,10 +214,17 @@ test.describe(
                     "This test is for checking if RSS570 Crystal Report is generated for given criteria"
             });
             //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
+            const homepage = await test.step(
+                `Login using ` +
+                    tenant +
+                    " " +
+                    school +
+                    ` and role ` +
+                    userRole,
+                async () => {
                     return await login(page, testInfo);
-                });
+                }
+            );
             const screen = expectedTexts.RSS570;
             const rss570 = await test.step(
                 "Go to the screen " + screen,
@@ -270,10 +293,17 @@ test.describe(
                     "This test is for checking if NML510 Trial Balance Report is generated for given criteria"
             });
             //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
+            const homepage = await test.step(
+                `Login using ` +
+                    tenant +
+                    " " +
+                    school +
+                    ` and role ` +
+                    userRole,
+                async () => {
                     return await login(page, testInfo);
-                });
+                }
+            );
             const screen = expectedTexts.NML510;
             const nml510 = await test.step(
                 "Go to the screen " + screen,
@@ -342,10 +372,17 @@ test.describe(
                     "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Execute"
             });
             //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
+            const homepage = await test.step(
+                `Login using ` +
+                    tenant +
+                    " " +
+                    school +
+                    ` and role ` +
+                    userRole,
+                async () => {
                     return await login(page, testInfo);
-                });
+                }
+            );
             const screen = expectedTexts.SIMS_TB_SCHOOL;
             const simsTbSchool = await test.step(
                 "Go to the screen " + screen,
@@ -383,10 +420,17 @@ test.describe(
                     "This test is for checking if attachments can be attached to RSS310Q"
             });
             //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
+            const homepage = await test.step(
+                `Login using ` +
+                    tenant +
+                    " " +
+                    school +
+                    ` and role ` +
+                    userRole,
+                async () => {
                     return await login(page, testInfo);
-                });
+                }
+            );
             const screen = expectedTexts.RSS310Q;
             const rss310q = await test.step(
                 "Go to the screen " + screen,
@@ -430,10 +474,17 @@ test.describe(
                     "This test is for checking if help screen is working"
             });
             //Login
-            const homepage =
-                await test.step(`Login using ${ENV.USERID!}`, async () => {
+            const homepage = await test.step(
+                `Login using ` +
+                    tenant +
+                    " " +
+                    school +
+                    ` and role ` +
+                    userRole,
+                async () => {
                     return await login(page, testInfo);
-                });
+                }
+            );
             await test.step("Click help screen", async () => {
                 const [newTab] = await Promise.all([
                     page.waitForEvent("popup"), // Wait for the new tab to open

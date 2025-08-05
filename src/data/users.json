@@ -1,0 +1,72 @@
+{
+    "SFDEMOSITE102": {
+        "ADMIN": "SFDS102ADMIN",
+        "ADMIN1": "SFDSADMIND102",
+        "SCHOOL01": {
+            "ID": "000001",
+            "NAME": "Green Abbey School",
+            "FINANCECLERK": "FINCLERK01D102",
+            "BUDGETHOLDER": "BUDHOLD01D102",
+            "BUSINESSMANAGER": "BUSMAN01D102",
+            "CLASSTEACHER": "CLASS01D102",
+            "HEADTEACHER": "HEAD01D102"
+        },
+        "SCHOOL11": {
+            "ID": "000011",
+            "NAME": "Water's Edge School",
+            "FINANCECLERK": "FINCLERK11D102",
+            "BUDGETHOLDER": "BUDHOLD11D102",
+            "BUSINESSMANAGER": "BUSMAN11D102",
+            "CLASSTEACHER": "CLASS11D102",
+            "HEADTEACHER": "HEAD11D102"
+        },
+        "SCHOOL12": {
+            "ID": "000012",
+            "NAME": "Tarn Side School",
+            "FINANCECLERK": "FINCLERK12D102",
+            "BUDGETHOLDER": "BUDHOLD12D102",
+            "BUSINESSMANAGER": "BUSMAN12D102",
+            "CLASSTEACHER": "CLASS12D102",
+            "HEADTEACHER": "HEAD12D102"
+        },
+        "SCHOOL99": {
+            "ID": "999999",
+            "NAME": "The ESS Academy Trust",
+            "FINANCEDIRECTOR": "FINDIR99D102"
+        }
+    },
+    "SFDEMOSITE130": {
+        "SCHOOL01": {
+            "ID": "000001",
+            "NAME": "Green Abbey School",
+            "FINANCECLERK": "FINCLERK01D130",
+            "BUDGETHOLDER": "BUDHOLD01D130",
+            "BUSINESSMANAGER": "BUSMAN01D130",
+            "CLASSTEACHER": "CLASS01D130",
+            "HEADTEACHER": "HEAD01D130"
+        },
+        "SCHOOL11": {
+            "ID": "000011",
+            "NAME": "Water's Edge School",
+            "FINANCECLERK": "FINCLERK11D130",
+            "BUDGETHOLDER": "BUDHOLD11D130",
+            "BUSINESSMANAGER": "BUSMAN11D130",
+            "CLASSTEACHER": "CLASS11D130",
+            "HEADTEACHER": "HEAD11D130"
+        },
+        "SCHOOL12": {
+            "ID": "000012",
+            "NAME": "Tarn Side School",
+            "FINANCECLERK": "FINCLERK12D130",
+            "BUDGETHOLDER": "BUDHOLD12D130",
+            "BUSINESSMANAGER": "BUSMAN12D130",
+            "CLASSTEACHER": "CLASS12D130",
+            "HEADTEACHER": "HEAD12D130"
+        },
+        "SCHOOL99": {
+            "ID": "999999",
+            "NAME": "The ESS Academy Trust",
+            "FINANCEDIRECTOR": "FINDIR99D130"
+        }
+    }
+}

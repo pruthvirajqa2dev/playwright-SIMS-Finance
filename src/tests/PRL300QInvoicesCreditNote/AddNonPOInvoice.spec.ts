@@ -10,6 +10,8 @@ import FileUtils from "../../utils/FileUtils";
 import { InvoiceDataParser } from "../../utils/parsers/InvoiceDataParser";
 import { ExcelHandler } from "../../utils/ExcelHandler";
 import InvoiceCalc from "../../utils/InvoiceCalc";
+import { getCredentials } from "../../utils/credentials";
+
 /**
  *
  * @param page
@@ -17,14 +19,14 @@ import InvoiceCalc from "../../utils/InvoiceCalc";
  * @returns
  */
 async function login(page: Page, testInfo: TestInfo) {
+    const tenant = expectedTexts.demoSiteKey + "130";
+    const school = expectedTexts.schoolKey + "99";
+    const userRole = "FINANCEDIRECTOR";
     const loginPage = new LoginPage(page, testInfo);
-    //Login using username and password
     const homepage: HomePage = await loginPage.login(
-        ENV.USERID!,
-        ENV.PASSWORD!,
+        getCredentials(tenant, school, userRole),
         testInfo
     );
-
     return homepage;
 }
 /**

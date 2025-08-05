@@ -3,7 +3,7 @@ import BasePage from "../BasePage";
 import path from "path";
 import expectedTexts from "../../data/expectedTexts.json";
 import labels from "../../data/labels.json";
-import roles from "../../data/roles.json";
+import roles from "../../data/playwrightHTMLRoles.json";
 import FileUtils from "../../utils/FileUtils";
 
 /**

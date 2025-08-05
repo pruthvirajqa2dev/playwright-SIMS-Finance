@@ -1,7 +1,7 @@
 import BasePage from "../BasePage";
 import expectedTexts from "../../data/expectedTexts.json";
 import labels from "../../data/labels.json";
-import roles from "../../data/roles.json";
+import roles from "../../data/playwrightHTMLRoles.json";
 import elementAttr from "../../data/elementAttributes.json";
 import { expect } from "@playwright/test";
 import FileUtils from "../../utils/FileUtils";

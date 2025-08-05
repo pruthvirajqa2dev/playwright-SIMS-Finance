@@ -25,6 +25,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "crypto": "^1.0.1",
     "googleapis": "^149.0.0",
     "open": "^10.1.2",
     "winston": "^3.17.0",

@@ -39,8 +39,7 @@ export default class LoginPage extends BasePage {
      * @returns A promise that resolves to an instance of the HomePage class.
      */
     async login(
-        username: string,
-        password: string,
+        [username, password]: [string, string],
         testInfo: TestInfo
     ): Promise<HomePage> {
         await this.navigateTo("/");

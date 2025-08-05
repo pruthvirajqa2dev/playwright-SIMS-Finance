@@ -3,7 +3,7 @@ import BasePage from "../BasePage";
 import { expect } from "@playwright/test";
 import labels from "../../data/labels.json";
 import elementAttributes from "../../data/elementAttributes.json";
-import roles from "../../data/roles.json";
+import roles from "../../data/playwrightHTMLRoles.json";
 
 /**
  * @author: @pruthvirajqa2dev

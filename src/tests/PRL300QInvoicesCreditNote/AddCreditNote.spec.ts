@@ -11,6 +11,7 @@ import InvoiceCalc from "../../utils/InvoiceCalc";
 import labels from "../../data/labels.json";
 import { ExcelHandler } from "../../utils/ExcelHandler";
 import { InvoiceDataParser } from "../../utils/parsers/InvoiceDataParser";
+import { getCredentials } from "../../utils/credentials";
 
 /**
  *Function to login to the application
@@ -21,14 +22,14 @@ import { InvoiceDataParser } from "../../utils/parsers/InvoiceDataParser";
  */
 
 async function login(page: Page, testInfo: TestInfo) {
+    const tenant = expectedTexts.demoSiteKey + "130";
+    const school = expectedTexts.schoolKey + "99";
+    const userRole = "FINANCEDIRECTOR";
     const loginPage = new LoginPage(page, testInfo);
-    //Login using username and password
     const homepage: HomePage = await loginPage.login(
-        ENV.USERID!,
-        ENV.PASSWORD!,
+        getCredentials(tenant, school, userRole),
         testInfo
     );
-
     return homepage;
 }
 /**
