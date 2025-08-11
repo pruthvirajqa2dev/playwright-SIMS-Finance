@@ -304,11 +304,11 @@ test.describe(
             });
             await test.step(
                 "Verify PDF report is generated in NML510 with text " +
-                    nml510.trialBalanceText,
+                    "Trial Balance by Cost Centre",
                 async () => {
                     await nml510.verifyPDFGeneratedWithExtOnScreen(
                         expectedTexts.NML510,
-                        nml510.trialBalanceText
+                        "Trial Balance by Cost Centre"
                     );
                 }
             );
