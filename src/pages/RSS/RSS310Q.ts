@@ -11,7 +11,7 @@ import {
     getRandomAmount,
     getRandomIntegerAmount,
     VAT_CODES
-} from "../../utils/models/Purchase Orders/dataGenerator";
+} from "../../utils/models/PO/dataGenerator";
 import {
     getLedgerOptions,
     getFundOptions
