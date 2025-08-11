@@ -238,7 +238,7 @@ test.describe(
             await test.step("Verify PDF is generated in RSS570", async () => {
                 await rss570.verifyPDFGeneratedWithExtOnScreen(
                     expectedTexts.RSS570,
-                    rss570.outstandingAccrualsText
+                    "Outstanding Accruals"
                 );
             });
             await test.step("Click on PDF report", async () => {
