@@ -15,7 +15,7 @@ import { getCredentials } from "../../utils/credentials";
 const tenant = expectedTexts.demoSiteKey + expectedTexts.tenantNumber;
 const school = expectedTexts.schoolKey + expectedTexts.schoolNumber;
 const userRole = expectedTexts.userRoleKey;
-
+// Function to perform login
 async function login(page: Page, testInfo: TestInfo) {
     const loginPage = new LoginPage(page, testInfo);
     const homepage: HomePage = await loginPage.login(
