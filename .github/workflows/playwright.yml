@@ -670,6 +670,34 @@ jobs:
                       });
                       </script>                          
                   </body></html>" >> $INDEX_FILE
+            - name: Cleanup old published reports and history (keep 60 days)
+              run: |
+                  # Remove published-reports older than 60 days
+                  find published-reports/ -maxdepth 1 -mindepth 1 -type d | while read dir; do
+                    DIRNAME=$(basename "$dir")
+                    # Extract date from directory name (format: YYYY-MM-DD_HH-MM-SS)
+                    DIRDATE=$(echo $DIRNAME | cut -d'_' -f1)
+                    if [[ $DIRDATE =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+                      REPORT_DATE=$(date -d "$DIRDATE" +%s)
+                      NOW_DATE=$(date +%s)
+                      AGE=$(( (NOW_DATE - REPORT_DATE) / 86400 ))
+                      if [ $AGE -gt 60 ]; then
+                        echo "Deleting old report: $dir (age: $AGE days)"
+                        rm -rf "$dir"
+                      fi
+                    fi
+                  done
+                  # Remove old runs from consolidated.json (history)
+                  if [ -f "test-results-history/consolidated.json" ]; then
+                    jq --arg cutoff "$(date -d '60 days ago' +%Y-%m-%d)" '
+                      { runs: (.runs | map(select(.timestamp | split("_")[0] >= $cutoff))) }
+                    ' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+                  fi
+                  # Commit and push changes to keep repo and dashboard in sync
+                  git add published-reports/ test-results-history/consolidated.json
+                  git commit -m "Cleanup: Remove reports and history older than 60 days" || echo "No old reports/history to remove"
+                  git push origin Main || echo "No changes to push"
+                  git push origin gh-pages || echo "No changes to push"
             - name: Commit Current Report to GitHub Pages
               run: |
                   git add published-reports/$TIMESTAMP/
