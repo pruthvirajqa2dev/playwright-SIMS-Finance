@@ -692,9 +692,7 @@ jobs:
                     jq --arg cutoff "$(date -d '60 days ago' +%Y-%m-%d)" '
                       { runs: (.runs | map(select(.timestamp | split("_")[0] >= $cutoff))) }
                     ' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
-                  fi
-                  # Commit and push changes to keep repo and dashboard in sync
-                  git add published-reports/ test-results-history/consolidated.json
+                  fi 
                   git commit -m "Cleanup: Remove reports and history older than 60 days" || echo "No old reports/history to remove"
                   git push origin Main || echo "No changes to push"
                   git push origin gh-pages || echo "No changes to push"
