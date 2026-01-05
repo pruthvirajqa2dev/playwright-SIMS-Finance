@@ -5414,6 +5414,7 @@
 [2025-07-28T04:57:40.837Z] INFO: Browser: chromium
 [2025-07-28T05:03:27.849Z] INFO: Test environment: uat
 [2025-07-28T05:03:27.852Z] INFO: Browser: chromium
+<<<<<<< HEAD
 [2025-07-28T05:18:46.140Z] INFO: Test environment: uat
 [2025-07-28T05:18:46.143Z] INFO: Browser: chromium
 [2025-07-28T05:18:51.496Z] INFO: Test environment: uat
@@ -5506,3 +5507,59 @@
 [2025-07-28T05:34:52.834Z] INFO: Browser: chromium
 [2025-07-28T05:34:54.965Z] INFO: Test environment: uat
 [2025-07-28T05:34:54.967Z] INFO: Browser: chromium
+=======
+[2025-08-11T04:53:40.110Z] INFO: Test environment: uat
+[2025-08-11T04:53:40.113Z] INFO: Browser: chromium
+[2025-08-11T04:53:42.930Z] INFO: Test environment: uat
+[2025-08-11T04:53:42.934Z] INFO: Browser: chromium
+[2025-08-11T04:53:45.767Z] INFO: Test environment: uat
+[2025-08-11T04:53:45.769Z] INFO: Browser: chromium
+[2025-08-11T04:53:48.584Z] INFO: Test environment: uat
+[2025-08-11T04:53:48.587Z] INFO: Browser: chromium
+[2025-08-11T04:53:55.084Z] INFO: Test environment: uat
+[2025-08-11T04:53:55.086Z] INFO: Browser: chromium
+[2025-08-11T04:53:57.885Z] INFO: Test environment: uat
+[2025-08-11T04:53:57.887Z] INFO: Browser: chromium
+[2025-08-11T04:54:34.885Z] INFO: Test environment: uat
+[2025-08-11T04:54:34.888Z] INFO: Browser: chromium
+[2025-08-11T04:54:57.139Z] INFO: Test environment: uat
+[2025-08-11T04:54:57.141Z] INFO: Browser: chromium
+[2025-08-11T04:55:53.761Z] INFO: Test environment: uat
+[2025-08-11T04:55:53.763Z] INFO: Browser: chromium
+[2025-08-11T04:56:02.791Z] INFO: Test environment: uat
+[2025-08-11T04:56:02.794Z] INFO: Browser: chromium
+[2025-08-11T04:58:02.843Z] INFO: Test environment: uat
+[2025-08-11T04:58:02.846Z] INFO: Browser: chromium
+[2025-08-11T04:58:05.439Z] INFO: Test environment: uat
+[2025-08-11T04:58:05.441Z] INFO: Browser: chromium
+[2026-01-05T11:21:04.545Z] INFO: Test environment: uat
+[2026-01-05T11:21:04.548Z] INFO: Browser: chromium
+>>>>>>> EmailTestsMain
+[2026-01-05T11:24:50.081Z] INFO: Test environment: uat
+[2026-01-05T11:24:50.083Z] INFO: Browser: chromium
+[2026-01-05T11:24:55.560Z] INFO: Test environment: uat
+[2026-01-05T11:24:55.563Z] INFO: Browser: chromium
+[2026-01-05T11:24:59.279Z] INFO: Test environment: uat
+[2026-01-05T11:24:59.282Z] INFO: Browser: chromium
+[2026-01-05T11:25:01.577Z] INFO: Test environment: uat
+[2026-01-05T11:25:01.582Z] INFO: Browser: chromium
+[2026-01-05T11:25:03.391Z] INFO: Test environment: uat
+[2026-01-05T11:25:03.393Z] INFO: Browser: chromium
+[2026-01-05T11:25:07.155Z] INFO: Test environment: uat
+[2026-01-05T11:25:07.159Z] INFO: Browser: chromium
+[2026-01-05T11:25:09.598Z] INFO: Test environment: uat
+[2026-01-05T11:25:09.601Z] INFO: Browser: chromium
+[2026-01-05T11:25:26.576Z] INFO: Test environment: uat
+[2026-01-05T11:25:26.579Z] INFO: Browser: chromium
+[2026-01-05T11:25:30.327Z] INFO: Test environment: uat
+[2026-01-05T11:25:30.331Z] INFO: Browser: chromium
+[2026-01-05T11:25:32.754Z] INFO: Test environment: uat
+[2026-01-05T11:25:32.757Z] INFO: Browser: chromium
+[2026-01-05T11:25:44.556Z] INFO: Test environment: uat
+[2026-01-05T11:25:44.559Z] INFO: Browser: chromium
+[2026-01-05T11:25:48.608Z] INFO: Test environment: uat
+[2026-01-05T11:25:48.610Z] INFO: Browser: chromium
+[2026-01-05T11:25:51.153Z] INFO: Test environment: uat
+[2026-01-05T11:25:51.157Z] INFO: Browser: chromium
+[2026-01-05T11:25:53.122Z] INFO: Test environment: uat
+[2026-01-05T11:25:53.125Z] INFO: Browser: chromium
