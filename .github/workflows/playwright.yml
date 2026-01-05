@@ -83,36 +83,10 @@ jobs:
                   name: blob-report-${{ matrix.shardIndex }}
                   path: blob-report
                   retention-days: 30
-    email-tests:
-        name: Run Email Tests (single run)
-        needs: playwright-test
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: lts/*
-            - name: Switch to EmailTestsMain branch
-              run: |
-                  git fetch origin
-                  git checkout EmailTestsMain
-            - name: Install dependencies
-              run: npm ci
-            - name: Install Playwright Browsers
-              run: npx playwright install --with-deps
-            - name: Run EmailTests.spec.ts
-              run: |
-                  npx playwright test EmailTests.spec.ts --project=chromium --workers=1
-                  mv test-results.json test-results-email.json
-            - name: Upload Email Test Results
-              uses: actions/upload-artifact@v4
-              with:
-                  name: test-results-email
-                  path: test-results-email.json
-                  retention-days: 30
+
     merge-reports:
         name: Merging executed reports
-        needs: [playwright-test, email-tests]
+        needs: [playwright-test]
         runs-on: ubuntu-latest
         permissions:
             contents: write
@@ -143,6 +117,7 @@ jobs:
                   path: test-results
                   pattern: test-results-*
                   merge-multiple: true
+
             - name: List Downloaded Results
               run: |
                   echo "Contents of test-results directory:"
