@@ -176,8 +176,8 @@ jobs:
             #Save total execution time to file
             - name: Save Execution Time
               run: |
-                  if [ -f test-results/test-results.json ]; then
-                    duration=$(jq '.stats.duration' test-results/test-results.json)
+                  if [ -f test-results.json ]; then
+                    duration=$(jq '.stats.duration' test-results.json)
                     # Convert ms to seconds
                     echo "$((duration / 1000)) seconds" > execution-time.txt
                   else
@@ -218,6 +218,10 @@ jobs:
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
                   mkdir -p published-reports/$TIMESTAMP
                   cp -r playwright-report/* published-reports/$TIMESTAMP
+                  # Copy execution time file if it exists
+                  if [ -f execution-time.txt ]; then
+                    cp execution-time.txt published-reports/$TIMESTAMP/
+                  fi
                   echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
             - name: Download Shard Statuses
               uses: actions/download-artifact@v4
