@@ -230,9 +230,12 @@ jobs:
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
                   mkdir -p published-reports/$TIMESTAMP
                   cp -r playwright-report/* published-reports/$TIMESTAMP
-                  # Copy execution time file if it exists
+                  # Copy execution time and test-results files if they exist
                   if [ -f execution-time.txt ]; then
                     cp execution-time.txt published-reports/$TIMESTAMP/
+                  fi
+                  if [ -f test-results.json ]; then
+                    cp test-results.json published-reports/$TIMESTAMP/
                   fi
                   echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
             - name: Download Shard Statuses
