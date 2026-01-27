@@ -416,22 +416,23 @@ jobs:
                   for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort -r); do
                     TIMESTAMP=$(basename "$dir")
                     if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
-                      DATE_PART=$(echo $TIMESTAMP | cut -d'_' -f1)
-                      TIME_PART=$(echo $TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
-                      
-                      STATUS="Unknown"
-                      CSS_CLASS=""
-                      if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
-                        STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json")
-                        STATUS=$(echo "$STATUS" | xargs)
-                        if [ "$STATUS" = "Failed" ]; then
-                          CSS_CLASS="failed"
+                      # Only show row if report index.html exists
+                      if [ -f "published-reports/$TIMESTAMP/index.html" ]; then
+                        DATE_PART=$(echo $TIMESTAMP | cut -d'_' -f1)
+                        TIME_PART=$(echo $TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
+                        STATUS="Unknown"
+                        CSS_CLASS=""
+                        if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
+                          STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json")
+                          STATUS=$(echo "$STATUS" | xargs)
+                          if [ "$STATUS" = "Failed" ]; then
+                            CSS_CLASS="failed"
+                          fi
+                          if [ "$STATUS" = "Passed" ]; then
+                            CSS_CLASS="passed"
+                          fi
+                          echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
                         fi
-                        if [ "$STATUS" = "Passed" ]; then
-                          CSS_CLASS="passed"
-                        fi
-                        echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
-                      fi
                         LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
                         # Try to get execution time from a file, fallback to N/A
                         EXEC_TIME="N/A"
@@ -439,6 +440,7 @@ jobs:
                           EXEC_TIME=$(cat "published-reports/$TIMESTAMP/execution-time.txt")
                         fi
                         echo "<tr data-date='$DATE_PART'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td><td>$EXEC_TIME</td></tr>" >> $INDEX_FILE
+                      fi
                     fi
                   done
                   echo "</tbody></table>
