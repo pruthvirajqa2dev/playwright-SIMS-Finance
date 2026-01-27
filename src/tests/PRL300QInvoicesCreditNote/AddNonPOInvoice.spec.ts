@@ -30,7 +30,7 @@ async function login(page: Page, testInfo: TestInfo) {
     return homepage;
 }
 /**
- * Test suite for adding Purchase Order Invoices
+ * Test suite for adding non Purchase Order Invoices
  * @group PRL300Q
  * @group Invoices
  * @group NonPurchasePOInvoice
@@ -134,7 +134,7 @@ test.describe(
 
             await test.step("Get the list of all the suppliers with payment method BACS and add invoices for the same", async () => {
                 const fileName = await FileUtils.latestFileNameLookup(
-                    `${process.cwd()}/Test Files/BACS*.TXT`
+                    `${process.cwd()}/Test Files/CHQ*.TXT`
                 );
                 console.log(
                     "filename=" +
@@ -175,7 +175,17 @@ test.describe(
                     counter < countOfUniqueSuppliers;
                     counter++
                 ) {
+                    logger.info(
+                        `Processing supplier ${
+                            counter + 1
+                        } of ${countOfUniqueSuppliers}`
+                    );
                     for (let i = 0; i < countOfInvoicesPerSupplier; i++) {
+                        logger.info(
+                            `Processing invoice ${
+                                i + 1
+                            } of ${countOfInvoicesPerSupplier}`
+                        );
                         const costCentre =
                             invoiceData[
                                 Math.floor(Math.random() * invoiceData.length)

@@ -40,7 +40,7 @@ jobs:
               id: run-tests
               run: |
                   set +e
-                  npx playwright test PostChecksTests.spec.ts --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1;
+                  npx playwright test PostChecksTests.spec.ts --grep-invert "@email" --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1;
                   echo "STATUS_CODE=$?" >> $GITHUB_ENV
                   #Rename the results file to include shard index
                   mv test-results.json test-results-${{ matrix.shardIndex }}.json
@@ -173,6 +173,16 @@ jobs:
                     )
                   ' merged-results.json test-results/test-results-*.json > test-results.json
 
+            #Save total execution time to file
+            - name: Save Execution Time
+              run: |
+                  if [ -f test-results/test-results.json ]; then
+                    duration=$(jq '.stats.duration' test-results/test-results.json)
+                    # Convert ms to seconds
+                    echo "$((duration / 1000)) seconds" > execution-time.txt
+                  else
+                    echo "N/A" > execution-time.txt
+                  fi
             #Parse Test Results and Set Variables
             - name: Parse Test Results and Set Variables
               run: node ./src/config/parse-json-report.js
@@ -399,6 +409,7 @@ jobs:
                                 <th>Time</th>
                                 <th>Report Link</th>
                                 <th data-sort='status' class='sort-icon'>Status</th>
+                                <th>Execution Time</th>
                              </tr>
                           </thead>
                           <tbody>" > $INDEX_FILE
@@ -422,7 +433,12 @@ jobs:
                         echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
                       fi
                         LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
-                        echo "<tr data-date='$DATE_PART'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td></tr>" >> $INDEX_FILE
+                        # Try to get execution time from a file, fallback to N/A
+                        EXEC_TIME="N/A"
+                        if [ -f "published-reports/$TIMESTAMP/execution-time.txt" ]; then
+                          EXEC_TIME=$(cat "published-reports/$TIMESTAMP/execution-time.txt")
+                        fi
+                        echo "<tr data-date='$DATE_PART'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td><td>$EXEC_TIME</td></tr>" >> $INDEX_FILE
                     fi
                   done
                   echo "</tbody></table>

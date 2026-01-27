@@ -1,6 +1,7 @@
 import base, { expect, Locator, Page } from "@playwright/test";
 import expectedTexts from "../data/expectedTexts.json";
 import logger from "../logging/logger";
+import { waitForEmailWithPreciseTime } from "../utils/GmailUtils";
 /**
  * @author: @pruthvirajqa2dev
  * Base page class to inherit basic page functionality
@@ -13,9 +14,11 @@ import logger from "../logging/logger";
  */
 export default abstract class BasePage {
     protected page: Page;
+    protected testInfo: any;
     //Constructor
-    constructor(page: Page, testInfo) {
+    constructor(page: Page, testInfo: any) {
         this.page = page;
+        this.testInfo = testInfo;
     }
     //Locators
     private readonly _dialogTitleLocator = ".ui-dialog-title";
@@ -247,7 +250,7 @@ export default abstract class BasePage {
      * @returns
      */
     async getByRole(
-        role,
+        role: any,
         options?: { name?: string; hidden?: boolean; exact?: boolean }
     ): Promise<Locator> {
         return this.page.getByRole(role, options);
@@ -363,7 +366,7 @@ export default abstract class BasePage {
     async expectElementToHaveAttributeWithValue(
         locator: string,
         attr: string,
-        value
+        value: string
     ) {
         await expect(
             this.page.locator(locator).first(),
@@ -560,7 +563,7 @@ export default abstract class BasePage {
      * @param page
      * @param url
      */
-    async verifyPageURL(page: Page, url) {
+    async verifyPageURL(page: Page, url: any) {
         expect(page.url()).toContain(url);
     }
     /**
@@ -645,5 +648,27 @@ export default abstract class BasePage {
                 console.error(`Error clicking ok button: ${error}`);
                 throw error;
             });
+    }
+    /**
+     *
+     * @param expectedSender
+     * @param expectedEmailSubject
+     * @param actionTime
+     * @returns
+     */
+    async verifyEmailSent(
+        expectedSender: any,
+        expectedEmailSubject: any,
+        actionTime: any
+    ) {
+        const emailReceived = await waitForEmailWithPreciseTime(
+            expectedSender,
+            expectedEmailSubject,
+            120,
+            5,
+            actionTime
+        );
+        expect(emailReceived).toBeTruthy();
+        return emailReceived;
     }
 }

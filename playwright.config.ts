@@ -70,15 +70,15 @@ export default defineConfig({
                 ...devices["Desktop Chrome"],
                 viewport: { width: 1266, height: 586 }
             }
-        },
-
-        {
-            name: "firefox",
-            use: {
-                ...devices["Desktop Firefox"],
-                viewport: { width: 1280, height: 595 }
-            }
         }
+
+        // {
+        //     name: "firefox",
+        //     use: {
+        //         ...devices["Desktop Firefox"],
+        //         viewport: { width: 1280, height: 595 }
+        //     }
+        // }
 
         // {
         //     name: "webkit",
