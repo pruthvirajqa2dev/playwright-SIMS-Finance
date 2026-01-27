@@ -213,6 +213,18 @@ jobs:
                   git fetch origin
                   git checkout gh-pages  # Checkout the existing gh-pages branch
                   git pull --rebase origin gh-pages || echo "No changes to pull"
+            - name: Retrospective Execution Time Generation (one-time)
+              run: |
+                for dir in published-reports/*; do
+                  if [ -d "$dir" ] && [ -f "$dir/test-results.json" ]; then
+                    duration=$(jq '.stats.duration' "$dir/test-results.json")
+                    if [ -n "$duration" ] && [ "$duration" != "null" ]; then
+                      echo "$((duration / 1000)) seconds" > "$dir/execution-time.txt"
+                    else
+                      echo "N/A" > "$dir/execution-time.txt"
+                    fi
+                  fi
+                done
             - name: Add Current Report with Timestamp
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
@@ -469,7 +481,7 @@ jobs:
                       </div>
                   </div>
                   </div>
-                  <footer><p>© 2024 Playwright Test Reports. All rights reserved.</p></footer>
+                  <footer><p>© $(date +'%Y') Playwright Test Reports. All rights reserved.</p></footer>
                   <script>
                     const testHistory = $CONSOLIDATED_HISTORY;
                     //console.log("testHistory: "+ testHistory);
