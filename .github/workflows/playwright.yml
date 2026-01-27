@@ -172,25 +172,6 @@ jobs:
                       if .config == null then .config = $item.config else . end
                     )
                   ' merged-results.json test-results/test-results-*.json > test-results.json
-
-            #Save total execution time to file
-            - name: Save Execution Time
-              run: |
-                  if [ -f test-results.json ]; then
-                    duration=$(jq '.stats.duration' test-results.json)
-                    # Convert ms to seconds
-                    echo "$(printf '%.0f' $(echo "$duration / 1000" | bc -l)) seconds" > execution-time.txt
-                  else
-                    echo "N/A" > execution-time.txt
-                  fi
-            - name: Debug execution-time generation
-              run: |
-                  echo "PWD:"
-                  pwd
-                  echo "Files:"
-                  ls -la
-                  echo "execution-time.txt:"
-                  cat execution-time.txt || echo "❌ execution-time.txt NOT FOUND"
             #Parse Test Results and Set Variables
             - name: Parse Test Results and Set Variables
               run: node ./src/config/parse-json-report.js
@@ -233,6 +214,25 @@ jobs:
                       fi
                     fi
                   done
+            #Save total execution time to file
+            - name: Save Execution Time
+              run: |
+                  if [ -f test-results.json ]; then
+                    duration=$(jq '.stats.duration' test-results.json)
+                    # Convert ms to seconds
+                    echo "$(printf '%.0f' $(echo "$duration / 1000" | bc -l)) seconds" > execution-time.txt
+                  else
+                    echo "N/A" > execution-time.txt
+                  fi
+            - name: Debug execution-time generation
+              run: |
+                  echo "PWD:"
+                  pwd
+                  echo "Files:"
+                  ls -la
+                  echo "execution-time.txt:"
+                  cat execution-time.txt || echo "❌ execution-time.txt NOT FOUND"
+
             - name: Add Current Report with Timestamp
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
