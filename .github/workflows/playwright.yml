@@ -183,6 +183,14 @@ jobs:
                   else
                     echo "N/A" > execution-time.txt
                   fi
+            - name: Debug execution-time generation
+              run: |
+                  echo "PWD:"
+                  pwd
+                  echo "Files:"
+                  ls -la
+                  echo "execution-time.txt:"
+                  cat execution-time.txt || echo "❌ execution-time.txt NOT FOUND"
             #Parse Test Results and Set Variables
             - name: Parse Test Results and Set Variables
               run: node ./src/config/parse-json-report.js
