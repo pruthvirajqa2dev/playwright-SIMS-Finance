@@ -179,7 +179,7 @@ jobs:
                   if [ -f test-results.json ]; then
                     duration=$(jq '.stats.duration' test-results.json)
                     # Convert ms to seconds
-                    echo "$((duration / 1000)) seconds" > execution-time.txt
+                    echo "$(printf '%.0f' $(echo "$duration / 1000" | bc -l)) seconds" > execution-time.txt
                   else
                     echo "N/A" > execution-time.txt
                   fi
@@ -215,16 +215,16 @@ jobs:
                   git pull --rebase origin gh-pages || echo "No changes to pull"
             - name: Retrospective Execution Time Generation (one-time)
               run: |
-                for dir in published-reports/*; do
-                  if [ -d "$dir" ] && [ -f "$dir/test-results.json" ]; then
-                    duration=$(jq '.stats.duration' "$dir/test-results.json")
-                    if [ -n "$duration" ] && [ "$duration" != "null" ]; then
-                      echo "$((duration / 1000)) seconds" > "$dir/execution-time.txt"
-                    else
-                      echo "N/A" > "$dir/execution-time.txt"
+                  for dir in published-reports/*; do
+                    if [ -d "$dir" ] && [ -f "$dir/test-results.json" ]; then
+                      duration=$(jq '.stats.duration' "$dir/test-results.json")
+                      if [ -n "$duration" ] && [ "$duration" != "null" ]; then
+                        echo "$(printf '%.0f' $(echo "$duration / 1000" | bc -l)) seconds" > "$dir/execution-time.txt"
+                      else
+                        echo "N/A" > "$dir/execution-time.txt"
+                      fi
                     fi
-                  fi
-                done
+                  done
             - name: Add Current Report with Timestamp
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
