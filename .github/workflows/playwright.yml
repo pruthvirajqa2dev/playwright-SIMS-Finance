@@ -210,46 +210,43 @@ jobs:
                     local hours=$((total_seconds / 3600))
                     local minutes=$(((total_seconds % 3600) / 60))
                     local seconds=$((total_seconds % 60))
-                                  
+                                      
                     local output=""
-                                  
+                                      
                     if [ $hours -gt 0 ]; then
                       output+="${hours} hr"
                       [ $hours -gt 1 ] && output+="s"
                     fi
-                                  
+                                      
                     if [ $minutes -gt 0 ]; then
                       [ -n "$output" ] && output+=" "
                       output+="${minutes} min"
                       [ $minutes -gt 1 ] && output+="s"
                     fi
-                                  
+                                      
                     if [ $seconds -gt 0 ] || [ -z "$output" ]; then
                       [ -n "$output" ] && output+=" "
                       output+="${seconds} sec"
                       [ $seconds -gt 1 ] && output+="s"
                     fi
-                                  
+                                      
                     echo "$output"
                   }
-                                  
-                  if [ -f test-results.json ]; then
-                    START=$(jq '[.suites[].specs[].tests[].results[].startTime] | min' test-results.json)
-                    END=$(jq '[.suites[].specs[].tests[].results[].startTime + .suites[].specs[].tests[].results[].duration] | max' test-results.json)
-                                  
-                    if [ "$START" != "null" ] && [ "$END" != "null" ]; then
-                      TOTAL_MS=$((END - START))
-                      TOTAL_SEC=$((TOTAL_MS / 1000))
-                                  
+                                      
+                  if ls test-results/test-results-*.json >/dev/null 2>&1; then
+                    MAX_DURATION_MS=$(jq '[.stats.duration] | max' test-results/test-results-*.json)
+                                      
+                    if [ "$MAX_DURATION_MS" != "null" ] && [ "$MAX_DURATION_MS" -gt 0 ]; then
+                      TOTAL_SEC=$((MAX_DURATION_MS / 1000))
                       HUMAN_TIME=$(format_duration $TOTAL_SEC)
                       echo "$HUMAN_TIME" > execution-time.txt
-                      echo "Execution Time: $HUMAN_TIME"
                     else
                       echo "N/A" > execution-time.txt
                     fi
                   else
                     echo "N/A" > execution-time.txt
                   fi
+
             - name: Debug execution-time generation
               run: |
                   echo "PWD:"
