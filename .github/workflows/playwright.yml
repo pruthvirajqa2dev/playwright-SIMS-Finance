@@ -202,25 +202,51 @@ jobs:
                   git fetch origin
                   git checkout gh-pages  # Checkout the existing gh-pages branch
                   git pull --rebase origin gh-pages || echo "No changes to pull"
-            - name: Retrospective Execution Time Generation (one-time)
-              run: |
-                  for dir in published-reports/*; do
-                    if [ -d "$dir" ] && [ -f "$dir/test-results.json" ]; then
-                      duration=$(jq '.stats.duration' "$dir/test-results.json")
-                      if [ -n "$duration" ] && [ "$duration" != "null" ]; then
-                        echo "$(printf '%.0f' $(echo "$duration / 1000" | bc -l)) seconds" > "$dir/execution-time.txt"
-                      else
-                        echo "N/A" > "$dir/execution-time.txt"
-                      fi
-                    fi
-                  done
             #Save total execution time to file
-            - name: Save Execution Time
+            - name: Generate Human-Readable Execution Time
               run: |
+                  format_duration () {
+                    local total_seconds=$1
+                    local hours=$((total_seconds / 3600))
+                    local minutes=$(((total_seconds % 3600) / 60))
+                    local seconds=$((total_seconds % 60))
+                                  
+                    local output=""
+                                  
+                    if [ $hours -gt 0 ]; then
+                      output+="${hours} hr"
+                      [ $hours -gt 1 ] && output+="s"
+                    fi
+                                  
+                    if [ $minutes -gt 0 ]; then
+                      [ -n "$output" ] && output+=" "
+                      output+="${minutes} min"
+                      [ $minutes -gt 1 ] && output+="s"
+                    fi
+                                  
+                    if [ $seconds -gt 0 ] || [ -z "$output" ]; then
+                      [ -n "$output" ] && output+=" "
+                      output+="${seconds} sec"
+                      [ $seconds -gt 1 ] && output+="s"
+                    fi
+                                  
+                    echo "$output"
+                  }
+                                  
                   if [ -f test-results.json ]; then
-                    duration=$(jq '.stats.duration' test-results.json)
-                    # Convert ms to seconds
-                    echo "$(printf '%.0f' $(echo "$duration / 1000" | bc -l)) seconds" > execution-time.txt
+                    START=$(jq '[.suites[].specs[].tests[].results[].startTime] | min' test-results.json)
+                    END=$(jq '[.suites[].specs[].tests[].results[].startTime + .suites[].specs[].tests[].results[].duration] | max' test-results.json)
+                                  
+                    if [ "$START" != "null" ] && [ "$END" != "null" ]; then
+                      TOTAL_MS=$((END - START))
+                      TOTAL_SEC=$((TOTAL_MS / 1000))
+                                  
+                      HUMAN_TIME=$(format_duration $TOTAL_SEC)
+                      echo "$HUMAN_TIME" > execution-time.txt
+                      echo "Execution Time: $HUMAN_TIME"
+                    else
+                      echo "N/A" > execution-time.txt
+                    fi
                   else
                     echo "N/A" > execution-time.txt
                   fi
@@ -278,6 +304,21 @@ jobs:
                       echo '{"runs":[]}' > test-results-history/consolidated.json
                   fi
                    # Create/update consolidated.json with the current run's data
+                  EXEC_TIME_SEC=0
+                  if [ -f "published-reports/$TIMESTAMP/execution-time.txt" ]; then
+                    RAW_TIME=$(cat "published-reports/$TIMESTAMP/execution-time.txt")
+                    EXEC_TIME_SEC=$(echo "$RAW_TIME" | awk '
+                      {
+                        for (i=1;i<=NF;i++) {
+                          if ($i ~ /hr/) h=$(i-1)
+                          if ($i ~ /min/) m=$(i-1)
+                          if ($i ~ /sec/) s=$(i-1)
+                        }
+                        print (h*3600 + m*60 + s)
+                      }
+                    ')
+                  fi                  
+
                   CURRENT_RUN=$(cat <<EOF
                   {
                     "timestamp": "$TIMESTAMP",
@@ -286,7 +327,8 @@ jobs:
                       "passed": $PASSED_TESTS,
                       "failed": $FAILED_TESTS,
                       "flaky": $FLAKY_TESTS
-                    }
+                    },
+                    "executionTimeSec": $EXEC_TIME_SEC
                   }
                   EOF
                   )
@@ -490,6 +532,10 @@ jobs:
                                 <option value="all">All time</option>
                             </select>
                       </div>
+                  </div>
+                  <h2>Execution Time Trend</h2>
+                  <div class="graph-wrapper">
+                    <canvas id="executionTimeChart"></canvas>
                   </div>
                   </div>
                   <footer><p>© $(date +'%Y') Playwright Test Reports. All rights reserved.</p></footer>
@@ -708,9 +754,70 @@ jobs:
                         }
                       timeRangeSelect.addEventListener('change', function() {
                               updateChart(this.value);
+                              updateExecutionTimeChart(this.value);
                       });
+                      function updateExecutionTimeChart(days) {
+                      const now = new Date();
+                      let runs = [...testHistory.runs];
+                                                      
+                      if (days !== 'all') {
+                        const daysAgo = new Date();
+                        daysAgo.setDate(now.getDate() - parseInt(days));
+                        runs = runs.filter(run => {
+                          const runDate = new Date(run.timestamp.split('_')[0]);
+                          return runDate >= daysAgo;
+                        });
+                      }
+                                      
+                      runs.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                                      
+                      const labels = runs.map(run => run.timestamp.replace(/_/g, ' '));
+                      const execTimeMinutes = runs.map(run =>
+                        Math.round((run.executionTimeSec || 0) / 60)
+                      );
+                                      
+                      const ctx = document.getElementById('executionTimeChart').getContext('2d');
+                                      
+                      if (window.execChart) {
+                        window.execChart.destroy();
+                      }
+                                      
+                      window.execChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                          labels,
+                          datasets: [{
+                            label: 'Execution Time (mins)',
+                            data: execTimeMinutes,
+                            borderColor: '#6f42c1',
+                            backgroundColor: 'rgba(111, 66, 193, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                          }]
+                        },
+                        options: {
+                          responsive: true,
+                          scales: {
+                            y: {
+                              title: {
+                                display: true,
+                                text: 'Minutes'
+                              }
+                            },
+                            x: {
+                              title: {
+                                display: true,
+                                text: 'Run Timestamp'
+                              }
+                            }
+                          }
+                        }
+                      });
+                    }
+                              
                       // Initialize chart
                         updateChart(timeRangeSelect.value);
+                        updateExecutionTimeChart(timeRangeSelect.value);
                         filterTable();
                       });
                       </script>                          
