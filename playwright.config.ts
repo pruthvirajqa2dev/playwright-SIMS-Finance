@@ -25,6 +25,9 @@ dotenv.config({
     path: `${__dirname}//src//config//.env.${ENV}`,
     override: true
 });
+if (!process.env.URL) {
+    throw new Error(`❌ URL not loaded. Check .env.${process.env.TEST_ENV}`);
+}
 logger.info(`Test environment: ${process.env.TEST_ENV || "development"}`);
 logger.info(`Browser: ${process.env.BROWSER || "chromium"}`);
 
