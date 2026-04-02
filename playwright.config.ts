@@ -14,15 +14,17 @@ dotenv.config({
 });
 // const defaultEnv = "uat";
 logger.info(`Test environment: ${process.env.TEST_ENV}`);
+const ENV = process.env.TEST_ENV || "uat";
+process.env.TEST_ENV = ENV;
 
-if (process.env.TEST_ENV) {
-    dotenv.config({
-        path: `${__dirname}//src//config//.env.${process.env.TEST_ENV}`,
-        override: true
-    });
-} else {
-    process.env.TEST_ENV = "uat";
-}
+// ✅ Logging after resolution
+logger.info(`Test environment: ${ENV}`);
+
+// ✅ Always load env-specific file (no if-else)
+dotenv.config({
+    path: `${__dirname}//src//config//.env.${ENV}`,
+    override: true
+});
 logger.info(`Test environment: ${process.env.TEST_ENV || "development"}`);
 logger.info(`Browser: ${process.env.BROWSER || "chromium"}`);
 
