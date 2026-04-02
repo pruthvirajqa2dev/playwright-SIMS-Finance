@@ -530,14 +530,34 @@ export default abstract class BasePage {
         screen: string,
         expectedText: string
     ) {
-        await Promise.all([
-            this.expectElementToContainText(this.reportLocator, screen),
-            this.expectElementToContainText(this.reportLocator, expectedText),
-            this.expectElementToContainText(
-                this.reportLocator,
-                expectedTexts.PDFExt
-            )
-        ]);
+        if (process.env.TEST_ENV === "TRAINING") {
+            await Promise.all([
+                this.expectElementToContainText(
+                    this.secondReportLocator,
+                    screen
+                ),
+                this.expectElementToContainText(
+                    this.secondReportLocator,
+                    expectedText
+                ),
+                this.expectElementToContainText(
+                    this.secondReportLocator,
+                    expectedTexts.PDFExt
+                )
+            ]);
+        } else {
+            await Promise.all([
+                this.expectElementToContainText(this.reportLocator, screen),
+                this.expectElementToContainText(
+                    this.reportLocator,
+                    expectedText
+                ),
+                this.expectElementToContainText(
+                    this.reportLocator,
+                    expectedTexts.PDFExt
+                )
+            ]);
+        }
     }
     /**
      * This function is for checking if PDF is generated with extension on RSS570
