@@ -87,7 +87,7 @@ async function login(page: Page, testInfo: TestInfo) {
  * 
  */
 test.describe(
-    "Perf test big PO" + `${process.env.test_env}`.toUpperCase(),
+    "Perf test big PO" + `${process.env.TEST_ENV}`.toUpperCase(),
     () => {
         //Test case 1
         test("Perf test big PO", async ({ page }, testInfo) => {

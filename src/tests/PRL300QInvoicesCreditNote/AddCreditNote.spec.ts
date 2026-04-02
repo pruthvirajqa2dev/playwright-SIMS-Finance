@@ -61,7 +61,7 @@ async function login(page: Page, testInfo: TestInfo) {
  *
  *  */
 test.describe(
-    "Add Credit Note " + `${process.env.test_env}`.toUpperCase(),
+    "Add Credit Note " + `${process.env.TEST_ENV}`.toUpperCase(),
     () => {
         //Test case 1
         test("Add Credit Note ", async ({ page }, testInfo) => {

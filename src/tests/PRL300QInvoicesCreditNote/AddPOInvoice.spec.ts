@@ -50,7 +50,7 @@ async function login(page: Page, testInfo: TestInfo) {
  *This test suite is intended to ensure that the Purchase Order Invoices can be added correctly and that the system behaves as expected.
  *
  */
-test.describe("PO Invoice " + `${process.env.test_env}`.toUpperCase(), () => {
+test.describe("PO Invoice " + `${process.env.TEST_ENV}`.toUpperCase(), () => {
     //Test case 1
     test("PO Invoice ", async ({ page }, testInfo) => {
         test.info().annotations.push({

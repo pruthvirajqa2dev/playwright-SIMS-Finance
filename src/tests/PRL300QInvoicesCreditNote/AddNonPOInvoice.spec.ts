@@ -75,7 +75,7 @@ async function login(page: Page, testInfo: TestInfo) {
  * ```
  */
 test.describe(
-    "Non purchase PO Invoice " + `${process.env.test_env}`.toUpperCase(),
+    "Non purchase PO Invoice " + `${process.env.TEST_ENV}`.toUpperCase(),
     () => {
         //Test case 1
         test("Non purchase PO Invoice ", async ({ page }, testInfo) => {

@@ -88,11 +88,11 @@ async function login(
  *   - Help screen should be accessible and functional.
  *
  * @remarks
- * This test suite is designed to run in a specific environment defined by the `test_env` environment variable.
+ * This test suite is designed to run in a specific environment defined by the `TEST_ENV` environment variable.
  *  It includes various test cases that cover different functionalities of the application.
  *  Each test case is annotated with its purpose and expected behavior.
  * @example
- * To run this test suite, set the `test_env` environment variable to the desired environment (e.g., `test`, `uat`, `prod`) and execute the tests using Playwright.
+ * To run this test suite, set the `TEST_ENV` environment variable to the desired environment (e.g., `test`, `uat`, `prod`) and execute the tests using Playwright.
  * @see
  * For more information on how to run Playwright tests, refer to the [Playwright documentation](https://playwright.dev/docs/test-intro).
  * @author @pruthvirajqa2dev
@@ -167,7 +167,7 @@ export async function getTextCount(page: Page, text: string): Promise<number> {
     return count;
 }
 test.describe(
-    "Postchecks on environment:" + `${process.env.test_env}`.toUpperCase(),
+    "Postchecks on environment:" + `${process.env.TEST_ENV}`.toUpperCase(),
     () => {
         //Test case 1
         test("Login and Logout", async ({ page }, testInfo) => {

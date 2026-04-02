@@ -19,7 +19,7 @@ async function login(page: Page, testInfo: TestInfo) {
 
 test.describe(
     "@email Test Emails Postchecks on environment:" +
-        `${process.env.test_env}`.toUpperCase(),
+        `${process.env.TEST_ENV}`.toUpperCase(),
     () => {
         test.describe.configure({ mode: "serial" });
         //Test case 1

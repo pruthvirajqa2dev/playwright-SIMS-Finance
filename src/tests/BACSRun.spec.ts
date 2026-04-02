@@ -23,7 +23,7 @@ async function login(page: Page, testInfo: TestInfo) {
 
     return homepage;
 }
-test.describe("BACS Run " + `${process.env.test_env}`.toUpperCase(), () => {
+test.describe("BACS Run " + `${process.env.TEST_ENV}`.toUpperCase(), () => {
     //Test case 1
     test("BACS Payment Run", async ({ page }, testInfo) => {
         test.info().annotations.push({

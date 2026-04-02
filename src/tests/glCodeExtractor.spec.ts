@@ -18,10 +18,10 @@ async function login(page: Page, testInfo: TestInfo) {
 }
 
 test.describe(
-    "Extract gl code on environment:" + `${process.env.test_env}`.toUpperCase(),
+    "Extract gl code on environment:" + `${process.env.TEST_ENV}`.toUpperCase(),
     () => {
         test(
-            "Extract gl code on environment:" + `${process.env.test_env}`,
+            "Extract gl code on environment:" + `${process.env.TEST_ENV}`,
             async ({ page }, testInfo) => {
                 test.info().annotations.push({
                     type: "RSS310Q - Purchase Order",

@@ -22,7 +22,7 @@ async function login(page: Page, testInfo: TestInfo) {
     return homepage;
 }
 test.describe(
-    "Identify payment methods on " + `${process.env.test_env}`.toUpperCase(),
+    "Identify payment methods on " + `${process.env.TEST_ENV}`.toUpperCase(),
     () => {
         //Test case 1
         test.fixme("Identify payment methods", async ({ page }, testInfo) => {
