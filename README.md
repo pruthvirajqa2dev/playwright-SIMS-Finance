@@ -6,27 +6,27 @@ A robust end-to-end test automation framework for the **SIMS-Finance** applicati
 
 ## **Table of Contents**
 
--   [Features](#features)
--   [Prerequisites](#prerequisites)
--   [Setup Instructions](#setup-instructions)
--   [Running the Tests](#running-the-tests)
--   [Folder Structure](#folder-structure)
--   [Future Enhancements](#future-enhancements)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Setup Instructions](#setup-instructions)
+- [Running the Tests](#running-the-tests)
+- [Folder Structure](#folder-structure)
+- [Future Enhancements](#future-enhancements)
 
 ---
 
 ## **Features**
 
--   Built with Playwright for fast, reliable, and cross-browser testing.
--   Leveraging Page Object Model
--   Comprehensive configuration via `playwright.config.js`.
--   Modular and scalable structure, with support for adding new tests easily.
--   Environment support for running tests across multiple setups (e.g., dev, staging, production).
--   Headed and headless execution modes for efficient testing.
--   Potential integration with reporting tools like Allure.
--   **Linters for Code Quality**:
-    -   Integrated ESLint to ensure consistent and high-quality JavaScript/TypeScript code.
-    -   Configured Prettier for automated code formatting.
+- Built with Playwright for fast, reliable, and cross-browser testing.
+- Leveraging Page Object Model
+- Comprehensive configuration via `playwright.config.js`.
+- Modular and scalable structure, with support for adding new tests easily.
+- Environment support for running tests across multiple setups (e.g., dev, staging, production).
+- Headed and headless execution modes for efficient testing.
+- Potential integration with reporting tools like Allure.
+- **Linters for Code Quality**:
+    - Integrated ESLint to ensure consistent and high-quality JavaScript/TypeScript code.
+    - Configured Prettier for automated code formatting.
 
 ---
 
@@ -55,10 +55,10 @@ Before running the tests, ensure that the following are installed:
 npm install
 ```
 
-3. **Configure the environment**: 
+3. **Configure the environment**:
 
--   Update the playwright.config.js file with the appropriate baseURL for your application.
--   If environment variables are needed, create a .env file at the root of the project with the required key-value pairs.
+- Update the playwright.config.js file with the appropriate baseURL for your application.
+- If environment variables are needed, create a .env file at the root of the project with the required key-value pairs.
 
 ---
 
@@ -93,26 +93,65 @@ npx playwright show-report
 ## **Folder Structure**
 
 ```plaintext
-SIMS-Finance--pw-non-cucumber/
+playwright-SIMS-Finance/
 │
-├── playwright.yml          # yml configuration for github actions workflow jobs
-├── src/tests/              # Contains all test files
-│   ├── login.spec.ts       # Example test case
-│   ├── finance.spec.ts     # Finance module tests
-│
-├── src/pages/                  # Page Object Model (POM) files
-│   ├── LoginPage.ts       # Encapsulates login-related actions
-│   ├── FinancePage.ts      # Encapsulates finance-specific actions
-│
-├── src/utils/                  # Utilities for common functions
-│   ├── PDFUtils.ts         # Reusable methods for handling PDF content
-│   ├── FileUtils.ts        # Reusable methods for handling File operations
-│
-├── .prettierrc.json        # Prettier configuration
-├── playwright.config.ts    # Playwright configuration
-├── package.json            # Node.js dependencies and scripts
-├── .gitignore              # Ignored files and folders
-└── README.md               # Project documentation
+├── all-blob-reports/           # Aggregated blob reports (resources/)
+├── blob-report/                # Playwright blob reports
+├── existing-reports/           # Previous test reports
+├── logs/                       # Log files
+├── node_modules/               # Node.js dependencies
+├── PDFDownloads/               # Downloaded and extracted PDF files
+├── playwright-report/          # Playwright HTML reports (data/, index.html)
+├── src/                        # Main source code
+│   ├── config/                 # Environment configs (.env, env.ts, etc.)
+│   ├── data/                   # Test data (JSON, etc.)
+│   ├── logging/                # Logging utilities (logger.ts)
+│   ├── pages/                  # Page Object Model (POM) files
+│   │   ├── BasePage.ts
+│   │   ├── HomePage.ts
+│   │   ├── LoginPage.ts
+│   │   ├── CMS/
+│   │   ├── NML/
+│   │   ├── PRL/
+│   │   ├── RSS/
+│   │   ├── SPC/
+│   │   └── XQUERY/
+│   ├── tests/                  # Test specs and suites
+│   │   ├── BACSRun.spec.ts
+│   │   ├── glCodeExtractor.spec.ts
+│   │   ├── IdentifyPaymentMethods.spec.ts
+│   │   ├── Email-Tests/
+│   │   ├── Post-Deployment-Tests/
+│   │   ├── PRL300QInvoicesCreditNote/
+│   │   └── Purchase Order/
+│   └── utils/                  # Utilities and helpers
+│       ├── credentials.ts
+│       ├── encryptor.ts
+│       ├── excel/
+│       ├── GL Code Helper/
+│       ├── models/
+│       ├── parsers/
+│       ├── PDFUtils.ts
+│       ├── FileManager.ts
+│       ├── FileUtils.ts
+│       ├── GmailUtils.ts
+│       └── InvoiceCalc.ts
+├── Test Files/                 # Test input files (TXT, DOCX, etc.)
+├── test-results/               # Playwright test results
+├── test-results-history/       # Historical test results
+├── .github/                    # GitHub workflows and configs
+├── .gitignore                  # Git ignored files
+├── .prettierrc.json            # Prettier configuration
+├── index.html                  # Project landing page
+├── package.json                # Node.js project manifest
+├── package-lock.json           # NPM lock file
+├── playwright.config.ts        # Playwright configuration
+├── README.md                   # Project documentation
+├── requirements.md             # Project requirements
+├── sfdemosite-Extracted-GLCode.xlsx # Example data file
+├── tenant4-Extracted-GLCode.xlsx    # Example data file
+├── test-results.json           # Playwright test results (JSON)
+├── tsconfig.json               # TypeScript configuration
 ```
 
 ---
@@ -127,7 +166,7 @@ SIMS-Finance--pw-non-cucumber/
 
 Contributions are welcome! To contribute:
 
--   Fork this repository.
--   Create a new branch for your feature/bug fix.
--   Commit your changes with meaningful commit messages.
--   Submit a pull request with a description of the changes.
+- Fork this repository.
+- Create a new branch for your feature/bug fix.
+- Commit your changes with meaningful commit messages.
+- Submit a pull request with a description of the changes.

@@ -11,17 +11,44 @@ import XQuerySIMS_TB_SCHOOL from "../../pages/XQUERY/XQuerySIMS_TB_SCHOOL";
 import RSS310Q from "../../pages/RSS/RSS310Q";
 import SPC420 from "../../pages/SPC/SPC420";
 import { getCredentials } from "../../utils/credentials";
+import XQY200 from "../../pages/XQUERY/XQY200";
+import exp from "constants";
 
 const tenant = expectedTexts.demoSiteKey + expectedTexts.tenantNumber;
 const school = expectedTexts.schoolKey + expectedTexts.schoolNumber;
 const userRole = expectedTexts.userRoleKey;
 // Function to perform login
-async function login(page: Page, testInfo: TestInfo) {
+async function login(
+    page: Page,
+    testInfo: TestInfo,
+    tenant?: string,
+    school?: string,
+    userRole?: string
+) {
+    let homepage: HomePage = null as any;
     const loginPage = new LoginPage(page, testInfo);
-    const homepage: HomePage = await loginPage.login(
-        getCredentials(tenant, school, userRole),
-        testInfo
-    );
+    if (userRole === "ADMIN") {
+        homepage = await loginPage.login(
+            getCredentials(
+                tenant ||
+                    expectedTexts.demoSiteKey + expectedTexts.tenantNumber,
+                school || expectedTexts.schoolKey + expectedTexts.schoolNumber,
+                userRole || expectedTexts.userRoleKey
+            ),
+            testInfo
+        );
+    } else {
+        homepage = await loginPage.login(
+            getCredentials(
+                tenant ||
+                    expectedTexts.demoSiteKey + expectedTexts.tenantNumber,
+                school || expectedTexts.schoolKey + expectedTexts.schoolNumber,
+                userRole || expectedTexts.userRoleKey
+            ),
+            testInfo
+        );
+    }
+
     return homepage;
 }
 /**
@@ -72,6 +99,73 @@ async function login(page: Page, testInfo: TestInfo) {
  * @version 1.0.0
  * @since 2023-10-01
  */
+export interface TextMatchMeta {
+    index: number;
+    text: string | null;
+    tagName: string;
+    isVisible: boolean;
+    boundingBox: any;
+}
+
+export async function inspectTextMatches(
+    page: Page,
+    text: string,
+    screenshotName?: string
+): Promise<TextMatchMeta[]> {
+    const locator = page.locator(`text="${text}"`);
+    const count = await locator.count();
+
+    console.log(`Found ${count} match(es) for "${text}"`);
+
+    const results: TextMatchMeta[] = [];
+
+    for (let i = 0; i < count; i++) {
+        const element = locator.nth(i);
+
+        const textContent = await element.textContent();
+        const tagName = await element.evaluate((el) => el.tagName);
+        const isVisible = await element.isVisible();
+        const boundingBox = await element.boundingBox();
+
+        results.push({
+            index: i,
+            text: textContent,
+            tagName,
+            isVisible,
+            boundingBox
+        });
+
+        console.log(`--- Match ${i + 1} ---`);
+        console.log(`Text: ${textContent}`);
+        console.log(`Tag: ${tagName}`);
+        console.log(`Visible: ${isVisible}`);
+        console.log(`Position:`, boundingBox);
+
+        // Highlight element visually
+        await element.evaluate((el) => {
+            (el as HTMLElement).style.outline = "3px solid red";
+            (el as HTMLElement).style.backgroundColor = "yellow";
+        });
+    }
+
+    // Take screenshot after highlighting
+    if (screenshotName && count > 0) {
+        await page.screenshot({
+            path: `${screenshotName}.png`,
+            fullPage: true
+        });
+        console.log(`Screenshot saved as ${screenshotName}.png`);
+    }
+
+    return results;
+}
+export async function getTextCount(page: Page, text: string): Promise<number> {
+    await page.waitForLoadState("networkidle");
+    const locator = page.locator(`text=${text}`);
+    const count = await locator.count();
+    console.log(`Found ${count} occurrence(s) of "${text}".`);
+    return count;
+}
 test.describe(
     "Postchecks on environment:" + `${process.env.test_env}`.toUpperCase(),
     () => {
@@ -83,6 +177,14 @@ test.describe(
                     "This test is for performing login to SIMS Finance and then for user " +
                     ENV.USERID!
             });
+            //await getTextCount(page, "ESS");
+            await getTextCount(page, "Education Software Solutions Limited");
+            await inspectTextMatches(
+                page,
+                "Education Software Solutions Limited",
+                "BeforeLogin"
+            );
+            // await getTextCount(page, "Education Software Solutions Limited");
             //Login
             const homepage = await test.step(
                 `Login using ` +
@@ -110,6 +212,11 @@ test.describe(
                     path: filePath,
                     contentType: "image/png"
                 });
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "AfterLogin"
+                );
                 await homepage.expectPageElementsVisibilityOnLoad();
             });
             await test.step(`Click on profile and logout button`, async () => {
@@ -135,10 +242,21 @@ test.describe(
                 await page.screenshot({
                     path: homepage.screenshotPath + "/Dialog.png"
                 });
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeLogout"
+                );
                 await homepage.clickyesBtnLocator();
                 await page.screenshot({
                     path: homepage.screenshotPath + "/YesButton.png"
                 });
+                //await getTextCount(page, "ESS");
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeLogout"
+                );
                 await homepage.verifyURL(ENV.LOGOUT_URL!);
             });
         });
@@ -171,6 +289,12 @@ test.describe(
                 }
             );
             await test.step("Verify valid page elements are visible", async () => {
+                //await getTextCount(page, "ESS");
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "SPC420PageLoad"
+                );
                 await spc420.expectPageElementsVisibilityOnLoad();
             });
             const directory = "ADM - Administration";
@@ -178,9 +302,19 @@ test.describe(
             await test.step(
                 "Click on " + subDirectory + " in " + directory,
                 async () => {
+                    //await getTextCount(page, "ESS");
+                    await getTextCount(
+                        page,
+                        "Education Software Solutions Limited"
+                    );
                     await spc420.clickSubDirectoryInDirectory(
                         directory,
                         subDirectory
+                    );
+                    //await getTextCount(page, "ESS");
+                    await getTextCount(
+                        page,
+                        "Education Software Solutions Limited"
                     );
                     await spc420.verifySubDirectoryOpened(
                         directory,
@@ -192,14 +326,32 @@ test.describe(
                 await test.step("Upload the file", async () => {
                     var createdFileNameWithExt: string | null =
                         await spc420.uploadFile();
+                    //await getTextCount(page, "ESS");
+                    await inspectTextMatches(
+                        page,
+                        "Education Software Solutions Limited",
+                        "AfterFileUpload"
+                    );
                     await spc420.selectSchoolId(
                         expectedTexts.expectedSchoolName
+                    );
+                    //await getTextCount(page, "ESS");
+                    await inspectTextMatches(
+                        page,
+                        "Education Software Solutions Limited",
+                        "BeforeUpdate"
                     );
                     await spc420.clickButtonUsingRole("Update");
                     return createdFileNameWithExt;
                 });
             expect(createdFileNameWithExt).not.toBeNull();
             await test.step(`Delete the uploaded file ${createdFileNameWithExt!}`, async () => {
+                //await getTextCount(page, "ESS");
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeDelete"
+                );
                 await spc420.verifyUploadedFileDetailsOnTableRecord(
                     createdFileNameWithExt!
                 );
@@ -235,25 +387,50 @@ test.describe(
                 }
             );
             await test.step("Verify valid page elements are visible", async () => {
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "RSS570PageLoad"
+                );
                 await rss570.expectPageElementsVisibilityOnLoad();
             });
             await test.step("Enter school Id, sort option and check currency checkbox", async () => {
                 await rss570.selectSchoolId(expectedTexts.expectedSchoolName);
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeFillingForm"
+                );
                 await rss570.fillSupplierOrNominalSortInput(
                     expectedTexts.expectedSupplierOrNominalSortRSS570
                 );
                 await rss570.checkCurrencyCheckBox();
             });
             await test.step("Click on submit button", async () => {
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeSubmit"
+                );
                 await rss570.clickSubmitBtn();
             });
             await test.step("Submit job on job processing dialog and wait for green icon on Background processing dialog", async () => {
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeJobProcessing"
+                );
                 await rss570.checkIfDialogExistsWithTitle(
                     expectedTexts.expectedJobProcessingDialogTitle
                 );
                 await rss570.clickOkBtn();
             });
             await test.step("Wait for green icon on Background processing dialog", async () => {
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeBackgroundProcessing"
+                );
                 await rss570.checkIfDialogExistsWithTitle(
                     expectedTexts.expectedBackgroundProcessingDialogTitle
                 );
@@ -263,6 +440,11 @@ test.describe(
                 await rss570.verifyPDFGeneratedWithExtOnScreen(
                     expectedTexts.RSS570,
                     labels.outstandingAccrualsLbl
+                );
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "AfterPDFGeneration"
                 );
             });
             await test.step("Click on PDF report", async () => {
@@ -308,22 +490,42 @@ test.describe(
             const nml510 = await test.step(
                 "Go to the screen " + screen,
                 async () => {
+                    await inspectTextMatches(
+                        page,
+                        "Education Software Solutions Limited",
+                        "NML510PageLoad"
+                    );
                     await homepage.clickHamburgerMenuButton();
                     await homepage.goToScreenUsingRecentHistory(screen);
                     return new NML510(page, testInfo);
                 }
             );
             await test.step("Verify valid page elements are visible", async () => {
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "NML510PageLoad"
+                );
                 await nml510.expectPageElementsVisibilityOnLoad();
             });
             await test.step("Enter school Id and click submit", async () => {
                 await nml510.selectSchoolId(expectedTexts.expectedSchoolName);
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeSubmit"
+                );
                 await nml510.clickSubmitBtn();
             });
 
             await test.step("Submit job on job processing dialog and wait for green icon on Background processing dialog", async () => {
                 await nml510.checkIfDialogExistsWithTitle(
                     expectedTexts.expectedJobProcessingDialogTitle
+                );
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeJobProcessing"
                 );
                 await nml510.clickOkBtn();
             });
@@ -344,6 +546,11 @@ test.describe(
                 }
             );
             await test.step("Click on PDF report", async () => {
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "AfterPDFGeneration"
+                );
                 await nml510.waitForPdfIconLocator();
                 const downloadPromise = page.waitForEvent("download");
                 await nml510.clickSaveAllButton();
@@ -399,6 +606,11 @@ test.describe(
                 await simsTbSchool.selectSchoolId(
                     expectedTexts.expectedSchoolName
                 );
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeFillingForm"
+                );
                 await simsTbSchool.selectYearAndPeriod(
                     expectedTexts.expectedYear,
                     expectedTexts.expectedPeriod
@@ -408,6 +620,11 @@ test.describe(
                     page.waitForEvent("popup"), // Wait for the new tab to open
                     simsTbSchool.clickExecuteBtn() // Click the button that opens the new tab
                 ]);
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeReportGeneration"
+                );
                 await simsTbSchool.assertionsOnNewTab(newTab);
                 await simsTbSchool.clickCloseBtnOnNewTab(newTab);
             });
@@ -444,10 +661,20 @@ test.describe(
                 await rss310q.expectPageElementsVisibilityOnLoad();
             });
             await test.step("Fill up the form and click search", async () => {
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeFillingForm"
+                );
                 await rss310q.selectSchoolId(expectedTexts.expectedSchoolName);
                 await rss310q.clickSearchBtn();
             });
             await test.step("Click random view button and then verify breadcrumbs", async () => {
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeClickingRandomViewButton"
+                );
                 const random: [string[], number] =
                     await rss310q.clickRandomViewButton();
                 await rss310q.verifyBreadcrumbs(random);
@@ -458,6 +685,11 @@ test.describe(
                     return filename;
                 });
             await test.step(`Verify attachment details for ${uploadedFileName}`, async () => {
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeVerifyingAttachmentDetails"
+                );
                 await rss310q.verifyAttachmentDetails(uploadedFileName);
                 await rss310q.clickOkOnAttachementDetails();
                 await rss310q.verifyUploadedAttachmentsOnAttachmentsDialog(
@@ -491,6 +723,11 @@ test.describe(
                     homepage.clickHelpLink() // Click the button that opens the new tab
                 ]);
                 await newTab.waitForLoadState();
+                await inspectTextMatches(
+                    page,
+                    "Education Software Solutions Limited",
+                    "BeforeClickingHelpLink"
+                );
                 homepage.verifyPageURL(
                     newTab,
                     `${process.env.URL}` +
@@ -498,6 +735,56 @@ test.describe(
                         expectedTexts.tenant +
                         expectedTexts.expectedHelpUrl
                 );
+            });
+        });
+        test.skip("XQY200 - Xquery Builder ", async ({ page }, testInfo) => {
+            test.info().annotations.push({
+                type: "XQY200 - Xquery Builder",
+                description:
+                    "This test is for checking if Xquery Builder is working fine by executing SIMS_TB_SCHOOL XQuery and verifying the generated report"
+            });
+            // ENV.USERID = "sfdsadmind130";
+            // ENV.PASSWORD = "SIMSFinance2018#";
+            //Login
+            const homepage = await test.step(
+                `Login using ` +
+                    tenant +
+                    " " +
+                    school +
+                    ` and role ` +
+                    userRole,
+                async () => {
+                    return await login(
+                        page,
+                        testInfo,
+                        expectedTexts.tenantTraining,
+                        undefined,
+                        expectedTexts.userRoleKey
+                    );
+                }
+            );
+            const screen = expectedTexts.XQY200;
+            const xqy200 = await test.step(
+                "Go to the screen " + screen,
+                async () => {
+                    await homepage.clickHamburgerMenuButton();
+                    await homepage.goToScreenUsingRecentHistory(screen);
+                    return new XQY200(page, testInfo);
+                }
+            );
+            await test.step("Verify valid page elements are visible", async () => {
+                await xqy200.expectPageElementsVisibilityOnLoad();
+            });
+            await test.step("Go to data browser and open Custom SQL window", async () => {
+                await xqy200.clickButtonUsingRole("Data Browser");
+                await xqy200.clickButtonUsingRole("Custom SQL");
+            });
+            await test.step("Fill the textbox in Custom SQL and click Test", async () => {
+                await xqy200.enterToTextBoxUsingRole(
+                    "SQL",
+                    "Select count(*) from rssconsol_5ts0"
+                );
+                await xqy200.clickButtonUsingRole("Test");
             });
         });
     }

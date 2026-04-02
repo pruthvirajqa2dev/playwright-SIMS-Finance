@@ -9,6 +9,7 @@
     "RSS570": "RSS570",
     "NML510": "NML510",
     "RSS310Q": "RSS310Q",
+    "XQY200": "XQY200",
     "SIMS_PERIODS": "SIMS_PERIODS",
     "SIMS_TB_SCHOOL": "SIMS_TB_SCHOOL",
     "expectedSchoolName": "Green Abbey School",
@@ -73,8 +74,9 @@
     "glCodeExcelSheetNameRead": "2025-07-18",
     "glCodeExcelWorkBookNameWrite": "tenant4-Extracted-GLCode.xlsx",
     "demoSiteKey": "SFDEMOSITE",
-    "tenantNumber": "130",
-    "schoolKey": "SCHOOL",
-    "schoolNumber": "99",
-    "userRoleKey": "FINANCEDIRECTOR"
+    "tenantNumber": "076",
+    "schoolKey": "",
+    "schoolNumber": "",
+    "userRoleKey": "ADMIN",
+    "tenantTraining": "sfdemosite076"
 }

@@ -5,4 +5,5 @@ export default class env {
     public static SFDEMOSITE_PASSWORD = process.env.SFDEMOSITE_PASSWORD;
     public static LOGOUT_URL = process.env.LOGOUT_URL;
     public static ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
+    public static TEST_ENV = process.env.TEST_ENV;
 }

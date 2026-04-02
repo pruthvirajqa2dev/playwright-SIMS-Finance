@@ -454,6 +454,18 @@ export default abstract class BasePage {
             .click();
     }
     /**
+     * This function wraps the function to enter Text using role
+     * @param value
+     */
+    async enterToTextBoxUsingRole(name: string, value: string) {
+        await this.page
+            .getByRole("textbox", {
+                name: name,
+                exact: true
+            })
+            .fill(value);
+    }
+    /**
      * This function checks if the dialog with provided title exists on the page
      * @param title
      */

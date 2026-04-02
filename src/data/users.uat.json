@@ -36,6 +36,7 @@
         }
     },
     "SFDEMOSITE130": {
+        "ADMIN": "SFDSADMIND130",
         "SCHOOL01": {
             "ID": "000001",
             "NAME": "Green Abbey School",

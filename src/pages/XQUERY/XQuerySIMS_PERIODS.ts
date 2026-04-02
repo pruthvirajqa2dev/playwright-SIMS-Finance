@@ -102,18 +102,16 @@ export default class XQuerySIMS_TB_SCHOOL extends BasePage {
      * @param year
      * @param period
      */
-    async selectYearAndPeriod(year, period) {
+    async selectYearAndPeriod(year: string, period: string) {
         await this.selectOption(this.yearDropdownLocator, year);
         await this.selectOption(this.periodDropdownLocator, period);
     }
     /**
-     *
      */
     async clickExecuteBtn() {
         await this.click(this.executeBtnLocator);
     }
     /**
-     *
      */
     async expectTitleToBeVisible() {
         await this.expectElementToBeVisibleUsingLocator(
@@ -189,22 +187,22 @@ export default class XQuerySIMS_TB_SCHOOL extends BasePage {
         await this.expectElementToHaveAttributeWithValue(
             this.subjectInputLocator,
             "value",
-            new RegExp(expectedTexts.expectedYear)
+            new RegExp(expectedTexts.expectedYear).toString()
         );
         await this.expectElementToHaveAttributeWithValue(
             this.subjectInputLocator,
             "value",
-            new RegExp(expectedTexts.expectedPeriod)
+            new RegExp(expectedTexts.expectedPeriod).toString()
         );
         await this.expectElementToHaveAttributeWithValue(
             this.subjectInputLocator,
             "value",
-            new RegExp(expectedTexts.expectedSchoolID)
+            new RegExp(expectedTexts.expectedSchoolID).toString()
         );
         await this.expectElementToHaveAttributeWithValue(
             this.timeInputLocator,
             "value",
-            new RegExp(new Date().toLocaleDateString("en-GB"))
+            new RegExp(new Date().toLocaleDateString("en-GB")).toString()
         );
     }
 }

@@ -9,20 +9,21 @@ import logger from "./src/logging/logger";
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 const dotenv = require("dotenv");
-const defaultEnv = "uat";
-if (process.env.test_env) {
+dotenv.config({
+    path: `${__dirname}//src//config//.env`
+});
+// const defaultEnv = "uat";
+logger.info(`Test environment: ${process.env.TEST_ENV}`);
+
+if (process.env.TEST_ENV) {
     dotenv.config({
-        path: `${__dirname}//src//config//.env.${process.env.test_env}`,
+        path: `${__dirname}//src//config//.env.${process.env.TEST_ENV}`,
         override: true
     });
 } else {
-    dotenv.config({
-        path: `${__dirname}//src//config//.env.${defaultEnv}`,
-        override: true
-    });
-    process.env.test_env = defaultEnv;
+    process.env.TEST_ENV = "uat";
 }
-logger.info(`Test environment: ${process.env.test_env || "development"}`);
+logger.info(`Test environment: ${process.env.TEST_ENV || "development"}`);
 logger.info(`Browser: ${process.env.BROWSER || "chromium"}`);
 
 // if (!process.env.NODE_ENV) {
