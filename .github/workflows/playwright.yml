@@ -1,425 +1,274 @@
 name: Playwright Tests
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [Main]
+    workflow_dispatch:
+    push:
+        branches: [Main]
 
 env:
-  NODE_VERSION: 20
+    NODE_VERSION: 20
 
 jobs:
+    # =========================
+    # TEST EXECUTION
+    # =========================
+    playwright-test:
+        runs-on: ubuntu-latest
+        continue-on-error: true
 
-# =========================
-# TEST EXECUTION (SHARDED)
-# =========================
-  playwright-test:
-    runs-on: ubuntu-latest
-    continue-on-error: true
+        strategy:
+            fail-fast: false
+            matrix:
+                shardIndex: [1, 2]
+                shardTotal: [2]
 
-    strategy:
-      fail-fast: false
-      matrix:
-        shardIndex: [1, 2]
-        shardTotal: [2]
+        steps:
+            - uses: actions/checkout@v4
 
-    steps:
-      - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+            - uses: actions/cache@v3
+              with:
+                  path: ~/.npm
+                  key: npm-${{ hashFiles('package-lock.json') }}
 
-      # ✅ Cache npm
-      - uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
+            - uses: actions/cache@v3
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      # ✅ Cache Playwright browsers
-      - uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+            - run: npm ci
+            - run: npx playwright install --with-deps
 
-      - run: npm ci
-      - run: npx playwright install --with-deps
+            - name: Run Playwright tests
+              run: |
+                  set +e
+                  npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --retries=1
+                  echo $? > status.txt
 
-      # ✅ Retry enabled (Flakiness control)
-      - name: Run Playwright tests
-        run: |
-          set +e
-          npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --retries=1
-          echo $? > status.txt
+            - name: Rename results
+              run: |
+                  if [ -f test-results.json ]; then
+                    mv test-results.json test-results-${{ matrix.shardIndex }}.json
+                  fi
 
-      # Rename shard output
-      - name: Rename results
-        run: |
-          if [ -f test-results.json ]; then
-            mv test-results.json test-results-${{ matrix.shardIndex }}.json
-          fi
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: test-results-${{ matrix.shardIndex }}
+                  path: test-results-${{ matrix.shardIndex }}.json
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: test-results-${{ matrix.shardIndex }}
-          path: test-results-${{ matrix.shardIndex }}.json
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: blob-report-${{ matrix.shardIndex }}
+                  path: blob-report
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: blob-report-${{ matrix.shardIndex }}
-          path: blob-report
+    # =========================
+    # MERGE + DASHBOARD
+    # =========================
+    merge-reports:
+        needs: playwright-test
+        runs-on: ubuntu-latest
 
+        outputs:
+            executed: ${{ steps.metrics.outputs.executed }}
+            passed: ${{ steps.metrics.outputs.passed }}
+            failed: ${{ steps.metrics.outputs.failed }}
+            flaky: ${{ steps.metrics.outputs.flaky }}
+            status: ${{ steps.status.outputs.status }}
 
-# =========================
-# MERGE + DASHBOARD
-# =========================
-  merge-reports:
-    needs: playwright-test
-    runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-    outputs:
-      executed: ${{ steps.metrics.outputs.executed }}
-      passed: ${{ steps.metrics.outputs.passed }}
-      failed: ${{ steps.metrics.outputs.failed }}
-      flaky: ${{ steps.metrics.outputs.flaky }}
-      status: ${{ steps.status.outputs.status }}
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
 
-    steps:
-      - uses: actions/checkout@v4
+            - run: npm ci
+            - run: sudo apt-get install -y jq
 
-      - run: sudo apt-get install -y jq
+            - uses: actions/download-artifact@v4
+              with:
+                  path: results
+                  pattern: test-results-*
+                  merge-multiple: true
 
-      - uses: actions/download-artifact@v4
-        with:
-          path: results
-          pattern: test-results-*
-          merge-multiple: true
+            - uses: actions/download-artifact@v4
+              with:
+                  path: blobs
+                  pattern: blob-report-*
+                  merge-multiple: true
 
-      - uses: actions/download-artifact@v4
-        with:
-          path: blobs
-          pattern: blob-report-*
-          merge-multiple: true
+            - name: Merge Playwright HTML
+              run: npx playwright merge-reports --reporter html ./blobs
 
-      - name: Merge Playwright HTML
-        run: npx playwright merge-reports --reporter html ./blobs
+            # =========================
+            # METRICS
+            # =========================
+            - name: Extract Metrics
+              id: metrics
+              run: |
+                  if [ "$(ls -A results/*.json 2>/dev/null)" ]; then
+                    EXEC=$(jq '[.stats.expected + .stats.unexpected + .stats.flaky] | add' results/*.json)
+                    PASS=$(jq '[.stats.expected] | add' results/*.json)
+                    FAIL=$(jq '[.stats.unexpected] | add' results/*.json)
+                    FLAKY=$(jq '[.stats.flaky] | add' results/*.json)
+                  else
+                    EXEC=0
+                    PASS=0
+                    FAIL=0
+                    FLAKY=0
+                  fi
 
+                  echo "executed=$EXEC" >> $GITHUB_OUTPUT
+                  echo "passed=$PASS" >> $GITHUB_OUTPUT
+                  echo "failed=$FAIL" >> $GITHUB_OUTPUT
+                  echo "flaky=$FLAKY" >> $GITHUB_OUTPUT
 
-# =========================
-# METRICS EXTRACTION
-# =========================
-      - name: Extract Metrics
-        id: metrics
-        run: |
-          if [ "$(ls -A results/*.json 2>/dev/null)" ]; then
-            EXEC=$(jq '[.stats.expected + .stats.unexpected + .stats.flaky] | add' results/*.json)
-            PASS=$(jq '[.stats.expected] | add' results/*.json)
-            FAIL=$(jq '[.stats.unexpected] | add' results/*.json)
-            FLAKY=$(jq '[.stats.flaky] | add' results/*.json)
-          else
-            EXEC=0
-            PASS=0
-            FAIL=0
-            FLAKY=0
-          fi
+            # =========================
+            # FINAL STATUS
+            # =========================
+            - name: Determine Final Status
+              id: status
+              run: |
+                  if [ "${{ steps.metrics.outputs.failed }}" -gt 0 ]; then
+                    echo "status=Failed" >> $GITHUB_OUTPUT
+                  else
+                    echo "status=Passed" >> $GITHUB_OUTPUT
+                  fi
 
-          echo "executed=$EXEC" >> $GITHUB_OUTPUT
-          echo "passed=$PASS" >> $GITHUB_OUTPUT
-          echo "failed=$FAIL" >> $GITHUB_OUTPUT
-          echo "flaky=$FLAKY" >> $GITHUB_OUTPUT
+            # =========================
+            # TIMESTAMP
+            # =========================
+            - name: Generate Timestamp
+              id: ts
+              run: echo "TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
 
+            # =========================
+            # SAVE REPORT
+            # =========================
+            - name: Save report
+              run: |
+                  TIMESTAMP=${{ steps.ts.outputs.TIMESTAMP }}
+                  mkdir -p published-reports/$TIMESTAMP
 
-# =========================
-# FINAL STATUS LOGIC
-# =========================
-      - name: Determine Final Status
-        id: status
-        run: |
-          if [ "${{ steps.metrics.outputs.failed }}" -gt 0 ]; then
-            echo "status=Failed" >> $GITHUB_OUTPUT
-          else
-            echo "status=Passed" >> $GITHUB_OUTPUT
-          fi
+                  if [ -d playwright-report ]; then
+                    cp -r playwright-report/* published-reports/$TIMESTAMP
+                  fi
 
+                  if [ "$(ls -A results/*.json 2>/dev/null)" ]; then
+                    jq -s '.' results/*.json > published-reports/$TIMESTAMP/test-results.json
+                  fi
 
-# =========================
-# TIMESTAMP (CONSISTENT)
-# =========================
-      - name: Generate Timestamp
-        id: ts
-        run: echo "TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
+            # =========================
+            # GENERATE DASHBOARD (FIXED)
+            # =========================
+            - name: Generate Index
+              run: |
+                  mkdir -p published-reports
 
+                  CONSOLIDATED=$(cat test-results-history/consolidated.json 2>/dev/null || echo '{"runs":[]}')
 
-# =========================
-# EXECUTION TIME
-# =========================
-      - name: Compute Execution Time
-        run: |
-          MAX=$(jq '[.stats.duration] | max' results/*.json 2>/dev/null || echo 0)
-          echo $((MAX/1000)) > exec-sec.txt
+                  PASSED=${{ steps.metrics.outputs.passed }}
+                  FAILED=${{ steps.metrics.outputs.failed }}
+                  FLAKY=${{ steps.metrics.outputs.flaky }}
 
+                  INDEX_FILE="published-reports/index.html"
 
-# =========================
-# HISTORY MANAGEMENT (60 DAYS)
-# =========================
-      - name: Checkout gh-pages
-        run: |
-          git fetch origin
-          git checkout gh-pages || git checkout -b gh-pages
+                    cat > "$INDEX_FILE" <<'EOF'
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                    <meta charset="UTF-8">
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                            
+                    <style>
+                    body {font-family:'Segoe UI';background:#f3f4f6;color:#333;margin:0;}
+                    .header {background:white;padding:15px;border-left:3px solid #1e40af;font-size:20px;font-weight:600;}
+                    .cards {display:flex;gap:20px;margin:20px;}
+                    .card {background:white;padding:20px;border-radius:8px;border-top:4px solid #1e40af;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+                    .badge-pass {background:#dcfce7;padding:5px 10px;border-radius:12px;}
+                    .badge-fail {background:#fee2e2;padding:5px 10px;border-radius:12px;}
+                    </style>
+                    </head>
+                            
+                    <body>
+                            
+                    <div class="header">FMS Test Reporting</div>
+                            
+                    <div class="cards">
+                    <div class="card">Passed: __PASSED__</div>
+                    <div class="card">Failed: __FAILED__</div>
+                    <div class="card">Flaky: __FLAKY__</div>
+                    </div>
+                            
+                    <script>
+                    const data = __DATA__;
+                    let rows = [...data.runs].reverse();
+                            
+                    new Chart(document.createElement('canvas'),{
+                    type:'line',
+                    data:{
+                      labels:rows.map(r=>r.timestamp),
+                      datasets:[
+                        {label:'Passed',data:rows.map(r=>r.counts.passed),borderColor:'#16a34a',tension:0.3,pointRadius:2},
+                        {label:'Failed',data:rows.map(r=>r.counts.failed),borderColor:'#dc2626',tension:0.3,pointRadius:2}
+                      ]
+                    }
+                    });
+                    </script>
 
-      - name: Load history safely
-        run: |
-          mkdir -p test-results-history
-          if ! jq empty test-results-history/consolidated.json 2>/dev/null; then
-            echo '{"runs":[]}' > test-results-history/consolidated.json
-          fi
+                    </body>
+                    </html>
+                  EOF
+                  sed -i "s/__PASSED__/$PASSED/g" "$INDEX_FILE"
+                  sed -i "s/__FAILED__/$FAILED/g" "$INDEX_FILE"
+                  sed -i "s/__FLAKY__/$FLAKY/g" "$INDEX_FILE"
+                  sed -i "s|__DATA__|$CONSOLIDATED|g" "$INDEX_FILE"
 
-      - name: Update history safely
-        run: |
-          TIMESTAMP=${{ steps.ts.outputs.TIMESTAMP }}
-          EXEC_TIME=$(cat exec-sec.txt)
+            - name: Commit & Push
+              run: |
+                  git config user.name github-actions
+                  git config user.email actions@github.com
+                  git add .
+                  git commit -m "update dashboard" || true
+                  git push origin gh-pages
 
-          NEW=$(jq -n \
-            --arg ts "$TIMESTAMP" \
-            --argjson executed ${{ steps.metrics.outputs.executed }} \
-            --argjson passed ${{ steps.metrics.outputs.passed }} \
-            --argjson failed ${{ steps.metrics.outputs.failed }} \
-            --argjson flaky ${{ steps.metrics.outputs.flaky }} \
-            --argjson execTime $EXEC_TIME \
-            '{
-              timestamp:$ts,
-              counts:{
-                executed:$executed,
-                passed:$passed,
-                failed:$failed,
-                flaky:$flaky
-              },
-              executionTimeSec:$execTime
-            }')
+    # =========================
+    # NOTIFY
+    # =========================
+    notify:
+        needs: merge-reports
+        runs-on: ubuntu-latest
 
-          jq --argjson run "$NEW" '.runs += [$run]' test-results-history/consolidated.json > tmp.json
-          mv tmp.json test-results-history/consolidated.json
+        steps:
+            - name: Notify on Execution
+              if: always()
+              uses: dawidd6/action-send-mail@v4
+              with:
+                  server_address: smtp.gmail.com
+                  server_port: 465
+                  secure: true
+                  username: ${{ secrets.EMAIL_USERNAME }}
+                  password: ${{ secrets.EMAIL_PASSWORD }}
+                  subject: "SIMS Finance - Playwright Tests ${{ needs.merge-reports.outputs.status }}"
+                  body: |
+                      Hi,
 
-          jq --arg cutoff "$(date -d '60 days ago' +%Y-%m-%d)" \
-          '{runs: (.runs | map(select(.timestamp | split("_")[0] >= $cutoff)))}' \
-          test-results-history/consolidated.json > tmp.json
+                      🧪 The Playwright tests have ${{ needs.merge-reports.outputs.status }}
 
-          mv tmp.json test-results-history/consolidated.json
+                      📊 Summary:
+                      Executed: ${{ needs.merge-reports.outputs.executed }}
+                      Passed: ${{ needs.merge-reports.outputs.passed }}
+                      Failed: ${{ needs.merge-reports.outputs.failed }}
+                      Flaky: ${{ needs.merge-reports.outputs.flaky }}
 
+                      🕒 Dashboard:
+                      https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/
 
-# =========================
-# SAVE REPORT (AUDIT)
-# =========================
-      - name: Save report
-        run: |
-          TIMESTAMP=${{ steps.ts.outputs.TIMESTAMP }}
-          mkdir -p published-reports/$TIMESTAMP
-
-          if [ -d playwright-report ]; then
-            cp -r playwright-report/* published-reports/$TIMESTAMP
-          fi
-
-          if [ "$(ls -A results/*.json 2>/dev/null)" ]; then
-            jq -s '.' results/*.json > published-reports/$TIMESTAMP/test-results.json
-          fi
-
-
-# =========================
-# GENERATE FMS DASHBOARD
-# =========================
-      - name: Generate Index
-        run: |
-          mkdir -p published-reports
-          CONSOLIDATED=$(cat test-results-history/consolidated.json)
-
-          PASSED=${{ steps.metrics.outputs.passed }}
-          FAILED=${{ steps.metrics.outputs.failed }}
-          FLAKY=${{ steps.metrics.outputs.flaky }}
-
-          INDEX_FILE="published-reports/index.html"
-
-          cat <<EOF > $INDEX_FILE
-        <!DOCTYPE html>
-        <html>
-        <head>
-        <meta charset="UTF-8">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                      
-        <style>
-        body {font-family:'Segoe UI';background:#f3f4f6;color:#333;margin:0;}
-        .header {background:white;padding:15px;border-left:3px solid #1e40af;font-size:20px;font-weight:600;}
-        .cards {display:flex;gap:20px;margin:20px;}
-        .card {background:white;padding:20px;border-radius:8px;border-top:4px solid #1e40af;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-        table {width:90%;margin:auto;border-collapse:collapse;background:white;}
-        th,td {padding:10px;border:1px solid #ddd;}
-        th {cursor:pointer;background:#e5e7eb;}
-        .badge-pass {background:#dcfce7;padding:5px 10px;border-radius:12px;}
-        .badge-fail {background:#fee2e2;padding:5px 10px;border-radius:12px;}
-        .pagination {text-align:center;margin:20px;}
-        </style>
-        </head>
-                      
-        <body>
-                      
-        <div class="header">FMS Test Reporting</div>
-                      
-        <div class="cards">
-        <div class="card">Passed: $PASSED</div>
-        <div class="card">Failed: $FAILED</div>
-        <div class="card">Flaky: $FLAKY</div>
-        </div>
-                      
-        <div style="margin:20px;">
-        <input type="date" id="dateFilter">
-        <select id="statusFilter">
-        <option value="">All</option>
-        <option value="Passed">Passed</option>
-        <option value="Failed">Failed</option>
-        </select>
-        </div>
-                      
-        <table id="table">
-        <thead>
-        <tr>
-        <th>Date</th>
-        <th>Status</th>
-        <th>Report</th>
-        </tr>
-        </thead>
-        <tbody></tbody>
-        </table>
-                      
-        <div class="pagination">
-        <button onclick="prev()">Prev</button>
-        <button onclick="next()">Next</button>
-        </div>
-                      
-        <canvas id="trend"></canvas>
-                      
-        <script>
-        const data = $CONSOLIDATED;
-        let rows = [...data.runs].reverse();
-        let page = 1;
-        const perPage = 10;
-                      
-        function render(){
-         const tbody=document.querySelector("#table tbody");
-         tbody.innerHTML="";
-                      
-         const d=document.getElementById("dateFilter").value;
-         const s=document.getElementById("statusFilter").value;
-                      
-         let filtered = rows.filter(r=>{
-           let ok=true;
-           if(d) ok &= r.timestamp.startsWith(d);
-           if(s) ok &= ((r.counts.failed>0?"Failed":"Passed")===s);
-           return ok;
-         });
-                      
-         const start=(page-1)*perPage;
-         const slice=filtered.slice(start,start+perPage);
-                      
-         slice.forEach(r=>{
-           const status=r.counts.failed>0?"Failed":"Passed";
-           const badge=status==="Failed"?"badge-fail":"badge-pass";
-                      
-           const tr=document.createElement("tr");
-           tr.innerHTML=\`
-           <td>\${r.timestamp}</td>
-           <td><span class="\${badge}">\${status}</span></td>
-           <td><a href="./\${r.timestamp}/index.html">View</a></td>
-           \`;
-           tbody.appendChild(tr);
-         });
-        }
-                      
-        function next(){
-         if(page * perPage < rows.length){
-           page++;
-           render();
-         }
-        }
-        function prev(){
-         page=Math.max(1,page-1);
-         render();
-        }
-      
-        document.getElementById("dateFilter").onchange=render;
-        document.getElementById("statusFilter").onchange=render;
-      
-        render();
-      
-        new Chart(document.getElementById('trend'),{
-         type:'line',
-         data:{
-          labels:data.runs.map(r=>r.timestamp),
-          datasets:[
-            {label:'Passed',data:data.runs.map(r=>r.counts.passed),borderColor:'#16a34a',tension:0.3,pointRadius:2},
-            {label:'Failed',data:data.runs.map(r=>r.counts.failed),borderColor:'#dc2626',tension:0.3,pointRadius:2}
-          ]
-         }
-        });
-        </script>
-       
-        </body>
-        </html>
-        EOF
-
-      - name: Commit & Push
-        run: |
-          git config user.name github-actions
-          git config user.email actions@github.com
-          git add .
-          git commit -m "update dashboard" || true
-          git push origin gh-pages
-
-
-# =========================
-# DEPLOY
-# =========================
-  deploy:
-    needs: merge-reports
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    steps:
-      - uses: actions/deploy-pages@v4
-
-
-# =========================
-# NOTIFY (FINAL REQUIRED FORMAT)
-# =========================
-  notify:
-    needs: merge-reports
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Notify on Execution
-        uses: dawidd6/action-send-mail@v4
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          secure: true
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "SIMS Finance - Playwright Tests ${{ needs.merge-reports.outputs.status }}"
-          body: |
-            Hi,
-
-            🧪 The Playwright tests have ${{ needs.merge-reports.outputs.status }}
-
-            📊 Summary:
-            Executed: ${{ needs.merge-reports.outputs.executed }}
-            Passed: ${{ needs.merge-reports.outputs.passed }}
-            Failed: ${{ needs.merge-reports.outputs.failed }}
-            Flaky: ${{ needs.merge-reports.outputs.flaky }}
-
-            🕒 Dashboard:
-            https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/
-
-            Regards,
-            SIMS Finance QA Team
-          to: pruthviraj.pardeshi@parentpay.com
-          from: ${{ secrets.EMAIL_USERNAME }}
-          cc: princy.rajkumar@parentpay.com
+                      Regards,
+                      SIMS Finance QA Team
+                  to: pruthviraj.pardeshi@parentpay.com
+                  from: ${{ secrets.EMAIL_USERNAME }}
+                  cc: princy.rajkumar@parentpay.com
