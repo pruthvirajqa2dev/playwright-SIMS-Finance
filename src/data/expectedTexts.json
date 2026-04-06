@@ -36,7 +36,7 @@
     "expectedSearchCriteriaText": "Search Criteria",
     "expectedHeaderResultsText": "Header Results",
     "expectedOrderNumberText": "Order Number",
-    "tenant": "auth/esr.elogin/sfdemosite076",
+    "tenant": "sfdemosite130",
     "expectedHelpUrl": "/hlp000.xsp?topic_id=!ESR-HOMEPAGE&program_id=SIMSFINANCE&package_id=SIM",
     "expectedHeaderDetailsText": "Header Details",
     "newText": "New",
