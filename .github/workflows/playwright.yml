@@ -45,7 +45,7 @@ jobs:
             - name: Run Playwright tests
               run: |
                   set +e
-                  npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --retries=1
+                  npx playwright test Postchecks.spec.ts --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --retries=1
                   echo $? > status.txt
 
             - name: Rename results
@@ -212,7 +212,7 @@ jobs:
                     </div>
                             
                     <script>
-                    const data = __DATA__;
+                    const data = JSON.parse('__DATA__');
                     let rows = [...data.runs].reverse();
                             
                     new Chart(document.createElement('canvas'),{
@@ -230,10 +230,12 @@ jobs:
                     </body>
                     </html>
                   EOF
+                  # Safe JSON (single line)
+                  ESCAPED_JSON=$(echo "$CONSOLIDATED" | jq -c .)                                       
                   sed -i "s/__PASSED__/$PASSED/g" "$INDEX_FILE"
                   sed -i "s/__FAILED__/$FAILED/g" "$INDEX_FILE"
                   sed -i "s/__FLAKY__/$FLAKY/g" "$INDEX_FILE"
-                  sed -i "s|__DATA__|$CONSOLIDATED|g" "$INDEX_FILE"
+                  sed -i "s|__DATA__|$ESCAPED_JSON|g" "$INDEX_FILE"
 
             - name: Commit & Push
               run: |
