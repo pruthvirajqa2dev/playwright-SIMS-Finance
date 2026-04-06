@@ -109,18 +109,26 @@ jobs:
             - name: Extract Metrics
               id: metrics
               run: |
-                  if [ "$(ls -A results/*.json 2>/dev/null)" ]; then
-                    EXEC=$(jq '[.stats.expected + .stats.unexpected + .stats.flaky] | add' results/*.json)
-                    PASS=$(jq '[.stats.expected] | add' results/*.json)
-                    FAIL=$(jq '[.stats.unexpected] | add' results/*.json)
-                    FLAKY=$(jq '[.stats.flaky] | add' results/*.json)
+                  if ls results/*.json >/dev/null 2>&1; then
+                            
+                    EXEC=$(jq -s '[.[].stats.expected + .[].stats.unexpected + .[].stats.flaky] | add' results/*.json)
+                    PASS=$(jq -s '[.[].stats.expected] | add' results/*.json)
+                    FAIL=$(jq -s '[.[].stats.unexpected] | add' results/*.json)
+                    FLAKY=$(jq -s '[.[].stats.flaky] | add' results/*.json)
+                            
                   else
                     EXEC=0
                     PASS=0
                     FAIL=0
                     FLAKY=0
                   fi
-
+                            
+                  # 🔒 Ensure single-line safe values
+                  EXEC=$(echo "$EXEC" | tr -d '\n')
+                  PASS=$(echo "$PASS" | tr -d '\n')
+                  FAIL=$(echo "$FAIL" | tr -d '\n')
+                  FLAKY=$(echo "$FLAKY" | tr -d '\n')
+                            
                   echo "executed=$EXEC" >> $GITHUB_OUTPUT
                   echo "passed=$PASS" >> $GITHUB_OUTPUT
                   echo "failed=$FAIL" >> $GITHUB_OUTPUT
