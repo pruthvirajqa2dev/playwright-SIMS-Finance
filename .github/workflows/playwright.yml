@@ -8,6 +8,9 @@ on:
 env:
     NODE_VERSION: 20
 
+permissions:
+    contents: write
+
 jobs:
     # =========================
     # TEST EXECUTION
@@ -24,6 +27,9 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
+              with:
+                  persist-credentials: true
+                  fetch-depth: 0
 
             - uses: actions/setup-node@v4
               with:
