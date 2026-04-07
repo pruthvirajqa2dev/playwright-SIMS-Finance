@@ -243,7 +243,7 @@ jobs:
                   git config user.email actions@github.com
                   git add .
                   git commit -m "update dashboard" || true
-                  git push origin gh-pages
+                  git push origin HEAD:gh-pages
 
     # =========================
     # NOTIFY
