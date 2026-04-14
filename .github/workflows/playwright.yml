@@ -4,263 +4,843 @@ on:
     workflow_dispatch:
     push:
         branches: [Main]
-
-env:
-    NODE_VERSION: 20
-
-permissions:
-    contents: write
+    pull_request:
+        branches: [Main]
+    schedule:
+        - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
 
 jobs:
-    # =========================
-    # TEST EXECUTION
-    # =========================
     playwright-test:
-        runs-on: ubuntu-latest
+        name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }})
+        if: ${{ always() }}
+        timeout-minutes: 60
         continue-on-error: true
-
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pages: write
+            id-token: write
         strategy:
             fail-fast: false
             matrix:
+                project: [chromium]
                 shardIndex: [1, 2]
                 shardTotal: [2]
 
         steps:
             - uses: actions/checkout@v4
-              with:
-                  persist-credentials: true
-                  fetch-depth: 0
-
             - uses: actions/setup-node@v4
               with:
-                  node-version: ${{ env.NODE_VERSION }}
-
-            - uses: actions/cache@v3
-              with:
-                  path: ~/.npm
-                  key: npm-${{ hashFiles('package-lock.json') }}
-
-            - uses: actions/cache@v3
-              with:
-                  path: ~/.cache/ms-playwright
-                  key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-            - run: npm ci
-            - run: npx playwright install --with-deps
-
-            - name: Run Playwright tests
+                  node-version: lts/*
+            - name: Install dependencies
+              run: npm ci
+            - name: Install Playwright Browsers
+              run: npx playwright install --with-deps
+            - name: Run Playwright tests for shard ${{ matrix.shardIndex }}
+              id: run-tests
               run: |
                   set +e
-                  npx playwright test Postchecks.spec.ts --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --retries=1
-                  echo $? > status.txt
-
-            - name: Rename results
-              run: |
-                  if [ -f test-results.json ]; then
-                    mv test-results.json test-results-${{ matrix.shardIndex }}.json
-                  fi
-
-            - uses: actions/upload-artifact@v4
+                  npx playwright test PostChecksTests.spec.ts --grep-invert "@email" --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers=1;
+                  echo "STATUS_CODE=$?" >> $GITHUB_ENV
+                  #Rename the results file to include shard index
+                  mv test-results.json test-results-${{ matrix.shardIndex }}.json
+                  echo "Current directory:"
+                  pwd
+                  echo "Files in current directory:"
+                  ls -l
+            - name: Upload Test Results for Shard ${{ matrix.shardIndex }}
+              if: always()
+              uses: actions/upload-artifact@v4
               with:
                   name: test-results-${{ matrix.shardIndex }}
                   path: test-results-${{ matrix.shardIndex }}.json
+                  retention-days: 30
+            - name: Save Test Status for Shard ${{ matrix.shardIndex }}
+              if: always()
+              run: |
+                  if [ $STATUS_CODE -ne 0 ]; then
+                    echo "Failed" > shard-${{ matrix.shardIndex }}-status.txt
+                  else
+                    echo "Passed" > shard-${{ matrix.shardIndex }}-status.txt
+                  fi
+                  echo "Exit status: $?"
+              shell: bash
+            - name: Upload Shard Status
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: shard-${{ matrix.shardIndex }}-status
+                  path: shard-${{ matrix.shardIndex }}-status.txt
 
+            - uses: actions/cache@v3
+              if: always()
+              with:
+                  path: blob-report-${{ matrix.shardIndex }}
+                  key: playwright-blob-report-${{ matrix.shardIndex }}
             - uses: actions/upload-artifact@v4
+              if: always()
               with:
                   name: blob-report-${{ matrix.shardIndex }}
                   path: blob-report
+                  retention-days: 30
 
-    # =========================
-    # MERGE + DASHBOARD
-    # =========================
     merge-reports:
-        needs: playwright-test
+        name: Merging executed reports
+        needs: [playwright-test]
         runs-on: ubuntu-latest
-
-        outputs:
-            executed: ${{ steps.metrics.outputs.executed }}
-            passed: ${{ steps.metrics.outputs.passed }}
-            failed: ${{ steps.metrics.outputs.failed }}
-            flaky: ${{ steps.metrics.outputs.flaky }}
-            status: ${{ steps.status.outputs.status }}
+        permissions:
+            contents: write
+            pages: write
+            id-token: write
 
         steps:
             - uses: actions/checkout@v4
-
             - uses: actions/setup-node@v4
               with:
-                  node-version: ${{ env.NODE_VERSION }}
-
-            - run: npm ci
-            - run: sudo apt-get install -y jq
-
-            - uses: actions/download-artifact@v4
+                  node-version: lts/*
+            - name: Install dependencies
+              run: npm ci
+            #Download artifacts
+            - name: Download artifacts
+              uses: actions/download-artifact@v4
               with:
-                  path: results
+                  path: all-blob-reports
+                  pattern: blob-report-*
+                  merge-multiple: true
+            #Add these steps before the merge
+            - name: Install jq
+              run: sudo apt-get install -y jq
+
+            - name: Download Test Results from Shards
+              uses: actions/download-artifact@v4
+              with:
+                  path: test-results
                   pattern: test-results-*
                   merge-multiple: true
 
-            - uses: actions/download-artifact@v4
+            - name: List Downloaded Results
+              run: |
+                  echo "Contents of test-results directory:"
+                  ls -la test-results/
+                  echo "Full path of test results:"
+                  find test-results/ -name "*.json"
+            #Merge Playwright reports
+            - name: Merge Playwright reports
+              run: npx playwright merge-reports --reporter html ./all-blob-reports
+            #Configure Git User
+            - name: Configure Git User
+              run: |
+                  git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
+                  git config --global user.name "pruthvirajqa2dev"
+            #Pull from Main branch
+            - name: Pull from Main branch
+              run: |
+                  git fetch origin
+                  git checkout Main  #Checkout the existing Main branch
+                  git pull --rebase origin Main || echo "No changes to pull"
+            - name: Merge Test Results
+              run: |
+                  #Create a template for the merged file
+                  echo '{
+                    "config": null,
+                    "suites": [],
+                    "errors": [],
+                    "stats": {
+                      "startTime": null,
+                      "duration": 0,
+                      "expected": 0,
+                      "skipped": 0,
+                      "unexpected": 0,
+                      "flaky": 0
+                    }
+                  }' > merged-results.json
+                  # Merge the results using jq
+                  jq -s '
+                    reduce .[1:][] as $item (.[0];
+                      .suites += $item.suites |
+                      .errors += $item.errors |
+                      .stats.expected += $item.stats.expected |
+                      .stats.skipped += $item.stats.skipped |
+                      .stats.unexpected += $item.stats.unexpected |
+                      .stats.flaky += $item.stats.flaky |
+                      .stats.duration += $item.stats.duration |
+                      if .stats.startTime == null or ($item.stats.startTime < .stats.startTime) then
+                        .stats.startTime = $item.stats.startTime
+                      else . end |
+                      if .config == null then .config = $item.config else . end
+                    )
+                  ' merged-results.json test-results/test-results-*.json > test-results.json
+            #Parse Test Results and Set Variables
+            - name: Parse Test Results and Set Variables
+              run: node ./src/config/parse-json-report.js
+            #Use Environment Variables
+            - name: Use Environment Variables
+              run: |
+                  echo "Executed Tests: ${{ env.EXECUTED_TESTS }}"
+                  echo "Passed Tests: ${{ env.PASSED_TESTS }}"
+                  echo "Failed Tests: ${{ env.FAILED_TESTS }}"
+                  echo "Flaky Tests: ${{ env.FLAKY_TESTS }}"
+            #Stash untracked files
+            - name: Stash untracked files
+              run: |
+                  git stash push -m "Stashing untracked report files" --include-untracked
+            #Display JSON report (formatted)
+            - name: Display JSON report (formatted)
+              if: always()
+              run: |
+                  echo "Formatted JSON report:"
+                  echo "Current directory:"
+                  pwd
+                  echo "Files in current directory:"
+                  ls -l
+                  jq '.' test-results.json
+            #Pull from gh-pages branch
+            - name: Pull from gh-pages branch
+              run: |
+                  git fetch origin
+                  git checkout gh-pages  # Checkout the existing gh-pages branch
+                  git pull --rebase origin gh-pages || echo "No changes to pull"
+            #Save total execution time to file
+            - name: Generate Human-Readable Execution Time
+              run: |
+                  format_duration () {
+                    local total_seconds=$1
+                    local hours=$((total_seconds / 3600))
+                    local minutes=$(((total_seconds % 3600) / 60))
+                    local seconds=$((total_seconds % 60))
+                                      
+                    local output=""
+                                      
+                    if [ $hours -gt 0 ]; then
+                      output+="${hours} hr"
+                      [ $hours -gt 1 ] && output+="s"
+                    fi
+                                      
+                    if [ $minutes -gt 0 ]; then
+                      [ -n "$output" ] && output+=" "
+                      output+="${minutes} min"
+                      [ $minutes -gt 1 ] && output+="s"
+                    fi
+                                      
+                    if [ $seconds -gt 0 ] || [ -z "$output" ]; then
+                      [ -n "$output" ] && output+=" "
+                      output+="${seconds} sec"
+                      [ $seconds -gt 1 ] && output+="s"
+                    fi
+                                      
+                    echo "$output"
+                  }
+                                      
+                  if ls test-results/test-results-*.json >/dev/null 2>&1; then
+                    MAX_DURATION_MS=$(jq '[.stats.duration] | max' test-results/test-results-*.json)
+                                      
+                    if [ "$MAX_DURATION_MS" != "null" ] && [ "$MAX_DURATION_MS" -gt 0 ]; then
+                      TOTAL_SEC=$((MAX_DURATION_MS / 1000))
+                      HUMAN_TIME=$(format_duration $TOTAL_SEC)
+                      echo "$HUMAN_TIME" > execution-time.txt
+                    else
+                      echo "N/A" > execution-time.txt
+                    fi
+                  else
+                    echo "N/A" > execution-time.txt
+                  fi
+            - name: Debug execution-time generation
+              run: |
+                  echo "PWD:"
+                  pwd
+                  echo "Files:"
+                  ls -la
+                  echo "execution-time.txt:"
+                  cat execution-time.txt || echo "❌ execution-time.txt NOT FOUND"
+            - name: Add Current Report with Timestamp
+              run: |
+                  TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
+                  mkdir -p published-reports/$TIMESTAMP
+                  cp -r playwright-report/* published-reports/$TIMESTAMP
+                  # Copy execution time and test-results files if they exist
+                  if [ -f execution-time.txt ]; then
+                    cp execution-time.txt published-reports/$TIMESTAMP/
+                  fi
+                  if [ -f test-results.json ]; then
+                    cp test-results.json published-reports/$TIMESTAMP/
+                  fi
+                  echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+            - name: Download Shard Statuses
+              uses: actions/download-artifact@v4
               with:
-                  path: blobs
-                  pattern: blob-report-*
+                  path: all-shard-statuses
+                  pattern: shard-*-status
                   merge-multiple: true
 
-            - name: Merge Playwright HTML
-              run: npx playwright merge-reports --reporter html ./blobs
-
-            # =========================
-            # METRICS
-            # =========================
-            - name: Extract Metrics
-              id: metrics
+            - name: Aggregate Shard Statuses
+              id: aggregate-shard-status
               run: |
-                  if ls results/*.json >/dev/null 2>&1; then
-                            
-                    EXEC=$(jq -s '[.[].stats.expected + .[].stats.unexpected + .[].stats.flaky] | add' results/*.json)
-                    PASS=$(jq -s '[.[].stats.expected] | add' results/*.json)
-                    FAIL=$(jq -s '[.[].stats.unexpected] | add' results/*.json)
-                    FLAKY=$(jq -s '[.[].stats.flaky] | add' results/*.json)
-                            
-                  else
-                    EXEC=0
-                    PASS=0
-                    FAIL=0
-                    FLAKY=0
-                  fi
-                            
-                  # 🔒 Ensure single-line safe values
-                  EXEC=$(echo "$EXEC" | tr -d '\n')
-                  PASS=$(echo "$PASS" | tr -d '\n')
-                  FAIL=$(echo "$FAIL" | tr -d '\n')
-                  FLAKY=$(echo "$FLAKY" | tr -d '\n')
-                            
-                  echo "executed=$EXEC" >> $GITHUB_OUTPUT
-                  echo "passed=$PASS" >> $GITHUB_OUTPUT
-                  echo "failed=$FAIL" >> $GITHUB_OUTPUT
-                  echo "flaky=$FLAKY" >> $GITHUB_OUTPUT
-
-            # =========================
-            # FINAL STATUS
-            # =========================
-            - name: Determine Final Status
-              id: status
+                  FINAL_STATUS="Passed"
+                  for report in $(find all-shard-statuses -name "shard-*-status.txt"); do
+                    if grep -q "Failed" "$report"; then
+                      FINAL_STATUS="Failed"
+                      break
+                    fi
+                  done
+                  echo "Final test status: $FINAL_STATUS"
+                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
+                  echo "Test status from previous job: $FINAL_STATUS"
+                  echo "FINAL_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
+              shell: bash
+            - name: Update Index Page
               run: |
-                  if [ "${{ steps.metrics.outputs.failed }}" -gt 0 ]; then
-                    echo "status=Failed" >> $GITHUB_OUTPUT
-                  else
-                    echo "status=Passed" >> $GITHUB_OUTPUT
+                  git fetch origin
+                  git checkout Main  # Checkout the existing Main branch
+                  git pull --rebase origin Main || echo "No changes to pull"
+                  # Initialize consolidated.json if it doesn't exist
+                  if [ ! -f "test-results-history/consolidated.json" ]; then
+                      echo '{"runs":[]}' > test-results-history/consolidated.json
                   fi
-
-            # =========================
-            # TIMESTAMP
-            # =========================
-            - name: Generate Timestamp
-              id: ts
-              run: echo "TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
-
-            # =========================
-            # SAVE REPORT
-            # =========================
-            - name: Save report
-              run: |
-                  TIMESTAMP=${{ steps.ts.outputs.TIMESTAMP }}
-                  mkdir -p published-reports/$TIMESTAMP
-
-                  if [ -d playwright-report ]; then
-                    cp -r playwright-report/* published-reports/$TIMESTAMP
+                   # Create/update consolidated.json with the current run's data
+                  EXEC_TIME_SEC=0
+                  if [ -f "published-reports/$TIMESTAMP/execution-time.txt" ]; then
+                    RAW_TIME=$(cat "published-reports/$TIMESTAMP/execution-time.txt")
+                    EXEC_TIME_SEC=$(echo "$RAW_TIME" | awk '
+                      {
+                        for (i=1;i<=NF;i++) {
+                          if ($i ~ /hr/) h=$(i-1)
+                          if ($i ~ /min/) m=$(i-1)
+                          if ($i ~ /sec/) s=$(i-1)
+                        }
+                        print (h*3600 + m*60 + s)
+                      }
+                    ')
+                  fi                  
+                  CURRENT_RUN=$(cat <<EOF
+                  {
+                    "timestamp": "$TIMESTAMP",
+                    "counts": {
+                      "executed": $EXECUTED_TESTS,
+                      "passed": $PASSED_TESTS,
+                      "failed": $FAILED_TESTS,
+                      "flaky": $FLAKY_TESTS
+                    },
+                    "executionTimeSec": $EXEC_TIME_SEC
+                  }
+                  EOF
+                  )
+                  # Update consolidated history
+                  if [ ! -f "test-results-history/consolidated.json" ]; then
+                      mkdir -p test-results-history
+                      echo "{\"runs\":[]}" > test-results-history/consolidated.json
                   fi
-
-                  if [ "$(ls -A results/*.json 2>/dev/null)" ]; then
-                    jq -s '.' results/*.json > published-reports/$TIMESTAMP/test-results.json
+                  # Add new run data to consolidated.json
+                  jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+                  # Keep only last 30 days of data
+                  jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+                  # Commit the consolidated.json changes
+                  git add test-results-history/consolidated.json
+                  git commit -m "Update test history with run from $TIMESTAMP" || echo "No changes to commit"
+                  git push origin Main || echo "No changes to push"
+                  # Make consolidated history available for the HTML template
+                  CONSOLIDATED_HISTORY=$(cat test-results-history/consolidated.json)
+                  # Read consolidated history with error handling
+                  if ! CONSOLIDATED_HISTORY=$(jq '.' test-results-history/consolidated.json 2>/dev/null); then
+                      echo "Warning: Invalid JSON in consolidated.json, creating new one"
+                      CONSOLIDATED_HISTORY='{"runs":[]}'
+                      echo "$CONSOLIDATED_HISTORY" > test-results-history/consolidated.json
                   fi
-
-            # =========================
-            # GENERATE DASHBOARD (FIXED)
-            # =========================
-            - name: Generate Index
-              run: |
-                  mkdir -p published-reports
-
-                  CONSOLIDATED=$(cat test-results-history/consolidated.json 2>/dev/null || echo '{"runs":[]}')
-
-                  PASSED=${{ steps.metrics.outputs.passed }}
-                  FAILED=${{ steps.metrics.outputs.failed }}
-                  FLAKY=${{ steps.metrics.outputs.flaky }}
-
+                  git fetch origin
+                  git checkout gh-pages  # Checkout the existing gh-pages branch
+                  git pull --rebase origin gh-pages || echo "No changes to pull"
                   INDEX_FILE="published-reports/index.html"
-
-                    cat > "$INDEX_FILE" <<'EOF'
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                    <meta charset="UTF-8">
+                  TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
+                   echo "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>SIMS Finance Test Execution Reports</title>
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                            
                     <style>
-                    body {font-family:'Segoe UI';background:#f3f4f6;color:#333;margin:0;}
-                    .header {background:white;padding:15px;border-left:3px solid #1e40af;font-size:20px;font-weight:600;}
-                    .cards {display:flex;gap:20px;margin:20px;}
-                    .card {background:white;padding:20px;border-radius:8px;border-top:4px solid #1e40af;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-                    .badge-pass {background:#dcfce7;padding:5px 10px;border-radius:12px;}
-                    .badge-fail {background:#fee2e2;padding:5px 10px;border-radius:12px;}
+                      body {font-family:Arial, sans-serif; background-color:#f4f4f9; color:#333;}
+                      table {width:90%; margin:2em auto; border-collapse:collapse; background:white; box-shadow:0 2px 8px rgba(0, 0, 0, 0.1); }
+                      th, td { padding:12px; text-align:left; border:1px solid #ddd; }
+                      th { background-color:#4CAF50; color:white; cursor: pointer; }
+                      th:hover { background-color:#45a049; }
+                      tr:nth-child(even) { background-color:#f9f9f9; }
+                      tr:hover { background-color:#f1f1f1; }
+                      .failed { background-color:#ffe6e6 !important;}
+                      .passed { background-color:#d4f8d4 !important;}
+                      a {color:#4CAF50; text-decoration:none; }
+                      a:hover { text-decoration:underline; }
+                      .filters {
+                              margin-bottom: 20px;
+                              display: flex;
+                              gap: 10px;
+                          }
+                      .filters input, .filters select { 
+                        padding: 8px;
+                        margin: 0 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                      }
+                      .sort-icon::after {
+                        content: '↕';
+                        margin-left: 5px;
+                      }
+                      .sort-asc::after {
+                        content: '↑';
+                      }
+                      .sort-desc::after {
+                        content: '↓';
+                      }
+                     .dashboard-container {
+                          display: flex;
+                          gap: 20px;
+                          margin: 20px;
+                          flex-wrap: wrap;
+                      }
+                      .table-container {
+                              flex: 1;
+                              min-width: 600px;
+                      }
+                    .graph-container {
+                              flex: 1;
+                              min-width: 600px;
+                              background: white;
+                              padding: 20px;
+                              border-radius: 8px;
+                              box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                          }
+                    .graph-wrapper {
+                              height: 400px;
+                              position: relative;
+                          }
+                    .controls {
+                              margin-top: 10px;
+                              padding: 10px;
+                              background: #f8f9fa;
+                              border-radius: 4px;
+                          }
+                    @media (max-width: 1200px) {
+                              .dashboard-container {
+                                  flex-direction: column;
+                              }
+                    .table-container,
+                    .graph-container {
+                                  min-width: 100%;
+                              }
+                          }
+                    .pagination {
+                        display: flex;
+                        justify-content: center;
+                        margin: 20px 0;
+                    }
+                    .pagination button {
+                        padding: 10px 15px;
+                        margin: 0 5px;
+                        border: none;
+                        background-color: #4CAF50;
+                        color: white;
+                        cursor: pointer;
+                    }
+                    .pagination button.disabled {
+                        background-color: #ddd;
+                        cursor: not-allowed;
+                    }
                     </style>
                     </head>
-                            
                     <body>
-                            
-                    <div class="header">FMS Test Reporting</div>
-                            
-                    <div class="cards">
-                    <div class="card">Passed: __PASSED__</div>
-                    <div class="card">Failed: __FAILED__</div>
-                    <div class="card">Flaky: __FLAKY__</div>
-                    </div>
-                            
-                    <script>
-                    const data = JSON.parse('__DATA__');
-                    let rows = [...data.runs].reverse();
-                            
-                    new Chart(document.createElement('canvas'),{
-                    type:'line',
-                    data:{
-                      labels:rows.map(r=>r.timestamp),
-                      datasets:[
-                        {label:'Passed',data:rows.map(r=>r.counts.passed),borderColor:'#16a34a',tension:0.3,pointRadius:2},
-                        {label:'Failed',data:rows.map(r=>r.counts.failed),borderColor:'#dc2626',tension:0.3,pointRadius:2}
-                      ]
+                      <header>
+                        <h1>Playwright Reports</h1>
+                        <p>Explore the results of the test runs below.</p>
+                      </header>
+                      <div class='filters'>
+                        <input type='date' id='dateFilter' placeholder='Filter by date'>
+                        <select id='statusFilter'>
+                          <option value=''>All Statuses</option>
+                          <option value='Passed'>Passed</option>
+                          <option value='Failed'>Failed</option>
+                        </select>
+                      </div>
+                      <div class="dashboard-container">
+                        <div class="table-container">
+                          <table id='reportsTable'>
+                           <thead>
+                              <tr>
+                                <th data-sort='date' class='sort-icon'>Date</th>
+                                <th>Time</th>
+                                <th>Report Link</th>
+                                <th data-sort='status' class='sort-icon'>Status</th>
+                                <th>Execution Time</th>
+                             </tr>
+                          </thead>
+                          <tbody>" > $INDEX_FILE
+                  for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort -r); do
+                    TIMESTAMP=$(basename "$dir")
+                    if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
+                      # Only show row if report index.html exists
+                      if [ -f "published-reports/$TIMESTAMP/index.html" ]; then
+                        DATE_PART=$(echo $TIMESTAMP | cut -d'_' -f1)
+                        TIME_PART=$(echo $TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
+                        STATUS="Unknown"
+                        CSS_CLASS=""
+                        if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
+                          STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json")
+                          STATUS=$(echo "$STATUS" | xargs)
+                          if [ "$STATUS" = "Failed" ]; then
+                            CSS_CLASS="failed"
+                          fi
+                          if [ "$STATUS" = "Passed" ]; then
+                            CSS_CLASS="passed"
+                          fi
+                          echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
+                        fi
+                        LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
+                        # Try to get execution time from a file, fallback to N/A
+                        EXEC_TIME="N/A"
+                        if [ -f "published-reports/$TIMESTAMP/execution-time.txt" ]; then
+                          EXEC_TIME=$(cat "published-reports/$TIMESTAMP/execution-time.txt")
+                        fi
+                        echo "<tr data-date='$DATE_PART'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td><td>$EXEC_TIME</td></tr>" >> $INDEX_FILE
+                      fi
+                    fi
+                  done
+                  echo "</tbody></table>
+                    <div class='pagination'>
+                    <button id='prevPage' class='disabled'>Previous</button>
+                    <button id='nextPage'>Next</button>
+                  </div>
+                  </div>
+                  <div class="graph-container">
+                          <h2>Test Execution Trends</h2>
+                        <div class="graph-wrapper">
+                            <canvas id="trendsChart"></canvas>
+                        </div>
+                      <div class="controls">
+                            <label for="timeRange">Time Range:</label>
+                            <select id="timeRange">
+                                <option value="7">Last 7 days</option>
+                                <option value="14">Last 14 days</option>
+                                <option value="30">Last 30 days</option>
+                                <option value="all">All time</option>
+                            </select>
+                      </div>
+                  </div>
+                  <h2>Execution Time Trend</h2>
+                  <div class="graph-wrapper">
+                    <canvas id="executionTimeChart"></canvas>
+                  </div>
+                  </div>
+                  <footer><p>© $(date +'%Y') Playwright Test Reports. All rights reserved.</p></footer>
+                  <script>
+                    const testHistory = $CONSOLIDATED_HISTORY;
+                    //console.log("testHistory: "+ testHistory);
+                    document.addEventListener('DOMContentLoaded', function() {
+                      const table = document.getElementById('reportsTable');
+                      const dateFilter = document.getElementById('dateFilter');
+                      const statusFilter = document.getElementById('statusFilter');
+                      let sortDirection = {};
+                      
+                      const originalRows = Array.from(table.querySelectorAll('tbody tr'));
+                      let filteredRows = [...originalRows];
+                      
+                      // Pagination variables
+                      const rowsPerPage = 10;
+                      let currentPage = 1;
+                      const totalPages = () => Math.ceil(filteredRows.length / rowsPerPage);
+                      const prevPageButton = document.getElementById('prevPage');
+                      const nextPageButton = document.getElementById('nextPage');
+                      // Sorting function
+                      function sortTable(column) {
+                        const tbody = table.querySelector('tbody');
+                        const headers = table.querySelectorAll('th');
+                        // Reset other headers
+                        headers.forEach(header => {
+                          if (header.dataset.sort !== column) {
+                            header.className = 'sort-icon';
+                          }
+                        });
+                        // Toggle sort direction
+                        sortDirection[column] = !sortDirection[column];
+                        const currentHeader = Array.from(headers).find(h => h.dataset.sort === column);
+                        currentHeader.className = sortDirection[column] ? 'sort-asc' : 'sort-desc';
+                        filteredRows.sort((a, b) => {
+                          let aVal, bVal;
+                          if (column === 'date') {
+                            aVal = a.dataset.date;
+                            bVal = b.dataset.date;
+                          } else if (column === 'status') {
+                            aVal = a.cells[3].textContent;
+                            bVal = b.cells[3].textContent;
+                          }
+                          return sortDirection[column] ? 
+                            aVal.localeCompare(bVal) : 
+                            bVal.localeCompare(aVal);
+                        });
+                        tbody.innerHTML = '';
+                        filteredRows.forEach(row => tbody.appendChild(row));
+                        updatePagination();
+                      }
+                      // Filtering function
+                      function filterTable() {
+                        const rows = table.querySelectorAll('tbody tr');
+                        const dateValue = dateFilter.value;
+                        const statusValue = statusFilter.value;
+                            // Reset to original rows if no filters
+                        if (!dateValue && !statusValue) {
+                          filteredRows = [...originalRows];
+                        } else{
+                          filteredRows = originalRows.filter(row => {
+                          const rowDate = row.dataset.date;
+                          const rowStatus = row.cells[3].textContent.trim();
+                          const dateMatch = !dateValue || rowDate === dateValue;
+                          const statusMatch = !statusValue || rowStatus.includes(statusValue);
+                          return dateMatch && statusMatch;
+                        });
+                         }
+                        currentPage = 1; // Reset to first page when filtering
+                        updatePagination();
+                      }
+                      // Pagination functions
+                      function updatePagination() {
+                        const tbody = table.querySelector('tbody');
+                        tbody.innerHTML = ''; // Clear the table
+                        const start = (currentPage - 1) * rowsPerPage;
+                        const end = start + rowsPerPage;
+                        const paginatedRows = filteredRows.slice(start, end);
+                        paginatedRows.forEach(row => tbody.appendChild(row));
+                        prevPageButton.classList.toggle('disabled', currentPage === 1);
+                        nextPageButton.classList.toggle('disabled', currentPage === totalPages());
+                      }
+                      function goToPage(page) {
+                        if (page < 1 || page > totalPages()) return;
+                        currentPage = page;
+                        updatePagination();
+                      }
+                      prevPageButton.addEventListener('click', () => goToPage(currentPage - 1));
+                      nextPageButton.addEventListener('click', () => goToPage(currentPage + 1));
+                      // Add event listeners
+                      table.querySelectorAll('th[data-sort]').forEach(header => {
+                      const sortType = header.dataset.sort;
+                      if (sortType) {
+                        header.addEventListener('click', () => sortTable(sortType));  
+                      } else {
+                        console.warn(\"No data-sort attribute defined for this header.\");
+                      }
+                      });
+                      dateFilter.addEventListener('input', filterTable);
+                      statusFilter.addEventListener('change', filterTable);
+                      // Graph functionality
+                      const timeRangeSelect = document.getElementById('timeRange');
+                      let chart = null;
+                      function updateChart(days) {
+                          // Filter data based on selected time range
+                          const now = new Date();
+                          let filteredRuns = [...testHistory.runs];
+                          
+                          if (days !== 'all') {
+                              const daysAgo = new Date();
+                              daysAgo.setDate(now.getDate() - parseInt(days));
+                              
+                              filteredRuns = testHistory.runs.filter(run => {
+                                  const runDate = new Date(run.timestamp.split('_')[0]);
+                                  return runDate >= daysAgo;
+                              });
+                          }
+                          // Sort runs by date
+                          filteredRuns.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                          
+                          // Extract data for the chart
+                          const labels = testHistory.runs.map(run => run.timestamp.replace(/_/g, ' ')); // Dates
+                          const executedData = testHistory.runs.map(run => run.counts.executed);
+                          const passedData = testHistory.runs.map(run => run.counts.passed);
+                          const failedData = testHistory.runs.map(run => run.counts.failed);
+                          const flakyData = testHistory.runs.map(run => run.counts.flaky);
+                        
+                            if (chart) {
+                                  chart.destroy();
+                              }
+                          // Create the chart
+                          const ctx = document.getElementById('trendsChart').getContext('2d');
+                          new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                              labels: labels,
+                                  datasets: [
+                                            {
+                                              label: 'Executed',
+                                              data: executedData,
+                                              borderColor: '#007BFF', // Bright blue
+                                              backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                                              borderWidth: 2,
+                                              borderDash: [], // Solid line
+                                            },
+                                            {
+                                              label: 'Passed',
+                                              data: passedData,
+                                              borderColor: '#28A745', // Vibrant green
+                                              backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                                              borderWidth: 2,
+                                              borderDash: [5, 5], // Dashed line
+                                            },
+                                            {
+                                              label: 'Failed',
+                                              data: failedData,
+                                              borderColor: '#DC3545', // Bold red
+                                              backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                                              borderWidth: 2,
+                                              borderDash: [], // Solid line
+                                            },
+                                            {
+                                              label: 'Flaky',
+                                              data: flakyData,
+                                              borderColor: '#FFC107', // Bright yellow
+                                              backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                                              borderWidth: 2,
+                                              borderDash: [10, 5], // Dashed line
+                                            }
+                                          ]
+                            },
+                            options: {
+                              responsive: true,
+                              plugins: {
+                                legend: {
+                                  position: 'top',
+                                  labels: {
+                                    usePointStyle: true, // Show dots instead of boxes in the legend
+                                    font: {
+                                      size: 12
+                                    }
+                                  }
+                                }
+                              },
+                              scales: {
+                                x: {
+                                  title: {
+                                    display: true,
+                                    text: 'Date & Timestamp'
+                                  }
+                                },
+                                y: {
+                                  title: {
+                                    display: true,
+                                    text: 'Number of Tests'
+                                  }
+                                }
+                              }
+                                  }
+                          });
+                        }
+                      timeRangeSelect.addEventListener('change', function() {
+                              updateChart(this.value);
+                              updateExecutionTimeChart(this.value);
+                      });
+                      function updateExecutionTimeChart(days) {
+                      const now = new Date();
+                      let runs = [...testHistory.runs];
+                                                      
+                      if (days !== 'all') {
+                        const daysAgo = new Date();
+                        daysAgo.setDate(now.getDate() - parseInt(days));
+                        runs = runs.filter(run => {
+                          const runDate = new Date(run.timestamp.split('_')[0]);
+                          return runDate >= daysAgo;
+                        });
+                      }
+                                      
+                      runs.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                                      
+                      const labels = runs.map(run => run.timestamp.replace(/_/g, ' '));
+                      const execTimeMinutes = runs.map(run =>
+                        Math.round((run.executionTimeSec || 0) / 60)
+                      );
+                                      
+                      const ctx = document.getElementById('executionTimeChart').getContext('2d');
+                                      
+                      if (window.execChart) {
+                        window.execChart.destroy();
+                      }
+                                      
+                      window.execChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                          labels,
+                          datasets: [{
+                            label: 'Execution Time (mins)',
+                            data: execTimeMinutes,
+                            borderColor: '#6f42c1',
+                            backgroundColor: 'rgba(111, 66, 193, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                          }]
+                        },
+                        options: {
+                          responsive: true,
+                          scales: {
+                            y: {
+                              title: {
+                                display: true,
+                                text: 'Minutes'
+                              }
+                            },
+                            x: {
+                              title: {
+                                display: true,
+                                text: 'Run Timestamp'
+                              }
+                            }
+                          }
+                        }
+                      });
                     }
-                    });
-                    </script>
-
-                    </body>
-                    </html>
-                  EOF
-                  # Safe JSON (single line)
-                  ESCAPED_JSON=$(echo "$CONSOLIDATED" | jq -c .)                                       
-                  sed -i "s/__PASSED__/$PASSED/g" "$INDEX_FILE"
-                  sed -i "s/__FAILED__/$FAILED/g" "$INDEX_FILE"
-                  sed -i "s/__FLAKY__/$FLAKY/g" "$INDEX_FILE"
-                  sed -i "s|__DATA__|$ESCAPED_JSON|g" "$INDEX_FILE"
-
-            - name: Commit & Push
+                              
+                      // Initialize chart
+                        updateChart(timeRangeSelect.value);
+                        updateExecutionTimeChart(timeRangeSelect.value);
+                        filterTable();
+                      });
+                      </script>                          
+                  </body></html>" >> $INDEX_FILE
+            - name: Cleanup old published reports and history (keep 60 days)
               run: |
-                  git config user.name github-actions
-                  git config user.email actions@github.com
-                  git add .
-                  git commit -m "update dashboard" || true
-                  git push origin HEAD:gh-pages
-
-    # =========================
-    # NOTIFY
-    # =========================
-    notify:
-        needs: merge-reports
-        runs-on: ubuntu-latest
-
-        steps:
+                  # Remove published-reports older than 60 days
+                  find published-reports/ -maxdepth 1 -mindepth 1 -type d | while read dir; do
+                    DIRNAME=$(basename "$dir")
+                    # Extract date from directory name (format: YYYY-MM-DD_HH-MM-SS)
+                    DIRDATE=$(echo $DIRNAME | cut -d'_' -f1)
+                    if [[ $DIRDATE =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+                      REPORT_DATE=$(date -d "$DIRDATE" +%s)
+                      NOW_DATE=$(date +%s)
+                      AGE=$(( (NOW_DATE - REPORT_DATE) / 86400 ))
+                      if [ $AGE -gt 60 ]; then
+                        echo "Deleting old report: $dir (age: $AGE days)"
+                        rm -rf "$dir"
+                      fi
+                    fi
+                  done
+                  # Remove old runs from consolidated.json (history)
+                  if [ -f "test-results-history/consolidated.json" ]; then
+                    jq --arg cutoff "$(date -d '60 days ago' +%Y-%m-%d)" '
+                      { runs: (.runs | map(select(.timestamp | split("_")[0] >= $cutoff))) }
+                    ' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+                  fi 
+                  git commit -m "Cleanup: Remove reports and history older than 60 days" || echo "No old reports/history to remove"
+                  git push origin Main || echo "No changes to push"
+                  git push origin gh-pages || echo "No changes to push"
+            - name: Commit Current Report to GitHub Pages
+              run: |
+                  git add published-reports/$TIMESTAMP/
+                  git commit -m "Update Playwright reports with $TIMESTAMP"
+                  git push origin gh-pages
+            - name: Setup Pages
+              uses: actions/configure-pages@v2
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  name: github-pages
+                  path: published-reports/
+            - name: Set FINAL_STATUS from status.json
+              run: |
+                  STATUS=$(jq -r '.status' published-reports/$TIMESTAMP/status.json)
+                  echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
+            # - name: Wait for 7 minutes before sending email
+            #   run: sleep 420
             - name: Notify on Execution
-              if: always()
+              if: success()
               uses: dawidd6/action-send-mail@v4
               with:
                   server_address: smtp.gmail.com
@@ -268,23 +848,38 @@ jobs:
                   secure: true
                   username: ${{ secrets.EMAIL_USERNAME }}
                   password: ${{ secrets.EMAIL_PASSWORD }}
-                  subject: "SIMS Finance - Playwright Tests ${{ needs.merge-reports.outputs.status }}"
+                  subject: "SIMS Finance- GitHub Action: Playwright Tests ${{ env.FINAL_STATUS }}"
                   body: |
                       Hi,
-
-                      🧪 The Playwright tests have ${{ needs.merge-reports.outputs.status }}
-
-                      📊 Summary:
-                      Executed: ${{ needs.merge-reports.outputs.executed }}
-                      Passed: ${{ needs.merge-reports.outputs.passed }}
-                      Failed: ${{ needs.merge-reports.outputs.failed }}
-                      Flaky: ${{ needs.merge-reports.outputs.flaky }}
-
-                      🕒 Dashboard:
+                      Please find the automated SIMS Finance Playwright Tests Execution Status:
+                      🧪 The Playwright tests have ${{ env.FINAL_STATUS }}.
+                      🕒 Latest run was on ${{ env.TIMESTAMP }}.
+                      Please refer the link below to view the report and graphical representation here:
                       https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/
-
                       Regards,
                       SIMS Finance QA Team
                   to: pruthviraj.pardeshi@parentpay.com
                   from: ${{ secrets.EMAIL_USERNAME }}
                   cc: princy.rajkumar@parentpay.com
+    Deploy-to-GitHub-Pages:
+        # Add a dependency to the merge-reports job
+        needs: merge-reports
+
+        # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+        permissions:
+            pages: write # to deploy to Pages
+            id-token: write # to verify the deployment originates from an appropriate source
+
+        # Deploy to the github-pages environment
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+
+        # Specify runner + deployment step
+        runs-on: ubuntu-latest
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
+              with:
+                  artifact_name: github-pages
