@@ -74,9 +74,9 @@
     "glCodeExcelSheetNameRead": "2025-07-18",
     "glCodeExcelWorkBookNameWrite": "tenant4-Extracted-GLCode.xlsx",
     "demoSiteKey": "SFDEMOSITE",
-    "tenantNumber": "130",
-    "schoolKey": "SCHOOL",
-    "schoolNumber": "99",
-    "userRoleKey": "FINANCEDIRECTOR",
+    "tenantNumber": "076",
+    "schoolKey": "",
+    "schoolNumber": "",
+    "userRoleKey": "ADMIN",
     "tenantTraining": "sfdemosite130"
 }
