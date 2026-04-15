@@ -188,6 +188,7 @@ export default class RSS310Q extends BasePage {
     async verifyBreadcrumbs(random: [string[], number]) {
         const paddedString = random[0][random[1]].toString().padStart(9, "0");
         console.log("paddedString:" + paddedString.trim());
+        await this.page.waitForLoadState("networkidle");
         const breadcrumbs = await this.page
             .locator(this.breadcrumbLocator)
             .allTextContents();

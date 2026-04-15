@@ -160,7 +160,7 @@ export default class XQuerySIMS_TB_SCHOOL extends BasePage {
             expectedTexts.expectedSchoolID
         );
         await expect(newTabTitleElement).toContainText(
-            expectedTexts.expectedSchoolName
+            expectedTexts.expectedNameTBReport
         );
         await expect(newTabTitleElement).toContainText(
             expectedTexts.expectedPeriod
