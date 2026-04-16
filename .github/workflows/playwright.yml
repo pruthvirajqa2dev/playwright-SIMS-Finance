@@ -296,7 +296,7 @@ jobs:
                   if [ ! -f "test-results-history/consolidated.json" ]; then
                       echo '{"runs":[]}' > test-results-history/consolidated.json
                   fi
-                   # Create/update consolidated.json with the current run's data
+                  # Create/update consolidated.json with the current run's data
                   EXEC_TIME_SEC=0
                   if [ -f "published-reports/$TIMESTAMP/execution-time.txt" ]; then
                     RAW_TIME=$(cat "published-reports/$TIMESTAMP/execution-time.txt")
@@ -310,7 +310,7 @@ jobs:
                         print (h*3600 + m*60 + s)
                       }
                     ')
-                  fi                  
+                  fi
                   CURRENT_RUN=$(cat <<EOF
                   {
                     "timestamp": "$TIMESTAMP",
@@ -327,7 +327,7 @@ jobs:
                   # Update consolidated history
                   if [ ! -f "test-results-history/consolidated.json" ]; then
                       mkdir -p test-results-history
-                      echo "{\"runs\":[]}" > test-results-history/consolidated.json
+                      echo '{"runs":[]}' > test-results-history/consolidated.json
                   fi
                   # Add new run data to consolidated.json
                   jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
@@ -337,8 +337,6 @@ jobs:
                   git add test-results-history/consolidated.json
                   git commit -m "Update test history with run from $TIMESTAMP" || echo "No changes to commit"
                   git push origin Main || echo "No changes to push"
-                  # Make consolidated history available for the HTML template
-                  CONSOLIDATED_HISTORY=$(cat test-results-history/consolidated.json)
                   # Read consolidated history with error handling
                   if ! CONSOLIDATED_HISTORY=$(jq '.' test-results-history/consolidated.json 2>/dev/null); then
                       echo "Warning: Invalid JSON in consolidated.json, creating new one"
@@ -350,451 +348,309 @@ jobs:
                   git pull --rebase origin gh-pages || echo "No changes to pull"
                   INDEX_FILE="published-reports/index.html"
                   TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
-                   echo "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>
-                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                    <title>SIMS Finance Test Execution Reports</title>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                    <style>
-                      body {font-family:Arial, sans-serif; background-color:#f4f4f9; color:#333;}
-                      table {width:90%; margin:2em auto; border-collapse:collapse; background:white; box-shadow:0 2px 8px rgba(0, 0, 0, 0.1); }
-                      th, td { padding:12px; text-align:left; border:1px solid #ddd; }
-                      th { background-color:#4CAF50; color:white; cursor: pointer; }
-                      th:hover { background-color:#45a049; }
-                      tr:nth-child(even) { background-color:#f9f9f9; }
-                      tr:hover { background-color:#f1f1f1; }
-                      .failed { background-color:#ffe6e6 !important;}
-                      .passed { background-color:#d4f8d4 !important;}
-                      a {color:#4CAF50; text-decoration:none; }
-                      a:hover { text-decoration:underline; }
-                      .filters {
-                              margin-bottom: 20px;
-                              display: flex;
-                              gap: 10px;
-                          }
-                      .filters input, .filters select { 
-                        padding: 8px;
-                        margin: 0 10px;
-                        border: 1px solid #ddd;
-                        border-radius: 4px;
-                      }
-                      .sort-icon::after {
-                        content: '↕';
-                        margin-left: 5px;
-                      }
-                      .sort-asc::after {
-                        content: '↑';
-                      }
-                      .sort-desc::after {
-                        content: '↓';
-                      }
-                     .dashboard-container {
-                          display: flex;
-                          gap: 20px;
-                          margin: 20px;
-                          flex-wrap: wrap;
-                      }
-                      .table-container {
-                              flex: 1;
-                              min-width: 600px;
-                      }
-                    .graph-container {
-                              flex: 1;
-                              min-width: 600px;
-                              background: white;
-                              padding: 20px;
-                              border-radius: 8px;
-                              box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                          }
-                    .graph-wrapper {
-                              height: 400px;
-                              position: relative;
-                          }
-                    .controls {
-                              margin-top: 10px;
-                              padding: 10px;
-                              background: #f8f9fa;
-                              border-radius: 4px;
-                          }
-                    @media (max-width: 1200px) {
-                              .dashboard-container {
-                                  flex-direction: column;
-                              }
-                    .table-container,
-                    .graph-container {
-                                  min-width: 100%;
-                              }
-                          }
-                    .pagination {
-                        display: flex;
-                        justify-content: center;
-                        margin: 20px 0;
-                    }
-                    .pagination button {
-                        padding: 10px 15px;
-                        margin: 0 5px;
-                        border: none;
-                        background-color: #4CAF50;
-                        color: white;
-                        cursor: pointer;
-                    }
-                    .pagination button.disabled {
-                        background-color: #ddd;
-                        cursor: not-allowed;
-                    }
-                    </style>
-                    </head>
-                    <body>
-                      <header>
-                        <h1>Playwright Reports</h1>
-                        <p>Explore the results of the test runs below.</p>
-                      </header>
-                      <div class='filters'>
-                        <input type='date' id='dateFilter' placeholder='Filter by date'>
-                        <select id='statusFilter'>
-                          <option value=''>All Statuses</option>
-                          <option value='Passed'>Passed</option>
-                          <option value='Failed'>Failed</option>
-                        </select>
-                      </div>
-                      <div class="dashboard-container">
-                        <div class="table-container">
-                          <table id='reportsTable'>
-                           <thead>
-                              <tr>
-                                <th data-sort='date' class='sort-icon'>Date</th>
-                                <th>Time</th>
-                                <th>Report Link</th>
-                                <th data-sort='status' class='sort-icon'>Status</th>
-                                <th>Execution Time</th>
-                             </tr>
-                          </thead>
-                          <tbody>" > $INDEX_FILE
+                  # Build reportsData as a JSON array from directories
+                  ROWS_JSON="["
                   for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort -r); do
-                    TIMESTAMP=$(basename "$dir")
-                    if [[ $TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
-                      # Only show row if report index.html exists
-                      if [ -f "published-reports/$TIMESTAMP/index.html" ]; then
-                        DATE_PART=$(echo $TIMESTAMP | cut -d'_' -f1)
-                        TIME_PART=$(echo $TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
-                        STATUS="Unknown"
-                        CSS_CLASS=""
-                        if [ -f "published-reports/$TIMESTAMP/status.json" ]; then
-                          STATUS=$(jq -r '.status' "published-reports/$TIMESTAMP/status.json")
-                          STATUS=$(echo "$STATUS" | xargs)
-                          if [ "$STATUS" = "Failed" ]; then
-                            CSS_CLASS="failed"
-                          fi
-                          if [ "$STATUS" = "Passed" ]; then
-                            CSS_CLASS="passed"
-                          fi
-                          echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
+                    DIR_TIMESTAMP=$(basename "$dir")
+                    if [[ $DIR_TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
+                      if [ -f "published-reports/$DIR_TIMESTAMP/index.html" ]; then
+                        DATE_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f1)
+                        TIME_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
+                        ROW_STATUS="Unknown"
+                        if [ -f "published-reports/$DIR_TIMESTAMP/status.json" ]; then
+                          ROW_STATUS=$(jq -r '.status' "published-reports/$DIR_TIMESTAMP/status.json")
+                          ROW_STATUS=$(echo "$ROW_STATUS" | xargs)
+                          echo "FINAL_STATUS=$ROW_STATUS" >> $GITHUB_ENV
                         fi
-                        LINK="<a href='./$TIMESTAMP/index.html' target='_blank'>View Report</a>"
-                        # Try to get execution time from a file, fallback to N/A
                         EXEC_TIME="N/A"
-                        if [ -f "published-reports/$TIMESTAMP/execution-time.txt" ]; then
-                          EXEC_TIME=$(cat "published-reports/$TIMESTAMP/execution-time.txt")
+                        if [ -f "published-reports/$DIR_TIMESTAMP/execution-time.txt" ]; then
+                          EXEC_TIME=$(cat "published-reports/$DIR_TIMESTAMP/execution-time.txt")
                         fi
-                        echo "<tr data-date='$DATE_PART'><td>$DATE_PART</td><td>$TIME_PART</td><td>$LINK</td><td class='$CSS_CLASS'>$STATUS</td><td>$EXEC_TIME</td></tr>" >> $INDEX_FILE
+                        ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"execTime\":\"$EXEC_TIME\"},"
                       fi
                     fi
                   done
-                  echo "</tbody></table>
-                    <div class='pagination'>
-                    <button id='prevPage' class='disabled'>Previous</button>
-                    <button id='nextPage'>Next</button>
-                  </div>
-                  </div>
-                  <div class="graph-container">
-                          <h2>Test Execution Trends</h2>
-                        <div class="graph-wrapper">
-                            <canvas id="trendsChart"></canvas>
-                        </div>
-                      <div class="controls">
-                            <label for="timeRange">Time Range:</label>
-                            <select id="timeRange">
-                                <option value="7">Last 7 days</option>
-                                <option value="14">Last 14 days</option>
-                                <option value="30">Last 30 days</option>
-                                <option value="all">All time</option>
-                            </select>
-                      </div>
-                  </div>
-                  <h2>Execution Time Trend</h2>
-                  <div class="graph-wrapper">
-                    <canvas id="executionTimeChart"></canvas>
-                  </div>
-                  </div>
-                  <footer><p>© $(date +'%Y') Playwright Test Reports. All rights reserved.</p></footer>
-                  <script>
-                    const testHistory = $CONSOLIDATED_HISTORY;
-                    //console.log("testHistory: "+ testHistory);
-                    document.addEventListener('DOMContentLoaded', function() {
-                      const table = document.getElementById('reportsTable');
-                      const dateFilter = document.getElementById('dateFilter');
-                      const statusFilter = document.getElementById('statusFilter');
-                      let sortDirection = {};
-                      
-                      const originalRows = Array.from(table.querySelectorAll('tbody tr'));
-                      let filteredRows = [...originalRows];
-                      
-                      // Pagination variables
-                      const rowsPerPage = 10;
-                      let currentPage = 1;
-                      const totalPages = () => Math.ceil(filteredRows.length / rowsPerPage);
-                      const prevPageButton = document.getElementById('prevPage');
-                      const nextPageButton = document.getElementById('nextPage');
-                      // Sorting function
-                      function sortTable(column) {
-                        const tbody = table.querySelector('tbody');
-                        const headers = table.querySelectorAll('th');
-                        // Reset other headers
-                        headers.forEach(header => {
-                          if (header.dataset.sort !== column) {
-                            header.className = 'sort-icon';
-                          }
-                        });
-                        // Toggle sort direction
-                        sortDirection[column] = !sortDirection[column];
-                        const currentHeader = Array.from(headers).find(h => h.dataset.sort === column);
-                        currentHeader.className = sortDirection[column] ? 'sort-asc' : 'sort-desc';
-                        filteredRows.sort((a, b) => {
-                          let aVal, bVal;
-                          if (column === 'date') {
-                            aVal = a.dataset.date;
-                            bVal = b.dataset.date;
-                          } else if (column === 'status') {
-                            aVal = a.cells[3].textContent;
-                            bVal = b.cells[3].textContent;
-                          }
-                          return sortDirection[column] ? 
-                            aVal.localeCompare(bVal) : 
-                            bVal.localeCompare(aVal);
-                        });
-                        tbody.innerHTML = '';
-                        filteredRows.forEach(row => tbody.appendChild(row));
-                        updatePagination();
+                  ROWS_JSON+="]"
+                  # Write dynamic data to a temp file (node will read these)
+                  echo "$CONSOLIDATED_HISTORY" > /tmp/consolidated_data.json
+                  echo "$ROWS_JSON" > /tmp/rows_data.json
+                  # Write the static React-based HTML template
+                  cat > /tmp/index_template.html << 'HTMLEOF'
+                  <!DOCTYPE html>
+                  <html lang="en">
+                  <head>
+                    <meta charset="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <title>SIMS Finance Test Execution Reports</title>
+                    <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <style>
+                      *, *::before, *::after { box-sizing: border-box; }
+                      body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 0; }
+                      header { background: #4CAF50; color: white; padding: 20px 30px; }
+                      header h1 { margin: 0 0 6px; }
+                      header p { margin: 0; opacity: 0.9; }
+                      table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+                      th, td { padding: 12px; text-align: left; border: 1px solid #ddd; }
+                      th { background-color: #4CAF50; color: white; cursor: pointer; user-select: none; }
+                      th:hover { background-color: #45a049; }
+                      tr:nth-child(even) { background-color: #f9f9f9; }
+                      tr:hover { background-color: #f1f1f1; }
+                      .failed { background-color: #ffe6e6 !important; }
+                      .passed { background-color: #d4f8d4 !important; }
+                      a { color: #4CAF50; text-decoration: none; }
+                      a:hover { text-decoration: underline; }
+                      .filters { display: flex; gap: 10px; padding: 16px 20px; flex-wrap: wrap; align-items: center; }
+                      .filters input, .filters select { padding: 8px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+                      .sort-icon::after { content: '↕'; margin-left: 5px; }
+                      .sort-asc::after { content: '↑'; margin-left: 5px; }
+                      .sort-desc::after { content: '↓'; margin-left: 5px; }
+                      .dashboard-container { display: flex; gap: 20px; padding: 20px; flex-wrap: wrap; }
+                      .table-container { flex: 1; min-width: 600px; }
+                      .graph-container { flex: 1; min-width: 600px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+                      .graph-wrapper { height: 400px; position: relative; }
+                      .exec-time-section { padding: 0 20px 20px; }
+                      .controls { margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 4px; }
+                      .controls label { font-weight: bold; margin-right: 8px; }
+                      @media (max-width: 1200px) {
+                        .dashboard-container { flex-direction: column; }
+                        .table-container, .graph-container { min-width: 100%; }
                       }
-                      // Filtering function
-                      function filterTable() {
-                        const rows = table.querySelectorAll('tbody tr');
-                        const dateValue = dateFilter.value;
-                        const statusValue = statusFilter.value;
-                            // Reset to original rows if no filters
-                        if (!dateValue && !statusValue) {
-                          filteredRows = [...originalRows];
-                        } else{
-                          filteredRows = originalRows.filter(row => {
-                          const rowDate = row.dataset.date;
-                          const rowStatus = row.cells[3].textContent.trim();
-                          const dateMatch = !dateValue || rowDate === dateValue;
-                          const statusMatch = !statusValue || rowStatus.includes(statusValue);
-                          return dateMatch && statusMatch;
-                        });
-                         }
-                        currentPage = 1; // Reset to first page when filtering
-                        updatePagination();
-                      }
-                      // Pagination functions
-                      function updatePagination() {
-                        const tbody = table.querySelector('tbody');
-                        tbody.innerHTML = ''; // Clear the table
-                        const start = (currentPage - 1) * rowsPerPage;
-                        const end = start + rowsPerPage;
-                        const paginatedRows = filteredRows.slice(start, end);
-                        paginatedRows.forEach(row => tbody.appendChild(row));
-                        prevPageButton.classList.toggle('disabled', currentPage === 1);
-                        nextPageButton.classList.toggle('disabled', currentPage === totalPages());
-                      }
-                      function goToPage(page) {
-                        if (page < 1 || page > totalPages()) return;
-                        currentPage = page;
-                        updatePagination();
-                      }
-                      prevPageButton.addEventListener('click', () => goToPage(currentPage - 1));
-                      nextPageButton.addEventListener('click', () => goToPage(currentPage + 1));
-                      // Add event listeners
-                      table.querySelectorAll('th[data-sort]').forEach(header => {
-                      const sortType = header.dataset.sort;
-                      if (sortType) {
-                        header.addEventListener('click', () => sortTable(sortType));  
-                      } else {
-                        console.warn(\"No data-sort attribute defined for this header.\");
-                      }
-                      });
-                      dateFilter.addEventListener('input', filterTable);
-                      statusFilter.addEventListener('change', filterTable);
-                      // Graph functionality
-                      const timeRangeSelect = document.getElementById('timeRange');
-                      let chart = null;
-                      function updateChart(days) {
-                          // Filter data based on selected time range
-                          const now = new Date();
-                          let filteredRuns = [...testHistory.runs];
-                          
-                          if (days !== 'all') {
-                              const daysAgo = new Date();
-                              daysAgo.setDate(now.getDate() - parseInt(days));
-                              
-                              filteredRuns = testHistory.runs.filter(run => {
-                                  const runDate = new Date(run.timestamp.split('_')[0]);
-                                  return runDate >= daysAgo;
-                              });
-                          }
-                          // Sort runs by date
-                          filteredRuns.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                          
-                          // Extract data for the chart
-                          const labels = testHistory.runs.map(run => run.timestamp.replace(/_/g, ' ')); // Dates
-                          const executedData = testHistory.runs.map(run => run.counts.executed);
-                          const passedData = testHistory.runs.map(run => run.counts.passed);
-                          const failedData = testHistory.runs.map(run => run.counts.failed);
-                          const flakyData = testHistory.runs.map(run => run.counts.flaky);
-                        
-                            if (chart) {
-                                  chart.destroy();
-                              }
-                          // Create the chart
-                          const ctx = document.getElementById('trendsChart').getContext('2d');
-                          new Chart(ctx, {
+                      .pagination { display: flex; justify-content: center; gap: 8px; margin: 16px 0; }
+                      .pagination button { padding: 8px 16px; border: none; border-radius: 4px; background-color: #4CAF50; color: white; cursor: pointer; font-size: 14px; }
+                      .pagination button:disabled { background-color: #ccc; cursor: not-allowed; }
+                      footer { text-align: center; padding: 20px; color: #888; font-size: 13px; }
+                    </style>
+                  </head>
+                  <body>
+                    <div id="root"></div>
+                    <script id="app-data">
+                      window.__APP_DATA__ = {
+                        testHistory: __HISTORY_PLACEHOLDER__,
+                        reportsData: __ROWS_PLACEHOLDER__
+                      };
+                    </script>
+                    <script type="text/babel">
+                      const { useState, useEffect, useRef, useMemo } = React;
+                      const { testHistory, reportsData } = window.__APP_DATA__;
+                    
+                      function TrendsChart({ runs }) {
+                        const canvasRef = useRef(null);
+                        const chartRef = useRef(null);
+                        useEffect(() => {
+                          if (!canvasRef.current) return;
+                          if (chartRef.current) chartRef.current.destroy();
+                          chartRef.current = new Chart(canvasRef.current, {
                             type: 'line',
                             data: {
-                              labels: labels,
-                                  datasets: [
-                                            {
-                                              label: 'Executed',
-                                              data: executedData,
-                                              borderColor: '#007BFF', // Bright blue
-                                              backgroundColor: 'rgba(0, 123, 255, 0.2)',
-                                              borderWidth: 2,
-                                              borderDash: [], // Solid line
-                                            },
-                                            {
-                                              label: 'Passed',
-                                              data: passedData,
-                                              borderColor: '#28A745', // Vibrant green
-                                              backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                                              borderWidth: 2,
-                                              borderDash: [5, 5], // Dashed line
-                                            },
-                                            {
-                                              label: 'Failed',
-                                              data: failedData,
-                                              borderColor: '#DC3545', // Bold red
-                                              backgroundColor: 'rgba(220, 53, 69, 0.2)',
-                                              borderWidth: 2,
-                                              borderDash: [], // Solid line
-                                            },
-                                            {
-                                              label: 'Flaky',
-                                              data: flakyData,
-                                              borderColor: '#FFC107', // Bright yellow
-                                              backgroundColor: 'rgba(255, 193, 7, 0.2)',
-                                              borderWidth: 2,
-                                              borderDash: [10, 5], // Dashed line
-                                            }
-                                          ]
+                              labels: runs.map(r => r.timestamp.replace(/_/g, ' ')),
+                              datasets: [
+                                { label: 'Executed', data: runs.map(r => r.counts.executed), borderColor: '#007BFF', backgroundColor: 'rgba(0,123,255,0.2)', borderWidth: 2 },
+                                { label: 'Passed',   data: runs.map(r => r.counts.passed),   borderColor: '#28A745', backgroundColor: 'rgba(40,167,69,0.2)',  borderWidth: 2, borderDash: [5,5] },
+                                { label: 'Failed',   data: runs.map(r => r.counts.failed),   borderColor: '#DC3545', backgroundColor: 'rgba(220,53,69,0.2)',  borderWidth: 2 },
+                                { label: 'Flaky',    data: runs.map(r => r.counts.flaky),    borderColor: '#FFC107', backgroundColor: 'rgba(255,193,7,0.2)',  borderWidth: 2, borderDash: [10,5] }
+                              ]
                             },
                             options: {
                               responsive: true,
-                              plugins: {
-                                legend: {
-                                  position: 'top',
-                                  labels: {
-                                    usePointStyle: true, // Show dots instead of boxes in the legend
-                                    font: {
-                                      size: 12
-                                    }
-                                  }
-                                }
-                              },
+                              maintainAspectRatio: false,
+                              plugins: { legend: { position: 'top', labels: { usePointStyle: true } } },
                               scales: {
-                                x: {
-                                  title: {
-                                    display: true,
-                                    text: 'Date & Timestamp'
-                                  }
-                                },
-                                y: {
-                                  title: {
-                                    display: true,
-                                    text: 'Number of Tests'
-                                  }
-                                }
-                              }
-                                  }
-                          });
-                        }
-                      timeRangeSelect.addEventListener('change', function() {
-                              updateChart(this.value);
-                              updateExecutionTimeChart(this.value);
-                      });
-                      function updateExecutionTimeChart(days) {
-                      const now = new Date();
-                      let runs = [...testHistory.runs];
-                                                      
-                      if (days !== 'all') {
-                        const daysAgo = new Date();
-                        daysAgo.setDate(now.getDate() - parseInt(days));
-                        runs = runs.filter(run => {
-                          const runDate = new Date(run.timestamp.split('_')[0]);
-                          return runDate >= daysAgo;
-                        });
-                      }
-                                      
-                      runs.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                                      
-                      const labels = runs.map(run => run.timestamp.replace(/_/g, ' '));
-                      const execTimeMinutes = runs.map(run =>
-                        Math.round((run.executionTimeSec || 0) / 60)
-                      );
-                                      
-                      const ctx = document.getElementById('executionTimeChart').getContext('2d');
-                                      
-                      if (window.execChart) {
-                        window.execChart.destroy();
-                      }
-                                      
-                      window.execChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                          labels,
-                          datasets: [{
-                            label: 'Execution Time (mins)',
-                            data: execTimeMinutes,
-                            borderColor: '#6f42c1',
-                            backgroundColor: 'rgba(111, 66, 193, 0.2)',
-                            borderWidth: 2,
-                            tension: 0.3
-                          }]
-                        },
-                        options: {
-                          responsive: true,
-                          scales: {
-                            y: {
-                              title: {
-                                display: true,
-                                text: 'Minutes'
-                              }
-                            },
-                            x: {
-                              title: {
-                                display: true,
-                                text: 'Run Timestamp'
+                                x: { title: { display: true, text: 'Date & Timestamp' } },
+                                y: { title: { display: true, text: 'Number of Tests' } }
                               }
                             }
+                          });
+                          return () => { if (chartRef.current) chartRef.current.destroy(); };
+                        }, [runs]);
+                        return <canvas ref={canvasRef} />;
+                      }
+                    
+                      function ExecutionTimeChart({ runs }) {
+                        const canvasRef = useRef(null);
+                        const chartRef = useRef(null);
+                        useEffect(() => {
+                          if (!canvasRef.current) return;
+                          if (chartRef.current) chartRef.current.destroy();
+                          chartRef.current = new Chart(canvasRef.current, {
+                            type: 'line',
+                            data: {
+                              labels: runs.map(r => r.timestamp.replace(/_/g, ' ')),
+                              datasets: [{
+                                label: 'Execution Time (mins)',
+                                data: runs.map(r => Math.round((r.executionTimeSec || 0) / 60)),
+                                borderColor: '#6f42c1',
+                                backgroundColor: 'rgba(111,66,193,0.2)',
+                                borderWidth: 2,
+                                tension: 0.3
+                              }]
+                            },
+                            options: {
+                              responsive: true,
+                              maintainAspectRatio: false,
+                              scales: {
+                                y: { title: { display: true, text: 'Minutes' } },
+                                x: { title: { display: true, text: 'Run Timestamp' } }
+                              }
+                            }
+                          });
+                          return () => { if (chartRef.current) chartRef.current.destroy(); };
+                        }, [runs]);
+                        return <canvas ref={canvasRef} />;
+                      }
+                    
+                      function App() {
+                        const [dateFilter, setDateFilter]     = useState('');
+                        const [statusFilter, setStatusFilter] = useState('');
+                        const [sortCol, setSortCol]           = useState(null);
+                        const [sortDir, setSortDir]           = useState('asc');
+                        const [currentPage, setCurrentPage]   = useState(1);
+                        const [timeRange, setTimeRange]       = useState('7');
+                        const rowsPerPage = 10;
+                    
+                        const filtered = useMemo(() =>
+                          reportsData.filter(r => {
+                            const dateMatch   = !dateFilter   || r.date === dateFilter;
+                            const statusMatch = !statusFilter || r.status.includes(statusFilter);
+                            return dateMatch && statusMatch;
+                          }), [dateFilter, statusFilter]);
+                    
+                        const sorted = useMemo(() => {
+                          if (!sortCol) return filtered;
+                          return [...filtered].sort((a, b) => {
+                            const aVal = sortCol === 'date' ? a.date : a.status;
+                            const bVal = sortCol === 'date' ? b.date : b.status;
+                            return sortDir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+                          });
+                        }, [filtered, sortCol, sortDir]);
+                    
+                        const totalPages = Math.max(1, Math.ceil(sorted.length / rowsPerPage));
+                        const paginated  = sorted.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+                    
+                        function handleSort(col) {
+                          if (sortCol === col) {
+                            setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+                          } else {
+                            setSortCol(col);
+                            setSortDir('asc');
                           }
+                          setCurrentPage(1);
                         }
-                      });
-                    }
-                              
-                      // Initialize chart
-                        updateChart(timeRangeSelect.value);
-                        updateExecutionTimeChart(timeRangeSelect.value);
-                        filterTable();
-                      });
-                      </script>                          
-                  </body></html>" >> $INDEX_FILE
+                      
+                        const filteredRuns = useMemo(() => {
+                          const runs = [...(testHistory.runs || [])].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+                          if (timeRange === 'all') return runs;
+                          const cutoff = new Date();
+                          cutoff.setDate(cutoff.getDate() - parseInt(timeRange));
+                          return runs.filter(r => new Date(r.timestamp.split('_')[0]) >= cutoff);
+                        }, [timeRange]);
+                      
+                        function thClass(col) {
+                          if (sortCol !== col) return 'sort-icon';
+                          return sortDir === 'asc' ? 'sort-asc' : 'sort-desc';
+                        }
+                      
+                        return (
+                          <div>
+                            <header>
+                              <h1>SIMS Finance – Playwright Reports</h1>
+                              <p>Explore the results of the test runs below.</p>
+                            </header>
+                      
+                            <div className="filters">
+                              <input
+                                type="date"
+                                value={dateFilter}
+                                onChange={e => { setDateFilter(e.target.value); setCurrentPage(1); }}
+                                title="Filter by date"
+                              />
+                              <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}>
+                                <option value="">All Statuses</option>
+                                <option value="Passed">Passed</option>
+                                <option value="Failed">Failed</option>
+                              </select>
+                            </div>
+                      
+                            <div className="dashboard-container">
+                              <div className="table-container">
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th className={thClass('date')}   onClick={() => handleSort('date')}>Date</th>
+                                      <th>Time</th>
+                                      <th>Report Link</th>
+                                      <th className={thClass('status')} onClick={() => handleSort('status')}>Status</th>
+                                      <th>Execution Time</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {paginated.map((r, i) => (
+                                      <tr key={i} className={r.status === 'Failed' ? 'failed' : r.status === 'Passed' ? 'passed' : ''}>
+                                        <td>{r.date}</td>
+                                        <td>{r.time}</td>
+                                        <td><a href={r.link} target="_blank" rel="noreferrer">View Report</a></td>
+                                        <td>{r.status}</td>
+                                        <td>{r.execTime}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                                  
+                                <div className="pagination">
+                                  <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Previous</button>
+                                  <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage(p => p + 1)}>Next</button>
+                                </div>
+                              </div>
+                                  
+                              <div className="graph-container">
+                                <h2>Test Execution Trends</h2>
+                                <div className="graph-wrapper">
+                                  <TrendsChart runs={filteredRuns} />
+                                </div>
+                                <div className="controls">
+                                  <label>Time Range:</label>
+                                  <select value={timeRange} onChange={e => setTimeRange(e.target.value)}>
+                                    <option value="7">Last 7 days</option>
+                                    <option value="14">Last 14 days</option>
+                                    <option value="30">Last 30 days</option>
+                                    <option value="all">All time</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                                  
+                            <div className="exec-time-section">
+                              <h2>Execution Time Trend</h2>
+                              <div className="graph-wrapper">
+                                <ExecutionTimeChart runs={filteredRuns} />
+                              </div>
+                            </div>
+                                  
+                            <footer>
+                              <p>&copy; {new Date().getFullYear()} Playwright Test Reports. All rights reserved.</p>
+                            </footer>
+                          </div>
+                        );
+                      }
+                    
+                      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+                    </script>
+                  </body>
+                  </html>
+                  HTMLEOF
+                  # Inject the dynamic data into the template using Node.js
+                  node -e "
+                    const fs = require('fs');
+                    const template = fs.readFileSync('/tmp/index_template.html', 'utf8');
+                    const history  = fs.readFileSync('/tmp/consolidated_data.json', 'utf8').trim();
+                    const rows     = fs.readFileSync('/tmp/rows_data.json', 'utf8').trim();
+                    const result   = template
+                      .replace('__HISTORY_PLACEHOLDER__', history)
+                      .replace('__ROWS_PLACEHOLDER__', rows);
+                    fs.writeFileSync('$INDEX_FILE', result);
+                  "
             - name: Cleanup old published reports and history (keep 60 days)
               run: |
                   # Remove published-reports older than 60 days
