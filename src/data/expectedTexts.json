@@ -13,7 +13,7 @@
     "SIMS_PERIODS": "SIMS_PERIODS",
     "SIMS_TB_SCHOOL": "SIMS_TB_SCHOOL",
     "expectedSchoolName": "Green Abbey School",
-    "expectedNameTBReport": "The ESS Academy Trust",
+    "expectedNameTBReport": "Green Abbey School",
     "expectedSchoolID": "000001",
     "expectedSchoolIDDialogTitle": "School ID",
     "expectedSelectSchoolDialogTitle": "Select School",
@@ -75,9 +75,9 @@
     "glCodeExcelSheetNameRead": "2025-07-18",
     "glCodeExcelWorkBookNameWrite": "tenant4-Extracted-GLCode.xlsx",
     "demoSiteKey": "SFDEMOSITE",
-    "tenantNumber": "076",
-    "schoolKey": "",
-    "schoolNumber": "",
-    "userRoleKey": "ADMIN",
+    "tenantNumber": "130",
+    "schoolKey": "SCHOOL",
+    "schoolNumber": "99",
+    "userRoleKey": "FINANCEDIRECTOR",
     "tenantTraining": "sfdemosite130"
 }
