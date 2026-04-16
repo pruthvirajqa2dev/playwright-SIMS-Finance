@@ -232,9 +232,9 @@ jobs:
                   }
                                       
                   if ls test-results/test-results-*.json >/dev/null 2>&1; then
-                    MAX_DURATION_MS=$(jq '[.stats.duration] | max' test-results/test-results-*.json)
+                    MAX_DURATION_MS=$(jq -s '[.[].stats.duration] | max | floor' test-results/test-results-*.json)
                                       
-                    if [ "$MAX_DURATION_MS" != "null" ] && [ "$MAX_DURATION_MS" -gt 0 ]; then
+                    if [ "$MAX_DURATION_MS" != "null" ] && [ "$MAX_DURATION_MS" != "0" ] && [ "$MAX_DURATION_MS" -gt 0 ] 2>/dev/null; then
                       TOTAL_SEC=$((MAX_DURATION_MS / 1000))
                       HUMAN_TIME=$(format_duration $TOTAL_SEC)
                       echo "$HUMAN_TIME" > execution-time.txt
