@@ -737,55 +737,55 @@ test.describe(
                 );
             });
         });
-        test.fixme("XQY200 - Xquery Builder ", async ({ page }, testInfo) => {
-            test.info().annotations.push({
-                type: "XQY200 - Xquery Builder",
-                description:
-                    "This test is for checking if Xquery Builder is working fine by executing SIMS_TB_SCHOOL XQuery and verifying the generated report"
-            });
-            // ENV.USERID = "sfdsadmind130";
-            // ENV.PASSWORD = "SIMSFinance2018#";
-            //Login
-            const homepage = await test.step(
-                `Login using ` +
-                    tenant +
-                    " " +
-                    school +
-                    ` and role ` +
-                    userRole,
-                async () => {
-                    return await login(
-                        page,
-                        testInfo,
-                        expectedTexts.tenantTraining,
-                        undefined,
-                        expectedTexts.userRoleKey
-                    );
-                }
-            );
-            const screen = expectedTexts.XQY200;
-            const xqy200 = await test.step(
-                "Go to the screen " + screen,
-                async () => {
-                    await homepage.clickHamburgerMenuButton();
-                    await homepage.goToScreenUsingRecentHistory(screen);
-                    return new XQY200(page, testInfo);
-                }
-            );
-            await test.step("Verify valid page elements are visible", async () => {
-                await xqy200.expectPageElementsVisibilityOnLoad();
-            });
-            await test.step("Go to data browser and open Custom SQL window", async () => {
-                await xqy200.clickButtonUsingRole("Data Browser");
-                await xqy200.clickButtonUsingRole("Custom SQL");
-            });
-            await test.step("Fill the textbox in Custom SQL and click Test", async () => {
-                await xqy200.enterToTextBoxUsingRole(
-                    "SQL",
-                    "Select count(*) from rssconsol_5ts0"
-                );
-                await xqy200.clickButtonUsingRole("Test");
-            });
-        });
+        // test.fixme("XQY200 - Xquery Builder ", async ({ page }, testInfo) => {
+        //     test.info().annotations.push({
+        //         type: "XQY200 - Xquery Builder",
+        //         description:
+        //             "This test is for checking if Xquery Builder is working fine by executing SIMS_TB_SCHOOL XQuery and verifying the generated report"
+        //     });
+        //     // ENV.USERID = "sfdsadmind130";
+        //     // ENV.PASSWORD = "SIMSFinance2018#";
+        //     //Login
+        //     const homepage = await test.step(
+        //         `Login using ` +
+        //             tenant +
+        //             " " +
+        //             school +
+        //             ` and role ` +
+        //             userRole,
+        //         async () => {
+        //             return await login(
+        //                 page,
+        //                 testInfo,
+        //                 expectedTexts.tenantTraining,
+        //                 undefined,
+        //                 expectedTexts.userRoleKey
+        //             );
+        //         }
+        //     );
+        //     const screen = expectedTexts.XQY200;
+        //     const xqy200 = await test.step(
+        //         "Go to the screen " + screen,
+        //         async () => {
+        //             await homepage.clickHamburgerMenuButton();
+        //             await homepage.goToScreenUsingRecentHistory(screen);
+        //             return new XQY200(page, testInfo);
+        //         }
+        //     );
+        //     await test.step("Verify valid page elements are visible", async () => {
+        //         await xqy200.expectPageElementsVisibilityOnLoad();
+        //     });
+        //     await test.step("Go to data browser and open Custom SQL window", async () => {
+        //         await xqy200.clickButtonUsingRole("Data Browser");
+        //         await xqy200.clickButtonUsingRole("Custom SQL");
+        //     });
+        //     await test.step("Fill the textbox in Custom SQL and click Test", async () => {
+        //         await xqy200.enterToTextBoxUsingRole(
+        //             "SQL",
+        //             "Select count(*) from rssconsol_5ts0"
+        //         );
+        //         await xqy200.clickButtonUsingRole("Test");
+        //     });
+        // });
     }
 );
