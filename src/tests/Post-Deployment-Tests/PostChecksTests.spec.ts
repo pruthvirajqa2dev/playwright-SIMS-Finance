@@ -170,7 +170,7 @@ test.describe(
     "Postchecks on environment:" + `${process.env.TEST_ENV}`.toUpperCase(),
     () => {
         //Test case 1
-        test("Login and Logout", async ({ page }, testInfo) => {
+        test("Login and Logout @shard2", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "Login and Logout",
                 description:
@@ -261,7 +261,7 @@ test.describe(
             });
         });
         //Test case 2
-        test("File upload using SPC420", async ({ page }, testInfo) => {
+        test("File upload using SPC420 @shard2", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "File upload using SPC420",
                 description:
@@ -359,7 +359,7 @@ test.describe(
             });
         });
         //Test case 3
-        test("RSS570 - Crystal Report", async ({ page }, testInfo) => {
+        test("RSS570 - Crystal Report @shard1", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "RSS570 - Crystal Report",
                 description:
@@ -468,7 +468,7 @@ test.describe(
             });
         });
         //Test case 4
-        test("NML510 - Trial Balance Report", async ({ page }, testInfo) => {
+        test("NML510 - Trial Balance Report @shard1", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "NML510 - Trial Balance Report",
                 description:
@@ -570,7 +570,7 @@ test.describe(
             });
         });
         //Test case 5
-        test("SIMS_TB_SCHOOL - XQuery Report - Execute", async ({
+        test("SIMS_TB_SCHOOL - XQuery Report - Execute @shard2", async ({
             page
         }, testInfo) => {
             test.info().annotations.push({
@@ -630,7 +630,7 @@ test.describe(
             });
         });
         //Test case 6
-        test("RSS310Q - Attachments", async ({ page }, testInfo) => {
+        test("RSS310Q - Attachments @shard2", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "RSS310Q - Attachments",
                 description:
@@ -699,7 +699,7 @@ test.describe(
             });
         });
         //Test case 7
-        test("Help screen", async ({ page }, testInfo) => {
+        test("Help screen @shard2", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "Help screen",
                 description:
