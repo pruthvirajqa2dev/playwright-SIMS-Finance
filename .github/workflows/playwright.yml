@@ -29,6 +29,16 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
+
+            - name: Record workflow start time
+              run: |
+                  echo "$(date +%s)" > workflow-start-${{ matrix.shardIndex }}.txt
+            - name: Upload workflow start time
+              uses: actions/upload-artifact@v4
+              with:
+                  name: workflow-start-${{ matrix.shardIndex }}
+                  path: workflow-start-${{ matrix.shardIndex }}.txt
+
             - uses: actions/setup-node@v4
               with:
                   node-version: lts/*
@@ -127,6 +137,19 @@ jobs:
                   path: all-blob-reports
                   pattern: blob-report-*
                   merge-multiple: true
+
+            - name: Download workflow start times
+              uses: actions/download-artifact@v4
+              with:
+                  path: all-start-times
+                  pattern: workflow-start-*
+                  merge-multiple: true
+
+            - name: Resolve earliest workflow start time
+              run: |
+                  MIN_START=$(cat all-start-times/workflow-start-*.txt 2>/dev/null | sort -n | head -1)
+                  if [ -z "$MIN_START" ]; then MIN_START=$(date +%s); fi
+                  echo "WORKFLOW_START_EPOCH=$MIN_START" >> $GITHUB_ENV
             #Add these steps before the merge
             - name: Install jq
               run: sudo apt-get install -y jq
@@ -298,6 +321,24 @@ jobs:
                     echo "N/A"          > execution-time.txt
                     echo "[]"           > shard-times.json
                   fi
+            - name: Generate workflow total time
+              run: |
+                  format_duration () {
+                    local total_seconds=$1
+                    local hours=$((total_seconds / 3600))
+                    local minutes=$(((total_seconds % 3600) / 60))
+                    local seconds=$((total_seconds % 60))
+                    local output=""
+                    if [ $hours -gt 0 ]; then output+="${hours} hr"; [ $hours -gt 1 ] && output+="s"; fi
+                    if [ $minutes -gt 0 ]; then [ -n "$output" ] && output+=" "; output+="${minutes} min"; [ $minutes -gt 1 ] && output+="s"; fi
+                    if [ $seconds -gt 0 ] || [ -z "$output" ]; then [ -n "$output" ] && output+=" "; output+="${seconds} sec"; [ $seconds -gt 1 ] && output+="s"; fi
+                    echo "$output"
+                  }
+                  NOW=$(date +%s)
+                  ELAPSED=$((NOW - WORKFLOW_START_EPOCH))
+                  echo "$(format_duration $ELAPSED)" > workflow-time.txt
+                  echo "Workflow elapsed: $(cat workflow-time.txt)"
+
             - name: Debug execution-time generation
               run: |
                   echo "PWD:"
@@ -306,6 +347,8 @@ jobs:
                   ls -la
                   echo "execution-time.txt:"
                   cat execution-time.txt || echo "❌ execution-time.txt NOT FOUND"
+                  echo "workflow-time.txt:"
+                  cat workflow-time.txt || echo "❌ workflow-time.txt NOT FOUND"
             - name: Add Current Report with Timestamp
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
@@ -320,6 +363,9 @@ jobs:
                   fi
                   if [ -f test-results.json ]; then
                     cp test-results.json published-reports/$TIMESTAMP/
+                  fi
+                  if [ -f workflow-time.txt ]; then
+                    cp workflow-time.txt published-reports/$TIMESTAMP/
                   fi
                   echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
             - name: Download Shard Statuses
@@ -449,7 +495,12 @@ jobs:
                           SHARD_TIMES=$(cat "published-reports/$DIR_TIMESTAMP/shard-times.json")
                         fi
 
-                  ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"execTime\":\"$EXEC_TIME\",\"shardTimes\":$SHARD_TIMES},"
+                        WORKFLOW_TIME="N/A"
+                        if [ -f "published-reports/$DIR_TIMESTAMP/workflow-time.txt" ]; then
+                          WORKFLOW_TIME=$(cat "published-reports/$DIR_TIMESTAMP/workflow-time.txt")
+                        fi
+
+                  ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"execTime\":\"$EXEC_TIME\",\"workflowTime\":\"$WORKFLOW_TIME\",\"shardTimes\":$SHARD_TIMES},"
                       fi
                     fi
                   done

@@ -140,13 +140,14 @@ const template = /* html */`<!DOCTYPE html>
     // against bash xargs leaving stray whitespace on string values.
     // -----------------------------------------------------------------------
     const normalisedData = (Array.isArray(reportsData) ? reportsData : []).map(r => ({
-      date:        (r.date        || '').trim(),
-      time:        (r.time        || '').trim(),
-      link:        (r.link        || '#').trim(),
-      status:      (r.status      || 'Unknown').trim(),
-      environment: (r.environment || '').trim(),
-      execTime:    (r.execTime    || 'N/A').trim(),
-      shardTimes:  Array.isArray(r.shardTimes) ? r.shardTimes : [],
+      date:         (r.date         || '').trim(),
+      time:         (r.time         || '').trim(),
+      link:         (r.link         || '#').trim(),
+      status:       (r.status       || 'Unknown').trim(),
+      environment:  (r.environment  || '').trim(),
+      execTime:     (r.execTime     || 'N/A').trim(),
+      workflowTime: (r.workflowTime || 'N/A').trim(),
+      shardTimes:   Array.isArray(r.shardTimes) ? r.shardTimes : [],
     }));
 
     // -----------------------------------------------------------------------
@@ -234,25 +235,32 @@ const template = /* html */`<!DOCTYPE html>
               }
             </div>
 
-            {/* Wall-Clock Time */}
-            <div className="bg-white rounded-xl shadow-md p-5 flex flex-col gap-1">
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Wall-Clock Time</span>
-              <span className="text-3xl font-extrabold mt-1 text-violet-600">{latest.execTime || 'N/A'}</span>
-              {latest.shardTimes && latest.shardTimes.length > 0 && (
-                <div className="shard-tooltip mt-2 self-start">
-                  <span className="text-xs text-slate-400 underline decoration-dotted cursor-help">
-                    View shard details ▾
-                  </span>
-                  <div className="tooltip-box">
-                    {latest.shardTimes.map(s => (
-                      <div key={s.shard} className="flex gap-3 justify-between">
-                        <span className="font-semibold">Shard {s.shard}</span>
-                        <span>{s.label}</span>
-                      </div>
-                    ))}
-                  </div>
+            {/* Wall-Clock Times */}
+            <div className="bg-white rounded-xl shadow-md p-5 flex flex-col gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Execution Time</span>
+              <div className="flex flex-col gap-1 mt-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-xs text-slate-500 font-medium">🧪 Playwright</span>
+                  <span className="text-lg font-extrabold text-violet-600">{latest.execTime || 'N/A'}</span>
                 </div>
-              )}
+                {latest.shardTimes && latest.shardTimes.length > 0 && (
+                  <div className="shard-tooltip self-start ml-5 mb-1">
+                    <span className="text-xs text-slate-400 underline decoration-dotted cursor-help">shard details ▾</span>
+                    <div className="tooltip-box">
+                      {latest.shardTimes.map(s => (
+                        <div key={s.shard} className="flex gap-3 justify-between">
+                          <span className="font-semibold">Shard {s.shard}</span>
+                          <span>{s.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="flex items-baseline justify-between gap-2 border-t border-slate-100 pt-1">
+                  <span className="text-xs text-slate-500 font-medium">⚙️ Workflow</span>
+                  <span className="text-lg font-extrabold text-indigo-500">{latest.workflowTime || 'N/A'}</span>
+                </div>
+              </div>
             </div>
 
             {/* Environment */}
