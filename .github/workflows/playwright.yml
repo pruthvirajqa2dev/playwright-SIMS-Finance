@@ -34,8 +34,28 @@ jobs:
                   node-version: lts/*
             - name: Install dependencies
               run: npm ci
+
+            - name: Cache Playwright browsers
+              id: playwright-cache
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/ms-playwright
+                  # Key is derived from the lockfile hash: any Playwright version
+                  # bump in package-lock.json produces a new cache entry.
+                  # GitHub's cache service is centralised, so the cache is
+                  # available to every runner VM that matches the key.
+                  key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+                  restore-keys: |
+                      playwright-${{ runner.os }}-
+
             - name: Install Playwright Browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: npx playwright install --with-deps
+
+            - name: Install Playwright system dependencies (cache hit)
+              if: steps.playwright-cache.outputs.cache-hit == 'true'
+              run: npx playwright install-deps
+
             - name: Run Playwright tests for shard ${{ matrix.shardIndex }}
               id: run-tests
               run: |
@@ -110,6 +130,19 @@ jobs:
             #Add these steps before the merge
             - name: Install jq
               run: sudo apt-get install -y jq
+
+            - name: Load TEST_ENV from .env file
+              run: |
+                  # Read TEST_ENV from src/config/.env and export to GITHUB_ENV
+                  if [ -f src/config/.env ]; then
+                    TEST_ENV=$(grep '^TEST_ENV=' src/config/.env | cut -d'=' -f2 | tr -d '"' | xargs)
+                  fi
+                  if [ -z "$TEST_ENV" ]; then
+                    echo "Warning: TEST_ENV not found in src/config/.env, defaulting to Unknown"
+                    TEST_ENV="Unknown"
+                  fi
+                  echo "TEST_ENV=$TEST_ENV" >> $GITHUB_ENV
+                  echo "Resolved TEST_ENV: $TEST_ENV"
 
             - name: Download Test Results from Shards
               uses: actions/download-artifact@v4
@@ -203,46 +236,67 @@ jobs:
             #Save total execution time to file
             - name: Generate Human-Readable Execution Time
               run: |
+                  # -----------------------------------------------------------
+                  # format_duration <total_seconds>  →  "1 hr 2 mins 3 secs"
+                  # -----------------------------------------------------------
                   format_duration () {
                     local total_seconds=$1
                     local hours=$((total_seconds / 3600))
                     local minutes=$(((total_seconds % 3600) / 60))
                     local seconds=$((total_seconds % 60))
-                                      
                     local output=""
-                                      
                     if [ $hours -gt 0 ]; then
-                      output+="${hours} hr"
-                      [ $hours -gt 1 ] && output+="s"
+                      output+="${hours} hr"; [ $hours -gt 1 ] && output+="s"
                     fi
-                                      
                     if [ $minutes -gt 0 ]; then
                       [ -n "$output" ] && output+=" "
-                      output+="${minutes} min"
-                      [ $minutes -gt 1 ] && output+="s"
+                      output+="${minutes} min"; [ $minutes -gt 1 ] && output+="s"
                     fi
-                                      
                     if [ $seconds -gt 0 ] || [ -z "$output" ]; then
                       [ -n "$output" ] && output+=" "
-                      output+="${seconds} sec"
-                      [ $seconds -gt 1 ] && output+="s"
+                      output+="${seconds} sec"; [ $seconds -gt 1 ] && output+="s"
                     fi
-                                      
                     echo "$output"
                   }
-                                      
+
                   if ls test-results/test-results-*.json >/dev/null 2>&1; then
+                    # ----------------------------------------------------------
+                    # Wall-clock time = MAX across shards (they ran in parallel).
+                    # SUM would double-count parallel work and is misleading.
+                    # ----------------------------------------------------------
                     MAX_DURATION_MS=$(jq -s '[.[].stats.duration] | max | floor' test-results/test-results-*.json)
-                                      
+
                     if [ "$MAX_DURATION_MS" != "null" ] && [ "$MAX_DURATION_MS" != "0" ] && [ "$MAX_DURATION_MS" -gt 0 ] 2>/dev/null; then
                       TOTAL_SEC=$((MAX_DURATION_MS / 1000))
-                      HUMAN_TIME=$(format_duration $TOTAL_SEC)
-                      echo "$HUMAN_TIME" > execution-time.txt
+                      echo "$(format_duration $TOTAL_SEC)" > execution-time.txt
                     else
                       echo "N/A" > execution-time.txt
                     fi
+
+                    # ----------------------------------------------------------
+                    # Per-shard breakdown — useful for spotting imbalanced shards.
+                    # Stored as shard-times.json  →  [{"shard":1,"label":"X min"},...]
+                    # ----------------------------------------------------------
+                    SHARD_JSON="["
+                    FIRST=true
+                    for f in $(ls test-results/test-results-*.json | sort); do
+                      # Extract shard index from filename  (test-results-1.json → 1)
+                      SHARD_IDX=$(basename "$f" | grep -o '[0-9]*' | tail -1)
+                      SHARD_MS=$(jq '.stats.duration | floor' "$f")
+                      if [ "$SHARD_MS" != "null" ] && [ "$SHARD_MS" -gt 0 ] 2>/dev/null; then
+                        SHARD_SEC=$((SHARD_MS / 1000))
+                        SHARD_LABEL=$(format_duration $SHARD_SEC)
+                      else
+                        SHARD_LABEL="N/A"
+                      fi
+                      [ "$FIRST" = true ] && FIRST=false || SHARD_JSON+=","
+                      SHARD_JSON+="{\"shard\":$SHARD_IDX,\"label\":\"$SHARD_LABEL\"}"
+                    done
+                    SHARD_JSON+="]"
+                    echo "$SHARD_JSON" > shard-times.json
                   else
-                    echo "N/A" > execution-time.txt
+                    echo "N/A"          > execution-time.txt
+                    echo "[]"           > shard-times.json
                   fi
             - name: Debug execution-time generation
               run: |
@@ -260,6 +314,9 @@ jobs:
                   # Copy execution time and test-results files if they exist
                   if [ -f execution-time.txt ]; then
                     cp execution-time.txt published-reports/$TIMESTAMP/
+                  fi
+                  if [ -f shard-times.json ]; then
+                    cp shard-times.json published-reports/$TIMESTAMP/
                   fi
                   if [ -f test-results.json ]; then
                     cp test-results.json published-reports/$TIMESTAMP/
@@ -283,7 +340,7 @@ jobs:
                     fi
                   done
                   echo "Final test status: $FINAL_STATUS"
-                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\" }" > "published-reports/$TIMESTAMP/status.json"
+                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\", \"environment\": \"$TEST_ENV\" }" > "published-reports/$TIMESTAMP/status.json"
                   echo "Test status from previous job: $FINAL_STATUS"
                   echo "FINAL_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
               shell: bash
@@ -292,18 +349,27 @@ jobs:
                   git fetch origin
                   git checkout Main  # Checkout the existing Main branch
                   git pull --rebase origin Main || echo "No changes to pull"
+
+                  # ----------------------------------------------------------
+                  # Copy the dashboard generator before we switch branches
+                  # ----------------------------------------------------------
+                  mkdir -p /tmp/scripts
+                  cp scripts/generate-dashboard.js /tmp/scripts/generate-dashboard.js
+
                   # Initialize consolidated.json if it doesn't exist
                   if [ ! -f "test-results-history/consolidated.json" ]; then
+                      mkdir -p test-results-history
                       echo '{"runs":[]}' > test-results-history/consolidated.json
                   fi
-                  # Create/update consolidated.json with the current run's data
+
+                  # Parse execution time from human-readable format to seconds
                   EXEC_TIME_SEC=0
                   if [ -f "published-reports/$TIMESTAMP/execution-time.txt" ]; then
                     RAW_TIME=$(cat "published-reports/$TIMESTAMP/execution-time.txt")
                     EXEC_TIME_SEC=$(echo "$RAW_TIME" | awk '
                       {
                         for (i=1;i<=NF;i++) {
-                          if ($i ~ /hr/) h=$(i-1)
+                          if ($i ~ /hr/)  h=$(i-1)
                           if ($i ~ /min/) m=$(i-1)
                           if ($i ~ /sec/) s=$(i-1)
                         }
@@ -311,44 +377,52 @@ jobs:
                       }
                     ')
                   fi
+
+                  # Build the current run JSON object (includes environment)
                   CURRENT_RUN=$(cat <<EOF
                   {
                     "timestamp": "$TIMESTAMP",
+                    "environment": "$TEST_ENV",
                     "counts": {
                       "executed": $EXECUTED_TESTS,
-                      "passed": $PASSED_TESTS,
-                      "failed": $FAILED_TESTS,
-                      "flaky": $FLAKY_TESTS
+                      "passed":   $PASSED_TESTS,
+                      "failed":   $FAILED_TESTS,
+                      "flaky":    $FLAKY_TESTS
                     },
                     "executionTimeSec": $EXEC_TIME_SEC
                   }
                   EOF
                   )
-                  # Update consolidated history
-                  if [ ! -f "test-results-history/consolidated.json" ]; then
-                      mkdir -p test-results-history
-                      echo '{"runs":[]}' > test-results-history/consolidated.json
-                  fi
-                  # Add new run data to consolidated.json
-                  jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
-                  # Keep only last 30 days of data
-                  jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
-                  # Commit the consolidated.json changes
+
+                  # Append run and keep last 30 entries
+                  jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' \
+                    test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+                  jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' \
+                    test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+
+                  # Commit the consolidated.json changes to Main
                   git add test-results-history/consolidated.json
                   git commit -m "Update test history with run from $TIMESTAMP" || echo "No changes to commit"
                   git push origin Main || echo "No changes to push"
-                  # Read consolidated history with error handling
+
+                  # Snapshot consolidated history before switching branches
                   if ! CONSOLIDATED_HISTORY=$(jq '.' test-results-history/consolidated.json 2>/dev/null); then
-                      echo "Warning: Invalid JSON in consolidated.json, creating new one"
+                      echo "Warning: Invalid JSON in consolidated.json, using empty fallback"
                       CONSOLIDATED_HISTORY='{"runs":[]}'
-                      echo "$CONSOLIDATED_HISTORY" > test-results-history/consolidated.json
                   fi
+
+                  # ----------------------------------------------------------
+                  # Switch to gh-pages
+                  # ----------------------------------------------------------
                   git fetch origin
-                  git checkout gh-pages  # Checkout the existing gh-pages branch
+                  git checkout gh-pages
                   git pull --rebase origin gh-pages || echo "No changes to pull"
+
                   INDEX_FILE="published-reports/index.html"
                   TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
-                  # Build reportsData as a JSON array from directories
+
+                  # Build reportsData JSON array from published subdirectories
+                  # Each entry now includes an "environment" field read from status.json
                   ROWS_JSON="["
                   for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort -r); do
                     DIR_TIMESTAMP=$(basename "$dir")
@@ -356,301 +430,39 @@ jobs:
                       if [ -f "published-reports/$DIR_TIMESTAMP/index.html" ]; then
                         DATE_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f1)
                         TIME_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
+
                         ROW_STATUS="Unknown"
+                        ROW_ENV=""
                         if [ -f "published-reports/$DIR_TIMESTAMP/status.json" ]; then
-                          ROW_STATUS=$(jq -r '.status' "published-reports/$DIR_TIMESTAMP/status.json")
-                          ROW_STATUS=$(echo "$ROW_STATUS" | xargs)
+                          ROW_STATUS=$(jq -r '.status'      "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                          ROW_ENV=$(jq    -r '.environment // ""' "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
                           echo "FINAL_STATUS=$ROW_STATUS" >> $GITHUB_ENV
                         fi
+
                         EXEC_TIME="N/A"
                         if [ -f "published-reports/$DIR_TIMESTAMP/execution-time.txt" ]; then
                           EXEC_TIME=$(cat "published-reports/$DIR_TIMESTAMP/execution-time.txt")
                         fi
-                        ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"execTime\":\"$EXEC_TIME\"},"
+
+                        SHARD_TIMES="[]"
+                        if [ -f "published-reports/$DIR_TIMESTAMP/shard-times.json" ]; then
+                          SHARD_TIMES=$(cat "published-reports/$DIR_TIMESTAMP/shard-times.json")
+                        fi
+
+                        ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"execTime\":\"$EXEC_TIME\",\"shardTimes\":$SHARD_TIMES},"
                       fi
                     fi
                   done
                   ROWS_JSON+="]"
-                  # Write dynamic data to a temp file (node will read these)
+
+                  # Write data files and call the Node.js dashboard generator
                   echo "$CONSOLIDATED_HISTORY" > /tmp/consolidated_data.json
-                  echo "$ROWS_JSON" > /tmp/rows_data.json
-                  # Write the static React-based HTML template
-                  cat > /tmp/index_template.html << 'HTMLEOF'
-                  <!DOCTYPE html>
-                  <html lang="en">
-                  <head>
-                    <meta charset="UTF-8" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                    <title>SIMS Finance Test Execution Reports</title>
-                    <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                    <style>
-                      *, *::before, *::after { box-sizing: border-box; }
-                      body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 0; }
-                      header { background: #4CAF50; color: white; padding: 20px 30px; }
-                      header h1 { margin: 0 0 6px; }
-                      header p { margin: 0; opacity: 0.9; }
-                      table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-                      th, td { padding: 12px; text-align: left; border: 1px solid #ddd; }
-                      th { background-color: #4CAF50; color: white; cursor: pointer; user-select: none; }
-                      th:hover { background-color: #45a049; }
-                      tr:nth-child(even) { background-color: #f9f9f9; }
-                      tr:hover { background-color: #f1f1f1; }
-                      .failed { background-color: #ffe6e6 !important; }
-                      .passed { background-color: #d4f8d4 !important; }
-                      a { color: #4CAF50; text-decoration: none; }
-                      a:hover { text-decoration: underline; }
-                      .filters { display: flex; gap: 10px; padding: 16px 20px; flex-wrap: wrap; align-items: center; }
-                      .filters input, .filters select { padding: 8px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
-                      .sort-icon::after { content: '↕'; margin-left: 5px; }
-                      .sort-asc::after { content: '↑'; margin-left: 5px; }
-                      .sort-desc::after { content: '↓'; margin-left: 5px; }
-                      .dashboard-container { display: flex; gap: 20px; padding: 20px; flex-wrap: wrap; }
-                      .table-container { flex: 1; min-width: 600px; }
-                      .graph-container { flex: 1; min-width: 600px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-                      .graph-wrapper { height: 400px; position: relative; }
-                      .exec-time-section { padding: 0 20px 20px; }
-                      .controls { margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 4px; }
-                      .controls label { font-weight: bold; margin-right: 8px; }
-                      @media (max-width: 1200px) {
-                        .dashboard-container { flex-direction: column; }
-                        .table-container, .graph-container { min-width: 100%; }
-                      }
-                      .pagination { display: flex; justify-content: center; gap: 8px; margin: 16px 0; }
-                      .pagination button { padding: 8px 16px; border: none; border-radius: 4px; background-color: #4CAF50; color: white; cursor: pointer; font-size: 14px; }
-                      .pagination button:disabled { background-color: #ccc; cursor: not-allowed; }
-                      footer { text-align: center; padding: 20px; color: #888; font-size: 13px; }
-                    </style>
-                  </head>
-                  <body>
-                    <div id="root"></div>
-                    <script id="app-data">
-                      window.__APP_DATA__ = {
-                        testHistory: __HISTORY_PLACEHOLDER__,
-                        reportsData: __ROWS_PLACEHOLDER__
-                      };
-                    </script>
-                    <script type="text/babel">
-                      const { useState, useEffect, useRef, useMemo } = React;
-                      const { testHistory, reportsData } = window.__APP_DATA__;
-                    
-                      function TrendsChart({ runs }) {
-                        const canvasRef = useRef(null);
-                        const chartRef = useRef(null);
-                        useEffect(() => {
-                          if (!canvasRef.current) return;
-                          if (chartRef.current) chartRef.current.destroy();
-                          chartRef.current = new Chart(canvasRef.current, {
-                            type: 'line',
-                            data: {
-                              labels: runs.map(r => r.timestamp.replace(/_/g, ' ')),
-                              datasets: [
-                                { label: 'Executed', data: runs.map(r => r.counts.executed), borderColor: '#007BFF', backgroundColor: 'rgba(0,123,255,0.2)', borderWidth: 2 },
-                                { label: 'Passed',   data: runs.map(r => r.counts.passed),   borderColor: '#28A745', backgroundColor: 'rgba(40,167,69,0.2)',  borderWidth: 2, borderDash: [5,5] },
-                                { label: 'Failed',   data: runs.map(r => r.counts.failed),   borderColor: '#DC3545', backgroundColor: 'rgba(220,53,69,0.2)',  borderWidth: 2 },
-                                { label: 'Flaky',    data: runs.map(r => r.counts.flaky),    borderColor: '#FFC107', backgroundColor: 'rgba(255,193,7,0.2)',  borderWidth: 2, borderDash: [10,5] }
-                              ]
-                            },
-                            options: {
-                              responsive: true,
-                              maintainAspectRatio: false,
-                              plugins: { legend: { position: 'top', labels: { usePointStyle: true } } },
-                              scales: {
-                                x: { title: { display: true, text: 'Date & Timestamp' } },
-                                y: { title: { display: true, text: 'Number of Tests' } }
-                              }
-                            }
-                          });
-                          return () => { if (chartRef.current) chartRef.current.destroy(); };
-                        }, [runs]);
-                        return <canvas ref={canvasRef} />;
-                      }
-                    
-                      function ExecutionTimeChart({ runs }) {
-                        const canvasRef = useRef(null);
-                        const chartRef = useRef(null);
-                        useEffect(() => {
-                          if (!canvasRef.current) return;
-                          if (chartRef.current) chartRef.current.destroy();
-                          chartRef.current = new Chart(canvasRef.current, {
-                            type: 'line',
-                            data: {
-                              labels: runs.map(r => r.timestamp.replace(/_/g, ' ')),
-                              datasets: [{
-                                label: 'Execution Time (mins)',
-                                data: runs.map(r => Math.round((r.executionTimeSec || 0) / 60)),
-                                borderColor: '#6f42c1',
-                                backgroundColor: 'rgba(111,66,193,0.2)',
-                                borderWidth: 2,
-                                tension: 0.3
-                              }]
-                            },
-                            options: {
-                              responsive: true,
-                              maintainAspectRatio: false,
-                              scales: {
-                                y: { title: { display: true, text: 'Minutes' } },
-                                x: { title: { display: true, text: 'Run Timestamp' } }
-                              }
-                            }
-                          });
-                          return () => { if (chartRef.current) chartRef.current.destroy(); };
-                        }, [runs]);
-                        return <canvas ref={canvasRef} />;
-                      }
-                    
-                      function App() {
-                        const [dateFilter, setDateFilter]     = useState('');
-                        const [statusFilter, setStatusFilter] = useState('');
-                        const [sortCol, setSortCol]           = useState(null);
-                        const [sortDir, setSortDir]           = useState('asc');
-                        const [currentPage, setCurrentPage]   = useState(1);
-                        const [timeRange, setTimeRange]       = useState('7');
-                        const rowsPerPage = 10;
-                    
-                        const filtered = useMemo(() =>
-                          reportsData.filter(r => {
-                            const dateMatch   = !dateFilter   || r.date === dateFilter;
-                            const statusMatch = !statusFilter || r.status.includes(statusFilter);
-                            return dateMatch && statusMatch;
-                          }), [dateFilter, statusFilter]);
-                    
-                        const sorted = useMemo(() => {
-                          if (!sortCol) return filtered;
-                          return [...filtered].sort((a, b) => {
-                            const aVal = sortCol === 'date' ? a.date : a.status;
-                            const bVal = sortCol === 'date' ? b.date : b.status;
-                            return sortDir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-                          });
-                        }, [filtered, sortCol, sortDir]);
-                    
-                        const totalPages = Math.max(1, Math.ceil(sorted.length / rowsPerPage));
-                        const paginated  = sorted.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
-                    
-                        function handleSort(col) {
-                          if (sortCol === col) {
-                            setSortDir(d => d === 'asc' ? 'desc' : 'asc');
-                          } else {
-                            setSortCol(col);
-                            setSortDir('asc');
-                          }
-                          setCurrentPage(1);
-                        }
-                      
-                        const filteredRuns = useMemo(() => {
-                          const runs = [...(testHistory.runs || [])].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
-                          if (timeRange === 'all') return runs;
-                          const cutoff = new Date();
-                          cutoff.setDate(cutoff.getDate() - parseInt(timeRange));
-                          return runs.filter(r => new Date(r.timestamp.split('_')[0]) >= cutoff);
-                        }, [timeRange]);
-                      
-                        function thClass(col) {
-                          if (sortCol !== col) return 'sort-icon';
-                          return sortDir === 'asc' ? 'sort-asc' : 'sort-desc';
-                        }
-                      
-                        return (
-                          <div>
-                            <header>
-                              <h1>SIMS Finance – Playwright Reports</h1>
-                              <p>Explore the results of the test runs below.</p>
-                            </header>
-                      
-                            <div className="filters">
-                              <input
-                                type="date"
-                                value={dateFilter}
-                                onChange={e => { setDateFilter(e.target.value); setCurrentPage(1); }}
-                                title="Filter by date"
-                              />
-                              <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}>
-                                <option value="">All Statuses</option>
-                                <option value="Passed">Passed</option>
-                                <option value="Failed">Failed</option>
-                              </select>
-                            </div>
-                      
-                            <div className="dashboard-container">
-                              <div className="table-container">
-                                <table>
-                                  <thead>
-                                    <tr>
-                                      <th className={thClass('date')}   onClick={() => handleSort('date')}>Date</th>
-                                      <th>Time</th>
-                                      <th>Report Link</th>
-                                      <th className={thClass('status')} onClick={() => handleSort('status')}>Status</th>
-                                      <th>Execution Time</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {paginated.map((r, i) => (
-                                      <tr key={i} className={r.status === 'Failed' ? 'failed' : r.status === 'Passed' ? 'passed' : ''}>
-                                        <td>{r.date}</td>
-                                        <td>{r.time}</td>
-                                        <td><a href={r.link} target="_blank" rel="noreferrer">View Report</a></td>
-                                        <td>{r.status}</td>
-                                        <td>{r.execTime}</td>
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
-                                  
-                                <div className="pagination">
-                                  <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Previous</button>
-                                  <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage(p => p + 1)}>Next</button>
-                                </div>
-                              </div>
-                                  
-                              <div className="graph-container">
-                                <h2>Test Execution Trends</h2>
-                                <div className="graph-wrapper">
-                                  <TrendsChart runs={filteredRuns} />
-                                </div>
-                                <div className="controls">
-                                  <label>Time Range:</label>
-                                  <select value={timeRange} onChange={e => setTimeRange(e.target.value)}>
-                                    <option value="7">Last 7 days</option>
-                                    <option value="14">Last 14 days</option>
-                                    <option value="30">Last 30 days</option>
-                                    <option value="all">All time</option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                                  
-                            <div className="exec-time-section">
-                              <h2>Execution Time Trend</h2>
-                              <div className="graph-wrapper">
-                                <ExecutionTimeChart runs={filteredRuns} />
-                              </div>
-                            </div>
-                                  
-                            <footer>
-                              <p>&copy; {new Date().getFullYear()} Playwright Test Reports. All rights reserved.</p>
-                            </footer>
-                          </div>
-                        );
-                      }
-                    
-                      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-                    </script>
-                  </body>
-                  </html>
-                  HTMLEOF
-                  # Inject the dynamic data into the template using Node.js
-                  node -e "
-                    const fs = require('fs');
-                    const template = fs.readFileSync('/tmp/index_template.html', 'utf8');
-                    const history  = fs.readFileSync('/tmp/consolidated_data.json', 'utf8').trim();
-                    const rows     = fs.readFileSync('/tmp/rows_data.json', 'utf8').trim();
-                    const result   = template
-                      .replace('__HISTORY_PLACEHOLDER__', history)
-                      .replace('__ROWS_PLACEHOLDER__', rows);
-                    fs.writeFileSync('$INDEX_FILE', result);
-                  "
+                  echo "$ROWS_JSON"            > /tmp/rows_data.json
+
+                  node /tmp/scripts/generate-dashboard.js \
+                    /tmp/consolidated_data.json \
+                    /tmp/rows_data.json \
+                    "$INDEX_FILE"
             - name: Cleanup old published reports and history (keep 60 days)
               run: |
                   # Remove published-reports older than 60 days
