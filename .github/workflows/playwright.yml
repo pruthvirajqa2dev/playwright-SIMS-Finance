@@ -449,11 +449,13 @@ jobs:
                           SHARD_TIMES=$(cat "published-reports/$DIR_TIMESTAMP/shard-times.json")
                         fi
 
-                        ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"execTime\":\"$EXEC_TIME\",\"shardTimes\":$SHARD_TIMES},"
+                  ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"execTime\":\"$EXEC_TIME\",\"shardTimes\":$SHARD_TIMES},"
                       fi
                     fi
                   done
-                  ROWS_JSON+="]"
+                  # Strip the trailing comma that bash appended to the last entry
+                  # so we get valid JSON:  [{...},{...}]  not  [{...},{...},]
+                  ROWS_JSON="${ROWS_JSON%,}]"
 
                   # Write data files and call the Node.js dashboard generator
                   echo "$CONSOLIDATED_HISTORY" > /tmp/consolidated_data.json

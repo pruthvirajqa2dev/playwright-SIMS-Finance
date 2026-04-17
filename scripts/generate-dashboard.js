@@ -36,11 +36,18 @@ if (!consolidatedJsonPath || !rowsJsonPath || !outputHtmlPath) {
 // ---------------------------------------------------------------------------
 function readJson(filePath, fallback) {
   try {
-    const raw = fs.readFileSync(filePath, 'utf8').trim();
-    JSON.parse(raw); // validate
+    let raw = fs.readFileSync(filePath, 'utf8').trim();
+
+    // Bash JSON builders often append a trailing comma before the closing
+    // bracket/brace, producing invalid JSON (e.g. [{...},{...},]).  Strip it.
+    raw = raw
+      .replace(/,\s*]/g, ']')   // trailing comma before ]
+      .replace(/,\s*}/g, '}');  // trailing comma before }
+
+    JSON.parse(raw); // validate — throws if still malformed
     return raw;
   } catch (err) {
-    console.warn(`Warning: could not read ${filePath} – using fallback. (${err.message})`);
+    console.warn(`Warning: could not read/parse ${filePath} – using fallback. (${err.message})`);
     return JSON.stringify(fallback);
   }
 }
@@ -129,14 +136,29 @@ const template = /* html */`<!DOCTYPE html>
     const { testHistory, reportsData } = window.__APP_DATA__;
 
     // -----------------------------------------------------------------------
+    // Normalise raw data — guards against legacy records missing fields and
+    // against bash xargs leaving stray whitespace on string values.
+    // -----------------------------------------------------------------------
+    const normalisedData = (Array.isArray(reportsData) ? reportsData : []).map(r => ({
+      date:        (r.date        || '').trim(),
+      time:        (r.time        || '').trim(),
+      link:        (r.link        || '#').trim(),
+      status:      (r.status      || 'Unknown').trim(),
+      environment: (r.environment || '').trim(),
+      execTime:    (r.execTime    || 'N/A').trim(),
+      shardTimes:  Array.isArray(r.shardTimes) ? r.shardTimes : [],
+    }));
+
+    // -----------------------------------------------------------------------
     // Colour helpers
     // -----------------------------------------------------------------------
     function statusPill(status) {
-      if (status === 'Passed')
+      const s = (status || '').trim();
+      if (s === 'Passed')
         return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">✓ Passed</span>;
-      if (status === 'Failed')
+      if (s === 'Failed')
         return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-700">✕ Failed</span>;
-      return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">– {status}</span>;
+      return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">– {s || '?'}</span>;
     }
 
     const ENV_STYLES = {
@@ -146,11 +168,12 @@ const template = /* html */`<!DOCTYPE html>
       DEV:        'bg-amber-100 text-amber-800 border-amber-200',
     };
     function envBadge(env) {
-      if (!env) return <span className="text-slate-400">—</span>;
-      const cls = ENV_STYLES[env.toUpperCase()] || 'bg-slate-100 text-slate-700 border-slate-200';
+      const e = (env || '').trim();
+      if (!e) return <span className="text-slate-400">—</span>;
+      const cls = ENV_STYLES[e.toUpperCase()] || 'bg-slate-100 text-slate-700 border-slate-200';
       return (
         <span className={\`inline-block px-2 py-0.5 rounded-full text-xs font-bold border \${cls}\`}>
-          {env}
+          {e}
         </span>
       );
     }
@@ -159,12 +182,14 @@ const template = /* html */`<!DOCTYPE html>
     // Summary Cards (latest run)
     // -----------------------------------------------------------------------
     function SummaryCards() {
-      const latest = reportsData[0];
+      const latest = normalisedData[0];
       if (!latest) return null;
 
       const successRate = useMemo(() => {
-        const run = (testHistory.runs || []).find(r => r.timestamp.startsWith(latest.date));
-        if (!run || !run.counts.executed) return null;
+        const run = (testHistory.runs || []).find(r =>
+          r.timestamp && r.timestamp.startsWith(latest.date)
+        );
+        if (!run || !run.counts || !run.counts.executed) return null;
         return Math.round((run.counts.passed / run.counts.executed) * 100);
       }, [latest]);
 
@@ -337,15 +362,18 @@ const template = /* html */`<!DOCTYPE html>
       const [timeRange,    setTimeRange]    = useState('7');
       const rowsPerPage = 10;
 
+      // Unique environment list derived from normalised data
       const environments = useMemo(() =>
-        [...new Set(reportsData.map(r => r.environment).filter(Boolean))].sort()
+        [...new Set(normalisedData.map(r => r.environment).filter(Boolean))].sort()
       , []);
 
       const filtered = useMemo(() =>
-        reportsData.filter(r => {
-          const dateOk   = !dateFilter   || r.date === dateFilter;
-          const statusOk = !statusFilter || r.status === statusFilter;
-          const envOk    = !envFilter    || r.environment === envFilter;
+        normalisedData.filter(r => {
+          // All comparisons use already-trimmed normalised values.
+          // Empty filter string → match everything (no filter applied).
+          const dateOk   = !dateFilter   || r.date        === dateFilter;
+          const statusOk = !statusFilter || r.status      === statusFilter.trim();
+          const envOk    = !envFilter    || r.environment === envFilter.trim();
           return dateOk && statusOk && envOk;
         }),
         [dateFilter, statusFilter, envFilter]
@@ -354,8 +382,8 @@ const template = /* html */`<!DOCTYPE html>
       const sorted = useMemo(() => {
         if (!sortCol) return filtered;
         return [...filtered].sort((a, b) => {
-          const aVal = a[sortCol] || '';
-          const bVal = b[sortCol] || '';
+          const aVal = (a[sortCol] || '').trim();
+          const bVal = (b[sortCol] || '').trim();
           return sortDir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
         });
       }, [filtered, sortCol, sortDir]);
@@ -396,7 +424,11 @@ const template = /* html */`<!DOCTYPE html>
                 <h1 className="text-2xl font-bold tracking-tight">SIMS Finance – Test Health Monitor</h1>
                 <p className="text-emerald-100 text-sm mt-0.5">Playwright Execution Reports · GitHub Actions CI</p>
               </div>
-              <span className="text-xs bg-white/20 px-3 py-1 rounded-full font-mono">{new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})}</span>
+              <div className="text-right">
+                <span className="block text-xs bg-white/20 px-3 py-1 rounded-full font-mono">
+                  Last updated: {new Date().toLocaleString('en-GB', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}
+                </span>
+              </div>
             </div>
           </header>
 
