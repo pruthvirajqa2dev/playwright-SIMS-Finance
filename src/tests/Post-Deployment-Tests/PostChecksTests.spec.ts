@@ -737,7 +737,7 @@ test.describe(
                 );
             });
         });
-        test.skip("XQY200 - Xquery Builder ", async ({ page }, testInfo) => {
+        test.fixme("XQY200 - Xquery Builder ", async ({ page }, testInfo) => {
             test.info().annotations.push({
                 type: "XQY200 - Xquery Builder",
                 description:
