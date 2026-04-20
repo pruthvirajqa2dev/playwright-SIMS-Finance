@@ -3,8 +3,6 @@ import LoginPage from "../../pages/LoginPage";
 import { getCredentials } from "../../utils/credentials";
 import expectedTexts from "../../data/expectedTexts.json";
 import ENV from "../../config/env";
-import path from "path";
-import fs from "fs";
 
 /**
  * @description
@@ -15,12 +13,12 @@ import fs from "fs";
  *   If this fails the entire pipeline is aborted, saving ~20 min of wasted CI.
  *
  * Retries: configured to 2 in the "auth" Playwright project (see playwright.config.ts).
- * storageState: saved to /tmp/storageState.json so postchecks shards can reuse
- *               the authenticated session without repeating the login flow.
+ *
+ * NOTE: storageState is intentionally NOT saved here. Postchecks shards each
+ * perform their own fresh login to avoid "Session Expired / Invalid Session"
+ * errors caused by UAT's single-session enforcement when a shared session is
+ * reused across parallel shards.
  */
-
-const STORAGE_STATE_PATH =
-    process.env.STORAGE_STATE_PATH ?? "/tmp/storageState.json";
 
 test.describe("Auth Gate", () => {
     test("Login succeeds and homepage loads @auth", async ({
@@ -46,14 +44,6 @@ test.describe("Auth Gate", () => {
         // ── Basic homepage assertion ─────────────────────────────────────
         await test.step("Verify homepage elements are visible", async () => {
             await homepage.expectPageElementsVisibilityOnLoad();
-        });
-
-        // ── Save authenticated session for shard reuse ───────────────────
-        await test.step("Save session storageState", async () => {
-            const dir = path.dirname(STORAGE_STATE_PATH);
-            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-            await page.context().storageState({ path: STORAGE_STATE_PATH });
-            console.log(`✅ storageState saved to: ${STORAGE_STATE_PATH}`);
         });
     });
 });

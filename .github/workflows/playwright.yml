@@ -166,18 +166,10 @@ jobs:
               if: steps.playwright-cache.outputs.cache-hit == 'true'
               run: npx playwright install-deps
 
-            # Restore the authenticated session saved by auth-gate
-            - name: Download storageState
-              uses: actions/download-artifact@v4
-              with:
-                  name: storage-state
-                  path: /tmp
-
             - name: Run Playwright tests (shard ${{ matrix.shardIndex }})
               id: run-tests
               run: |
                   set +e
-                  STORAGE_STATE_PATH=/tmp/storageState.json \
                   npx playwright test \
                     --project=chromium-shard${{ matrix.shardIndex }} \
                     --grep "@shard${{ matrix.shardIndex }}" \

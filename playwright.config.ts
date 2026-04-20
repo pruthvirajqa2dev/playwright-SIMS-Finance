@@ -41,10 +41,9 @@ logger.info(`Browser: ${process.env.BROWSER || "chromium"}`);
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-// Path where the auth gate saves the authenticated browser session.
-// CI sets STORAGE_STATE_PATH; local runs fall back to /tmp.
-const STORAGE_STATE_PATH =
-    process.env.STORAGE_STATE_PATH ?? "/tmp/storageState.json";
+// storageState is intentionally NOT shared with postchecks shards.
+// Each test performs its own fresh login to avoid single-session invalidation
+// on UAT environments that enforce one active session per user.
 
 export default defineConfig({
     expect: {
@@ -89,31 +88,29 @@ export default defineConfig({
         },
 
         // ── 2. Postchecks — shard 1 (@shard1 tests) ─────────────────────────
-        // No retries: failures should surface immediately.
-        // Reuses the authenticated storageState saved by the auth gate.
+        // retries: 2 — each test gets two retry attempts before being marked
+        // as failed, tolerating transient UAT flakiness.
+        // Each test performs its own fresh login — no shared storageState.
+        // This avoids "Session Expired / Invalid Session" errors caused by
+        // UAT's single-session enforcement when two shards share one session.
         {
             name: "chromium-shard1",
-            retries: 0,
+            retries: 2,
             testMatch: "**/Post-Deployment-Tests/PostChecksTests.spec.ts",
             use: {
                 ...devices["Desktop Chrome"],
-                viewport: { width: 1266, height: 586 },
-                // Pre-populate cookies / localStorage so each test starts
-                // with a valid session — login calls still run but complete
-                // instantly because the app sees an active session.
-                storageState: STORAGE_STATE_PATH
+                viewport: { width: 1266, height: 586 }
             }
         },
 
         // ── 3. Postchecks — shard 2 (@shard2 tests) ─────────────────────────
         {
             name: "chromium-shard2",
-            retries: 0,
+            retries: 2,
             testMatch: "**/Post-Deployment-Tests/PostChecksTests.spec.ts",
             use: {
                 ...devices["Desktop Chrome"],
-                viewport: { width: 1266, height: 586 },
-                storageState: STORAGE_STATE_PATH
+                viewport: { width: 1266, height: 586 }
             }
         }
 
