@@ -9,35 +9,43 @@ on:
     schedule:
         - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
 
+# ─────────────────────────────────────────────────────────────────────────────
+# PIPELINE OVERVIEW
+#
+#   auth-gate  ──►  postchecks (shard1 ‖ shard2, fail-fast)  ──►  merge-reports  ──►  deploy
+#
+#   • auth-gate validates login with up to 2 retries (configured in playwright.config.ts).
+#     If it fails the pipeline stops here — no wasted 20 min running postchecks.
+#   • postchecks runs two shards in parallel with fail-fast: true.
+#     If one shard fails the other is cancelled immediately.
+#   • merge-reports runs with if: always() so the dashboard is updated even on
+#     auth failure, clearly indicating WHICH stage broke.
+# ─────────────────────────────────────────────────────────────────────────────
+
 jobs:
-    playwright-test:
-        name: 🧪 SIMS Finance Tests (${{ matrix.shardIndex }}/${{ strategy.job-total }})
-        if: ${{ always() }}
-        timeout-minutes: 60
-        continue-on-error: true
+    # =========================================================================
+    # JOB 1 — Authentication Gate
+    # =========================================================================
+    auth-gate:
+        name: 🔐 Auth Gate
+        timeout-minutes: 15
         runs-on: ubuntu-latest
         permissions:
             contents: read
             pages: write
             id-token: write
-        strategy:
-            fail-fast: false
-            matrix:
-                project: [chromium]
-                shardIndex: [1, 2]
-                shardTotal: [2]
 
         steps:
             - uses: actions/checkout@v4
 
+            # Record true workflow start — used later for the wall-clock total
             - name: Record workflow start time
-              run: |
-                  echo "$(date +%s)" > workflow-start-${{ matrix.shardIndex }}.txt
+              run: echo "$(date +%s)" > workflow-start.txt
             - name: Upload workflow start time
               uses: actions/upload-artifact@v4
               with:
-                  name: workflow-start-${{ matrix.shardIndex }}
-                  path: workflow-start-${{ matrix.shardIndex }}.txt
+                  name: workflow-start
+                  path: workflow-start.txt
 
             - uses: actions/setup-node@v4
               with:
@@ -50,10 +58,6 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: ~/.cache/ms-playwright
-                  # Key is derived from the lockfile hash: any Playwright version
-                  # bump in package-lock.json produces a new cache entry.
-                  # GitHub's cache service is centralised, so the cache is
-                  # available to every runner VM that matches the key.
                   key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
                   restore-keys: |
                       playwright-${{ runner.os }}-
@@ -66,18 +70,123 @@ jobs:
               if: steps.playwright-cache.outputs.cache-hit == 'true'
               run: npx playwright install-deps
 
-            - name: Run Playwright tests for shard ${{ matrix.shardIndex }}
+            # retries: 2 is configured in the "auth" project in playwright.config.ts
+            - name: Run Auth Gate
+              run: |
+                  set +e
+                  STORAGE_STATE_PATH=/tmp/storageState.json \
+                  npx playwright test --project=auth --workers=1
+                  AUTH_EXIT=$?
+                  echo "AUTH_EXIT_CODE=$AUTH_EXIT" >> $GITHUB_ENV
+                  exit $AUTH_EXIT
+
+            # Upload storageState so postchecks shards can reuse the session
+            - name: Upload storageState
+              if: success()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: storage-state
+                  path: /tmp/storageState.json
+                  retention-days: 1
+
+            - name: Upload auth blob report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: blob-report-auth
+                  path: blob-report
+                  retention-days: 30
+
+            - name: Upload auth test results JSON
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: test-results-auth
+                  path: test-results.json
+                  retention-days: 30
+
+            # Stage marker consumed by merge-reports for dashboard observability
+            - name: Write stage status
+              if: always()
+              run: |
+                  if [ "$AUTH_EXIT_CODE" = "0" ]; then
+                    echo '{"stage":"auth","status":"Passed"}' > stage-status.json
+                  else
+                    echo '{"stage":"auth","status":"Failed"}' > stage-status.json
+                  fi
+            - name: Upload stage status
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: stage-status-auth
+                  path: stage-status.json
+
+    # =========================================================================
+    # JOB 2 — Postchecks  (only starts when auth-gate succeeds)
+    # =========================================================================
+    postchecks:
+        name: 🧪 Postchecks (shard ${{ matrix.shardIndex }})
+        needs: auth-gate
+        if: ${{ success() }}
+        timeout-minutes: 60
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pages: write
+            id-token: write
+        strategy:
+            # Cancel the surviving shard the moment one shard fails
+            fail-fast: true
+            matrix:
+                shardIndex: [1, 2]
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Cache Playwright browsers
+              id: playwright-cache
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+                  restore-keys: |
+                      playwright-${{ runner.os }}-
+
+            - name: Install Playwright Browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: npx playwright install --with-deps
+
+            - name: Install Playwright system dependencies (cache hit)
+              if: steps.playwright-cache.outputs.cache-hit == 'true'
+              run: npx playwright install-deps
+
+            # Restore the authenticated session saved by auth-gate
+            - name: Download storageState
+              uses: actions/download-artifact@v4
+              with:
+                  name: storage-state
+                  path: /tmp
+
+            - name: Run Playwright tests (shard ${{ matrix.shardIndex }})
               id: run-tests
               run: |
                   set +e
-                  npx playwright test PostChecksTests.spec.ts --grep "@shard${{ matrix.shardIndex }}" --project=${{ matrix.project }} --workers=1;
+                  STORAGE_STATE_PATH=/tmp/storageState.json \
+                  npx playwright test \
+                    --project=chromium-shard${{ matrix.shardIndex }} \
+                    --grep "@shard${{ matrix.shardIndex }}" \
+                    --workers=1
                   echo "STATUS_CODE=$?" >> $GITHUB_ENV
-                  #Rename the results file to include shard index
                   mv test-results.json test-results-${{ matrix.shardIndex }}.json
-                  echo "Current directory:"
-                  pwd
-                  echo "Files in current directory:"
-                  ls -l
+                  echo "Current directory:"; pwd
+                  echo "Files:"; ls -l
+
             - name: Upload Test Results for Shard ${{ matrix.shardIndex }}
               if: always()
               uses: actions/upload-artifact@v4
@@ -85,16 +194,17 @@ jobs:
                   name: test-results-${{ matrix.shardIndex }}
                   path: test-results-${{ matrix.shardIndex }}.json
                   retention-days: 30
-            - name: Save Test Status for Shard ${{ matrix.shardIndex }}
+
+            - name: Save shard status
               if: always()
               run: |
-                  if [ $STATUS_CODE -ne 0 ]; then
+                  if [ "$STATUS_CODE" -ne 0 ]; then
                     echo "Failed" > shard-${{ matrix.shardIndex }}-status.txt
                   else
                     echo "Passed" > shard-${{ matrix.shardIndex }}-status.txt
                   fi
-                  echo "Exit status: $?"
               shell: bash
+
             - name: Upload Shard Status
               if: always()
               uses: actions/upload-artifact@v4
@@ -102,21 +212,37 @@ jobs:
                   name: shard-${{ matrix.shardIndex }}-status
                   path: shard-${{ matrix.shardIndex }}-status.txt
 
-            - uses: actions/cache@v3
+            - name: Upload blob report
               if: always()
-              with:
-                  path: blob-report-${{ matrix.shardIndex }}
-                  key: playwright-blob-report-${{ matrix.shardIndex }}
-            - uses: actions/upload-artifact@v4
-              if: always()
+              uses: actions/upload-artifact@v4
               with:
                   name: blob-report-${{ matrix.shardIndex }}
                   path: blob-report
                   retention-days: 30
 
+            - name: Write stage status
+              if: always()
+              run: |
+                  if [ "$STATUS_CODE" -ne 0 ]; then
+                    echo "{\"stage\":\"postchecks\",\"shard\":${{ matrix.shardIndex }},\"status\":\"Failed\"}" > stage-status.json
+                  else
+                    echo "{\"stage\":\"postchecks\",\"shard\":${{ matrix.shardIndex }},\"status\":\"Passed\"}" > stage-status.json
+                  fi
+            - name: Upload stage status
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: stage-status-shard-${{ matrix.shardIndex }}
+                  path: stage-status.json
+
+    # =========================================================================
+    # JOB 3 — Merge reports & publish dashboard
+    # Runs with if: always() so the dashboard reflects even an auth failure.
+    # =========================================================================
     merge-reports:
-        name: Merging executed reports
-        needs: [playwright-test]
+        name: 📊 Merge Reports & Publish Dashboard
+        needs: [auth-gate, postchecks]
+        if: ${{ always() }}
         runs-on: ubuntu-latest
         permissions:
             contents: write
@@ -130,73 +256,93 @@ jobs:
                   node-version: lts/*
             - name: Install dependencies
               run: npm ci
-            #Download artifacts
-            - name: Download artifacts
+
+            - name: Install jq
+              run: sudo apt-get install -y jq
+
+            - name: Download blob reports (all stages)
               uses: actions/download-artifact@v4
               with:
                   path: all-blob-reports
                   pattern: blob-report-*
                   merge-multiple: true
 
-            - name: Download workflow start times
+            - name: Download workflow start time
               uses: actions/download-artifact@v4
               with:
+                  name: workflow-start
                   path: all-start-times
-                  pattern: workflow-start-*
-                  merge-multiple: true
+              continue-on-error: true
 
-            - name: Resolve earliest workflow start time
+            - name: Resolve workflow start epoch
               run: |
-                  MIN_START=$(cat all-start-times/workflow-start-*.txt 2>/dev/null | sort -n | head -1)
+                  MIN_START=$(cat all-start-times/workflow-start.txt 2>/dev/null | head -1)
                   if [ -z "$MIN_START" ]; then MIN_START=$(date +%s); fi
                   echo "WORKFLOW_START_EPOCH=$MIN_START" >> $GITHUB_ENV
-            #Add these steps before the merge
-            - name: Install jq
-              run: sudo apt-get install -y jq
+
+            - name: Download stage statuses
+              uses: actions/download-artifact@v4
+              with:
+                  path: all-stage-statuses
+                  pattern: stage-status-*
+                  merge-multiple: true
+              continue-on-error: true
+
+            - name: Determine which stage failed
+              run: |
+                  FAILED_STAGE="None"
+                  for f in all-stage-statuses/*.json; do
+                    [ -f "$f" ] || continue
+                    STATUS=$(jq -r '.status' "$f" 2>/dev/null)
+                    STAGE=$(jq -r '.stage'  "$f" 2>/dev/null)
+                    if [ "$STATUS" = "Failed" ]; then
+                      FAILED_STAGE="$STAGE"
+                      break
+                    fi
+                  done
+                  echo "FAILED_STAGE=$FAILED_STAGE" >> $GITHUB_ENV
+                  echo "Failed stage: $FAILED_STAGE"
 
             - name: Load TEST_ENV from .env file
               run: |
-                  # Read TEST_ENV from src/config/.env and export to GITHUB_ENV
                   if [ -f src/config/.env ]; then
                     TEST_ENV=$(grep '^TEST_ENV=' src/config/.env | cut -d'=' -f2 | tr -d '"' | xargs)
                   fi
                   if [ -z "$TEST_ENV" ]; then
-                    echo "Warning: TEST_ENV not found in src/config/.env, defaulting to Unknown"
+                    echo "Warning: TEST_ENV not found, defaulting to Unknown"
                     TEST_ENV="Unknown"
                   fi
                   echo "TEST_ENV=$TEST_ENV" >> $GITHUB_ENV
                   echo "Resolved TEST_ENV: $TEST_ENV"
 
-            - name: Download Test Results from Shards
+            - name: Download postcheck test results
               uses: actions/download-artifact@v4
               with:
                   path: test-results
-                  pattern: test-results-*
+                  pattern: test-results-[12]
                   merge-multiple: true
+              continue-on-error: true
 
-            - name: List Downloaded Results
+            - name: List downloaded results
               run: |
-                  echo "Contents of test-results directory:"
-                  ls -la test-results/
-                  echo "Full path of test results:"
-                  find test-results/ -name "*.json"
-            #Merge Playwright reports
-            - name: Merge Playwright reports
+                  echo "test-results/:"; ls -la test-results/ 2>/dev/null || echo "(empty)"
+
+            - name: Merge Playwright HTML reports
               run: npx playwright merge-reports --reporter html ./all-blob-reports
-            #Configure Git User
+
             - name: Configure Git User
               run: |
                   git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
                   git config --global user.name "pruthvirajqa2dev"
-            #Pull from Main branch
+
             - name: Pull from Main branch
               run: |
                   git fetch origin
-                  git checkout Main  #Checkout the existing Main branch
+                  git checkout Main
                   git pull --rebase origin Main || echo "No changes to pull"
-            - name: Merge Test Results
+
+            - name: Merge postcheck test result JSONs
               run: |
-                  #Create a template for the merged file
                   echo '{
                     "config": null,
                     "suites": [],
@@ -210,58 +356,59 @@ jobs:
                       "flaky": 0
                     }
                   }' > merged-results.json
-                  # Merge the results using jq
-                  jq -s '
-                    reduce .[1:][] as $item (.[0];
-                      .suites += $item.suites |
-                      .errors += $item.errors |
-                      .stats.expected += $item.stats.expected |
-                      .stats.skipped += $item.stats.skipped |
-                      .stats.unexpected += $item.stats.unexpected |
-                      .stats.flaky += $item.stats.flaky |
-                      .stats.duration += $item.stats.duration |
-                      if .stats.startTime == null or ($item.stats.startTime < .stats.startTime) then
-                        .stats.startTime = $item.stats.startTime
-                      else . end |
-                      if .config == null then .config = $item.config else . end
-                    )
-                  ' merged-results.json test-results/test-results-*.json > test-results.json
-            #Parse Test Results and Set Variables
+
+                  SHARD_FILES=$(find test-results/ -name "test-results-*.json" 2>/dev/null | sort)
+                  if [ -n "$SHARD_FILES" ]; then
+                    jq -s '
+                      reduce .[1:][] as $item (.[0];
+                        .suites += $item.suites |
+                        .errors += $item.errors |
+                        .stats.expected   += $item.stats.expected   |
+                        .stats.skipped    += $item.stats.skipped    |
+                        .stats.unexpected += $item.stats.unexpected |
+                        .stats.flaky      += $item.stats.flaky      |
+                        .stats.duration   += $item.stats.duration   |
+                        if .stats.startTime == null or ($item.stats.startTime < .stats.startTime) then
+                          .stats.startTime = $item.stats.startTime
+                        else . end |
+                        if .config == null then .config = $item.config else . end
+                      )
+                    ' merged-results.json $SHARD_FILES > test-results.json
+                    echo "✅ Merged shard results"
+                  else
+                    echo "⚠️  No shard results — auth gate likely failed."
+                    cp merged-results.json test-results.json
+                  fi
+
             - name: Parse Test Results and Set Variables
               run: node ./src/config/parse-json-report.js
-            #Use Environment Variables
+
             - name: Use Environment Variables
               run: |
                   echo "Executed Tests: ${{ env.EXECUTED_TESTS }}"
-                  echo "Passed Tests: ${{ env.PASSED_TESTS }}"
-                  echo "Failed Tests: ${{ env.FAILED_TESTS }}"
-                  echo "Flaky Tests: ${{ env.FLAKY_TESTS }}"
-            #Stash untracked files
+                  echo "Passed Tests:   ${{ env.PASSED_TESTS }}"
+                  echo "Failed Tests:   ${{ env.FAILED_TESTS }}"
+                  echo "Flaky Tests:    ${{ env.FLAKY_TESTS }}"
+                  echo "Failed Stage:   $FAILED_STAGE"
+
             - name: Stash untracked files
-              run: |
-                  git stash push -m "Stashing untracked report files" --include-untracked
-            #Display JSON report (formatted)
+              run: git stash push -m "Stashing untracked report files" --include-untracked
+
             - name: Display JSON report (formatted)
               if: always()
               run: |
-                  echo "Formatted JSON report:"
-                  echo "Current directory:"
-                  pwd
-                  echo "Files in current directory:"
-                  ls -l
+                  echo "Current directory:"; pwd
+                  echo "Files:"; ls -l
                   jq '.' test-results.json
-            #Pull from gh-pages branch
+
             - name: Pull from gh-pages branch
               run: |
                   git fetch origin
-                  git checkout gh-pages  # Checkout the existing gh-pages branch
+                  git checkout gh-pages
                   git pull --rebase origin gh-pages || echo "No changes to pull"
-            #Save total execution time to file
+
             - name: Generate Human-Readable Execution Time
               run: |
-                  # -----------------------------------------------------------
-                  # format_duration <total_seconds>  →  "1 hr 2 mins 3 secs"
-                  # -----------------------------------------------------------
                   format_duration () {
                     local total_seconds=$1
                     local hours=$((total_seconds / 3600))
@@ -283,27 +430,15 @@ jobs:
                   }
 
                   if ls test-results/test-results-*.json >/dev/null 2>&1; then
-                    # ----------------------------------------------------------
-                    # Wall-clock time = MAX across shards (they ran in parallel).
-                    # SUM would double-count parallel work and is misleading.
-                    # ----------------------------------------------------------
                     MAX_DURATION_MS=$(jq -s '[.[].stats.duration] | max | floor' test-results/test-results-*.json)
-
                     if [ "$MAX_DURATION_MS" != "null" ] && [ "$MAX_DURATION_MS" != "0" ] && [ "$MAX_DURATION_MS" -gt 0 ] 2>/dev/null; then
                       TOTAL_SEC=$((MAX_DURATION_MS / 1000))
                       echo "$(format_duration $TOTAL_SEC)" > execution-time.txt
                     else
                       echo "N/A" > execution-time.txt
                     fi
-
-                    # ----------------------------------------------------------
-                    # Per-shard breakdown — useful for spotting imbalanced shards.
-                    # Stored as shard-times.json  →  [{"shard":1,"label":"X min"},...]
-                    # ----------------------------------------------------------
-                    SHARD_JSON="["
-                    FIRST=true
+                    SHARD_JSON="["; FIRST=true
                     for f in $(ls test-results/test-results-*.json | sort); do
-                      # Extract shard index from filename  (test-results-1.json → 1)
                       SHARD_IDX=$(basename "$f" | grep -o '[0-9]*' | tail -1)
                       SHARD_MS=$(jq '.stats.duration | floor' "$f")
                       if [ "$SHARD_MS" != "null" ] && [ "$SHARD_MS" -gt 0 ] 2>/dev/null; then
@@ -318,9 +453,10 @@ jobs:
                     SHARD_JSON+="]"
                     echo "$SHARD_JSON" > shard-times.json
                   else
-                    echo "N/A"          > execution-time.txt
-                    echo "[]"           > shard-times.json
+                    echo "N/A" > execution-time.txt
+                    echo "[]"  > shard-times.json
                   fi
+
             - name: Generate workflow total time
               run: |
                   format_duration () {
@@ -339,76 +475,62 @@ jobs:
                   echo "$(format_duration $ELAPSED)" > workflow-time.txt
                   echo "Workflow elapsed: $(cat workflow-time.txt)"
 
-            - name: Debug execution-time generation
+            - name: Debug time files
               run: |
-                  echo "PWD:"
-                  pwd
-                  echo "Files:"
-                  ls -la
-                  echo "execution-time.txt:"
-                  cat execution-time.txt || echo "❌ execution-time.txt NOT FOUND"
-                  echo "workflow-time.txt:"
-                  cat workflow-time.txt || echo "❌ workflow-time.txt NOT FOUND"
+                  echo "execution-time.txt: $(cat execution-time.txt 2>/dev/null || echo NOT FOUND)"
+                  echo "workflow-time.txt:  $(cat workflow-time.txt  2>/dev/null || echo NOT FOUND)"
+
             - name: Add Current Report with Timestamp
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
                   mkdir -p published-reports/$TIMESTAMP
                   cp -r playwright-report/* published-reports/$TIMESTAMP
-                  # Copy execution time and test-results files if they exist
-                  if [ -f execution-time.txt ]; then
-                    cp execution-time.txt published-reports/$TIMESTAMP/
-                  fi
-                  if [ -f shard-times.json ]; then
-                    cp shard-times.json published-reports/$TIMESTAMP/
-                  fi
-                  if [ -f test-results.json ]; then
-                    cp test-results.json published-reports/$TIMESTAMP/
-                  fi
-                  if [ -f workflow-time.txt ]; then
-                    cp workflow-time.txt published-reports/$TIMESTAMP/
-                  fi
+                  [ -f execution-time.txt ] && cp execution-time.txt published-reports/$TIMESTAMP/
+                  [ -f shard-times.json ]   && cp shard-times.json   published-reports/$TIMESTAMP/
+                  [ -f test-results.json ]  && cp test-results.json  published-reports/$TIMESTAMP/
+                  [ -f workflow-time.txt ]  && cp workflow-time.txt  published-reports/$TIMESTAMP/
+                  echo "$FAILED_STAGE" > published-reports/$TIMESTAMP/failed-stage.txt
                   echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+
             - name: Download Shard Statuses
               uses: actions/download-artifact@v4
               with:
                   path: all-shard-statuses
                   pattern: shard-*-status
                   merge-multiple: true
+              continue-on-error: true
 
             - name: Aggregate Shard Statuses
               id: aggregate-shard-status
               run: |
-                  FINAL_STATUS="Passed"
-                  for report in $(find all-shard-statuses -name "shard-*-status.txt"); do
-                    if grep -q "Failed" "$report"; then
-                      FINAL_STATUS="Failed"
-                      break
-                    fi
-                  done
-                  echo "Final test status: $FINAL_STATUS"
-                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\", \"environment\": \"$TEST_ENV\" }" > "published-reports/$TIMESTAMP/status.json"
-                  echo "Test status from previous job: $FINAL_STATUS"
+                  if [ "$FAILED_STAGE" = "auth" ]; then
+                    FINAL_STATUS="Failed"
+                  else
+                    FINAL_STATUS="Passed"
+                    for report in $(find all-shard-statuses -name "shard-*-status.txt" 2>/dev/null); do
+                      if grep -q "Failed" "$report"; then FINAL_STATUS="Failed"; break; fi
+                    done
+                  fi
+                  echo "Final test status: $FINAL_STATUS  (failed stage: $FAILED_STAGE)"
+                  echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\", \"environment\": \"$TEST_ENV\", \"failedStage\": \"$FAILED_STAGE\" }" \
+                    > "published-reports/$TIMESTAMP/status.json"
                   echo "FINAL_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
               shell: bash
+
             - name: Update Index Page
               run: |
                   git fetch origin
-                  git checkout Main  # Checkout the existing Main branch
+                  git checkout Main
                   git pull --rebase origin Main || echo "No changes to pull"
 
-                  # ----------------------------------------------------------
-                  # Copy the dashboard generator before we switch branches
-                  # ----------------------------------------------------------
                   mkdir -p /tmp/scripts
                   cp scripts/generate-dashboard.js /tmp/scripts/generate-dashboard.js
 
-                  # Initialize consolidated.json if it doesn't exist
                   if [ ! -f "test-results-history/consolidated.json" ]; then
                       mkdir -p test-results-history
                       echo '{"runs":[]}' > test-results-history/consolidated.json
                   fi
 
-                  # Parse execution time from human-readable format to seconds
                   EXEC_TIME_SEC=0
                   if [ -f "published-reports/$TIMESTAMP/execution-time.txt" ]; then
                     RAW_TIME=$(cat "published-reports/$TIMESTAMP/execution-time.txt")
@@ -424,7 +546,6 @@ jobs:
                     ')
                   fi
 
-                  # Build the current run JSON object (includes environment)
                   CURRENT_RUN=$(cat <<EOF
                   {
                     "timestamp": "$TIMESTAMP",
@@ -440,26 +561,19 @@ jobs:
                   EOF
                   )
 
-                  # Append run and keep last 30 entries
                   jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' \
                     test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
                   jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' \
                     test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
 
-                  # Commit the consolidated.json changes to Main
                   git add test-results-history/consolidated.json
                   git commit -m "Update test history with run from $TIMESTAMP" || echo "No changes to commit"
                   git push origin Main || echo "No changes to push"
 
-                  # Snapshot consolidated history before switching branches
                   if ! CONSOLIDATED_HISTORY=$(jq '.' test-results-history/consolidated.json 2>/dev/null); then
-                      echo "Warning: Invalid JSON in consolidated.json, using empty fallback"
                       CONSOLIDATED_HISTORY='{"runs":[]}'
                   fi
 
-                  # ----------------------------------------------------------
-                  # Switch to gh-pages
-                  # ----------------------------------------------------------
                   git fetch origin
                   git checkout gh-pages
                   git pull --rebase origin gh-pages || echo "No changes to pull"
@@ -467,8 +581,6 @@ jobs:
                   INDEX_FILE="published-reports/index.html"
                   TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
 
-                  # Build reportsData JSON array from published subdirectories
-                  # Each entry now includes an "environment" field read from status.json
                   ROWS_JSON="["
                   for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort -r); do
                     DIR_TIMESTAMP=$(basename "$dir")
@@ -477,38 +589,32 @@ jobs:
                         DATE_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f1)
                         TIME_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
 
-                        ROW_STATUS="Unknown"
-                        ROW_ENV=""
+                        ROW_STATUS="Unknown"; ROW_ENV=""; ROW_FAILED_STAGE=""
                         if [ -f "published-reports/$DIR_TIMESTAMP/status.json" ]; then
-                          ROW_STATUS=$(jq -r '.status'      "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
-                          ROW_ENV=$(jq    -r '.environment // ""' "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                          ROW_STATUS=$(jq -r '.status'               "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                          ROW_ENV=$(jq    -r '.environment // ""'    "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                          ROW_FAILED_STAGE=$(jq -r '.failedStage // ""' "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
                           echo "FINAL_STATUS=$ROW_STATUS" >> $GITHUB_ENV
                         fi
 
                         EXEC_TIME="N/A"
-                        if [ -f "published-reports/$DIR_TIMESTAMP/execution-time.txt" ]; then
+                        [ -f "published-reports/$DIR_TIMESTAMP/execution-time.txt" ] && \
                           EXEC_TIME=$(cat "published-reports/$DIR_TIMESTAMP/execution-time.txt")
-                        fi
 
                         SHARD_TIMES="[]"
-                        if [ -f "published-reports/$DIR_TIMESTAMP/shard-times.json" ]; then
+                        [ -f "published-reports/$DIR_TIMESTAMP/shard-times.json" ] && \
                           SHARD_TIMES=$(cat "published-reports/$DIR_TIMESTAMP/shard-times.json")
-                        fi
 
                         WORKFLOW_TIME="N/A"
-                        if [ -f "published-reports/$DIR_TIMESTAMP/workflow-time.txt" ]; then
+                        [ -f "published-reports/$DIR_TIMESTAMP/workflow-time.txt" ] && \
                           WORKFLOW_TIME=$(cat "published-reports/$DIR_TIMESTAMP/workflow-time.txt")
-                        fi
 
-                  ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"execTime\":\"$EXEC_TIME\",\"workflowTime\":\"$WORKFLOW_TIME\",\"shardTimes\":$SHARD_TIMES},"
+                  ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"failedStage\":\"$ROW_FAILED_STAGE\",\"execTime\":\"$EXEC_TIME\",\"workflowTime\":\"$WORKFLOW_TIME\",\"shardTimes\":$SHARD_TIMES},"
                       fi
                     fi
                   done
-                  # Strip the trailing comma that bash appended to the last entry
-                  # so we get valid JSON:  [{...},{...}]  not  [{...},{...},]
                   ROWS_JSON="${ROWS_JSON%,}]"
 
-                  # Write data files and call the Node.js dashboard generator
                   echo "$CONSOLIDATED_HISTORY" > /tmp/consolidated_data.json
                   echo "$ROWS_JSON"            > /tmp/rows_data.json
 
@@ -516,12 +622,11 @@ jobs:
                     /tmp/consolidated_data.json \
                     /tmp/rows_data.json \
                     "$INDEX_FILE"
+
             - name: Cleanup old published reports and history (keep 60 days)
               run: |
-                  # Remove published-reports older than 60 days
                   find published-reports/ -maxdepth 1 -mindepth 1 -type d | while read dir; do
                     DIRNAME=$(basename "$dir")
-                    # Extract date from directory name (format: YYYY-MM-DD_HH-MM-SS)
                     DIRDATE=$(echo $DIRNAME | cut -d'_' -f1)
                     if [[ $DIRDATE =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
                       REPORT_DATE=$(date -d "$DIRDATE" +%s)
@@ -533,33 +638,35 @@ jobs:
                       fi
                     fi
                   done
-                  # Remove old runs from consolidated.json (history)
                   if [ -f "test-results-history/consolidated.json" ]; then
-                    jq --arg cutoff "$(date -d '60 days ago' +%Y-%m-%d)" '
-                      { runs: (.runs | map(select(.timestamp | split("_")[0] >= $cutoff))) }
-                    ' test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
-                  fi 
+                    jq --arg cutoff "$(date -d '60 days ago' +%Y-%m-%d)" \
+                      '{ runs: (.runs | map(select(.timestamp | split("_")[0] >= $cutoff))) }' \
+                      test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+                  fi
                   git commit -m "Cleanup: Remove reports and history older than 60 days" || echo "No old reports/history to remove"
                   git push origin Main || echo "No changes to push"
                   git push origin gh-pages || echo "No changes to push"
+
             - name: Commit Current Report to GitHub Pages
               run: |
                   git add published-reports/$TIMESTAMP/
                   git commit -m "Update Playwright reports with $TIMESTAMP"
                   git push origin gh-pages
+
             - name: Setup Pages
               uses: actions/configure-pages@v2
-            - name: Upload artifact
+
+            - name: Upload Pages artifact
               uses: actions/upload-pages-artifact@v3
               with:
                   name: github-pages
                   path: published-reports/
+
             - name: Set FINAL_STATUS from status.json
               run: |
                   STATUS=$(jq -r '.status' published-reports/$TIMESTAMP/status.json)
                   echo "FINAL_STATUS=$STATUS" >> $GITHUB_ENV
-            # - name: Wait for 7 minutes before sending email
-            #   run: sleep 420
+
             - name: Notify on Execution
               if: success()
               uses: dawidd6/action-send-mail@v4
@@ -569,34 +676,36 @@ jobs:
                   secure: true
                   username: ${{ secrets.EMAIL_USERNAME }}
                   password: ${{ secrets.EMAIL_PASSWORD }}
-                  subject: "SIMS Finance- GitHub Action: Playwright Tests ${{ env.FINAL_STATUS }}"
+                  subject: "SIMS Finance — Playwright Tests ${{ env.FINAL_STATUS }} (stage: ${{ env.FAILED_STAGE }})"
                   body: |
                       Hi,
-                      Please find the automated SIMS Finance Playwright Tests Execution Status:
-                      🧪 The Playwright tests have ${{ env.FINAL_STATUS }}.
-                      🕒 Latest run was on ${{ env.TIMESTAMP }}.
-                      Please refer the link below to view the report and graphical representation here:
+
+                      Automated SIMS Finance Playwright Tests Execution Status:
+
+                      🧪 Result:       ${{ env.FINAL_STATUS }}
+                      🚦 Failed stage: ${{ env.FAILED_STAGE }}
+                      🕒 Run time:     ${{ env.TIMESTAMP }}
+
+                      View the report and dashboard:
                       https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/
+
                       Regards,
                       SIMS Finance QA Team
                   to: pruthviraj.pardeshi@parentpay.com
                   from: ${{ secrets.EMAIL_USERNAME }}
                   cc: princy.rajkumar@parentpay.com
+
+    # =========================================================================
+    # JOB 4 — Deploy to GitHub Pages
+    # =========================================================================
     Deploy-to-GitHub-Pages:
-        # Add a dependency to the merge-reports job
         needs: merge-reports
-
-        # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
         permissions:
-            pages: write # to deploy to Pages
-            id-token: write # to verify the deployment originates from an appropriate source
-
-        # Deploy to the github-pages environment
+            pages: write
+            id-token: write
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
-
-        # Specify runner + deployment step
         runs-on: ubuntu-latest
         steps:
             - name: Deploy to GitHub Pages

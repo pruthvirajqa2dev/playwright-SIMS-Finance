@@ -147,6 +147,7 @@ const template = /* html */`<!DOCTYPE html>
       environment:  (r.environment  || '').trim(),
       execTime:     (r.execTime     || 'N/A').trim(),
       workflowTime: (r.workflowTime || 'N/A').trim(),
+      failedStage:  (r.failedStage  || '').trim(),
       shardTimes:   Array.isArray(r.shardTimes) ? r.shardTimes : [],
     }));
 
@@ -491,12 +492,13 @@ const template = /* html */`<!DOCTYPE html>
                         <th className={\`px-4 py-3 cursor-pointer select-none \${thClass('status')}\`}    onClick={() => handleSort('status')}>Status</th>
                         <th className={\`px-4 py-3 cursor-pointer select-none \${thClass('environment')}\`} onClick={() => handleSort('environment')}>Environment</th>
                         <th className="px-4 py-3">Execution Time</th>
+                        <th className="px-4 py-3">Stage</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {paginated.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className="text-center py-10 text-slate-400 text-sm">
+                          <td colSpan={7} className="text-center py-10 text-slate-400 text-sm">
                             No reports match the current filters.
                           </td>
                         </tr>
@@ -529,6 +531,16 @@ const template = /* html */`<!DOCTYPE html>
                                 </div>
                               </div>
                             )}
+                          </td>
+                          <td className="px-4 py-3 text-xs">
+                            {r.failedStage && r.failedStage !== 'None'
+                              ? <span className={\`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold border \${
+                                  r.failedStage === 'auth' ? 'bg-rose-100 text-rose-700 border-rose-200' : 'bg-amber-100 text-amber-700 border-amber-200'
+                                }\`}>
+                                  {r.failedStage === 'auth' ? '🔐' : '🧪'} {r.failedStage}
+                                </span>
+                              : <span className="text-slate-300">—</span>
+                            }
                           </td>
                         </tr>
                       ))}

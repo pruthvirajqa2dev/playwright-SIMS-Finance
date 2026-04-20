@@ -41,40 +41,79 @@ logger.info(`Browser: ${process.env.BROWSER || "chromium"}`);
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+// Path where the auth gate saves the authenticated browser session.
+// CI sets STORAGE_STATE_PATH; local runs fall back to /tmp.
+const STORAGE_STATE_PATH =
+    process.env.STORAGE_STATE_PATH ?? "/tmp/storageState.json";
+
 export default defineConfig({
     expect: {
-        timeout: 35 * 1000 // 60 seconds
+        timeout: 35 * 1000
     },
     timeout: 120 * 1000,
     testDir: "./src/tests",
     outputDir: "C:/temp/playwright-test-results",
-    /* Run tests in files in parallel */
-    fullyParallel: true,
-    /* Fail the build on CI if you accidentally left test.only in the source code. */
+    // Per-project fullyParallel is overridden below; keep false at root so
+    // auth gate and postchecks don't inadvertently run in parallel globally.
+    fullyParallel: false,
     // forbidOnly: !!process.env.CI,
-    /* Retry on CI only */
-    retries: process.env.CI ? 1 : 0,
-    /* Opt out of parallel tests on CI. */
-    workers: process.env.CI ? 2 : undefined,
-    /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+    // Retries are intentionally set per-project (see below).
+    retries: 0,
+    workers: process.env.CI ? 1 : undefined,
     reporter: [["blob"], ["json", { outputFile: "test-results.json" }]],
-    /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
-        /* Base URL to use in actions like `await page.goto('/')`. */
         baseURL: `${process.env.URL}`,
         video: "on",
-        /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: "on-first-retry",
         screenshot: "on"
     },
     // globalSetup: `src//utils//globalSetup.ts`,
-    /* Configure projects for major browsers */
+
+    // ── maxFailures: stop early once 2 tests have failed ────────────────────
+    // Applied globally; auth gate has its own retries=2 below so a transient
+    // login hiccup won't immediately count as a failure.
+    maxFailures: process.env.CI ? 2 : 0,
+
     projects: [
+        // ── 1. Authentication gate ───────────────────────────────────────────
+        // Runs ONLY auth.spec.ts.  2 retries give tolerance for transient blips.
+        // The workflow blocks postchecks until this project exits 0.
         {
-            name: "chromium",
+            name: "auth",
+            retries: 2,
+            testMatch: "**/Auth/auth.spec.ts",
             use: {
                 ...devices["Desktop Chrome"],
                 viewport: { width: 1266, height: 586 }
+            }
+        },
+
+        // ── 2. Postchecks — shard 1 (@shard1 tests) ─────────────────────────
+        // No retries: failures should surface immediately.
+        // Reuses the authenticated storageState saved by the auth gate.
+        {
+            name: "chromium-shard1",
+            retries: 0,
+            testMatch: "**/Post-Deployment-Tests/PostChecksTests.spec.ts",
+            use: {
+                ...devices["Desktop Chrome"],
+                viewport: { width: 1266, height: 586 },
+                // Pre-populate cookies / localStorage so each test starts
+                // with a valid session — login calls still run but complete
+                // instantly because the app sees an active session.
+                storageState: STORAGE_STATE_PATH
+            }
+        },
+
+        // ── 3. Postchecks — shard 2 (@shard2 tests) ─────────────────────────
+        {
+            name: "chromium-shard2",
+            retries: 0,
+            testMatch: "**/Post-Deployment-Tests/PostChecksTests.spec.ts",
+            use: {
+                ...devices["Desktop Chrome"],
+                viewport: { width: 1266, height: 586 },
+                storageState: STORAGE_STATE_PATH
             }
         }
 
