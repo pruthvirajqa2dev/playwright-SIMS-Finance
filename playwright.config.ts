@@ -79,7 +79,7 @@ export default defineConfig({
         // The workflow blocks postchecks until this project exits 0.
         {
             name: "auth",
-            retries: 2,
+            retries: process.env.CI ? 2 : 0,
             testMatch: "**/Auth/auth.spec.ts",
             use: {
                 ...devices["Desktop Chrome"],
@@ -95,8 +95,9 @@ export default defineConfig({
         // UAT's single-session enforcement when two shards share one session.
         {
             name: "chromium-shard1",
-            retries: 2,
+            retries: process.env.CI ? 2 : 0,
             testMatch: "**/Post-Deployment-Tests/PostChecksTests.spec.ts",
+            grep: /@shard1/,
             use: {
                 ...devices["Desktop Chrome"],
                 viewport: { width: 1266, height: 586 }
@@ -106,8 +107,9 @@ export default defineConfig({
         // ── 3. Postchecks — shard 2 (@shard2 tests) ─────────────────────────
         {
             name: "chromium-shard2",
-            retries: 2,
+            retries: process.env.CI ? 2 : 0,
             testMatch: "**/Post-Deployment-Tests/PostChecksTests.spec.ts",
+            grep: /@shard2/,
             use: {
                 ...devices["Desktop Chrome"],
                 viewport: { width: 1266, height: 586 }
