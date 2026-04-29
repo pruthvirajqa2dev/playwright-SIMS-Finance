@@ -8,7 +8,13 @@ on:
         branches: [Main]
     schedule:
         - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
-
+        # 30 April
+        - cron: "0 13 30 4 *"   # 2 PM UK
+        - cron: "0 17 30 4 *"    # 6 PM UK
+         # 1 May
+        - cron: "0 13 1 5 *"    # 2 PM UK
+        - cron: "0 17 1 5 *"    # 6 PM UK
+        
 # ─────────────────────────────────────────────────────────────────────────────
 # PIPELINE OVERVIEW
 #
