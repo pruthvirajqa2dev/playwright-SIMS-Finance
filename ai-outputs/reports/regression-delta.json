@@ -1,0 +1,135 @@
+{
+  "generatedAt": "2026-04-30T13:42:47.142Z",
+  "pivotDate": "2026-04-23",
+  "beforeWindow": {
+    "from": "2026-04-16",
+    "to": "2026-04-22",
+    "runsAnalysed": 9
+  },
+  "afterWindow": {
+    "from": "2026-04-23",
+    "to": "2026-04-30",
+    "runsAnalysed": 6
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "TRAINING",
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 20,
+      "afterFailureRate": 50,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 30,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "High",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 20,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 20,
+      "afterFlakyRate": 33,
+      "failureDelta": -20,
+      "flakyDelta": 13,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "Help screen",
+      "beforeFailureRate": 25,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -25,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m  Expected"
+      ],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 20,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 40,
+      "afterFlakyRate": 17,
+      "failureDelta": -20,
+      "flakyDelta": -23,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report",
+      "beforeFailureRate": 50,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -50,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report",
+      "beforeFailureRate": 50,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 50,
+      "afterFlakyRate": 0,
+      "failureDelta": -50,
+      "flakyDelta": -50,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate the timeout issues in 'NML510 - Trial Balance Report' with a 50% failure rate.",
+    "Analyze the environment differences between UAT and TRAINING for potential impacts.",
+    "Review the locator visibility errors in 'NML510 - Trial Balance Report' to identify underlying causes.",
+    "Monitor the flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for further patterns.",
+    "Assess the stability of resolved tests to ensure no re-emergence of issues."
+  ],
+  "executiveSummary": [
+    "The 'NML510 - Trial Balance Report' showed a regression from 20% to 50% failure rate post-pivot.",
+    "This pattern may indicate timing issues, as the test timeout exceeded 120000ms.",
+    "May affect the accuracy of financial reporting for users relying on the trial balance.",
+    "The environment change from UAT to TRAINING could reflect differences impacting test outcomes.",
+    "Five tests improved, indicating some stability, but the regression warrants immediate attention."
+  ]
+}

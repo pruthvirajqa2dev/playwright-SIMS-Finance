@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIMS Finance – AI Analysis Report</title>
+
+  <!-- Tailwind CSS (Play CDN — same as dashboard) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: { DEFAULT: '#10b981', dark: '#059669' } } } }
+    };
+  </script>
+
+  <!-- React 18 -->
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* ── Base ── */
+    html { scroll-behavior:smooth; }
+    *, *::before, *::after { box-sizing:border-box; }
+    tbody tr { transition:background 0.12s ease; }
+
+    /* ── Shell ── */
+    .dash { min-height:100vh; display:flex; flex-direction:column; background:#f1f5f9; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:#1e293b; font-size:14px; line-height:1.5; }
+
+    /* ── Header ── */
+    .dash-header { background:linear-gradient(135deg,#059669,#10b981); color:white; padding:1.5rem 2rem; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+    .dash-header-inner { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; }
+    .dash-title { font-size:1.45rem; font-weight:800; letter-spacing:-0.025em; line-height:1.2; }
+    .dash-subtitle { font-size:0.8rem; font-weight:400; opacity:0.72; margin-top:0.35rem; letter-spacing:0.01em; }
+    .dash-header-right { display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem; }
+    .dash-meta { font-size:0.7rem; font-family:monospace; background:rgba(255,255,255,0.18); padding:0.25rem 0.85rem; border-radius:999px; }
+
+    /* ── Sticky nav ── */
+    .dash-nav { background:white; border-bottom:1px solid #e2e8f0; position:sticky; top:0; z-index:20; box-shadow:0 1px 6px rgba(0,0,0,0.05); }
+    .dash-nav-inner { max-width:1400px; margin:0 auto; display:flex; padding:0 2rem; overflow-x:auto; }
+    .dash-nav a { display:inline-flex; align-items:center; gap:0.35rem; padding:0.85rem 1.1rem; font-size:0.76rem; font-weight:600; color:#64748b; text-decoration:none; border-bottom:2px solid transparent; white-space:nowrap; margin-bottom:-1px; letter-spacing:0.01em; transition:color 0.15s,border-color 0.15s; }
+    .dash-nav a:hover { color:#10b981; border-bottom-color:#10b981; }
+
+    /* ── Sections always visible ── */
+    .dash-section { display:block; scroll-margin-top:52px; }
+
+    /* ── Main ── */
+    .dash-main { flex:1; max-width:1400px; margin:0 auto; width:100%; padding:2rem; }
+
+    /* ── Section divider label ── */
+    .section-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#94a3b8; margin-bottom:0.85rem; display:flex; align-items:center; gap:0.6rem; }
+    .section-label::after { content:''; flex:1; height:1px; background:#e2e8f0; }
+
+    /* ── Card ── */
+    .card { background:white; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,0.05),0 4px 14px rgba(0,0,0,0.04); margin-bottom:1.25rem; overflow:hidden; transition:box-shadow 0.18s ease, transform 0.18s ease; }
+    .card:hover { box-shadow:0 4px 10px rgba(0,0,0,0.08),0 12px 28px rgba(0,0,0,0.06); transform:translateY(-1px); }
+    .card-head { padding:1rem 1.5rem; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .card-head h2 { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#475569; margin:0; }
+    .card-head p { font-size:0.72rem; color:#94a3b8; margin:0.2rem 0 0; font-weight:400; }
+    .card-body { padding:1.5rem; }
+
+    /* ── KPI strip ── */
+    .kpi-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin-bottom:1.25rem; }
+    .kpi-tile { background:white; border-radius:12px; padding:1.25rem 1.5rem; box-shadow:0 1px 3px rgba(0,0,0,0.05),0 4px 14px rgba(0,0,0,0.04); transition:box-shadow 0.18s ease, transform 0.18s ease; }
+    .kpi-tile:hover { box-shadow:0 4px 10px rgba(0,0,0,0.08),0 12px 28px rgba(0,0,0,0.06); transform:translateY(-1px); }
+    .kpi-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#94a3b8; margin-bottom:0.5rem; }
+    .kpi-value { font-size:2.4rem; font-weight:900; line-height:1; margin-bottom:0.5rem; letter-spacing:-0.02em; }
+    .kpi-sub { font-size:0.7rem; color:#94a3b8; margin-top:0.3rem; }
+
+    /* ── Alert block ── */
+    .alert-amber { display:flex; gap:0.75rem; padding:0.85rem 1rem; background:#fffbeb; border-left:3px solid #f59e0b; border-radius:0 8px 8px 0; }
+    .alert-amber-title { font-size:0.78rem; font-weight:600; color:#92400e; }
+    .alert-amber-body  { font-size:0.74rem; color:#b45309; margin-top:0.2rem; line-height:1.5; }
+
+    /* ── Table typography ── */
+    th { font-size:0.65rem !important; letter-spacing:0.07em; }
+    td { font-size:0.8rem; }
+
+    /* ── Footer ── */
+    .dash-footer { text-align:center; padding:1.5rem; font-size:0.7rem; color:#94a3b8; border-top:1px solid #e2e8f0; letter-spacing:0.02em; }
+
+    /* ── Global Info Tooltip System ── */
+    /* Trigger: any element with class "info-trigger" + data-tooltip attribute */
+    .info-trigger { display:inline-flex; align-items:center; justify-content:center;
+                    width:15px; height:15px; border-radius:50%;
+                    background:#e2e8f0; color:#64748b;
+                    font-size:0.6rem; font-weight:800; font-style:normal;
+                    cursor:default; flex-shrink:0; user-select:none;
+                    transition:background 0.15s, color 0.15s; }
+    .info-trigger:hover { background:#10b981; color:white; }
+    /* Single global tooltip — lives on <body>, never clipped by any ancestor */
+    #global-tooltip { position:fixed; z-index:99999; max-width:250px; width:max-content;
+                      background:#1e293b; color:#e2e8f0;
+                      font-size:0.72rem; line-height:1.65;
+                      padding:0.65rem 0.85rem; border-radius:8px;
+                      box-shadow:0 8px 28px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.12);
+                      pointer-events:none; white-space:normal;
+                      opacity:0; transition:opacity 0.16s ease;
+                      display:none; }
+    #global-tooltip.tt-visible { display:block; }
+    #global-tooltip.tt-show    { opacity:1; }
+    #global-tooltip::after { content:''; position:absolute; border:5px solid transparent; }
+    #global-tooltip.tt-above::after { top:100%; left:var(--ax,50%); transform:translateX(-50%); border-top-color:#1e293b; }
+    #global-tooltip.tt-below::after { bottom:100%; left:var(--ax,50%); transform:translateX(-50%); border-bottom-color:#1e293b; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-full font-sans">
+
+  <div id="root"></div>
+
+  <script id="app-data">
+    window.__AI_DATA__ = {
+      trend:      {"generatedAt":"2026-04-30T13:41:59.979Z","runsAnalysed":26,"weekendExcluded":4,"dateRange":{"from":"2026-04-16","to":"2026-04-30"},"overallHealthScore":75,"trendDirection":"Improving","successRate":23,"avgTestPassRate":91,"flakyRate":42,"byEnvironment":{"TRAINING":{"total":4,"failures":0,"flaky":2,"avgSuccess":100,"runs":[{"timestamp":"2026-04-30_12-20-44","successRate":100,"flaky":false},{"timestamp":"2026-04-30_10-16-51","successRate":100,"flaky":true},{"timestamp":"2026-04-29_10-17-27","successRate":100,"flaky":false},{"timestamp":"2026-04-29_09-15-58","successRate":100,"flaky":true}],"failureRuns":[],"flakyRuns":[{"timestamp":"2026-04-30_10-16-51","successRate":100,"flaky":true},{"timestamp":"2026-04-29_09-15-58","successRate":100,"flaky":true}]},"UAT":{"total":22,"failures":13,"flaky":9,"avgSuccess":89,"runs":[{"timestamp":"2026-04-28_10-30-28","successRate":86,"flaky":false},{"timestamp":"2026-04-27_10-28-29","successRate":100,"flaky":false},{"timestamp":"2026-04-24_09-57-10","successRate":100,"flaky":true},{"timestamp":"2026-04-23_10-03-15","successRate":86,"flaky":false},{"timestamp":"2026-04-23_06-51-55","successRate":86,"flaky":true},{"timestamp":"2026-04-22_09-38-17","successRate":86,"flaky":true},{"timestamp":"2026-04-21_09-50-54","successRate":100,"flaky":false},{"timestamp":"2026-04-20_10-41-01","successRate":100,"flaky":true},{"timestamp":"2026-04-20_10-11-46","successRate":86,"flaky":false},{"timestamp":"2026-04-20_09-59-45","successRate":71,"flaky":false},{"timestamp":"2026-04-20_09-46-09","successRate":100,"flaky":false},{"timestamp":"2026-04-17_11-39-01","successRate":100,"flaky":false},{"timestamp":"2026-04-17_11-24-07","successRate":100,"flaky":true},{"timestamp":"2026-04-17_11-02-03","successRate":100,"flaky":true},{"timestamp":"2026-04-17_10-36-46","successRate":100,"flaky":true},{"timestamp":"2026-04-17_10-23-34","successRate":88,"flaky":true},{"timestamp":"2026-04-17_10-10-08","successRate":88,"flaky":false},{"timestamp":"2026-04-17_09-53-44","successRate":88,"flaky":false},{"timestamp":"2026-04-17_09-28-23","successRate":88,"flaky":false},{"timestamp":"2026-04-17_09-23-50","successRate":88,"flaky":false},{"timestamp":"2026-04-16_12-11-10","successRate":63,"flaky":true},{"timestamp":"2026-04-16_11-54-33","successRate":50,"flaky":false}],"failureRuns":[{"timestamp":"2026-04-28_10-30-28","successRate":86,"flaky":false},{"timestamp":"2026-04-23_10-03-15","successRate":86,"flaky":false},{"timestamp":"2026-04-23_06-51-55","successRate":86,"flaky":true},{"timestamp":"2026-04-22_09-38-17","successRate":86,"flaky":true},{"timestamp":"2026-04-20_10-11-46","successRate":86,"flaky":false},{"timestamp":"2026-04-20_09-59-45","successRate":71,"flaky":false},{"timestamp":"2026-04-17_10-23-34","successRate":88,"flaky":true},{"timestamp":"2026-04-17_10-10-08","successRate":88,"flaky":false},{"timestamp":"2026-04-17_09-53-44","successRate":88,"flaky":false},{"timestamp":"2026-04-17_09-28-23","successRate":88,"flaky":false},{"timestamp":"2026-04-17_09-23-50","successRate":88,"flaky":false},{"timestamp":"2026-04-16_12-11-10","successRate":63,"flaky":true},{"timestamp":"2026-04-16_11-54-33","successRate":50,"flaky":false}],"flakyRuns":[{"timestamp":"2026-04-24_09-57-10","successRate":100,"flaky":true},{"timestamp":"2026-04-23_06-51-55","successRate":86,"flaky":true},{"timestamp":"2026-04-22_09-38-17","successRate":86,"flaky":true},{"timestamp":"2026-04-20_10-41-01","successRate":100,"flaky":true},{"timestamp":"2026-04-17_11-24-07","successRate":100,"flaky":true},{"timestamp":"2026-04-17_11-02-03","successRate":100,"flaky":true},{"timestamp":"2026-04-17_10-36-46","successRate":100,"flaky":true},{"timestamp":"2026-04-17_10-23-34","successRate":88,"flaky":true},{"timestamp":"2026-04-16_12-11-10","successRate":63,"flaky":true}]}},"patterns":[{"patternType":"Chronic Flakiness","description":"42% of runs exhibited flaky tests, indicating potential instability in test reliability.","affectedRuns":11,"severity":"Medium","recommendation":"Investigate the flaky tests to identify common factors contributing to their instability."},{"patternType":"Recurring Outage","description":"Two runs recorded complete outages with 0% pass rates, indicating significant issues during those periods.","affectedRuns":2,"severity":"High","recommendation":"Review the test environment and configurations during the outage periods for potential causes."},{"patternType":"Improving Trend","description":"The average success rate improved from 80% to 84% in the last 7 runs, suggesting positive momentum.","affectedRuns":7,"severity":"Low","recommendation":"Continue monitoring to ensure this trend persists and investigate any contributing factors."}],"riskPeriods":[{"period":"2026-04-16 to 2026-04-17","description":"7 consecutive runs recorded failures, indicating a potential issue during this timeframe."},{"period":"2026-04-20","description":"Two runs on this day had failures, suggesting a possible day-specific risk."},{"period":"2026-04-22 to 2026-04-24","description":"3 consecutive runs with failures observed, indicating a recurring issue in this period."}],"actionItems":["Investigate flaky tests for common failure patterns.","Analyze the environment during outage periods for configuration issues.","Monitor the trend of success rates to ensure continued improvement."],"executiveSummary":["23% of runs were fully passed with no failures or flakiness.","42% of runs had flaky tests, indicating reliability concerns.","Two runs experienced complete outages with 0% pass rates.","Average success rate improved from 80% to 84% in recent runs.","7 consecutive runs had failures between April 16 and 17.","Failures clustered on April 20 and between April 22 and 24.","UAT environment had a lower average success rate of 89% compared to 100% in TRAINING.","Further analysis of flaky tests and outage periods is recommended."]},
+      deep:       {"generatedAt":"2026-04-30T13:42:24.103Z","runsAnalysed":15,"runsWithIssues":15,"reportBaseUrl":"https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/","perTestProfiles":[{"testTitle":"RSS570 - Crystal Report","totalRuns":4,"failureCount":2,"flakyCount":2,"passCount":0,"failureRate":50,"flakyRate":50,"avgDurationMs":119983,"lastSeen":"2026-04-17_10-36-46","errorSamples":["Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background "],"failuresByEnv":{"UAT":2},"runsByEnv":{"UAT":4},"lastFailureTimestamp":"2026-04-16_12-11-10"},{"testTitle":"NML510 - Trial Balance Report","totalRuns":4,"failureCount":2,"flakyCount":0,"passCount":2,"failureRate":50,"flakyRate":0,"avgDurationMs":70713,"lastSeen":"2026-04-17_10-36-46","errorSamples":["Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background "],"failuresByEnv":{"UAT":2},"runsByEnv":{"UAT":4},"lastFailureTimestamp":"2026-04-16_12-11-10"},{"testTitle":"NML510 - Trial Balance Report @shard1","totalRuns":11,"failureCount":4,"flakyCount":0,"passCount":7,"failureRate":36,"flakyRate":0,"avgDurationMs":128296,"lastSeen":"2026-04-30_10-16-51","errorSamples":["\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m","Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background "],"failuresByEnv":{"UAT":4},"runsByEnv":{"TRAINING":2,"UAT":9},"lastFailureTimestamp":"2026-04-28_10-30-28"},{"testTitle":"Help screen","totalRuns":4,"failureCount":1,"flakyCount":0,"passCount":3,"failureRate":25,"flakyRate":0,"avgDurationMs":9042,"lastSeen":"2026-04-17_10-36-46","errorSamples":["Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m  Expected substring: \u001b[32m\"https://uat-"],"failuresByEnv":{"UAT":1},"runsByEnv":{"UAT":4},"lastFailureTimestamp":"2026-04-16_11-54-33"},{"testTitle":"RSS570 - Crystal Report @shard1","totalRuns":11,"failureCount":1,"flakyCount":3,"passCount":7,"failureRate":9,"flakyRate":27,"avgDurationMs":77198,"lastSeen":"2026-04-30_10-16-51","errorSamples":["\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"],"failuresByEnv":{"UAT":1},"runsByEnv":{"TRAINING":2,"UAT":9},"lastFailureTimestamp":"2026-04-20_09-59-45"},{"testTitle":"SIMS_TB_SCHOOL - XQuery Report - Execute @shard2","totalRuns":11,"failureCount":1,"flakyCount":3,"passCount":7,"failureRate":9,"flakyRate":27,"avgDurationMs":34366,"lastSeen":"2026-04-30_10-16-51","errorSamples":["Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbutton[value=\\'Close\\']')\u001b[22m \u001b"],"failuresByEnv":{"UAT":1},"runsByEnv":{"TRAINING":2,"UAT":9},"lastFailureTimestamp":"2026-04-20_09-59-45"},{"testTitle":"RSS310Q - Attachments @shard2","totalRuns":11,"failureCount":0,"flakyCount":3,"passCount":8,"failureRate":0,"flakyRate":27,"avgDurationMs":55696,"lastSeen":"2026-04-30_10-16-51","errorSamples":[],"failuresByEnv":{},"runsByEnv":{"TRAINING":2,"UAT":9}},{"testTitle":"File upload using SPC420","totalRuns":4,"failureCount":0,"flakyCount":1,"passCount":3,"failureRate":0,"flakyRate":25,"avgDurationMs":45858,"lastSeen":"2026-04-17_10-36-46","errorSamples":[],"failuresByEnv":{},"runsByEnv":{"UAT":4}},{"testTitle":"RSS310Q - Attachments","totalRuns":4,"failureCount":0,"flakyCount":1,"passCount":3,"failureRate":0,"flakyRate":25,"avgDurationMs":53425,"lastSeen":"2026-04-17_10-36-46","errorSamples":[],"failuresByEnv":{},"runsByEnv":{"UAT":4}},{"testTitle":"Login and Logout @shard2","totalRuns":11,"failureCount":0,"flakyCount":0,"passCount":11,"failureRate":0,"flakyRate":0,"avgDurationMs":8235,"lastSeen":"2026-04-30_10-16-51","errorSamples":[],"failuresByEnv":{},"runsByEnv":{"TRAINING":2,"UAT":9}},{"testTitle":"File upload using SPC420 @shard2","totalRuns":11,"failureCount":0,"flakyCount":0,"passCount":11,"failureRate":0,"flakyRate":0,"avgDurationMs":16842,"lastSeen":"2026-04-30_10-16-51","errorSamples":[],"failuresByEnv":{},"runsByEnv":{"TRAINING":2,"UAT":9}},{"testTitle":"Help screen @shard2","totalRuns":11,"failureCount":0,"flakyCount":0,"passCount":11,"failureRate":0,"flakyRate":0,"avgDurationMs":7281,"lastSeen":"2026-04-30_10-16-51","errorSamples":[],"failuresByEnv":{},"runsByEnv":{"TRAINING":2,"UAT":9}},{"testTitle":"Login and Logout","totalRuns":4,"failureCount":0,"flakyCount":0,"passCount":4,"failureRate":0,"flakyRate":0,"avgDurationMs":9049,"lastSeen":"2026-04-17_10-36-46","errorSamples":[],"failuresByEnv":{},"runsByEnv":{"UAT":4}},{"testTitle":"SIMS_TB_SCHOOL - XQuery Report - Execute","totalRuns":4,"failureCount":0,"flakyCount":0,"passCount":4,"failureRate":0,"flakyRate":0,"avgDurationMs":13054,"lastSeen":"2026-04-17_10-36-46","errorSamples":[],"failuresByEnv":{},"runsByEnv":{"UAT":4}},{"testTitle":"XQY200 - Xquery Builder ","totalRuns":3,"failureCount":0,"flakyCount":0,"passCount":0,"failureRate":0,"flakyRate":0,"avgDurationMs":0,"lastSeen":"2026-04-17_10-23-34","errorSamples":[],"failuresByEnv":{},"runsByEnv":{"UAT":3}}],"perTestAnalyses":[{"testTitle":"RSS570 - Crystal Report","stabilityCategory":"Flaky","failureRate":50,"flakyRate":50,"mostFrequentError":"Locator visibility failure","timeoutSuspected":false,"environmentSpecific":true,"recommendation":"Investigate locator visibility issues in UAT"},{"testTitle":"NML510 - Trial Balance Report","stabilityCategory":"Flaky","failureRate":50,"flakyRate":0,"mostFrequentError":"Locator visibility failure","timeoutSuspected":false,"environmentSpecific":true,"recommendation":"Review locator visibility in UAT"},{"testTitle":"NML510 - Trial Balance Report @shard1","stabilityCategory":"Unstable","failureRate":36,"flakyRate":0,"mostFrequentError":"Test timeout exceeded","timeoutSuspected":true,"environmentSpecific":false,"recommendation":"Analyze timeout occurrences during test execution"},{"testTitle":"Help screen","stabilityCategory":"Stable","failureRate":25,"flakyRate":0,"mostFrequentError":"Expected substring not found","timeoutSuspected":false,"environmentSpecific":false,"recommendation":"Check for content changes affecting expectations"},{"testTitle":"RSS570 - Crystal Report @shard1","stabilityCategory":"Flaky","failureRate":9,"flakyRate":27,"mostFrequentError":"Test timeout exceeded","timeoutSuspected":true,"environmentSpecific":false,"recommendation":"Investigate timeout issues in shard execution"}],"coFailurePatterns":[{"tests":["NML510 - Trial Balance Report","RSS570 - Crystal Report"],"occurrences":2,"possibleCause":""}],"topUnstableTests":["NML510 - Trial Balance Report","NML510 - Trial Balance Report @shard1","RSS570 - Crystal Report","RSS570 - Crystal Report @shard1","Help screen"],"actionItems":["Investigate locator visibility issues in UAT for NML510 and RSS570","Analyze timeout occurrences for NML510 @shard1","Review content changes affecting Help screen expectations","Assess shared dependencies causing co-failures","Monitor test execution duration for potential optimizations"],"executiveSummary":["50% of runs for NML510 and RSS570 had failures in UAT.","NML510 @shard1 showed a 36% failure rate with timeouts.","Co-failure observed between NML510 and RSS570 tests.","Flaky behaviour noted in multiple tests with timeout errors.","Locator visibility issues may affect report generation consistency."]},
+      regression: {"generatedAt":"2026-04-30T13:42:47.142Z","pivotDate":"2026-04-23","beforeWindow":{"from":"2026-04-16","to":"2026-04-22","runsAnalysed":9},"afterWindow":{"from":"2026-04-23","to":"2026-04-30","runsAnalysed":6},"beforeEnvs":["UAT"],"afterEnvs":["TRAINING","UAT"],"overallVerdict":"Regressed","regressions":[{"testTitle":"NML510 - Trial Balance Report @shard1","beforeFailureRate":20,"afterFailureRate":50,"beforeFlakyRate":0,"afterFlakyRate":0,"failureDelta":30,"flakyDelta":0,"verdict":"Regressed","riskLevel":"High","errorSamplesBefore":["Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"],"errorSamplesAfter":["\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m","Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"]}],"improvements":[],"newFailures":[],"resolvedFailures":[{"testTitle":"SIMS_TB_SCHOOL - XQuery Report - Execute @shard2","beforeFailureRate":20,"afterFailureRate":0,"beforeFlakyRate":20,"afterFlakyRate":33,"failureDelta":-20,"flakyDelta":13,"verdict":"Resolved","riskLevel":"Low","errorSamplesBefore":["Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"],"errorSamplesAfter":[]},{"testTitle":"Help screen","beforeFailureRate":25,"afterFailureRate":0,"beforeFlakyRate":0,"afterFlakyRate":0,"failureDelta":-25,"flakyDelta":0,"verdict":"Resolved","riskLevel":"Low","errorSamplesBefore":["Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m  Expected"],"errorSamplesAfter":[]},{"testTitle":"RSS570 - Crystal Report @shard1","beforeFailureRate":20,"afterFailureRate":0,"beforeFlakyRate":40,"afterFlakyRate":17,"failureDelta":-20,"flakyDelta":-23,"verdict":"Resolved","riskLevel":"Low","errorSamplesBefore":["\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"],"errorSamplesAfter":[]},{"testTitle":"NML510 - Trial Balance Report","beforeFailureRate":50,"afterFailureRate":0,"beforeFlakyRate":0,"afterFlakyRate":0,"failureDelta":-50,"flakyDelta":0,"verdict":"Resolved","riskLevel":"Low","errorSamplesBefore":["Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"],"errorSamplesAfter":[]},{"testTitle":"RSS570 - Crystal Report","beforeFailureRate":50,"afterFailureRate":0,"beforeFlakyRate":50,"afterFlakyRate":0,"failureDelta":-50,"flakyDelta":-50,"verdict":"Resolved","riskLevel":"Low","errorSamplesBefore":["Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"],"errorSamplesAfter":[]}],"actionItems":["Investigate the timeout issues in 'NML510 - Trial Balance Report' with a 50% failure rate.","Analyze the environment differences between UAT and TRAINING for potential impacts.","Review the locator visibility errors in 'NML510 - Trial Balance Report' to identify underlying causes.","Monitor the flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for further patterns.","Assess the stability of resolved tests to ensure no re-emergence of issues."],"executiveSummary":["The 'NML510 - Trial Balance Report' showed a regression from 20% to 50% failure rate post-pivot.","This pattern may indicate timing issues, as the test timeout exceeded 120000ms.","May affect the accuracy of financial reporting for users relying on the trial balance.","The environment change from UAT to TRAINING could reflect differences impacting test outcomes.","Five tests improved, indicating some stability, but the regression warrants immediate attention."]},
+      dbInteg:    null
+    };
+  </script>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+    const { trend, deep, regression, dbInteg } = window.__AI_DATA__;
+
+    // ── Colour helpers (mirrors dashboard palette) ──────────────────────────
+
+    function severityPill(s) {
+      const map = {
+        High:   'bg-rose-100 text-rose-700 border-rose-200',
+        Medium: 'bg-amber-100 text-amber-700 border-amber-200',
+        Low:    'bg-emerald-100 text-emerald-800 border-emerald-200',
+      };
+      const cls = map[s] || 'bg-slate-100 text-slate-600 border-slate-200';
+      return <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold border ${cls}`}>{s}</span>;
+    }
+
+    function stabilityPill(l) {
+      const map = {
+        Unstable: 'bg-rose-100 text-rose-700 border-rose-200',
+        Flaky:    'bg-amber-100 text-amber-700 border-amber-200',
+        Stable:   'bg-emerald-100 text-emerald-800 border-emerald-200',
+      };
+      const cls = map[l] || 'bg-slate-100 text-slate-600 border-slate-200';
+      return <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold border ${cls}`}>{l}</span>;
+    }
+
+    function patternPill(t) {
+      return <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-700 border border-violet-200">{t}</span>;
+    }
+
+    function trendBadge(d) {
+      const styles = {
+        Improving: { bg:'#ecfdf5', color:'#065f46', border:'#6ee7b7', dot:'#10b981' },
+        Degrading: { bg:'#fff1f2', color:'#9f1239', border:'#fda4af', dot:'#f43f5e' },
+        Stable:    { bg:'#f8fafc', color:'#475569', border:'#cbd5e1', dot:'#94a3b8' },
+      };
+      const icon = d === 'Improving' ? '📈' : d === 'Degrading' ? '📉' : '📊';
+      const s = styles[d] || styles.Stable;
+      return (
+        <span style={{display:'inline-flex',alignItems:'center',gap:'0.4rem',padding:'0.3rem 0.85rem',borderRadius:'999px',fontSize:'0.78rem',fontWeight:700,background:s.bg,color:s.color,border:'1px solid ' + s.border}}>
+          <span style={{width:'7px',height:'7px',borderRadius:'50%',background:s.dot,flexShrink:0}} />
+          {icon} {d}
+        </span>
+      );
+    }
+
+    function healthColor(score) {
+      return score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#f43f5e';
+    }
+
+    // ── Health Ring ─────────────────────────────────────────────────────────
+
+    function HealthRing({ score }) {
+      const canvasRef = useRef(null);
+      const chartRef  = useRef(null);
+      const color = healthColor(score);
+      useEffect(() => {
+        if (!canvasRef.current) return;
+        if (chartRef.current) chartRef.current.destroy();
+        chartRef.current = new Chart(canvasRef.current, {
+          type: 'doughnut',
+          data: {
+            datasets: [{
+              data: [score, 100 - score],
+              backgroundColor: [color, '#e2e8f0'],
+              borderWidth: 0,
+              circumference: 270,
+              rotation: 225,
+            }]
+          },
+          options: {
+            cutout: '72%',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false }, tooltip: { enabled: false } }
+          }
+        });
+        return () => { if (chartRef.current) chartRef.current.destroy(); };
+      }, [score]);
+      return (
+        <div className="relative w-32 h-32 mx-auto">
+          <canvas ref={canvasRef} />
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-3xl font-extrabold" style={{color}}>{score}</span>
+            <span className="text-xs text-slate-400 font-medium">/100</span>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Failure Rate Bar ─────────────────────────────────────────────────────
+
+    function RateBar({ value, colorClass }) {
+      return (
+        <div className="flex items-center gap-2">
+          <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div className={`h-2 rounded-full ${colorClass}`} style={{width: value + '%'}} />
+          </div>
+          <span className="text-xs font-bold text-slate-600 w-8 text-right">{value}%</span>
+        </div>
+      );
+    }
+
+    // ── Executive Summary Panel ─────────────────────────────────────────────
+    // Accepts summary as string[] or newline-delimited string.
+    // Heuristically buckets bullets into 3 sections for visual hierarchy.
+    // NOTE: all regex literals here use only plain ASCII — no \u / \b / \s escapes
+    // that would be mangled by the outer Node.js template literal.
+
+    function ExecSummaryPanel({ summary, label }) {
+      var RISK_WORDS = ['flak','fail','instabilit','drop','consecutive','cluster','timeout',
+        'regress','lost','missing','orphan','duplicate','violation','critical','outage',
+        'decline','disappear','major','unstable'];
+      var IMPACT_WORDS = ['may affect','could lead','could cause','may cause','further analysis',
+        'priorit','recommend','investigat','monitor ','should be','focus area','stabiliz',
+        'investigate','review','comparing','analysis'];
+
+      function matchesAny(str, words) {
+        var lower = str.toLowerCase();
+        for (var w = 0; w < words.length; w++) { if (lower.indexOf(words[w]) !== -1) return true; }
+        return false;
+      }
+
+      var raw = Array.isArray(summary)
+        ? summary
+        : String(summary || '').split('\n');
+
+      var bullets = [];
+      for (var r = 0; r < raw.length; r++) {
+        var line = raw[r];
+        if (!line) continue;
+        // Strip leading bullet chars: • - * and whitespace
+        var first = line.charCodeAt(0);
+        if (first === 8226 || first === 45 || first === 42) line = line.slice(1);
+        line = line.trim();
+        if (line) bullets.push(line);
+      }
+
+      var obs = [], risks = [], impacts = [];
+      for (var bi = 0; bi < bullets.length; bi++) {
+        var b = bullets[bi];
+        if (matchesAny(b, IMPACT_WORDS))     impacts.push(b);
+        else if (matchesAny(b, RISK_WORDS))  risks.push(b);
+        else                                 obs.push(b);
+      }
+
+      if (!bullets.length) return null;
+
+      function Section({ title, items, bg, borderColor, titleColor, dotColor, prefix }) {
+        if (!items.length) return null;
+        return (
+          <div style={{background:bg, border:'1px solid '+borderColor, borderRadius:'8px', padding:'0.7rem 1rem', marginBottom:'0.5rem'}}>
+            <div style={{fontWeight:700, fontSize:'0.7rem', color:titleColor, marginBottom:'0.45rem', display:'flex', alignItems:'center', gap:'0.35rem', textTransform:'uppercase', letterSpacing:'0.07em'}}>
+              <span>{prefix}</span>
+              <span>{title}</span>
+              <span style={{marginLeft:'auto', fontWeight:600, fontSize:'0.65rem', color:titleColor, opacity:0.7}}>{items.length}</span>
+            </div>
+            <ul style={{margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:'0.22rem'}}>
+              {items.map(function(item, i) {
+                return (
+                  <li key={i} style={{display:'flex', alignItems:'flex-start', gap:'0.45rem', fontSize:'0.8125rem', color:'#374151', lineHeight:1.55}}>
+                    <span style={{color:dotColor, flexShrink:0, fontWeight:800, marginTop:'0.08rem', fontSize:'0.7rem'}}>&rsaquo;</span>
+                    <span>{item}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          {label && (
+            <div style={{fontSize:'0.68rem', fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.55rem'}}>{label}</div>
+          )}
+          <Section prefix="&#128202;" title="Key Observations" items={obs}
+            bg="#f8fafc" borderColor="#e2e8f0" titleColor="#475569" dotColor="#64748b" />
+          <Section prefix="&#9888;" title="Risk Indicators" items={risks}
+            bg="#fffbeb" borderColor="#fde68a" titleColor="#b45309" dotColor="#d97706" />
+          <Section prefix="&#128203;" title="Impact &amp; Considerations" items={impacts}
+            bg="#eff6ff" borderColor="#bfdbfe" titleColor="#1d4ed8" dotColor="#3b82f6" />
+        </div>
+      );
+    }
+
+    // ── Environment Runs Modal ───────────────────────────────────────────────
+    // Shown when a user clicks a count in the Environment Breakdown table.
+    // runs: Array<{timestamp, successRate, flaky}>, title: string, reportBaseUrl: string, onClose: fn
+
+    function EnvRunsModal({ runs, title, reportBaseUrl: baseUrl, onClose }) {
+      if (!runs) return null;
+
+      // Parse "YYYY-MM-DD_HH-MM-SS" → friendly display
+      function fmtTs(ts) {
+        const [datePart, timePart] = (ts || '').split('_');
+        if (!datePart) return ts;
+        const t = (timePart || '').replace(/-/g, ':');
+        return datePart + (t ? '  ' + t : '');
+      }
+
+      // Click-outside to close
+      function handleBackdrop(e) { if (e.target === e.currentTarget) onClose(); }
+
+      return (
+        <div
+          onClick={handleBackdrop}
+          style={{
+            position:'fixed', inset:0, background:'rgba(15,23,42,0.55)',
+            zIndex:9999, display:'flex', alignItems:'center', justifyContent:'center',
+            padding:'1rem'
+          }}
+        >
+          <div style={{
+            background:'#fff', borderRadius:'0.75rem', width:'100%', maxWidth:'640px',
+            maxHeight:'80vh', display:'flex', flexDirection:'column',
+            boxShadow:'0 20px 60px rgba(0,0,0,0.25)'
+          }}>
+            {/* Header */}
+            <div style={{
+              padding:'1rem 1.25rem', borderBottom:'1px solid #e2e8f0',
+              display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0
+            }}>
+              <h3 style={{fontWeight:700, fontSize:'0.95rem', color:'#1e293b', margin:0}}>{title}</h3>
+              <button
+                onClick={onClose}
+                style={{
+                  background:'none', border:'none', cursor:'pointer', color:'#64748b',
+                  fontSize:'1.25rem', lineHeight:1, padding:'0.1rem 0.3rem', borderRadius:'4px'
+                }}
+                aria-label="Close"
+              >×</button>
+            </div>
+
+            {/* Body */}
+            <div style={{overflowY:'auto', flex:1}}>
+              {(!runs || runs.length === 0)
+                ? <p style={{padding:'1.5rem', color:'#64748b', fontSize:'0.85rem'}}>No runs in this category.</p>
+                : (
+                  <table style={{width:'100%', borderCollapse:'collapse', fontSize:'0.82rem'}}>
+                    <thead>
+                      <tr style={{background:'#334155', color:'#fff'}}>
+                        <th style={{padding:'0.6rem 1rem', textAlign:'left', fontWeight:600, letterSpacing:'0.04em', fontSize:'0.72rem', textTransform:'uppercase'}}>#</th>
+                        <th style={{padding:'0.6rem 1rem', textAlign:'left', fontWeight:600, letterSpacing:'0.04em', fontSize:'0.72rem', textTransform:'uppercase'}}>
+                          <span style={{display:'inline-flex',alignItems:'center',gap:'0.35rem'}}>
+                            Run Timestamp
+                            <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                               data-tooltip="UTC timestamp in YYYY-MM-DD_HH-MM-SS format from the CI run that produced this result. Click the link (when available) to open the full Playwright HTML report for that run.">i</i>
+                          </span>
+                        </th>
+                        <th style={{padding:'0.6rem 1rem', textAlign:'center', fontWeight:600, letterSpacing:'0.04em', fontSize:'0.72rem', textTransform:'uppercase'}}>
+                          <span style={{display:'inline-flex',alignItems:'center',gap:'0.35rem',justifyContent:'center'}}>
+                            Pass Rate
+                            <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                               data-tooltip="passed ÷ executed × 100 for this specific run. 100% = all tests passed. Values below 100% indicate at least one test failed (not counting flaky retries).">i</i>
+                          </span>
+                        </th>
+                        <th style={{padding:'0.6rem 1rem', textAlign:'center', fontWeight:600, letterSpacing:'0.04em', fontSize:'0.72rem', textTransform:'uppercase'}}>
+                          <span style={{display:'inline-flex',alignItems:'center',gap:'0.35rem',justifyContent:'center'}}>
+                            Status
+                            <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                               data-tooltip="Clean = 100% pass, no flakiness · Partial failure = some tests failed (pass rate 1–99%) · Complete failure = 0% pass rate · Flaky = at least one test retried and eventually passed.">i</i>
+                          </span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {runs.map((r, idx) => {
+                        const rate = r.successRate ?? 0;
+                        const rateColor = rate >= 95 ? '#059669' : rate >= 50 ? '#d97706' : '#dc2626';
+                        const badges = [];
+                        if (rate < 100) badges.push({ label: rate === 0 ? 'Complete failure' : 'Partial failure', bg:'#fee2e2', fg:'#b91c1c' });
+                        if (r.flaky)    badges.push({ label: 'Flaky', bg:'#fef3c7', fg:'#92400e' });
+                        if (rate === 100 && !r.flaky) badges.push({ label: 'Clean', bg:'#d1fae5', fg:'#065f46' });
+                        return (
+                          <tr key={idx} style={{borderBottom:'1px solid #f1f5f9', background: idx % 2 === 0 ? '#fff' : '#f8fafc'}}>
+                            <td style={{padding:'0.55rem 1rem', color:'#94a3b8', fontFamily:'monospace'}}>{idx + 1}</td>
+                            <td style={{padding:'0.55rem 1rem', fontFamily:'monospace', fontWeight:500}}>
+                              {baseUrl
+                                ? (
+                                  <a
+                                    href={baseUrl + r.timestamp + '/index.html'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{color:'#4f46e5', textDecoration:'underline', textUnderlineOffset:'3px'}}
+                                    title="Open Playwright report for this run"
+                                  >{fmtTs(r.timestamp)}</a>
+                                )
+                                : <span style={{color:'#1e293b'}}>{fmtTs(r.timestamp)}</span>
+                              }
+                            </td>
+                            <td style={{padding:'0.55rem 1rem', textAlign:'center', fontWeight:700, color: rateColor}}>{rate}%</td>
+                            <td style={{padding:'0.55rem 1rem', textAlign:'center'}}>
+                              <span style={{display:'inline-flex', gap:'0.3rem', flexWrap:'wrap', justifyContent:'center'}}>
+                                {badges.map((b, bi) => (
+                                  <span key={bi} style={{padding:'0.15rem 0.5rem', borderRadius:'999px', fontSize:'0.7rem', fontWeight:700, background:b.bg, color:b.fg}}>{b.label}</span>
+                                ))}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )
+              }
+            </div>
+
+            {/* Footer */}
+            <div style={{
+              padding:'0.65rem 1.25rem', borderTop:'1px solid #e2e8f0',
+              fontSize:'0.75rem', color:'#94a3b8', textAlign:'right', flexShrink:0
+            }}>
+              {runs.length} run{runs.length !== 1 ? 's' : ''} · click outside or × to close
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Patterns Table ───────────────────────────────────────────────────────
+
+    function PatternsTable({ patterns }) {
+      if (!patterns || patterns.length === 0)
+        return <p className="text-sm text-slate-400 py-4">No patterns detected.</p>;
+      return (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+              <tr>
+                <th className="px-4 py-3">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                    Pattern
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="Category of recurring behaviour detected by the AI — e.g. 'Consistent Failure', 'Flaky Spike', 'Day-of-week Cluster', 'Execution Time Anomaly'.">i</i>
+                  </span>
+                </th>
+                <th className="px-4 py-3">Description</th>
+                <th className="px-4 py-3">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                    Severity
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="Impact rating: Critical = blocking / data-loss risk · High = repeated failures affecting confidence · Medium = intermittent / watch list · Low = cosmetic or rare.">i</i>
+                  </span>
+                </th>
+                <th className="px-4 py-3 text-center">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                    Runs
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="Number of individual CI runs in which this pattern was observed. Higher = more persistent and reliable signal.">i</i>
+                  </span>
+                </th>
+                <th className="px-4 py-3">Recommendation</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {patterns.map((p, i) => (
+                <tr key={i} className="hover:bg-slate-50">
+                  <td className="px-4 py-3 whitespace-nowrap">{patternPill(p.patternType)}</td>
+                  <td className="px-4 py-3 text-slate-600 text-xs max-w-xs">{p.description}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">{severityPill(p.severity)}</td>
+                  <td className="px-4 py-3 text-center font-mono font-semibold text-slate-700">{p.affectedRuns ?? '—'}</td>
+                  <td className="px-4 py-3 text-slate-600 text-xs max-w-xs">{p.recommendation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    // ── Per-Test Table ───────────────────────────────────────────────────────
+
+    function PerTestTable({ analyses, profiles, reportBaseUrl }) {
+      const profileMap = Object.fromEntries((profiles || []).map(p => [p.testTitle, p]));
+      if (!analyses || analyses.length === 0)
+        return <p className="text-sm text-slate-400 py-4">No per-test data available.</p>;
+
+      // Detect whether multi-env breakdown is present
+      const allEnvs = [...new Set(
+        (profiles || []).flatMap(p => Object.keys(p.failuresByEnv || {}))
+      )].sort();
+      const isMultiEnv = allEnvs.length > 1;
+
+      return (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+              <tr>
+                <th className="px-4 py-3">Test</th>
+                <th className="px-4 py-3 text-center">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                    Stability
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="AI-assigned label: Stable (rare/no failures) · Flaky (passes and fails inconsistently) · Consistently Failing (fails in most runs) · Intermittent (occasional failures without a clear flakiness pattern).">i</i>
+                  </span>
+                </th>
+                <th className="px-4 py-3">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                    Fail Rate
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="failedRuns ÷ totalRuns × 100. A run counts as a failure for this test if the test did not pass (excluding flaky retries that eventually passed).">i</i>
+                  </span>
+                </th>
+                <th className="px-4 py-3">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                    Flaky Rate
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="flakyRuns ÷ totalRuns × 100. A run counts as flaky for this test if it was retried and passed on a subsequent attempt — indicating a non-deterministic result.">i</i>
+                  </span>
+                </th>
+                {isMultiEnv && (
+                  <th className="px-4 py-3">
+                    <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                      Failures by Env
+                      <i className="info-trigger"
+                         data-tooltip="Failures/runs in each environment. Red = >20% failure rate in that env. A test failing only in one env points to environment-specific config or data.">i</i>
+                    </span>
+                  </th>
+                )}
+                <th className="px-4 py-3 text-center">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                    Priority
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="AI-ranked urgency to investigate this test: P1 (Critical) · P2 (High) · P3 (Medium) · P4 (Low). Factors: fail rate, recency, environment spread, and co-failure frequency.">i</i>
+                  </span>
+                </th>
+                <th className="px-4 py-3">Recommendation</th>
+                <th className="px-4 py-3 text-center">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                    Report
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="Links to the Playwright HTML report for the run in which this test last failed. Published to GitHub Pages at {baseUrl}/{timestamp}/index.html.">i</i>
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {analyses.map((a, i) => {
+                const p = profileMap[a.testTitle] || {};
+                const reportUrl = reportBaseUrl && p.lastFailureTimestamp
+                  ? `${reportBaseUrl}${p.lastFailureTimestamp}/index.html`
+                  : null;
+                return (
+                  <tr key={i} className="hover:bg-slate-50">
+                    <td className="px-4 py-3 font-medium text-slate-800 text-xs max-w-xs">
+                      <div>{a.testTitle}</div>
+                      {(p.errorSamples || []).map((e, j) => (
+                        <div key={j} className="mt-1 font-mono text-slate-400 text-xs truncate max-w-xs" title={e}>{e}</div>
+                      ))}
+                    </td>
+                    <td className="px-4 py-3 text-center whitespace-nowrap">{stabilityPill(a.stabilityLabel)}</td>
+                    <td className="px-4 py-3 min-w-[100px]">
+                      <RateBar value={p.failureRate ?? 0}
+                        colorClass={(p.failureRate ?? 0) > 20 ? 'bg-rose-500' : 'bg-emerald-500'} />
+                    </td>
+                    <td className="px-4 py-3 min-w-[100px]">
+                      <RateBar value={p.flakyRate ?? 0} colorClass="bg-amber-400" />
+                    </td>
+                    {isMultiEnv && (
+                      <td className="px-4 py-3 text-xs">
+                        {allEnvs.map(env => {
+                          const fails = (p.failuresByEnv || {})[env] ?? 0;
+                          const runs  = (p.runsByEnv   || {})[env] ?? 0;
+                          const isHot = runs > 0 && fails / runs > 0.2;
+                          return (
+                            <span key={env} className="inline-flex items-center gap-0.5 mr-2 whitespace-nowrap">
+                              <span className="text-slate-400">{env}:</span>
+                              <span className={isHot ? 'font-bold text-rose-600' : 'text-slate-500'}>
+                                {fails}/{runs}
+                              </span>
+                            </span>
+                          );
+                        })}
+                      </td>
+                    )}
+                    <td className="px-4 py-3 text-center whitespace-nowrap">{severityPill(a.priority)}</td>
+                    <td className="px-4 py-3 text-slate-600 text-xs max-w-xs">{a.recommendation}</td>
+                    <td className="px-4 py-3 text-center">
+                      {reportUrl
+                        ? <a href={reportUrl} target="_blank" rel="noreferrer"
+                             className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800 font-semibold text-xs transition">
+                            ↗ View Report
+                          </a>
+                        : <span className="text-slate-300 text-xs">—</span>
+                      }
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    // ── Co-Failure Table ─────────────────────────────────────────────────────
+
+    function CoFailureTable({ patterns }) {
+      if (!patterns || patterns.length === 0) return null;
+      return (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+              <tr>
+                <th className="px-4 py-3">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                    Test Pair
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="Two or more tests that failed in the same CI run. Ranked by the number of runs where ALL listed tests failed together.">i</i>
+                  </span>
+                </th>
+                <th className="px-4 py-3 text-center">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                    Co-failures
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="Number of runs in which every test in this pair failed simultaneously. Higher co-failure count = stronger signal of a shared root cause.">i</i>
+                  </span>
+                </th>
+                <th className="px-4 py-3">Hypothesis</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {patterns.map((c, i) => (
+                <tr key={i} className="hover:bg-slate-50">
+                  <td className="px-4 py-3 text-xs">
+                    {(c.tests || []).map((t, j) => (
+                      <div key={j}>
+                        <span className="font-medium text-slate-800">{t}</span>
+                        {j < c.tests.length - 1 && <span className="block text-slate-300 text-xs">+ with</span>}
+                      </div>
+                    ))}
+                  </td>
+                  <td className="px-4 py-3 text-center font-extrabold text-violet-600 text-lg">{c.occurrences}×</td>
+                  <td className="px-4 py-3 text-slate-600 text-xs max-w-xs">{c.possibleCause}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    // ── Analyse Button ───────────────────────────────────────────────────────
+    // Attempts POST /api/ai/analyse (future local server / CI webhook).
+    // Falls back to copying the CLI command to clipboard if no server responds.
+
+    function AnalyseButton() {
+      const [state, setState] = useState('idle'); // idle | running | done | copied | error
+      const cmd = 'npm run ai:full && npm run ai:report';
+
+      async function handleClick() {
+        setState('running');
+        try {
+          const res = await fetch('/api/ai/analyse', { method: 'POST' });
+          if (res.ok) { setState('done'); setTimeout(() => setState('idle'), 3000); return; }
+        } catch { /* no server — fall through to clipboard */ }
+        try { await navigator.clipboard.writeText(cmd); setState('copied'); }
+        catch { setState('error'); }
+        setTimeout(() => setState('idle'), 3000);
+      }
+
+      const label = state === 'running' ? '⏳ Triggering...'   :
+                    state === 'done'    ? '✓ Analysis triggered!' :
+                    state === 'copied'  ? '✓ Command copied!'  :
+                    state === 'error'   ? '⚠ Copy failed'      :
+                    '🤖 Analyse with AI Now';
+      const disabled = state === 'running';
+
+      return (
+        <div className="flex flex-col items-end gap-1">
+          <button onClick={handleClick} disabled={disabled}
+            className={`px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm ${
+              state === 'done' || state === 'copied'
+                ? 'bg-emerald-500 text-white'
+                : 'bg-white text-emerald-700 border-2 border-emerald-400 hover:bg-emerald-50'
+            } disabled:opacity-50 disabled:cursor-not-allowed`}>
+            {label}
+          </button>
+          <span className="text-xs text-emerald-100 opacity-70 font-mono">{cmd}</span>
+        </div>
+      );
+    }
+
+    // ── Database Integrity Section ───────────────────────────────────────────
+
+    function DatabaseIntegritySection({ report }) {
+      const isMock = report?._isMockData === true;
+
+      if (!report) return (
+        <div className="bg-white rounded-xl shadow-md p-6 mb-5">
+          <div className="flex items-center gap-3 mb-2">
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Database Integrity</h2>
+          </div>
+          <p className="text-sm text-slate-400">
+            No DB integrity data yet. Run:&nbsp;
+            <code className="font-mono text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+              npm run ai:db:post
+            </code>
+            &nbsp;after setting DB credentials in <code className="font-mono text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">src/config/.env</code>
+          </p>
+        </div>
+      );
+
+      const riskColour =
+        report.riskLevel === 'Critical' ? 'bg-rose-100 text-rose-700 border-rose-200' :
+        report.riskLevel === 'High'     ? 'bg-amber-100 text-amber-700 border-amber-200' :
+        report.riskLevel === 'Medium'   ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
+        report.riskLevel === 'Clean'    ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
+                                          'bg-slate-100 text-slate-600 border-slate-200';
+      const riskEmoji =
+        report.riskLevel === 'Critical' ? '🔴' :
+        report.riskLevel === 'High'     ? '🟠' :
+        report.riskLevel === 'Medium'   ? '🟡' : '🟢';
+
+      const sevColour = (s) =>
+        s === 'Critical' ? 'bg-rose-100 text-rose-700 border-rose-200' :
+        s === 'High'     ? 'bg-amber-100 text-amber-700 border-amber-200' :
+        s === 'Medium'   ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
+                           'bg-slate-100 text-slate-600 border-slate-200';
+
+      const [expandedSql, setExpandedSql] = useState(null);
+      const [showAllChecks, setShowAllChecks] = useState(false);
+
+      const violations = (report.checks || []).filter(c => c.status === 'Fail');
+      const passed     = (report.checks || []).filter(c => c.status === 'Pass').length;
+      const rowLosses  = (report.rowCountDeltas || []).filter(d => d.verdict === 'Unexpected Loss');
+
+      return (
+        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-5">
+          {/* Header */}
+          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-3">
+              <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Database Integrity</h2>
+              {isMock && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-violet-100 text-violet-700 border border-violet-200">
+                  🧪 Mock Data — POC
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-slate-400">
+                {report.database} · {report.environment} · {report.checksRun} checks
+              </span>
+              <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${riskColour}`}>
+                {riskEmoji} {report.riskLevel}
+              </span>
+            </div>
+          </div>
+
+          {/* Mock data notice banner */}
+          {isMock && (
+            <div className="px-6 py-3 bg-violet-50 border-b border-violet-100 flex items-start gap-2 text-xs text-violet-700">
+              <span className="mt-0.5">🧪</span>
+              <span>
+                <strong>Representative mock data for POC demonstration.</strong> Violations and row-count deltas are illustrative — they reflect the types of issues this agent catches in real environments.
+                To run against your database: add <code className="font-mono bg-violet-100 px-1 rounded">DB_SERVER</code>, <code className="font-mono bg-violet-100 px-1 rounded">DB_DATABASE</code>, <code className="font-mono bg-violet-100 px-1 rounded">DB_USER</code>, <code className="font-mono bg-violet-100 px-1 rounded">DB_PASSWORD</code> to <code className="font-mono bg-violet-100 px-1 rounded">src/config/.env</code> then run <code className="font-mono bg-violet-100 px-1 rounded">npm run ai:db:post</code>.
+              </span>
+            </div>
+          )}
+
+          {/* KPI bar */}
+          <div className="px-6 py-3 bg-slate-50 border-b border-slate-100 flex flex-wrap gap-6 text-xs">
+            <span className="text-rose-600 font-semibold">⚠ {report.totalViolations} violation{report.totalViolations !== 1 ? 's' : ''} ({report.criticalViolations} critical)</span>
+            <span className="text-emerald-600 font-semibold">✓ {passed} passed</span>
+            {rowLosses.length > 0 && (
+              <span className="text-rose-700 font-bold">🚨 {rowLosses.length} table{rowLosses.length !== 1 ? 's' : ''} lost rows during test run</span>
+            )}
+          </div>
+
+          {/* Executive summary */}
+          {report.executiveSummary && (
+            <div className="px-6 py-4 border-b border-slate-100">
+              <ExecSummaryPanel summary={report.executiveSummary} />
+            </div>
+          )}
+
+          {/* Violations table */}
+          {violations.length > 0 && (
+            <div className="overflow-x-auto border-b border-slate-100">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+                  <tr>
+                    <th className="px-4 py-3">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                        Check
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Named SQL integrity check (e.g. F1: Orphaned Ledger Entries). Each check targets a specific relational constraint or business rule in the SIMS Finance database schema.">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-3 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Severity
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Critical = data loss / financial integrity risk · High = broken referential integrity or workflow stall · Medium = anomaly that warrants investigation · Low = informational.">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-3 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Violations
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Row count returned by the SQL check query. Each row represents one record that violates the integrity rule — e.g. one orphaned ledger entry.">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-3">Description</th>
+                    <th className="px-4 py-3 text-center w-16">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        SQL
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Click to expand the exact SQL query that was executed for this check. Queries run as READ-ONLY against the SIMS Finance database.">i</i>
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {violations.map((c, i) => (
+                    <React.Fragment key={i}>
+                      <tr className="hover:bg-slate-50">
+                        <td className="px-4 py-3 font-semibold text-slate-800 text-xs">[{c.id}] {c.name}</td>
+                        <td className="px-4 py-3 text-center">
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border ${sevColour(c.severity)}`}>{c.severity}</span>
+                        </td>
+                        <td className="px-4 py-3 text-center font-bold text-rose-600 text-sm">{c.violationCount}</td>
+                        <td className="px-4 py-3 text-xs text-slate-500">{c.description}</td>
+                        <td className="px-4 py-3 text-center w-16">
+                          {c.query && (
+                            <button
+                              onClick={() => setExpandedSql(expandedSql === c.id ? null : c.id)}
+                              className={`px-2 py-0.5 rounded text-xs font-mono font-semibold border transition-colors ${expandedSql === c.id ? 'bg-slate-700 text-white border-slate-700' : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'}`}
+                            >
+                              {expandedSql === c.id ? '▲ SQL' : '▶ SQL'}
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                      {expandedSql === c.id && c.query && (
+                        <tr className="bg-slate-800">
+                          <td colSpan={5} className="px-4 py-3">
+                            <pre className="text-xs text-emerald-300 font-mono whitespace-pre-wrap break-all leading-relaxed">{c.query}</pre>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Row count deltas */}
+          {(report.rowCountDeltas || []).length > 0 && (
+            <div className="overflow-x-auto border-b border-slate-100">
+              <div className="px-6 pt-4 pb-2">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400" style={{display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+                  Row Count Changes (pre → post test run)
+                  <i className="info-trigger"
+                     data-tooltip="Snapshot of row counts in key tables taken before and after the test run. An Unexpected Loss means tests deleted or corrupted data. An Unexpected Gain means tests left behind orphaned records.">i</i>
+                </h3>
+              </div>
+              <table className="w-full text-sm text-left">
+                <thead className="bg-slate-600 text-white text-xs uppercase tracking-wide">
+                  <tr>
+                    <th className="px-4 py-2">Table</th>
+                    <th className="px-4 py-2 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Before
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Row count captured immediately before the test suite started. Used as the baseline for detecting data changes.">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-2 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        After
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Row count captured immediately after the test suite completed. Compared against Before to detect unexpected inserts or deletes.">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-2 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Δ
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="After − Before. Positive = rows added, Negative = rows removed. Zero = no change (expected for most tables in a well-isolated test run).">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-2 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Verdict
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Expected Change = delta matches what tests are designed to produce · Unexpected Loss = rows were deleted that shouldn't have been · Unexpected Gain = rows were inserted that weren't cleaned up.">i</i>
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {report.rowCountDeltas.map((d, i) => {
+                    const sign = d.delta >= 0 ? '+' : '';
+                    const deltaColour =
+                      d.verdict === 'Unexpected Loss' ? 'text-rose-600 font-bold' :
+                      d.verdict === 'Unexpected Gain' ? 'text-amber-600 font-semibold' : 'text-slate-400';
+                    const verdictCls =
+                      d.verdict === 'Unexpected Loss' ? 'bg-rose-100 text-rose-700 border-rose-200' :
+                      d.verdict === 'Unexpected Gain' ? 'bg-amber-100 text-amber-700 border-amber-200' :
+                                                        'bg-emerald-100 text-emerald-800 border-emerald-200';
+                    return (
+                      <tr key={i} className="hover:bg-slate-50">
+                        <td className="px-4 py-2 font-mono text-xs text-slate-700">{d.tableName}</td>
+                        <td className="px-4 py-2 text-center text-xs text-slate-500">{d.before.toLocaleString()}</td>
+                        <td className="px-4 py-2 text-center text-xs text-slate-700 font-medium">{d.after.toLocaleString()}</td>
+                        <td className={`px-4 py-2 text-center text-xs ${deltaColour}`}>{sign}{d.delta}</td>
+                        <td className="px-4 py-2 text-center">
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border ${verdictCls}`}>{d.verdict}</span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Action items */}
+          {(report.actionItems || []).length > 0 && (
+            <div className="px-6 py-4">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3" style={{display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+                DB Remediation Actions
+                <i className="info-trigger"
+                   data-tooltip="Prioritised fix steps generated by the AI based on the violations found. Each action targets a specific check failure and includes the recommended SQL or process change.">i</i>
+              </h3>
+              <ul className="space-y-2">
+                {report.actionItems.map((item, i) => (
+                  <li key={i} className="flex gap-3 items-start py-1.5 border-b border-slate-50 last:border-0">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-violet-500 text-white text-xs font-bold flex items-center justify-center">{i+1}</span>
+                    <span className="text-sm text-slate-600">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* All executed checks & SQL */}
+          {(report.checks || []).length > 0 && (
+            <div className="border-t border-slate-100">
+              <button
+                onClick={() => setShowAllChecks(!showAllChecks)}
+                className="w-full px-6 py-3 flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors"
+              >
+                <span>🔍 All Executed SQL Scripts ({(report.checks || []).length} checks)</span>
+                <span className="font-mono text-base leading-none">{showAllChecks ? '▲' : '▼'}</span>
+              </button>
+              {showAllChecks && (
+                <div className="divide-y divide-slate-100">
+                  {(report.checks || []).map((c, i) => {
+                    const statusCls =
+                      c.status === 'Fail'    ? 'bg-rose-100 text-rose-700 border-rose-200' :
+                      c.status === 'Pass'    ? 'bg-emerald-100 text-emerald-700 border-emerald-200' :
+                      c.status === 'Skipped' ? 'bg-slate-100 text-slate-400 border-slate-200' :
+                                               'bg-amber-100 text-amber-700 border-amber-200';
+                    return (
+                      <details key={i} className="group px-6 py-3 hover:bg-slate-50">
+                        <summary className="flex items-center gap-3 cursor-pointer list-none">
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border ${statusCls}`}>{c.status}</span>
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border ${sevColour(c.severity)}`}>{c.severity}</span>
+                          <span className="text-xs font-semibold text-slate-700 font-mono">[{c.id}]</span>
+                          <span className="text-xs text-slate-600">{c.name}</span>
+                          {c.status === 'Fail' && c.violationCount > 0 && (
+                            <span className="ml-auto text-xs font-bold text-rose-600">{c.violationCount} violation{c.violationCount !== 1 ? 's' : ''}</span>
+                          )}
+                        </summary>
+                        {c.query && (
+                          <div className="mt-2 rounded-lg bg-slate-800 overflow-hidden">
+                            <pre className="px-4 py-3 text-xs text-emerald-300 font-mono whitespace-pre-wrap break-all leading-relaxed">{c.query}</pre>
+                          </div>
+                        )}
+                      </details>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ── Regression Delta Section ─────────────────────────────────────────────
+
+    function RegressionDeltaSection({ report }) {
+      if (!report) return (
+        <div className="bg-white rounded-xl shadow-md p-6 mb-5">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Regression Delta</h2>
+          </div>
+          <p className="text-sm text-slate-400">
+            No regression data yet. Run:
+            <code className="ml-2 font-mono text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+              npm run ai:regression -- --since YYYY-MM-DD
+            </code>
+          </p>
+        </div>
+      );
+
+      const verdictColour =
+        report.overallVerdict === 'Regressed' ? 'bg-rose-100 text-rose-700 border-rose-200' :
+        report.overallVerdict === 'Improved'  ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
+                                                'bg-slate-100 text-slate-600 border-slate-200';
+      const verdictEmoji =
+        report.overallVerdict === 'Regressed' ? '🔴' :
+        report.overallVerdict === 'Improved'  ? '🟢' : '🟡';
+
+      const changed = [
+        ...(report.regressions  || []),
+        ...(report.newFailures  || []),
+        ...(report.improvements || []),
+        ...(report.resolvedFailures || [])
+      ];
+
+      function deltaRow(d, i) {
+        const sign = d.failureDelta >= 0 ? '+' : '';
+        const deltaColour =
+          d.failureDelta > 10 ? 'text-rose-600 font-bold' :
+          d.failureDelta > 0  ? 'text-amber-600 font-semibold' :
+          d.failureDelta < 0  ? 'text-emerald-600 font-semibold' : 'text-slate-400';
+        const verdictPillCls =
+          d.verdict === 'Regressed'   ? 'bg-rose-100 text-rose-700 border-rose-200' :
+          d.verdict === 'New Failure' ? 'bg-rose-100 text-rose-700 border-rose-200' :
+          d.verdict === 'Improved'    ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
+          d.verdict === 'Resolved'    ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
+                                        'bg-slate-100 text-slate-500 border-slate-200';
+        return (
+          <tr key={i} className="hover:bg-slate-50">
+            <td className="px-4 py-3 font-medium text-slate-800 text-xs max-w-xs">{d.testTitle}</td>
+            <td className="px-4 py-3 text-center">
+              <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border ${verdictPillCls}`}>{d.verdict}</span>
+            </td>
+            <td className="px-4 py-3 text-xs text-slate-500 text-center">{d.beforeFailureRate}%</td>
+            <td className="px-4 py-3 text-xs text-slate-700 font-medium text-center">{d.afterFailureRate}%</td>
+            <td className={`px-4 py-3 text-xs text-center ${deltaColour}`}>{sign}{d.failureDelta}%</td>
+            <td className="px-4 py-3 text-xs text-slate-500 text-center">{d.riskLevel}</td>
+          </tr>
+        );
+      }
+
+      return (
+        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-5">
+          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-2">
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+              Regression Delta
+            </h2>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-slate-400">
+                Pivot: <span className="font-semibold text-slate-600">{report.pivotDate}</span>
+                &nbsp;·&nbsp;
+                Before: {report.beforeWindow?.runsAnalysed ?? 0} runs ({report.beforeWindow?.from} → {report.beforeWindow?.to})
+                {(report.beforeEnvs || []).length > 0 && (
+                  <span className="ml-1">
+                    {(report.beforeEnvs).map((e, i) => (
+                      <span key={i} className="inline-block ml-1 px-1.5 py-0 rounded text-xs font-bold bg-indigo-100 text-indigo-600 border border-indigo-200">{e}</span>
+                    ))}
+                  </span>
+                )}
+                &nbsp;·&nbsp;
+                After: {report.afterWindow?.runsAnalysed ?? 0} runs ({report.afterWindow?.from} → {report.afterWindow?.to})
+                {(report.afterEnvs || []).length > 0 && (
+                  <span className="ml-1">
+                    {(report.afterEnvs).map((e, i) => (
+                      <span key={i} className="inline-block ml-1 px-1.5 py-0 rounded text-xs font-bold bg-indigo-100 text-indigo-600 border border-indigo-200">{e}</span>
+                    ))}
+                  </span>
+                )}
+              </span>
+              <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${verdictColour}`}>
+                {verdictEmoji} {report.overallVerdict}
+              </span>
+            </div>
+          </div>
+
+          {/* Summary bar */}
+          <div className="px-6 py-3 bg-slate-50 border-b border-slate-100 flex flex-wrap gap-6 text-xs">
+            <span className="text-rose-600 font-semibold">
+              ⚠ {(report.regressions?.length ?? 0) + (report.newFailures?.length ?? 0)} regressed / new
+            </span>
+            <span className="text-emerald-600 font-semibold">
+              ✓ {(report.improvements?.length ?? 0) + (report.resolvedFailures?.length ?? 0)} improved / resolved
+            </span>
+          </div>
+
+          {/* Executive summary */}
+          {report.executiveSummary && (
+            <div className="px-6 py-4 border-b border-slate-100">
+              <ExecSummaryPanel summary={report.executiveSummary} />
+            </div>
+          )}
+
+          {/* Delta table */}
+          {changed.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+                  <tr>
+                    <th className="px-4 py-3">Test</th>
+                    <th className="px-4 py-3 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Verdict
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Regressed = was passing before, now failing · Improved = was failing before, now passing · New Failure = only present in After window · Resolved = only present in Before window.">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-3 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Before
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Pass rate for this test in the Before window (runs prior to the pivot date). Calculated as passedRuns ÷ totalRuns × 100 within that window.">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-3 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        After
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="Pass rate for this test in the After window (runs on or after the pivot date). Compared against Before to determine the direction and magnitude of change.">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-3 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Δ
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="After − Before pass rate. Positive (green) = improvement. Negative (red) = regression. The larger the absolute value, the more significant the change.">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-3 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Risk
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="AI-assessed risk level of the delta: Critical = large regression in a core workflow · High = consistent drop · Medium = moderate or recent change · Low = minor or improving.">i</i>
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {changed.map((d, i) => deltaRow(d, i))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="px-6 py-4 text-sm text-slate-400">No test deltas — all tests stable across the pivot date.</p>
+          )}
+
+          {/* Action items from regression agent */}
+          {(report.actionItems || []).length > 0 && (
+            <div className="px-6 py-4 border-t border-slate-100">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3" style={{display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+                Regression Action Items
+                <i className="info-trigger"
+                   data-tooltip="Prioritised follow-up steps generated by the AI from the delta analysis — e.g. bisect the commit range, re-run in isolation, check shared fixtures.">i</i>
+              </h3>
+              <ul className="space-y-2">
+                {report.actionItems.map((item, i) => (
+                  <li key={i} className="flex gap-3 items-start py-1.5 border-b border-slate-50 last:border-0">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-rose-500 text-white text-xs font-bold flex items-center justify-center">{i+1}</span>
+                    <span className="text-sm text-slate-600">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ── Action Items ─────────────────────────────────────────────────────────
+
+    function ActionList({ items, title }) {
+      if (!items || items.length === 0) return null;
+      const tips = {
+        'Trend-Level': 'Macro recommendations from the Trend Pattern Agent based on the full run history — e.g. schedule changes, alerting thresholds, investigation priorities.',
+        'Per-Test':    'Test-level recommendations from the Deep Failure Agent based on per-test fail and flaky rates — e.g. quarantine a flaky test, fix a shared fixture, add a retry guard.'
+      };
+      return (
+        <div>
+          <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3" style={{display:'inline-flex',alignItems:'center',gap:'0.4rem'}}>
+            {title}
+            {tips[title] && (
+              <i className="info-trigger" data-tooltip={tips[title]}>i</i>
+            )}
+          </h3>
+          <ul className="space-y-2">
+            {items.map((item, i) => (
+              <li key={i} className="flex gap-3 items-start py-2 border-b border-slate-100 last:border-0">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-bold flex items-center justify-center">{i+1}</span>
+                <span className="text-sm text-slate-600">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    // ── App ──────────────────────────────────────────────────────────────────
+
+    function App() {
+      const score       = trend.overallHealthScore ?? 0;
+      const trendDir    = trend.trendDirection ?? 'Unknown';
+      const generatedAt = trend.generatedAt
+        ? new Date(trend.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }) + ' UTC'
+        : '—';
+      const reportBaseUrl = deep.reportBaseUrl || '';
+
+      // ── Env runs modal state ───────────────────────────────────────────────
+      const [envModal, setEnvModal] = useState(null); // { title, runs } | null
+
+      return (
+        <div className="dash">
+
+          {/* ── Env runs modal (portal-style, rendered at top of tree) ── */}
+          {envModal && (
+            <EnvRunsModal
+              runs={envModal.runs}
+              title={envModal.title}
+              reportBaseUrl={reportBaseUrl}
+              onClose={() => setEnvModal(null)}
+            />
+          )}
+
+          {/* ── Header ── */}
+          <header className="dash-header">
+            <div className="dash-header-inner">
+              <div>
+                <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.4rem'}}>
+                  <span style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',opacity:0.6}}>✦ AI Powered Analysis</span>
+                </div>
+                <div className="dash-title">SIMS Finance — AI Analysis</div>
+                <div className="dash-subtitle">
+                  Playwright Test Intelligence · {trend.runsAnalysed ?? 0} business-day runs
+                  {(trend.weekendExcluded ?? 0) > 0 && (
+                    <span style={{opacity:0.7}}> (+{trend.weekendExcluded} weekend auto-excluded)</span>
+                  )}
+                  · {trend.dateRange?.from ?? '?'} → {trend.dateRange?.to ?? '?'}
+                </div>
+                {/* ── Detected environments strip ── */}
+                {(() => {
+                  const envEntries = Object.entries(trend.byEnvironment || {});
+                  if (envEntries.length === 0) return null;
+                  return (
+                    <div style={{display:'flex',gap:'0.35rem',flexWrap:'wrap',marginTop:'0.55rem'}}>
+                      <span style={{fontSize:'0.65rem',fontWeight:600,opacity:0.7,alignSelf:'center'}}>Environments:</span>
+                      {envEntries.map(([env, d], i) => (
+                        <span key={i} style={{display:'inline-block',padding:'0.15rem 0.6rem',borderRadius:'999px',fontSize:'0.65rem',fontWeight:700,background:'rgba(255,255,255,0.22)',border:'1px solid rgba(255,255,255,0.35)',letterSpacing:'0.02em'}}>
+                          {env} <span style={{opacity:0.75}}>({d.total} runs)</span>
+                        </span>
+                      ))}
+                    </div>
+                  );
+                })()}
+                <div style={{display:'flex',gap:'0.4rem',flexWrap:'wrap',marginTop:'0.75rem'}}>
+                  {[
+                    { label:'📊 Trend Analysis',       color:'rgba(255,255,255,0.18)' },
+                    { label:'🔍 Failure Analysis',      color:'rgba(255,255,255,0.18)' },
+                    { label:'📈 Reliability Insights',  color:'rgba(255,255,255,0.18)' },
+                  ].map((b,i) => (
+                    <span key={i} style={{display:'inline-block',padding:'0.2rem 0.65rem',borderRadius:'999px',fontSize:'0.68rem',fontWeight:600,background:b.color,border:'1px solid rgba(255,255,255,0.25)',letterSpacing:'0.01em',whiteSpace:'nowrap'}}>
+                      {b.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="dash-header-right">
+                {trendBadge(trendDir)}
+                <AnalyseButton />
+                <span className="dash-meta">Generated {generatedAt}</span>
+              </div>
+            </div>
+          </header>
+
+          {/* ── Sticky nav ── */}
+          <nav className="dash-nav">
+            <div className="dash-nav-inner">
+              <a href="#s-overview">📊 Overview</a>
+              <a href="#s-trends">📈 Trends</a>
+              <a href="#s-unstable">🔴 Unstable Tests</a>
+              <a href="#s-actions">✅ Action Items</a>
+            </div>
+          </nav>
+
+          <main className="dash-main">
+
+            {/* ══ 1. OVERVIEW ══ */}
+            <div id="s-overview" className="dash-section">
+
+              <p className="section-label">Overview</p>
+
+              {/* KPI tiles */}
+              <div className="kpi-row">
+
+                {/* ── 1. Health Score + Trend Direction ── */}
+                <div className="kpi-tile" style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.5rem',borderTop:'3px solid ' + healthColor(score)}}>
+                  <div style={{display:'flex',alignItems:'center',gap:'0.4rem'}}>
+                    <div className="kpi-label" style={{margin:0}}>Health Score</div>
+                    <i className="info-trigger"
+                       data-tooltip="Composite 0–100 score from four signals: Pass rate (% runs with zero failures) · Flaky rate (tests with inconsistent outcomes) · Failure frequency (recurrent test failures) · Execution trend (improving vs degrading). 75+ = Healthy · 50–74 = Warning · <50 = Critical">i</i>
+                  </div>
+                  <HealthRing score={score} />
+                  <span style={{fontSize:'0.7rem',fontWeight:700,color:healthColor(score),letterSpacing:'0.05em',textTransform:'uppercase'}}>
+                    {score>=75?'● Healthy':score>=50?'● Warning':'● Critical'}
+                  </span>
+                  <span style={{
+                    fontSize:'0.72rem', fontWeight:700, letterSpacing:'0.04em',
+                    color: trendDir==='Improving' ? '#059669' : trendDir==='Degrading' ? '#dc2626' : '#64748b'
+                  }}>
+                    {trendDir==='Improving' ? '↑ Improving' : trendDir==='Degrading' ? '↓ Degrading' : '→ Stable'}
+                  </span>
+                </div>
+
+                {/* ── 2. Avg Test Pass Rate ── */}
+                <div className="kpi-tile">
+                  <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.5rem'}}>
+                    <div className="kpi-label" style={{margin:0}}>Avg Test Pass Rate</div>
+                    <i className="info-trigger"
+                       data-tooltip="Average percentage of tests that pass per CI run. Calculated as mean(passed ÷ executed × 100) across all business-day runs. Gives partial credit for near-perfect runs — a run where 41/42 tests pass scores 97%, not 0%. Primary health signal.">i</i>
+                  </div>
+                  <div className="kpi-value" style={{color:healthColor(trend.avgTestPassRate??0)}}>{trend.avgTestPassRate??0}%</div>
+                  <RateBar value={trend.avgTestPassRate??0} colorClass={(trend.avgTestPassRate??0)>=95?'bg-emerald-500':(trend.avgTestPassRate??0)>=80?'bg-amber-400':'bg-rose-500'} />
+                  {(trend.weekendExcluded ?? 0) > 0 && (
+                    <div className="kpi-sub" style={{marginTop:'0.4rem'}}>
+                      <span style={{color:'#94a3b8'}}>{trend.weekendExcluded} wknd run{trend.weekendExcluded !== 1 ? 's' : ''} auto-excluded</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* ── 3. Clean Runs — promoted from sub-metric ── */}
+                <div className="kpi-tile">
+                  <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.5rem'}}>
+                    <div className="kpi-label" style={{margin:0}}>Clean Runs</div>
+                    <i className="info-trigger"
+                       data-tooltip="Strict metric: % of business-day runs where 100% of tests passed with zero flakiness. Even a single flaky retry disqualifies a run. The gap between this and Avg Test Pass Rate reveals how often minor issues creep in.">i</i>
+                  </div>
+                  <div className="kpi-value" style={{color:healthColor(trend.successRate??0)}}>{trend.successRate??0}%</div>
+                  <RateBar value={trend.successRate??0} colorClass={(trend.successRate??0)>=75?'bg-emerald-500':(trend.successRate??0)>=40?'bg-amber-400':'bg-rose-500'} />
+                  <div className="kpi-sub" style={{marginTop:'0.5rem',borderTop:'1px solid #f1f5f9',paddingTop:'0.4rem',fontSize:'0.72rem'}}>
+                    <span style={{color:'#94a3b8'}}>Avg pass rate: </span>
+                    <span style={{fontWeight:700,color:healthColor(trend.avgTestPassRate??0)}}>{trend.avgTestPassRate??0}%</span>
+                    <span style={{color:'#cbd5e1',margin:'0 0.25rem'}}>·</span>
+                    <span style={{color:'#94a3b8'}}>gap: </span>
+                    <span style={{fontWeight:700,color:(trend.avgTestPassRate??0)-(trend.successRate??0)>30?'#dc2626':'#64748b'}}>
+                      {(trend.avgTestPassRate??0)-(trend.successRate??0)}pp
+                    </span>
+                  </div>
+                </div>
+
+                {/* ── 4. Unstable Tests — replaces run-level Flaky Rate ── */}
+                {(() => {
+                  const profiles = deep.perTestProfiles || [];
+                  const total    = profiles.length;
+                  if (total === 0) return (
+                    <div className="kpi-tile">
+                      <div className="kpi-label">Unstable Tests</div>
+                      <div className="kpi-value" style={{color:'#94a3b8'}}>—</div>
+                      <div className="kpi-sub">no profile data</div>
+                    </div>
+                  );
+                  const failing  = profiles.filter(p => (p.failureRate ?? 0) > 0).length;
+                  const flaky    = profiles.filter(p => (p.flakyRate  ?? 0) > 0).length;
+                  const unstable = profiles.filter(p => (p.failureRate ?? 0) > 0 || (p.flakyRate ?? 0) > 0).length;
+                  const pct      = Math.round(unstable / total * 100);
+                  const valColor = pct === 0 ? '#059669' : pct <= 33 ? '#d97706' : '#dc2626';
+                  return (
+                    <div className="kpi-tile">
+                      <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.5rem'}}>
+                        <div className="kpi-label" style={{margin:0}}>Unstable Tests</div>
+                        <i className="info-trigger"
+                           data-tooltip="Tests that have at least one failure or flaky result across the profiled runs. Calculated per-test — a single flaky test causing 10 runs to be flagged still counts as 1 unstable test. A test can be both failing and flaky.">i</i>
+                      </div>
+                      <div className="kpi-value" style={{color:valColor}}>
+                        {unstable}
+                        <span style={{fontSize:'1rem',color:'#94a3b8',fontWeight:500}}>/{total}</span>
+                      </div>
+                      <RateBar value={pct} colorClass={pct===0?'bg-emerald-500':pct<=33?'bg-amber-400':'bg-rose-500'} />
+                      <div className="kpi-sub" style={{marginTop:'0.5rem',borderTop:'1px solid #f1f5f9',paddingTop:'0.4rem',display:'flex',gap:'0.4rem',flexWrap:'wrap'}}>
+                        <span style={{padding:'0.1rem 0.5rem',borderRadius:'999px',fontSize:'0.68rem',fontWeight:700,background:'#fee2e2',color:'#b91c1c'}}>{failing} failing</span>
+                        <span style={{padding:'0.1rem 0.5rem',borderRadius:'999px',fontSize:'0.68rem',fontWeight:700,background:'#fef3c7',color:'#92400e'}}>{flaky} flaky</span>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* ── 5. Suite Reliability — replaces Tests Profiled ── */}
+                {(() => {
+                  const profiles = deep.perTestProfiles || [];
+                  const total    = profiles.length;
+                  if (total === 0) return (
+                    <div className="kpi-tile">
+                      <div className="kpi-label">Suite Reliability</div>
+                      <div className="kpi-value" style={{color:'#94a3b8'}}>—</div>
+                      <div className="kpi-sub">no profile data</div>
+                    </div>
+                  );
+                  const clean = profiles.filter(p => (p.failureRate ?? 0) === 0 && (p.flakyRate ?? 0) === 0).length;
+                  const pct   = Math.round(clean / total * 100);
+                  const valColor = pct >= 80 ? '#059669' : pct >= 50 ? '#d97706' : '#dc2626';
+                  return (
+                    <div className="kpi-tile">
+                      <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.5rem'}}>
+                        <div className="kpi-label" style={{margin:0}}>Suite Reliability</div>
+                        <i className="info-trigger"
+                           data-tooltip="Percentage of profiled tests that are completely clean — zero failures and zero flakiness across all scanned runs. The inverse of Unstable Tests. 100% means every test passes every time, consistently.">i</i>
+                      </div>
+                      <div className="kpi-value" style={{color:valColor}}>{pct}%</div>
+                      <RateBar value={pct} colorClass={pct>=80?'bg-emerald-500':pct>=50?'bg-amber-400':'bg-rose-500'} />
+                      <div className="kpi-sub" style={{marginTop:'0.5rem',borderTop:'1px solid #f1f5f9',paddingTop:'0.4rem'}}>
+                        <span style={{color:'#94a3b8'}}>{clean}/{total} tests clean</span>
+                        <span style={{color:'#cbd5e1',margin:'0 0.25rem'}}>·</span>
+                        <span style={{color:'#94a3b8'}}>{deep.runsAnalysed??0} runs scanned</span>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+              </div>
+
+              {/* Executive Summary */}
+              <div className="card">
+                <div className="card-head"><h2>Executive Summary</h2></div>
+                <div className="card-body">
+                  <ExecSummaryPanel summary={trend.executiveSummary} label="Trend Analysis" />
+                  {deep.executiveSummary && (
+                    <div style={{marginTop:'1.25rem', paddingTop:'1.25rem', borderTop:'1px solid #f1f5f9'}}>
+                      <ExecSummaryPanel summary={deep.executiveSummary} label="Per-Test Analysis" />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Database Integrity */}
+              <DatabaseIntegritySection report={dbInteg} />
+
+              {/* AI Agents Used */}
+              <div className="card">
+                <div className="card-head"><h2>AI Agents Used</h2></div>
+                <div className="card-body" style={{display:'flex',flexWrap:'wrap',gap:'0.6rem'}}>
+                  {[
+                    { label:'📊 Trend Analysis Agent',
+                      color:'#eff6ff', border:'#bfdbfe', text:'#1d4ed8',
+                      tip:'Analyses run history to detect macro patterns — degrading trends, flaky spikes, recurring failure windows, and overall health trajectory.' },
+                    { label:'🔍 Deep Failure Agent',
+                      color:'#fdf4ff', border:'#e9d5ff', text:'#7e22ce',
+                      tip:'Profiles each test individually — calculates per-test fail rate, flaky rate, last failure timestamp, and links to the Playwright HTML report for that run.' },
+                    { label:'📈 Regression Delta Agent',
+                      color:'#f0fdf4', border:'#bbf7d0', text:'#15803d',
+                      tip:'Compares test reliability before and after a pivot date to surface regressions and improvements. Useful for validating a release or identifying when things broke.' },
+                    { label:'🗄 DB Integrity Agent',
+                      color:'#fff7ed', border:'#fed7aa', text:'#c2410c',
+                      tip:'Runs 13 SQL integrity checks against the SIMS Finance database — orphaned records, transaction anomalies, workflow stalls, and row count deltas between pre/post test run snapshots.' },
+                  ].map((a,i) => (
+                    <span key={i} style={{display:'inline-flex',alignItems:'center',gap:'0.35rem',padding:'0.3rem 0.75rem',borderRadius:'999px',fontSize:'0.72rem',fontWeight:600,background:a.color,border:'1px solid ' + a.border,color:a.text}}>
+                      {a.label}
+                      <i className="info-trigger"
+                         data-tooltip={a.tip}
+                         style={{background:a.border, color:a.text}}>i</i>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+
+            {/* ══ 2. TRENDS ══ */}
+            <div id="s-trends" className="dash-section">
+
+              <p className="section-label">Trends</p>
+
+              {/* Environment Breakdown */}
+              {(() => {
+                const envEntries = Object.entries(trend.byEnvironment || {});
+                if (envEntries.length < 2) return null;
+                return (
+                  <div className="card">
+                    <div className="card-head">
+                      <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                        <h2>Environment Breakdown</h2>
+                        <i className="info-trigger"
+                           data-tooltip="Failure rates and average success split by environment. A test failing only in UAT but not TRAINING (or vice-versa) points to environment-specific config or data rather than a code defect.">i</i>
+                      </div>
+                      <p>Run stats per environment across the full history</p>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm text-left">
+                        <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+                          <tr>
+                            <th className="px-4 py-3">Environment</th>
+                            <th className="px-4 py-3 text-center">
+                              <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                                Total Runs
+                                <i className="info-trigger"
+                                   style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                                   data-tooltip="Count of business-day (Mon–Fri) runs recorded for this environment. Weekend runs are automatically excluded from all metrics.">i</i>
+                              </span>
+                            </th>
+                            <th className="px-4 py-3 text-center">
+                              <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                                Runs w/ Failures
+                                <i className="info-trigger"
+                                   style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                                   data-tooltip="Runs where at least one test did not pass (pass rate &lt; 100%). Derived from successRate, not raw failure count — the raw count is corrupted by the CI script when flakiness is present.">i</i>
+                              </span>
+                            </th>
+                            <th className="px-4 py-3 text-center">
+                              <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                                Runs w/ Flakiness
+                                <i className="info-trigger"
+                                   style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                                   data-tooltip="Runs where at least one test was marked flaky — it retried and eventually passed, meaning the result is non-deterministic. A run can appear in both this column and Runs w/ Failures.">i</i>
+                              </span>
+                            </th>
+                            <th className="px-4 py-3">
+                              <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                                Avg Success Rate
+                                <i className="info-trigger"
+                                   style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                                   data-tooltip="Average percentage of tests passing per run for this environment — calculated as mean(passed ÷ executed × 100) across all weekday runs. Gives partial credit for near-perfect runs, unlike a binary pass/fail count.">i</i>
+                              </span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {envEntries.map(([env, d], i) => (
+                            <tr key={i} className="hover:bg-slate-50">
+                              <td className="px-4 py-3 font-semibold text-slate-800">
+                                <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 border border-indigo-200">{env}</span>
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                <button
+                                  onClick={() => setEnvModal({ title: env + ' — All Runs (' + d.total + ')', runs: d.runs || [] })}
+                                  title="View all runs for this environment"
+                                  style={{fontFamily:'monospace',fontWeight:700,color:'#334155',background:'none',border:'none',cursor:'pointer',padding:'0.1rem 0.3rem',borderRadius:'4px',textDecoration:'underline dotted',textUnderlineOffset:'3px'}}
+                                  onMouseEnter={e=>e.currentTarget.style.color='#4f46e5'}
+                                  onMouseLeave={e=>e.currentTarget.style.color='#334155'}
+                                >{d.total}</button>
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                <button
+                                  onClick={() => d.failures > 0 && setEnvModal({ title: env + ' — Runs with Failures (' + d.failures + ')', runs: d.failureRuns || [] })}
+                                  title={d.failures > 0 ? 'View runs with failures' : 'No failures'}
+                                  style={{
+                                    fontWeight:700, background:'none', border:'none',
+                                    cursor: d.failures > 0 ? 'pointer' : 'default',
+                                    padding:'0.1rem 0.3rem', borderRadius:'4px',
+                                    color: d.failures > 0 ? '#dc2626' : '#059669',
+                                    textDecoration: d.failures > 0 ? 'underline dotted' : 'none',
+                                    textUnderlineOffset:'3px'
+                                  }}
+                                  onMouseEnter={e=>{ if(d.failures>0) e.currentTarget.style.color='#991b1b'; }}
+                                  onMouseLeave={e=>{ if(d.failures>0) e.currentTarget.style.color='#dc2626'; }}
+                                >{d.failures}</button>
+                                <span className="text-slate-400 text-xs ml-1">({d.total > 0 ? Math.round(d.failures/d.total*100) : 0}%)</span>
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                <button
+                                  onClick={() => d.flaky > 0 && setEnvModal({ title: env + ' — Runs with Flakiness (' + d.flaky + ')', runs: d.flakyRuns || [] })}
+                                  title={d.flaky > 0 ? 'View runs with flakiness' : 'No flakiness'}
+                                  style={{
+                                    fontWeight:700, background:'none', border:'none',
+                                    cursor: d.flaky > 0 ? 'pointer' : 'default',
+                                    padding:'0.1rem 0.3rem', borderRadius:'4px',
+                                    color: d.flaky > 0 ? '#d97706' : '#059669',
+                                    textDecoration: d.flaky > 0 ? 'underline dotted' : 'none',
+                                    textUnderlineOffset:'3px'
+                                  }}
+                                  onMouseEnter={e=>{ if(d.flaky>0) e.currentTarget.style.color='#92400e'; }}
+                                  onMouseLeave={e=>{ if(d.flaky>0) e.currentTarget.style.color='#d97706'; }}
+                                >{d.flaky}</button>
+                                <span className="text-slate-400 text-xs ml-1">({d.total > 0 ? Math.round(d.flaky/d.total*100) : 0}%)</span>
+                              </td>
+                              <td className="px-4 py-3 min-w-[140px]">
+                                <RateBar value={Math.round(d.avgSuccess ?? 0)}
+                                  colorClass={(d.avgSuccess ?? 0) >= 75 ? 'bg-emerald-500' : (d.avgSuccess ?? 0) >= 50 ? 'bg-amber-400' : 'bg-rose-500'} />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              <div className="card">
+                <div className="card-head">
+                  <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                    <h2>Trend Patterns</h2>
+                    <i className="info-trigger"
+                       data-tooltip="Recurring behaviours detected by the AI across the full run history — e.g. consistent failure clusters, flaky spikes, or time-of-day patterns. Each pattern has a severity rating and a recommendation.">i</i>
+                  </div>
+                </div>
+                <PatternsTable patterns={trend.patterns} />
+              </div>
+
+              {(trend.riskPeriods||[]).length > 0 && (
+                <div className="card">
+                  <div className="card-head">
+                    <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                      <h2>Risk Periods</h2>
+                      <i className="info-trigger"
+                         data-tooltip="Calendar windows (day-of-week, time-of-day, or date ranges) where failures are disproportionately clustered. Identified by the AI analysing the per-run history — not manually tagged.">i</i>
+                    </div>
+                  </div>
+                  <div className="card-body" style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                    {trend.riskPeriods.map((r,i) => (
+                      <div key={i} className="alert-amber">
+                        <span style={{fontSize:'1rem'}}>⚠️</span>
+                        <div>
+                          <div className="alert-amber-title">{r.period}</div>
+                          <div className="alert-amber-body">{r.description}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <RegressionDeltaSection report={regression} />
+
+            </div>
+
+            {/* ══ 3. UNSTABLE TESTS ══ */}
+            <div id="s-unstable" className="dash-section">
+
+              {(() => {
+                const unstable = (deep.perTestAnalyses||[]).filter(a=>a.stabilityLabel==='Unstable').length;
+                const flaky    = (deep.perTestAnalyses||[]).filter(a=>a.stabilityLabel==='Flaky').length;
+                const dotColor = unstable > 0 ? '#f43f5e' : flaky > 0 ? '#f59e0b' : '#10b981';
+                const statusText = unstable > 0 ? unstable + ' Unstable' : flaky > 0 ? flaky + ' Flaky' : 'All Stable';
+                return (
+                  <p className="section-label" style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                    <span style={{width:'8px',height:'8px',borderRadius:'50%',background:dotColor,flexShrink:0,boxShadow:'0 0 0 3px ' + dotColor + '22'}} />
+                    Unstable Tests
+                    <span style={{fontSize:'0.65rem',fontWeight:700,color:dotColor,marginLeft:'0.25rem'}}>{statusText}</span>
+                  </p>
+                );
+              })()}
+
+              <div className="card">
+                <div className="card-head"><h2>Per-Test Stability Analysis</h2></div>
+                <PerTestTable analyses={deep.perTestAnalyses} profiles={deep.perTestProfiles} reportBaseUrl={reportBaseUrl} />
+              </div>
+
+              {(deep.coFailurePatterns||[]).length > 0 && (
+                <div className="card">
+                  <div className="card-head">
+                    <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                      <h2>Co-Failure Patterns</h2>
+                      <i className="info-trigger"
+                         data-tooltip="Tests that fail together in the same run. A high co-failure count suggests a shared root cause — e.g. a common fixture, shared database state, or an upstream service dependency.">i</i>
+                    </div>
+                    <p>Tests that fail together — shared root cause likely.</p>
+                  </div>
+                  <CoFailureTable patterns={deep.coFailurePatterns} />
+                </div>
+              )}
+
+            </div>
+
+            {/* ══ 4. ACTION ITEMS ══ */}
+            <div id="s-actions" className="dash-section">
+
+              <p className="section-label">Action Items</p>
+
+              <div className="card">
+                <div className="card-body" style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',gap:'2.5rem'}}>
+                  <ActionList items={trend.actionItems} title="Trend-Level" />
+                  <ActionList items={deep.actionItems}  title="Per-Test" />
+                </div>
+              </div>
+
+            </div>
+
+          </main>
+
+          <footer className="dash-footer">
+            &copy; {new Date().getFullYear()} SIMS Finance · AI Analysis Report · Playwright Test Suite
+          </footer>
+
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+    // ── Close env modal on Escape key ────────────────────────────────────────
+    // (handled inside EnvRunsModal via backdrop click; keyboard escape is a nice extra)
+  </script>
+
+  <script>
+    /* ── Global Info Tooltip Engine ──────────────────────────────────────────
+       Trigger: any element with class="info-trigger" and data-tooltip="..."
+       One global <div id="global-tooltip"> is created at <body> level.
+       Uses getBoundingClientRect() + position:fixed — immune to all
+       overflow:hidden, transform, or stacking-context ancestors.        */
+    (function () {
+      var MAX_W   = 250;
+      var MARGIN  = 10;
+      var GAP     = 7;
+      var DELAY   = 150;   /* ms before showing */
+      var tt      = document.createElement('div');
+      tt.id = 'global-tooltip';
+      document.body.appendChild(tt);
+
+      var showTimer, hideTimer;
+
+      function position(trigger) {
+        var r   = trigger.getBoundingClientRect();
+        var iCx = r.left + r.width / 2;
+        var vw  = window.innerWidth;
+        var vh  = window.innerHeight;
+
+        /* Clamp width to avoid overflow near edges */
+        var w = Math.min(MAX_W, vw - MARGIN * 2);
+        tt.style.maxWidth = w + 'px';
+
+        /* Measure tooltip height after content set */
+        tt.style.left = '-9999px'; tt.style.top = '-9999px';
+        var th = tt.offsetHeight;
+
+        /* Prefer below; flip above if no room below */
+        var below = (r.bottom + GAP + th) <= (vh - MARGIN);
+        var topPx = below ? r.bottom + GAP : r.top - th - GAP;
+
+        /* Clamp left */
+        var leftPx = iCx - w / 2;
+        leftPx = Math.max(MARGIN, Math.min(leftPx, vw - w - MARGIN));
+
+        /* Arrow x relative to box */
+        var ax = Math.max(10, Math.min(iCx - leftPx, w - 10));
+
+        tt.style.setProperty('--ax', ax + 'px');
+        tt.style.left = leftPx + 'px';
+        tt.style.top  = topPx  + 'px';
+        tt.className  = 'tt-visible ' + (below ? 'tt-below' : 'tt-above');
+      }
+
+      function show(trigger) {
+        clearTimeout(hideTimer);
+        tt.textContent = '';   /* clear first */
+        tt.textContent = trigger.dataset.tooltip || '';
+        position(trigger);
+        requestAnimationFrame(function () { tt.classList.add('tt-show'); });
+      }
+
+      function hide() {
+        tt.classList.remove('tt-show');
+        hideTimer = setTimeout(function () { tt.className = ''; }, 200);
+      }
+
+      document.addEventListener('mouseover', function (e) {
+        var trigger = e.target.closest('.info-trigger');
+        if (!trigger || !trigger.dataset.tooltip) return;
+        clearTimeout(hideTimer);
+        clearTimeout(showTimer);
+        showTimer = setTimeout(function () { show(trigger); }, DELAY);
+      });
+
+      document.addEventListener('mouseout', function (e) {
+        var trigger = e.target.closest('.info-trigger');
+        if (trigger && !trigger.contains(e.relatedTarget)) {
+          clearTimeout(showTimer);
+          hide();
+        }
+      });
+
+      /* Reposition on scroll / resize without flicker */
+      var lastTrigger = null;
+      document.addEventListener('mouseover', function (e) {
+        var t = e.target.closest('.info-trigger');
+        lastTrigger = t || lastTrigger;
+      });
+      window.addEventListener('scroll', function () {
+        if (tt.classList.contains('tt-show') && lastTrigger) position(lastTrigger);
+      }, { passive:true });
+    })();
+  </script>
+
+</body>
+</html>

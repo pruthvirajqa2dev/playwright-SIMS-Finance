@@ -12,6 +12,7 @@
         "isolatedModules": true // Transpile each file as a separate module
     },
     "include": [
+        "src/**/*.ts", // Include all TypeScript files in the 'src' directory
         "tests/**/*.ts", // Include all TypeScript files in the 'tests' directory
         "playwright.config.ts" // Include the Playwright configuration file
     ],
