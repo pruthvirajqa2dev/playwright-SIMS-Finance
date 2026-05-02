@@ -1,6 +1,17 @@
 {
   "runs": [
     {
+      "timestamp": "2026-05-02_09-21-50",
+      "environment": "TRAINING",
+      "counts": {
+        "executed": 0,
+        "passed": 0,
+        "failed": 0,
+        "flaky": 0
+      },
+      "executionTimeSec": 0
+    },
+    {
       "timestamp": "2026-05-01_17-55-11",
       "environment": "TRAINING",
       "counts": {
@@ -318,17 +329,6 @@
         "flaky": 1
       },
       "executionTimeSec": 212
-    },
-    {
-      "timestamp": "2026-04-17_10-23-34",
-      "environment": "UAT",
-      "counts": {
-        "executed": 8,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 2
-      },
-      "executionTimeSec": 349
     }
   ]
 }
