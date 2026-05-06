@@ -1,42 +1,49 @@
 {
-  "generatedAt": "2026-04-30T13:42:47.142Z",
-  "pivotDate": "2026-04-23",
+  "generatedAt": "2026-05-06T11:45:36.424Z",
+  "pivotDate": "2026-04-29",
   "beforeWindow": {
-    "from": "2026-04-16",
-    "to": "2026-04-22",
-    "runsAnalysed": 9
+    "from": "2026-04-20",
+    "to": "2026-04-28",
+    "runsAnalysed": 7
   },
   "afterWindow": {
-    "from": "2026-04-23",
-    "to": "2026-04-30",
-    "runsAnalysed": 6
+    "from": "2026-04-29",
+    "to": "2026-05-06",
+    "runsAnalysed": 7
   },
   "beforeEnvs": [
     "UAT"
   ],
   "afterEnvs": [
-    "TRAINING",
-    "UAT"
+    "TRAINING"
   ],
   "overallVerdict": "Regressed",
   "regressions": [
     {
-      "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 20,
-      "afterFailureRate": 50,
+      "testTitle": "RSS310Q - Attachments @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
       "beforeFlakyRate": 0,
-      "afterFlakyRate": 0,
-      "failureDelta": 30,
-      "flakyDelta": 0,
+      "afterFlakyRate": 29,
+      "failureDelta": 0,
+      "flakyDelta": 29,
       "verdict": "Regressed",
-      "riskLevel": "High",
-      "errorSamplesBefore": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
-      ],
-      "errorSamplesAfter": [
-        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
-      ]
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 14,
+      "failureDelta": 0,
+      "flakyDelta": 14,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
     }
   ],
   "improvements": [],
@@ -44,12 +51,12 @@
   "resolvedFailures": [
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
-      "beforeFailureRate": 20,
+      "beforeFailureRate": 14,
       "afterFailureRate": 0,
-      "beforeFlakyRate": 20,
-      "afterFlakyRate": 33,
-      "failureDelta": -20,
-      "flakyDelta": 13,
+      "beforeFlakyRate": 29,
+      "afterFlakyRate": 29,
+      "failureDelta": -14,
+      "flakyDelta": 0,
       "verdict": "Resolved",
       "riskLevel": "Low",
       "errorSamplesBefore": [
@@ -58,28 +65,13 @@
       "errorSamplesAfter": []
     },
     {
-      "testTitle": "Help screen",
-      "beforeFailureRate": 25,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 0,
-      "afterFlakyRate": 0,
-      "failureDelta": -25,
-      "flakyDelta": 0,
-      "verdict": "Resolved",
-      "riskLevel": "Low",
-      "errorSamplesBefore": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m  Expected"
-      ],
-      "errorSamplesAfter": []
-    },
-    {
       "testTitle": "RSS570 - Crystal Report @shard1",
-      "beforeFailureRate": 20,
+      "beforeFailureRate": 14,
       "afterFailureRate": 0,
-      "beforeFlakyRate": 40,
-      "afterFlakyRate": 17,
-      "failureDelta": -20,
-      "flakyDelta": -23,
+      "beforeFlakyRate": 43,
+      "afterFlakyRate": 29,
+      "failureDelta": -14,
+      "flakyDelta": -14,
       "verdict": "Resolved",
       "riskLevel": "Low",
       "errorSamplesBefore": [
@@ -88,48 +80,35 @@
       "errorSamplesAfter": []
     },
     {
-      "testTitle": "NML510 - Trial Balance Report",
-      "beforeFailureRate": 50,
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 57,
       "afterFailureRate": 0,
       "beforeFlakyRate": 0,
       "afterFlakyRate": 0,
-      "failureDelta": -50,
+      "failureDelta": -57,
       "flakyDelta": 0,
       "verdict": "Resolved",
       "riskLevel": "Low",
       "errorSamplesBefore": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
-      ],
-      "errorSamplesAfter": []
-    },
-    {
-      "testTitle": "RSS570 - Crystal Report",
-      "beforeFailureRate": 50,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 50,
-      "afterFlakyRate": 0,
-      "failureDelta": -50,
-      "flakyDelta": -50,
-      "verdict": "Resolved",
-      "riskLevel": "Low",
-      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
       ],
       "errorSamplesAfter": []
     }
   ],
   "actionItems": [
-    "Investigate the timeout issues in 'NML510 - Trial Balance Report' with a 50% failure rate.",
-    "Analyze the environment differences between UAT and TRAINING for potential impacts.",
-    "Review the locator visibility errors in 'NML510 - Trial Balance Report' to identify underlying causes.",
-    "Monitor the flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for further patterns.",
-    "Assess the stability of resolved tests to ensure no re-emergence of issues."
+    "Investigate the flaky behaviour of 'RSS310Q - Attachments' and 'File upload using SPC420'.",
+    "Analyze the impact of the environment change from UAT to TRAINING on test stability.",
+    "Review the timing issues indicated by the new flakiness in previously stable tests.",
+    "Examine the error logs for patterns related to the regressions observed post-pivot.",
+    "Conduct a thorough review of the recent code changes made before the pivot date."
   ],
   "executiveSummary": [
-    "The 'NML510 - Trial Balance Report' showed a regression from 20% to 50% failure rate post-pivot.",
-    "This pattern may indicate timing issues, as the test timeout exceeded 120000ms.",
-    "May affect the accuracy of financial reporting for users relying on the trial balance.",
-    "The environment change from UAT to TRAINING could reflect differences impacting test outcomes.",
-    "Five tests improved, indicating some stability, but the regression warrants immediate attention."
+    "2 tests regressed while 3 tests improved after the pivot on 2026-04-29.",
+    "'RSS310Q - Attachments' and 'File upload using SPC420' now exhibit flaky behaviour, with rates of 29% and 14%, respectively.",
+    "This pattern may indicate timing issues introduced by the recent code changes.",
+    "Flaky behaviour could lead to inconsistent results in document attachments and file uploads.",
+    "Further analysis of the environment change may clarify the impact on test outcomes.",
+    "Reviewing error logs may provide insights into the observed flakiness in these tests."
   ]
 }

@@ -15,7 +15,8 @@
         "ai:db:check": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --mode check ai-outputs/reports/db-integrity.json",
         "ai:db:pre": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --mode pre ai-outputs/reports/db-snapshot.json",
         "ai:db:post": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --mode post ai-outputs/reports/db-integrity.json",
-        "ai:db:dry-run": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --dry-run"
+        "ai:db:dry-run": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --dry-run",
+        "ai:serve": "node scripts/ai-server.js"
     },
     "keywords": [],
     "author": "",

@@ -1,0 +1,233 @@
+{
+    "_isMockData": true,
+    "_mockNote": "Representative mock data for POC demonstration. No real DB connection was made. Set DB_SERVER, DB_DATABASE, DB_USER, DB_PASSWORD in src/config/.env and run 'npm run ai:db:check' to replace with live results.",
+    "generatedAt": "2026-05-05T10:43:30.000Z",
+    "mode": "check",
+    "database": "SIMSFinance_UAT",
+    "server": "sql-sims-uat.contoso.local",
+    "environment": "UAT",
+    "checksRun": 13,
+    "totalViolations": 4,
+    "criticalViolations": 2,
+    "highViolations": 2,
+    "riskLevel": "Critical",
+    "checks": [
+        {
+            "id": "ORP_001",
+            "name": "Orphaned Invoice Lines",
+            "description": "Invoice lines that reference a non-existent invoice header. Indicates a partial delete or failed rollback.",
+            "severity": "Critical",
+            "category": "orphaned_records",
+            "violationCount": 7,
+            "status": "Fail",
+            "query": "SELECT COUNT(*) AS violation_count FROM invoice_lines il WHERE NOT EXISTS (SELECT 1 FROM invoices i WHERE i.id = il.invoice_id)"
+        },
+        {
+            "id": "ORP_002",
+            "name": "Orphaned Purchase Order Lines",
+            "description": "PO lines referencing a non-existent purchase order header.",
+            "severity": "Critical",
+            "category": "orphaned_records",
+            "violationCount": 0,
+            "status": "Pass",
+            "query": "SELECT COUNT(*) AS violation_count FROM purchase_order_lines pol WHERE NOT EXISTS (SELECT 1 FROM purchase_orders po WHERE po.id = pol.purchase_order_id)"
+        },
+        {
+            "id": "ORP_003",
+            "name": "Orphaned Journal Entries",
+            "description": "Journal detail lines referencing a non-existent journal header. Can cause reporting discrepancies.",
+            "severity": "High",
+            "category": "orphaned_records",
+            "violationCount": 3,
+            "status": "Fail",
+            "query": "SELECT COUNT(*) AS violation_count FROM journal_entries je WHERE NOT EXISTS (SELECT 1 FROM journal_headers jh WHERE jh.id = je.journal_id)"
+        },
+        {
+            "id": "ORP_004",
+            "name": "Budget Virements Without Authorisation",
+            "description": "Approved budget virements with no matching authorisation record. Indicates a data-integrity or workflow failure.",
+            "severity": "Critical",
+            "category": "orphaned_records",
+            "violationCount": 0,
+            "status": "Pass",
+            "query": "SELECT COUNT(*) AS violation_count FROM budget_virements bv WHERE bv.status = 'Approved' AND NOT EXISTS (SELECT 1 FROM authorisations a WHERE a.entity_id = bv.id AND a.entity_type = 'BudgetVirement')"
+        },
+        {
+            "id": "TXN_001",
+            "name": "Transactions With Invalid Financial Year",
+            "description": "Transactions referencing a financial year ID that does not exist. This is the primary cause of missing transaction reports and year-end discrepancies.",
+            "severity": "Critical",
+            "category": "transaction_integrity",
+            "violationCount": 12,
+            "status": "Fail",
+            "query": "SELECT COUNT(*) AS violation_count FROM transactions t WHERE NOT EXISTS (SELECT 1 FROM financial_years fy WHERE fy.id = t.financial_year_id)"
+        },
+        {
+            "id": "TXN_002",
+            "name": "Transactions With Null Nominal Code",
+            "description": "Posted transactions missing a nominal (cost) code. Will not appear in budget reports.",
+            "severity": "High",
+            "category": "transaction_integrity",
+            "violationCount": 5,
+            "status": "Fail",
+            "query": "SELECT COUNT(*) AS violation_count FROM transactions WHERE nominal_code IS NULL OR LTRIM(RTRIM(CAST(nominal_code AS NVARCHAR))) = '' AND status = 'Posted'"
+        },
+        {
+            "id": "TXN_003",
+            "name": "Transactions Referencing Unknown Nominal Code",
+            "description": "Transactions using a nominal code not present in the chart of accounts. Silent mispostings.",
+            "severity": "High",
+            "category": "transaction_integrity",
+            "violationCount": 0,
+            "status": "Pass",
+            "query": "SELECT COUNT(*) AS violation_count FROM transactions t WHERE t.nominal_code IS NOT NULL AND NOT EXISTS (SELECT 1 FROM nominal_codes nc WHERE nc.code = t.nominal_code)"
+        },
+        {
+            "id": "TXN_004",
+            "name": "Missing Bank Reconciliation References",
+            "description": "Bank reconciliation entries with no matching transaction reference. Indicates a failed reconcile commit.",
+            "severity": "High",
+            "category": "transaction_integrity",
+            "violationCount": 0,
+            "status": "Pass",
+            "query": "SELECT COUNT(*) AS violation_count FROM bank_reconciliation_entries bre WHERE bre.transaction_ref IS NULL OR LTRIM(RTRIM(bre.transaction_ref)) = ''"
+        },
+        {
+            "id": "PO_001",
+            "name": "Purchase Orders Stuck in Submitted State",
+            "description": "POs in 'Submitted' status for more than 24 hours without approval action. Often a race condition in the approval workflow.",
+            "severity": "High",
+            "category": "workflow_stall",
+            "violationCount": 0,
+            "status": "Pass",
+            "query": "SELECT COUNT(*) AS violation_count FROM purchase_orders WHERE status = 'Submitted' AND last_modified_date < DATEADD(hour, -24, GETUTCDATE())"
+        },
+        {
+            "id": "PO_002",
+            "name": "Invoices With Null Approval Status",
+            "description": "Non-draft invoices missing an approval_status value. Will be excluded from the invoice liability report.",
+            "severity": "Medium",
+            "category": "data_completeness",
+            "violationCount": 0,
+            "status": "Pass",
+            "query": "SELECT COUNT(*) AS violation_count FROM invoices WHERE approval_status IS NULL AND invoice_status NOT IN ('Draft', 'Cancelled')"
+        },
+        {
+            "id": "REF_001",
+            "name": "Duplicate Financial Year Labels",
+            "description": "More than one financial_years record with the same label. The root cause of year-ID mismatches between environments.",
+            "severity": "Critical",
+            "category": "reference_data",
+            "violationCount": 0,
+            "status": "Pass",
+            "query": "SELECT COUNT(*) AS violation_count FROM (SELECT financial_year_label, COUNT(*) AS cnt FROM financial_years GROUP BY financial_year_label HAVING COUNT(*) > 1) AS dupes"
+        },
+        {
+            "id": "REF_002",
+            "name": "Users Assigned to Inactive Cost Centres",
+            "description": "User cost centre mappings pointing to deleted or inactive cost centres. Causes 'input repopulated/emptied' symptoms in the budget screens.",
+            "severity": "Medium",
+            "category": "reference_data",
+            "violationCount": 0,
+            "status": "Pass",
+            "query": "SELECT COUNT(*) AS violation_count FROM user_cost_centres ucc WHERE NOT EXISTS (SELECT 1 FROM cost_centres cc WHERE cc.id = ucc.cost_centre_id AND cc.is_active = 1)"
+        },
+        {
+            "id": "REF_003",
+            "name": "Closed Financial Year Still Accepting Transactions",
+            "description": "Transactions posted against a financial year marked as closed. A data-integrity failure that can cause year-end imbalance.",
+            "severity": "Critical",
+            "category": "reference_data",
+            "violationCount": 0,
+            "status": "Pass",
+            "query": "SELECT COUNT(*) AS violation_count FROM transactions t INNER JOIN financial_years fy ON fy.id = t.financial_year_id WHERE fy.is_closed = 1 AND t.created_date > fy.close_date"
+        }
+    ],
+    "rowCountDeltas": [
+        {
+            "tableName": "invoices",
+            "before": 1842,
+            "after": 1842,
+            "delta": 0,
+            "verdict": "No Change"
+        },
+        {
+            "tableName": "invoice_lines",
+            "before": 5631,
+            "after": 5638,
+            "delta": 7,
+            "verdict": "Unexpected Gain"
+        },
+        {
+            "tableName": "purchase_orders",
+            "before": 743,
+            "after": 743,
+            "delta": 0,
+            "verdict": "No Change"
+        },
+        {
+            "tableName": "purchase_order_lines",
+            "before": 2109,
+            "after": 2109,
+            "delta": 0,
+            "verdict": "No Change"
+        },
+        {
+            "tableName": "transactions",
+            "before": 28450,
+            "after": 28438,
+            "delta": -12,
+            "verdict": "Unexpected Loss"
+        },
+        {
+            "tableName": "journal_headers",
+            "before": 3201,
+            "after": 3201,
+            "delta": 0,
+            "verdict": "No Change"
+        },
+        {
+            "tableName": "journal_entries",
+            "before": 9844,
+            "after": 9847,
+            "delta": 3,
+            "verdict": "Unexpected Gain"
+        },
+        {
+            "tableName": "financial_years",
+            "before": 6,
+            "after": 6,
+            "delta": 0,
+            "verdict": "No Change"
+        },
+        {
+            "tableName": "nominal_codes",
+            "before": 412,
+            "after": 412,
+            "delta": 0,
+            "verdict": "No Change"
+        },
+        {
+            "tableName": "budget_virements",
+            "before": 88,
+            "after": 88,
+            "delta": 0,
+            "verdict": "No Change"
+        },
+        {
+            "tableName": "bank_reconciliation_entries",
+            "before": 1566,
+            "after": 1566,
+            "delta": 0,
+            "verdict": "No Change"
+        }
+    ],
+    "actionItems": [
+        "Investigate 7 orphaned invoice_lines rows — likely caused by a partial test teardown or failed rollback in the invoice deletion flow.",
+        "Resolve 12 transactions referencing an invalid financial year ID — cross-check financial_years table for missing or mismatched year labels between UAT and TRAINING.",
+        "Fix 5 posted transactions with null nominal codes — these will be silently excluded from all budget and cost-centre reports until corrected.",
+        "Audit 3 orphaned journal entries against journal_headers — may indicate an interrupted journal posting during the test run.",
+        "Review the net loss of 12 rows in the transactions table during the test run — confirm this is expected test cleanup, not accidental data deletion."
+    ],
+    "executiveSummary": "4 integrity checks failed across 13 checks run against SIMSFinance_UAT. 2 critical violations were detected: 7 orphaned invoice lines (partial rollback risk) and 12 transactions referencing an invalid financial year (reporting gap risk). Additionally, 3 orphaned journal entries and 5 posted transactions with null nominal codes were found. Row count analysis shows the transactions table lost 12 rows during the test run — requires investigation to rule out data loss. The invoice_lines and journal_entries tables each gained rows, indicating possible test data not cleaned up. These issues collectively represent a medium-to-high risk to finance report accuracy and should be investigated before the next UAT sign-off cycle."
+}

@@ -1,61 +1,19 @@
 {
-  "generatedAt": "2026-04-30T13:42:24.103Z",
-  "runsAnalysed": 15,
-  "runsWithIssues": 15,
+  "generatedAt": "2026-05-06T11:45:13.293Z",
+  "runsAnalysed": 14,
+  "runsWithIssues": 14,
   "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/",
   "perTestProfiles": [
     {
-      "testTitle": "RSS570 - Crystal Report",
-      "totalRuns": 4,
-      "failureCount": 2,
-      "flakyCount": 2,
-      "passCount": 0,
-      "failureRate": 50,
-      "flakyRate": 50,
-      "avgDurationMs": 119983,
-      "lastSeen": "2026-04-17_10-36-46",
-      "errorSamples": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background "
-      ],
-      "failuresByEnv": {
-        "UAT": 2
-      },
-      "runsByEnv": {
-        "UAT": 4
-      },
-      "lastFailureTimestamp": "2026-04-16_12-11-10"
-    },
-    {
-      "testTitle": "NML510 - Trial Balance Report",
-      "totalRuns": 4,
-      "failureCount": 2,
-      "flakyCount": 0,
-      "passCount": 2,
-      "failureRate": 50,
-      "flakyRate": 0,
-      "avgDurationMs": 70713,
-      "lastSeen": "2026-04-17_10-36-46",
-      "errorSamples": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background "
-      ],
-      "failuresByEnv": {
-        "UAT": 2
-      },
-      "runsByEnv": {
-        "UAT": 4
-      },
-      "lastFailureTimestamp": "2026-04-16_12-11-10"
-    },
-    {
       "testTitle": "NML510 - Trial Balance Report @shard1",
-      "totalRuns": 11,
+      "totalRuns": 14,
       "failureCount": 4,
       "flakyCount": 0,
-      "passCount": 7,
-      "failureRate": 36,
+      "passCount": 10,
+      "failureRate": 29,
       "flakyRate": 0,
-      "avgDurationMs": 128296,
-      "lastSeen": "2026-04-30_10-16-51",
+      "avgDurationMs": 103836,
+      "lastSeen": "2026-05-06_10-32-55",
       "errorSamples": [
         "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background "
@@ -64,42 +22,21 @@
         "UAT": 4
       },
       "runsByEnv": {
-        "TRAINING": 2,
-        "UAT": 9
+        "TRAINING": 7,
+        "UAT": 7
       },
       "lastFailureTimestamp": "2026-04-28_10-30-28"
     },
     {
-      "testTitle": "Help screen",
-      "totalRuns": 4,
-      "failureCount": 1,
-      "flakyCount": 0,
-      "passCount": 3,
-      "failureRate": 25,
-      "flakyRate": 0,
-      "avgDurationMs": 9042,
-      "lastSeen": "2026-04-17_10-36-46",
-      "errorSamples": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m  Expected substring: \u001b[32m\"https://uat-"
-      ],
-      "failuresByEnv": {
-        "UAT": 1
-      },
-      "runsByEnv": {
-        "UAT": 4
-      },
-      "lastFailureTimestamp": "2026-04-16_11-54-33"
-    },
-    {
       "testTitle": "RSS570 - Crystal Report @shard1",
-      "totalRuns": 11,
+      "totalRuns": 14,
       "failureCount": 1,
-      "flakyCount": 3,
-      "passCount": 7,
-      "failureRate": 9,
-      "flakyRate": 27,
-      "avgDurationMs": 77198,
-      "lastSeen": "2026-04-30_10-16-51",
+      "flakyCount": 5,
+      "passCount": 8,
+      "failureRate": 7,
+      "flakyRate": 36,
+      "avgDurationMs": 84995,
+      "lastSeen": "2026-05-06_10-32-55",
       "errorSamples": [
         "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
       ],
@@ -107,21 +44,21 @@
         "UAT": 1
       },
       "runsByEnv": {
-        "TRAINING": 2,
-        "UAT": 9
+        "TRAINING": 7,
+        "UAT": 7
       },
       "lastFailureTimestamp": "2026-04-20_09-59-45"
     },
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
-      "totalRuns": 11,
+      "totalRuns": 14,
       "failureCount": 1,
-      "flakyCount": 3,
-      "passCount": 7,
-      "failureRate": 9,
-      "flakyRate": 27,
-      "avgDurationMs": 34366,
-      "lastSeen": "2026-04-30_10-16-51",
+      "flakyCount": 4,
+      "passCount": 9,
+      "failureRate": 7,
+      "flakyRate": 29,
+      "avgDurationMs": 29704,
+      "lastSeen": "2026-05-06_10-32-55",
       "errorSamples": [
         "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbutton[value=\\'Close\\']')\u001b[22m \u001b"
       ],
@@ -129,241 +66,150 @@
         "UAT": 1
       },
       "runsByEnv": {
-        "TRAINING": 2,
-        "UAT": 9
+        "TRAINING": 7,
+        "UAT": 7
       },
       "lastFailureTimestamp": "2026-04-20_09-59-45"
     },
     {
       "testTitle": "RSS310Q - Attachments @shard2",
-      "totalRuns": 11,
+      "totalRuns": 14,
       "failureCount": 0,
-      "flakyCount": 3,
-      "passCount": 8,
+      "flakyCount": 2,
+      "passCount": 12,
       "failureRate": 0,
-      "flakyRate": 27,
-      "avgDurationMs": 55696,
-      "lastSeen": "2026-04-30_10-16-51",
+      "flakyRate": 14,
+      "avgDurationMs": 39033,
+      "lastSeen": "2026-05-06_10-32-55",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
-        "TRAINING": 2,
-        "UAT": 9
-      }
-    },
-    {
-      "testTitle": "File upload using SPC420",
-      "totalRuns": 4,
-      "failureCount": 0,
-      "flakyCount": 1,
-      "passCount": 3,
-      "failureRate": 0,
-      "flakyRate": 25,
-      "avgDurationMs": 45858,
-      "lastSeen": "2026-04-17_10-36-46",
-      "errorSamples": [],
-      "failuresByEnv": {},
-      "runsByEnv": {
-        "UAT": 4
-      }
-    },
-    {
-      "testTitle": "RSS310Q - Attachments",
-      "totalRuns": 4,
-      "failureCount": 0,
-      "flakyCount": 1,
-      "passCount": 3,
-      "failureRate": 0,
-      "flakyRate": 25,
-      "avgDurationMs": 53425,
-      "lastSeen": "2026-04-17_10-36-46",
-      "errorSamples": [],
-      "failuresByEnv": {},
-      "runsByEnv": {
-        "UAT": 4
-      }
-    },
-    {
-      "testTitle": "Login and Logout @shard2",
-      "totalRuns": 11,
-      "failureCount": 0,
-      "flakyCount": 0,
-      "passCount": 11,
-      "failureRate": 0,
-      "flakyRate": 0,
-      "avgDurationMs": 8235,
-      "lastSeen": "2026-04-30_10-16-51",
-      "errorSamples": [],
-      "failuresByEnv": {},
-      "runsByEnv": {
-        "TRAINING": 2,
-        "UAT": 9
+        "TRAINING": 7,
+        "UAT": 7
       }
     },
     {
       "testTitle": "File upload using SPC420 @shard2",
-      "totalRuns": 11,
+      "totalRuns": 14,
       "failureCount": 0,
-      "flakyCount": 0,
-      "passCount": 11,
+      "flakyCount": 1,
+      "passCount": 13,
       "failureRate": 0,
-      "flakyRate": 0,
-      "avgDurationMs": 16842,
-      "lastSeen": "2026-04-30_10-16-51",
+      "flakyRate": 7,
+      "avgDurationMs": 25668,
+      "lastSeen": "2026-05-06_10-32-55",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
-        "TRAINING": 2,
-        "UAT": 9
+        "TRAINING": 7,
+        "UAT": 7
+      }
+    },
+    {
+      "testTitle": "Login and Logout @shard2",
+      "totalRuns": 14,
+      "failureCount": 0,
+      "flakyCount": 0,
+      "passCount": 14,
+      "failureRate": 0,
+      "flakyRate": 0,
+      "avgDurationMs": 7673,
+      "lastSeen": "2026-05-06_10-32-55",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "TRAINING": 7,
+        "UAT": 7
       }
     },
     {
       "testTitle": "Help screen @shard2",
-      "totalRuns": 11,
+      "totalRuns": 14,
       "failureCount": 0,
       "flakyCount": 0,
-      "passCount": 11,
+      "passCount": 14,
       "failureRate": 0,
       "flakyRate": 0,
-      "avgDurationMs": 7281,
-      "lastSeen": "2026-04-30_10-16-51",
+      "avgDurationMs": 6923,
+      "lastSeen": "2026-05-06_10-32-55",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
-        "TRAINING": 2,
-        "UAT": 9
-      }
-    },
-    {
-      "testTitle": "Login and Logout",
-      "totalRuns": 4,
-      "failureCount": 0,
-      "flakyCount": 0,
-      "passCount": 4,
-      "failureRate": 0,
-      "flakyRate": 0,
-      "avgDurationMs": 9049,
-      "lastSeen": "2026-04-17_10-36-46",
-      "errorSamples": [],
-      "failuresByEnv": {},
-      "runsByEnv": {
-        "UAT": 4
-      }
-    },
-    {
-      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute",
-      "totalRuns": 4,
-      "failureCount": 0,
-      "flakyCount": 0,
-      "passCount": 4,
-      "failureRate": 0,
-      "flakyRate": 0,
-      "avgDurationMs": 13054,
-      "lastSeen": "2026-04-17_10-36-46",
-      "errorSamples": [],
-      "failuresByEnv": {},
-      "runsByEnv": {
-        "UAT": 4
-      }
-    },
-    {
-      "testTitle": "XQY200 - Xquery Builder ",
-      "totalRuns": 3,
-      "failureCount": 0,
-      "flakyCount": 0,
-      "passCount": 0,
-      "failureRate": 0,
-      "flakyRate": 0,
-      "avgDurationMs": 0,
-      "lastSeen": "2026-04-17_10-23-34",
-      "errorSamples": [],
-      "failuresByEnv": {},
-      "runsByEnv": {
-        "UAT": 3
+        "TRAINING": 7,
+        "UAT": 7
       }
     }
   ],
   "perTestAnalyses": [
     {
-      "testTitle": "RSS570 - Crystal Report",
-      "stabilityCategory": "Flaky",
-      "failureRate": 50,
-      "flakyRate": 50,
-      "mostFrequentError": "Locator visibility failure",
-      "timeoutSuspected": false,
-      "environmentSpecific": true,
-      "recommendation": "Investigate locator visibility issues in UAT"
-    },
-    {
-      "testTitle": "NML510 - Trial Balance Report",
-      "stabilityCategory": "Flaky",
-      "failureRate": 50,
-      "flakyRate": 0,
-      "mostFrequentError": "Locator visibility failure",
-      "timeoutSuspected": false,
-      "environmentSpecific": true,
-      "recommendation": "Review locator visibility in UAT"
-    },
-    {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "stabilityCategory": "Unstable",
-      "failureRate": 36,
+      "failureRate": 29,
       "flakyRate": 0,
-      "mostFrequentError": "Test timeout exceeded",
+      "mostFrequentError": "Test timeout of 120000ms exceeded",
       "timeoutSuspected": true,
-      "environmentSpecific": false,
-      "recommendation": "Analyze timeout occurrences during test execution"
-    },
-    {
-      "testTitle": "Help screen",
-      "stabilityCategory": "Stable",
-      "failureRate": 25,
-      "flakyRate": 0,
-      "mostFrequentError": "Expected substring not found",
-      "timeoutSuspected": false,
-      "environmentSpecific": false,
-      "recommendation": "Check for content changes affecting expectations"
+      "environmentSpecific": true,
+      "recommendation": "Investigate timeout issues in UAT environment"
     },
     {
       "testTitle": "RSS570 - Crystal Report @shard1",
       "stabilityCategory": "Flaky",
-      "failureRate": 9,
-      "flakyRate": 27,
-      "mostFrequentError": "Test timeout exceeded",
+      "failureRate": 7,
+      "flakyRate": 36,
+      "mostFrequentError": "Test timeout of 120000ms exceeded",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "recommendation": "Investigate timeout issues in shard execution"
-    }
-  ],
-  "coFailurePatterns": [
+      "recommendation": "Review retry patterns for flaky behaviour"
+    },
     {
-      "tests": [
-        "NML510 - Trial Balance Report",
-        "RSS570 - Crystal Report"
-      ],
-      "occurrences": 2,
-      "possibleCause": ""
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "stabilityCategory": "Flaky",
+      "failureRate": 7,
+      "flakyRate": 29,
+      "mostFrequentError": "Target page, context or browser has been closed",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "recommendation": "Examine locator reliability during execution"
+    },
+    {
+      "testTitle": "RSS310Q - Attachments @shard2",
+      "stabilityCategory": "Stable",
+      "failureRate": 0,
+      "flakyRate": 14,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "recommendation": "Monitor for future flaky behaviour"
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "stabilityCategory": "Stable",
+      "failureRate": 0,
+      "flakyRate": 7,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "recommendation": "Ensure consistent file upload performance"
     }
   ],
+  "coFailurePatterns": [],
   "topUnstableTests": [
-    "NML510 - Trial Balance Report",
     "NML510 - Trial Balance Report @shard1",
-    "RSS570 - Crystal Report",
     "RSS570 - Crystal Report @shard1",
-    "Help screen"
+    "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2"
   ],
   "actionItems": [
-    "Investigate locator visibility issues in UAT for NML510 and RSS570",
-    "Analyze timeout occurrences for NML510 @shard1",
-    "Review content changes affecting Help screen expectations",
-    "Assess shared dependencies causing co-failures",
-    "Monitor test execution duration for potential optimizations"
+    "Investigate timeout issues in UAT for NML510",
+    "Review retry patterns for RSS570 to reduce flakiness",
+    "Examine locator reliability for SIMS_TB_SCHOOL",
+    "Monitor for future flaky behaviour in RSS310Q",
+    "Ensure consistent performance for file uploads"
   ],
   "executiveSummary": [
-    "50% of runs for NML510 and RSS570 had failures in UAT.",
-    "NML510 @shard1 showed a 36% failure rate with timeouts.",
-    "Co-failure observed between NML510 and RSS570 tests.",
-    "Flaky behaviour noted in multiple tests with timeout errors.",
-    "Locator visibility issues may affect report generation consistency."
+    "29% of runs for NML510 had failures, primarily in UAT.",
+    "RSS570 showed 36% flaky behaviour, indicating potential instability.",
+    "SIMS_TB_SCHOOL had 29% flaky behaviour, suggesting reliability issues.",
+    "No co-failure patterns were detected among tests.",
+    "Investigating UAT timeouts may improve overall test reliability."
   ]
 }

@@ -71,80 +71,183 @@ const html = `<!DOCTYPE html>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
 
   <style>
+    /* ─────────────────────────────────────────────────────────────────────────
+     * Design Tokens — single source of truth for all visual properties.
+     * Update a token here and every rule that references it updates automatically.
+     * Do NOT hard-code these values elsewhere in this stylesheet.
+     * ───────────────────────────────────────────────────────────────────── */
+    :root {
+      /* Brand colour ramp */
+      --c-brand:       #10b981;
+      --c-brand-dark:  #059669;
+      --c-brand-deep:  #047857;
+
+      /* Semantic status colours */
+      --c-danger:  #ef4444;
+      --c-warning: #f59e0b;
+      --c-info:    #3b82f6;
+
+      /* Surface / background scale */
+      --c-surface:     #ffffff;
+      --c-surface-2:   #f8fafc;
+      --c-surface-3:   #f1f5f9;
+      --c-bg:          #f1f5f9;
+
+      /* Border colours */
+      --c-border:      #e2e8f0;
+      --c-border-soft: #f1f5f9;
+
+      /* Text colour ramp (darkest → muted) */
+      --c-text:        #1e293b;
+      --c-text-2:      #475569;
+      --c-text-3:      #64748b;
+      --c-text-muted:  #94a3b8;
+
+      /* Elevation shadow scale */
+      --shadow-sm:    0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05);
+      --shadow-md:    0 6px 16px rgba(0,0,0,0.09), 0 16px 32px rgba(0,0,0,0.06);
+      --shadow-lg:    0 20px 60px rgba(0,0,0,0.25);
+      --shadow-brand: 0 4px 14px rgba(16,185,129,0.45);
+
+      /* Border radius scale */
+      --r-sm:   6px;   /* nav pills, small UI */
+      --r-md:   10px;  /* alerts, tooltips, inner panels */
+      --r-lg:   14px;  /* cards, modals, KPI tiles */
+      --r-pill: 999px; /* badges, tags */
+
+      /* Transition presets */
+      --t-fast: 0.15s ease;  /* hover colour changes */
+      --t-base: 0.2s ease;   /* lift / shadow */
+      --t-slow: 0.3s ease;   /* fade-in / slide */
+    }
+
     /* ── Base ── */
     html { scroll-behavior:smooth; }
     *, *::before, *::after { box-sizing:border-box; }
-    tbody tr { transition:background 0.12s ease; }
+    tbody tr { transition:background var(--t-fast); }
 
     /* ── Shell ── */
-    .dash { min-height:100vh; display:flex; flex-direction:column; background:#f1f5f9; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:#1e293b; font-size:14px; line-height:1.5; }
+    .dash { min-height:100vh; display:flex; flex-direction:column; background:var(--c-bg); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:var(--c-text); font-size:14px; line-height:1.5; }
 
     /* ── Header ── */
-    .dash-header { background:linear-gradient(135deg,#059669,#10b981); color:white; padding:1.5rem 2rem; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
-    .dash-header-inner { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; }
-    .dash-title { font-size:1.45rem; font-weight:800; letter-spacing:-0.025em; line-height:1.2; }
-    .dash-subtitle { font-size:0.8rem; font-weight:400; opacity:0.72; margin-top:0.35rem; letter-spacing:0.01em; }
+    .dash-header {
+      background: linear-gradient(135deg, var(--c-brand-deep) 0%, var(--c-brand-dark) 40%, var(--c-brand) 100%);
+      color:white; padding:1.75rem 2rem;
+      box-shadow:0 4px 18px rgba(5,150,105,0.35);
+      position:relative; overflow:hidden;
+    }
+    /* Subtle dot-grid texture overlay */
+    .dash-header::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .dash-header-inner { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; position:relative; }
+    .dash-title { font-size:1.6rem; font-weight:900; letter-spacing:-0.035em; line-height:1.15; text-shadow:0 1px 3px rgba(0,0,0,0.15); }
+    .dash-subtitle { font-size:0.8rem; font-weight:400; opacity:0.78; margin-top:0.4rem; letter-spacing:0.01em; }
     .dash-header-right { display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem; }
-    .dash-meta { font-size:0.7rem; font-family:monospace; background:rgba(255,255,255,0.18); padding:0.25rem 0.85rem; border-radius:999px; }
+    .dash-meta { font-size:0.7rem; font-family:monospace; background:rgba(255,255,255,0.18); padding:0.25rem 0.85rem; border-radius:var(--r-pill); backdrop-filter:blur(4px); }
 
     /* ── Sticky nav ── */
-    .dash-nav { background:white; border-bottom:1px solid #e2e8f0; position:sticky; top:0; z-index:20; box-shadow:0 1px 6px rgba(0,0,0,0.05); }
-    .dash-nav-inner { max-width:1400px; margin:0 auto; display:flex; padding:0 2rem; overflow-x:auto; }
-    .dash-nav a { display:inline-flex; align-items:center; gap:0.35rem; padding:0.85rem 1.1rem; font-size:0.76rem; font-weight:600; color:#64748b; text-decoration:none; border-bottom:2px solid transparent; white-space:nowrap; margin-bottom:-1px; letter-spacing:0.01em; transition:color 0.15s,border-color 0.15s; }
-    .dash-nav a:hover { color:#10b981; border-bottom-color:#10b981; }
+    .dash-nav { background:rgba(255,255,255,0.95); backdrop-filter:blur(8px); border-bottom:1px solid var(--c-border); position:sticky; top:0; z-index:20; box-shadow:0 1px 8px rgba(0,0,0,0.07); }
+    .dash-nav-inner { max-width:1400px; margin:0 auto; display:flex; padding:0 1.5rem; overflow-x:auto; gap:0.1rem; align-items:center; }
+    .dash-nav a { display:inline-flex; align-items:center; gap:0.35rem; padding:0.45rem 0.9rem; margin:0.3rem 0.1rem; font-size:0.74rem; font-weight:600; color:var(--c-text-3); text-decoration:none; border-radius:var(--r-sm); white-space:nowrap; letter-spacing:0.01em; transition:color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast); }
+    .dash-nav a:hover  { color:var(--c-brand-dark); background:#f0fdf4; }
+    /* Active tab: solid brand fill + white text — unmissable */
+    .dash-nav a.active { color:#fff; background:var(--c-brand-dark); font-weight:700;
+      box-shadow:0 2px 8px rgba(5,150,105,0.35); }
 
-    /* ── Sections always visible ── */
-    .dash-section { display:block; scroll-margin-top:52px; }
+    /* ── Scroll progress bar ── */
+    #scroll-progress { position:fixed; top:0; left:0; height:3px; width:0%; background:var(--c-brand);
+      z-index:9999; transition:width 0.1s linear; pointer-events:none; }
+
+    /* ── Back to top button ── */
+    #back-to-top { position:fixed; bottom:1.75rem; right:1.75rem; z-index:9998;
+      width:42px; height:42px; border-radius:50%; border:none; cursor:pointer;
+      background:var(--c-brand); color:white; font-size:1.1rem; line-height:1;
+      box-shadow:var(--shadow-brand);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; transform:translateY(12px);
+      transition:opacity var(--t-slow),transform var(--t-slow),background var(--t-fast); pointer-events:none; }
+    #back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+    #back-to-top:hover   { background:var(--c-brand-dark); }
+
+    /* ── Sections ── */
+    /* scroll-margin-top set on the animation rule below; section boundary separator handled by + selector */
 
     /* ── Main ── */
     .dash-main { flex:1; max-width:1400px; margin:0 auto; width:100%; padding:2rem; }
 
     /* ── Section divider label ── */
-    .section-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#94a3b8; margin-bottom:0.85rem; display:flex; align-items:center; gap:0.6rem; }
-    .section-label::after { content:''; flex:1; height:1px; background:#e2e8f0; }
+    /* Acts as a visible section heading while scrolling */
+    .section-label {
+      font-size:0.72rem; font-weight:800; text-transform:uppercase;
+      letter-spacing:0.12em; color:var(--c-text-2);
+      margin-bottom:1.1rem;
+      display:flex; align-items:center; gap:0.65rem;
+      padding-bottom:0.6rem;
+      border-bottom:2px solid var(--c-border-soft);
+    }
+    /* Thick left accent bar — far more visible than a tiny dot */
+    .section-label::before { content:''; width:4px; height:1em; border-radius:2px; background:var(--c-brand); flex-shrink:0; }
+    .section-label::after  { display:none; }
+
+    /* ── Section fade-in ── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    /* scroll-margin accounts for sticky nav + extra breathing room */
+    .dash-section { animation: fadeUp 0.4s ease both; scroll-margin-top:60px; }
+    /* Top rule makes section transitions visually obvious while scrolling */
+    .dash-section + .dash-section { border-top:2px solid var(--c-border); margin-top:0.5rem; padding-top:2rem; }
+    .dash-section:nth-child(2) { animation-delay:0.05s; }
+    .dash-section:nth-child(3) { animation-delay:0.1s; }
+    .dash-section:nth-child(4) { animation-delay:0.15s; }
+    .dash-section:nth-child(5) { animation-delay:0.2s; }
+    .dash-section:nth-child(6) { animation-delay:0.25s; }
+    .dash-section:nth-child(7) { animation-delay:0.3s; }
 
     /* ── Card ── */
-    .card { background:white; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,0.05),0 4px 14px rgba(0,0,0,0.04); margin-bottom:1.25rem; overflow:hidden; transition:box-shadow 0.18s ease, transform 0.18s ease; }
-    .card:hover { box-shadow:0 4px 10px rgba(0,0,0,0.08),0 12px 28px rgba(0,0,0,0.06); transform:translateY(-1px); }
-    .card-head { padding:1rem 1.5rem; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
-    .card-head h2 { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#475569; margin:0; }
-    .card-head p { font-size:0.72rem; color:#94a3b8; margin:0.2rem 0 0; font-weight:400; }
+    .card { background:var(--c-surface); border-radius:var(--r-lg); box-shadow:var(--shadow-sm); margin-bottom:1.25rem; overflow:hidden; transition:box-shadow var(--t-base), transform var(--t-base); border:1px solid var(--c-border-soft); }
+    .card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--c-border); }
+    .card-head { padding:1rem 1.5rem; border-bottom:1px solid var(--c-border-soft); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; background:linear-gradient(to right,var(--c-surface-2),var(--c-surface)); }
+    .card-head h2 { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--c-text-2); margin:0; }
+    .card-head p { font-size:0.72rem; color:var(--c-text-muted); margin:0.2rem 0 0; font-weight:400; }
     .card-body { padding:1.5rem; }
 
     /* ── KPI strip ── */
     .kpi-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin-bottom:1.25rem; }
-    .kpi-tile { background:white; border-radius:12px; padding:1.25rem 1.5rem; box-shadow:0 1px 3px rgba(0,0,0,0.05),0 4px 14px rgba(0,0,0,0.04); transition:box-shadow 0.18s ease, transform 0.18s ease; }
-    .kpi-tile:hover { box-shadow:0 4px 10px rgba(0,0,0,0.08),0 12px 28px rgba(0,0,0,0.06); transform:translateY(-1px); }
-    .kpi-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#94a3b8; margin-bottom:0.5rem; }
-    .kpi-value { font-size:2.4rem; font-weight:900; line-height:1; margin-bottom:0.5rem; letter-spacing:-0.02em; }
-    .kpi-sub { font-size:0.7rem; color:#94a3b8; margin-top:0.3rem; }
+    .kpi-tile { background:var(--c-surface); border-radius:var(--r-lg); padding:1.25rem 1.5rem; box-shadow:var(--shadow-sm); transition:box-shadow var(--t-base), transform var(--t-base); border:1px solid var(--c-border-soft); }
+    .kpi-tile:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--c-border); }
+    .kpi-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--c-text-muted); margin-bottom:0.5rem; }
+    .kpi-value { font-size:2.4rem; font-weight:900; line-height:1; margin-bottom:0.5rem; letter-spacing:-0.03em; font-variant-numeric:tabular-nums; }
+    .kpi-sub { font-size:0.7rem; color:var(--c-text-muted); margin-top:0.3rem; }
 
     /* ── Alert block ── */
-    .alert-amber { display:flex; gap:0.75rem; padding:0.85rem 1rem; background:#fffbeb; border-left:3px solid #f59e0b; border-radius:0 8px 8px 0; }
-    .alert-amber-title { font-size:0.78rem; font-weight:600; color:#92400e; }
-    .alert-amber-body  { font-size:0.74rem; color:#b45309; margin-top:0.2rem; line-height:1.5; }
+    .alert-amber { display:flex; gap:0.75rem; padding:0.9rem 1rem; background:linear-gradient(to right,#fffbeb,#fefce8); border-left:3px solid var(--c-warning); border-radius:0 var(--r-md) var(--r-md) 0; box-shadow:0 1px 4px rgba(245,158,11,0.1); }
+    .alert-amber-title { font-size:0.78rem; font-weight:700; color:#92400e; }
+    .alert-amber-body  { font-size:0.74rem; color:#b45309; margin-top:0.2rem; line-height:1.55; }
 
     /* ── Table typography ── */
     th { font-size:0.65rem !important; letter-spacing:0.07em; }
     td { font-size:0.8rem; }
 
     /* ── Footer ── */
-    .dash-footer { text-align:center; padding:1.5rem; font-size:0.7rem; color:#94a3b8; border-top:1px solid #e2e8f0; letter-spacing:0.02em; }
+    .dash-footer { text-align:center; padding:1.75rem 1.5rem; font-size:0.7rem; color:var(--c-text-muted); border-top:1px solid var(--c-border); letter-spacing:0.02em;
+      background:linear-gradient(to bottom,var(--c-surface-2),var(--c-surface-3)); }
 
     /* ── Global Info Tooltip System ── */
     /* Trigger: any element with class "info-trigger" + data-tooltip attribute */
     .info-trigger { display:inline-flex; align-items:center; justify-content:center;
                     width:15px; height:15px; border-radius:50%;
-                    background:#e2e8f0; color:#64748b;
+                    background:var(--c-border); color:var(--c-text-3);
                     font-size:0.6rem; font-weight:800; font-style:normal;
                     cursor:default; flex-shrink:0; user-select:none;
-                    transition:background 0.15s, color 0.15s; }
-    .info-trigger:hover { background:#10b981; color:white; }
+                    transition:background var(--t-fast), color var(--t-fast); }
+    .info-trigger:hover { background:var(--c-brand); color:white; }
     /* Single global tooltip — lives on <body>, never clipped by any ancestor */
     #global-tooltip { position:fixed; z-index:99999; max-width:250px; width:max-content;
                       background:#1e293b; color:#e2e8f0;
                       font-size:0.72rem; line-height:1.65;
-                      padding:0.65rem 0.85rem; border-radius:8px;
+                      padding:0.65rem 0.85rem; border-radius:var(--r-md);
                       box-shadow:0 8px 28px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.12);
                       pointer-events:none; white-space:normal;
                       opacity:0; transition:opacity 0.16s ease;
@@ -215,6 +318,30 @@ const html = `<!DOCTYPE html>
       );
     }
 
+    // ── Agent colour registry (single source of truth) ─────────────────────
+    var AGENTS = {
+      trend:      { key:'trend',      icon:'📊', label:'Trend Analysis Agent',    bg:'#eff6ff', border:'#bfdbfe', text:'#1d4ed8', tip:'Analyses run history to detect macro patterns — degrading trends, flaky spikes, recurring failure windows, and overall health trajectory.' },
+      deep:       { key:'deep',       icon:'🔍', label:'Deep Failure Agent',       bg:'#fdf4ff', border:'#e9d5ff', text:'#7e22ce', tip:'Profiles each test individually — calculates per-test fail rate, flaky rate, last failure timestamp, and links to the Playwright HTML report for that run.' },
+      regression: { key:'regression', icon:'📈', label:'Regression Delta Agent',  bg:'#f0fdf4', border:'#bbf7d0', text:'#15803d', tip:'Compares test reliability before and after a pivot date to surface regressions and improvements.' },
+      db:         { key:'db',         icon:'🗄',  label:'DB Integrity Agent',       bg:'#fff7ed', border:'#fed7aa', text:'#c2410c', tip:'Runs SQL integrity checks against the SIMS Finance database — orphaned records, transaction anomalies, workflow stalls, and row count deltas between pre/post test run snapshots.' },
+    };
+
+    // Small reusable agent badge pill
+    function AgentBadge({ agentKey, style }) {
+      var a = AGENTS[agentKey]; if (!a) return null;
+      return (
+        <span style={Object.assign({}, {
+          display:'inline-flex', alignItems:'center', gap:'0.3rem',
+          padding:'0.18rem 0.6rem', borderRadius:'999px',
+          fontSize:'0.65rem', fontWeight:700,
+          background:a.bg, border:'1px solid '+a.border, color:a.text,
+          letterSpacing:'0.02em', flexShrink:0
+        }, style||{})}>
+          {a.icon} {a.label}
+        </span>
+      );
+    }
+
     function healthColor(score) {
       return score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#f43f5e';
     }
@@ -278,7 +405,7 @@ const html = `<!DOCTYPE html>
     // NOTE: all regex literals here use only plain ASCII — no \\u / \\b / \\s escapes
     // that would be mangled by the outer Node.js template literal.
 
-    function ExecSummaryPanel({ summary, label }) {
+    function ExecSummaryPanel({ summary, label, agentKey }) {
       var RISK_WORDS = ['flak','fail','instabilit','drop','consecutive','cluster','timeout',
         'regress','lost','missing','orphan','duplicate','violation','critical','outage',
         'decline','disappear','major','unstable'];
@@ -315,23 +442,42 @@ const html = `<!DOCTYPE html>
         else                                 obs.push(b);
       }
 
-      if (!bullets.length) return null;
+      // Highlight numbers/%, ISO dates, "Month DD" phrases, Title-case number words,
+      // ALL-CAPS env/test identifiers (e.g. UAT, TRAINING, NML510, SIMS_TB_SCHOOL),
+      // quoted names, and severity keywords.
+      // IMPORTANT: no \d \b \s inside the template literal — they get mangled to plain chars.
+      // Use [0-9] for digits, explicit spaces for whitespace, and no word-boundary assertions.
+      // No /i flag — [A-Z][A-Z0-9_]{2,} must stay uppercase-only.
+      var BOLD_PATTERN = /([0-9]{4}-[0-9]{2}-[0-9]{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec) +[0-9]{1,2}(?:st|nd|rd|th)?(?:,? *[0-9]{4})?|[0-9]+(?:[.,][0-9]+)?%?|"[^"]{1,60}"|[A-Z][A-Z0-9_]{2,}|One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|Eleven|Twelve|Thirteen|Fourteen|Fifteen|Sixteen|Seventeen|Eighteen|Nineteen|Twenty|Thirty|Forty|Fifty|Sixty|Seventy|Eighty|Ninety|Hundred|Thousand|[Cc]ritical|[Hh]igh|[Mm]edium|[Ll]ow|[Zz]ero|[Nn]one|[Aa]ll|[Ff]ailed|[Pp]assing|[Uu]nstable|[Ss]table|[Ff]laky|[Rr]egressed|[Ii]mproved)/;
+      function highlightItem(text) {
+        var parts = text.split(BOLD_PATTERN);
+        return parts.map(function(part, pi) {
+          if (!part) return null;
+          if (BOLD_PATTERN.test(part)) {
+            return React.createElement('strong', {
+              key: pi,
+              style: { fontWeight: 700, color: 'inherit' }
+            }, part);
+          }
+          return part;
+        });
+      }
 
       function Section({ title, items, bg, borderColor, titleColor, dotColor, prefix }) {
         if (!items.length) return null;
         return (
-          <div style={{background:bg, border:'1px solid '+borderColor, borderRadius:'8px', padding:'0.7rem 1rem', marginBottom:'0.5rem'}}>
-            <div style={{fontWeight:700, fontSize:'0.7rem', color:titleColor, marginBottom:'0.45rem', display:'flex', alignItems:'center', gap:'0.35rem', textTransform:'uppercase', letterSpacing:'0.07em'}}>
+          <div style={{background:bg, border:'1px solid '+borderColor, borderRadius:'8px', padding:'0.5rem 0.85rem', marginBottom:'0.4rem'}}>
+            <div style={{fontWeight:700, fontSize:'0.67rem', color:titleColor, marginBottom:'0.35rem', display:'flex', alignItems:'center', gap:'0.35rem', textTransform:'uppercase', letterSpacing:'0.07em'}}>
               <span>{prefix}</span>
               <span>{title}</span>
-              <span style={{marginLeft:'auto', fontWeight:600, fontSize:'0.65rem', color:titleColor, opacity:0.7}}>{items.length}</span>
+              <span style={{marginLeft:'auto', fontWeight:600, fontSize:'0.62rem', color:titleColor, opacity:0.7}}>{items.length}</span>
             </div>
-            <ul style={{margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:'0.22rem'}}>
+            <ul style={{margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:'0.13rem'}}>
               {items.map(function(item, i) {
                 return (
-                  <li key={i} style={{display:'flex', alignItems:'flex-start', gap:'0.45rem', fontSize:'0.8125rem', color:'#374151', lineHeight:1.55}}>
-                    <span style={{color:dotColor, flexShrink:0, fontWeight:800, marginTop:'0.08rem', fontSize:'0.7rem'}}>&rsaquo;</span>
-                    <span>{item}</span>
+                  <li key={i} style={{display:'flex', alignItems:'flex-start', gap:'0.4rem', fontSize:'0.775rem', color:'#374151', lineHeight:1.42}}>
+                    <span style={{color:dotColor, flexShrink:0, fontWeight:800, marginTop:'0.06rem', fontSize:'0.68rem'}}>&rsaquo;</span>
+                    <span>{highlightItem(item)}</span>
                   </li>
                 );
               })}
@@ -342,9 +488,12 @@ const html = `<!DOCTYPE html>
 
       return (
         <div>
-          {label && (
-            <div style={{fontSize:'0.68rem', fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.55rem'}}>{label}</div>
-          )}
+          {label && (() => {
+            var a = agentKey && AGENTS[agentKey];
+            return a
+              ? <div style={{marginBottom:'0.6rem'}}><AgentBadge agentKey={agentKey} /></div>
+              : <div style={{fontSize:'0.65rem', fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.55rem'}}>{label}</div>;
+          })()}
           <Section prefix="&#128202;" title="Key Observations" items={obs}
             bg="#f8fafc" borderColor="#e2e8f0" titleColor="#475569" dotColor="#64748b" />
           <Section prefix="&#9888;" title="Risk Indicators" items={risks}
@@ -383,7 +532,7 @@ const html = `<!DOCTYPE html>
           }}
         >
           <div style={{
-            background:'#fff', borderRadius:'0.75rem', width:'100%', maxWidth:'640px',
+            background:'#fff', borderRadius:'14px', width:'100%', maxWidth:'640px',
             maxHeight:'80vh', display:'flex', flexDirection:'column',
             boxShadow:'0 20px 60px rgba(0,0,0,0.25)'
           }}>
@@ -712,44 +861,137 @@ const html = `<!DOCTYPE html>
       );
     }
 
+    // ── Shared AI job log modal ──────────────────────────────────────────────
+    // Rendered by both AnalyseButton and PivotDatePicker while a job is live.
+
+    function AiJobModal({ phase, logs, onClose }) {
+      var logsRef = useRef(null);
+      useEffect(function() {
+        if (logsRef.current) logsRef.current.scrollTop = logsRef.current.scrollHeight;
+      }, [logs]);
+      if (phase === 'idle') return null;
+      var isRunning = phase === 'running';
+      var isDone    = phase === 'done';
+      return (
+        <div style={{position:'fixed',inset:0,background:'rgba(15,23,42,0.72)',zIndex:99998,
+          display:'flex',alignItems:'center',justifyContent:'center',padding:'1rem'}}>
+          <div style={{background:'#0f172a',borderRadius:'14px',width:'100%',maxWidth:'820px',
+            maxHeight:'78vh',display:'flex',flexDirection:'column',
+            boxShadow:'0 25px 60px rgba(0,0,0,0.55)',border:'1px solid #1e293b'}}>
+            {/* Header */}
+            <div style={{display:'flex',alignItems:'center',gap:'0.75rem',
+              padding:'0.85rem 1.25rem',borderBottom:'1px solid #1e293b',flexShrink:0}}>
+              {isRunning && (
+                <span style={{width:'9px',height:'9px',borderRadius:'50%',background:'#10b981',
+                  boxShadow:'0 0 0 3px rgba(16,185,129,0.25)',flexShrink:0}} />
+              )}
+              {isDone          && <span style={{fontSize:'1rem'}}>\u2705</span>}
+              {phase==='error' && <span style={{fontSize:'1rem'}}>\u274c</span>}
+              <span style={{fontSize:'0.82rem',fontWeight:700,color:'#e2e8f0',flex:1}}>
+                {isRunning ? 'Running AI analysis \u2014 do not close this panel\u2026'
+                  : isDone  ? 'Analysis complete \u2014 reloading report\u2026'
+                  :           'Analysis failed \u2014 check logs below'}
+              </span>
+              {!isRunning && (
+                <button onClick={onClose}
+                  style={{background:'none',border:'none',color:'#475569',cursor:'pointer',
+                    fontSize:'1.4rem',lineHeight:1,padding:'0 0.3rem',borderRadius:'4px'}}>\u00d7</button>
+              )}
+            </div>
+            {/* Log stream */}
+            <div ref={logsRef} style={{flex:1,overflowY:'auto',padding:'0.75rem 1rem',
+              fontFamily:'monospace',fontSize:'0.7rem',color:'#94a3b8',
+              lineHeight:1.65,whiteSpace:'pre-wrap',wordBreak:'break-all'}}>
+              {logs.length === 0
+                ? <span style={{color:'#334155'}}>Waiting for output\u2026</span>
+                : logs.map(function(line, i) {
+                    var clean = line.replace(/[\x1b]\[[0-9;]*m/g, '');
+                    var col = /\u2705|\u2713/.test(clean)              ? '#4ade80'
+                            : /\u274c|Error|failed|FAIL/.test(clean)  ? '#f87171'
+                            : /\u26a0|Warning/.test(clean)            ? '#fbbf24'
+                            :                                           '#94a3b8';
+                    return <div key={i} style={{color:col}}>{clean}</div>;
+                  })
+              }
+            </div>
+            {/* Footer */}
+            <div style={{padding:'0.5rem 1rem',borderTop:'1px solid #1e293b',
+              fontSize:'0.67rem',color:'#334155',flexShrink:0,fontFamily:'monospace'}}>
+              {isRunning ? '\u25cf Running\u2026'
+                : isDone  ? '\u2713 Done \u2014 page reloads in 2\u202fs'
+                :           '\u2717 Failed \u2014 see logs above'}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     // ── Analyse Button ───────────────────────────────────────────────────────
-    // Attempts POST /api/ai/analyse (future local server / CI webhook).
-    // Falls back to copying the CLI command to clipboard if no server responds.
+    // POST /api/ai/analyse → streams live output via SSE (requires npm run ai:serve).
+    // Falls back to copying the CLI command to clipboard when no server is running.
 
     function AnalyseButton() {
-      const [state, setState] = useState('idle'); // idle | running | done | copied | error
-      const cmd = 'npm run ai:full && npm run ai:report';
+      var [phase, setPhase] = useState('idle'); // idle | running | done | error | copied
+      var [logs,  setLogs]  = useState([]);
+      var esRef = useRef(null);
+      var cmd = 'npm run ai:full';
 
-      async function handleClick() {
-        setState('running');
-        try {
-          const res = await fetch('/api/ai/analyse', { method: 'POST' });
-          if (res.ok) { setState('done'); setTimeout(() => setState('idle'), 3000); return; }
-        } catch { /* no server — fall through to clipboard */ }
-        try { await navigator.clipboard.writeText(cmd); setState('copied'); }
-        catch { setState('error'); }
-        setTimeout(() => setState('idle'), 3000);
+      function connectSSE() {
+        if (esRef.current) { esRef.current.close(); esRef.current = null; }
+        var es = new EventSource('/api/ai/stream');
+        esRef.current = es;
+        es.onmessage = function(evt) {
+          var d = JSON.parse(evt.data);
+          if (d.type === 'log')  { setLogs(function(p) { return p.concat(d.text); }); }
+          if (d.type === 'idle') { es.close(); esRef.current = null; }
+          if (d.type === 'done') {
+            es.close(); esRef.current = null;
+            setPhase(d.exitCode === 0 ? 'done' : 'error');
+            if (d.exitCode === 0) setTimeout(function() { window.location.reload(); }, 2000);
+          }
+        };
+        es.onerror = function() {
+          if (esRef.current) { esRef.current.close(); esRef.current = null; }
+          setPhase('error');
+        };
       }
 
-      const label = state === 'running' ? '⏳ Triggering...'   :
-                    state === 'done'    ? '✓ Analysis triggered!' :
-                    state === 'copied'  ? '✓ Command copied!'  :
-                    state === 'error'   ? '⚠ Copy failed'      :
-                    '🤖 Analyse with AI Now';
-      const disabled = state === 'running';
+      async function handleClick() {
+        setPhase('running'); setLogs([]);
+        try {
+          var res = await fetch('/api/ai/analyse', { method: 'POST' });
+          if (res.status === 409 || res.ok) { connectSSE(); return; } // join live stream
+          throw new Error('server_error');
+        } catch(_) {
+          // No server — fall back to clipboard
+          try { await navigator.clipboard.writeText(cmd); setPhase('copied'); }
+          catch(_) { setPhase('error'); }
+          setTimeout(function() { setPhase('idle'); }, 3000);
+        }
+      }
+
+      var btnLabel = phase === 'running' ? '\u23f3 Running\u2026'
+                   : phase === 'done'    ? '\u2713 Done!'
+                   : phase === 'error'   ? '\u26a0 Failed'
+                   : phase === 'copied'  ? '\u2713 Command copied!'
+                   : '\ud83e\udd16 Analyse with AI Now';
 
       return (
-        <div className="flex flex-col items-end gap-1">
-          <button onClick={handleClick} disabled={disabled}
-            className={\`px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm \${
-              state === 'done' || state === 'copied'
-                ? 'bg-emerald-500 text-white'
-                : 'bg-white text-emerald-700 border-2 border-emerald-400 hover:bg-emerald-50'
-            } disabled:opacity-50 disabled:cursor-not-allowed\`}>
-            {label}
-          </button>
-          <span className="text-xs text-emerald-100 opacity-70 font-mono">{cmd}<\/span>
-        </div>
+        <>
+          <AiJobModal phase={phase} logs={logs}
+            onClose={function(){ setPhase('idle'); setLogs([]); }} />
+          <div className="flex flex-col items-end gap-1">
+            <button onClick={handleClick} disabled={phase === 'running'}
+              className={\`px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm \${
+                phase === 'done' || phase === 'copied' ? 'bg-emerald-500 text-white' :
+                phase === 'error'                      ? 'bg-rose-500 text-white'    :
+                'bg-white text-emerald-700 border-2 border-emerald-400 hover:bg-emerald-50'
+              } disabled:opacity-50 disabled:cursor-not-allowed\`}>
+              {btnLabel}
+            </button>
+            <span className="text-xs text-emerald-100 opacity-70 font-mono">{cmd}<\/span>
+          </div>
+        </>
       );
     }
 
@@ -1055,6 +1297,113 @@ const html = `<!DOCTYPE html>
 
     // ── Regression Delta Section ─────────────────────────────────────────────
 
+    // ── Pivot Date Picker ────────────────────────────────────────────────────
+    // Lets the user pick a new pivot date and run the regression agent live.
+    // Falls back to clipboard when no server is running (npm run ai:serve).
+
+    function PivotDatePicker({ currentPivot }) {
+      var [date,  setDate]  = useState(currentPivot || '');
+      var [phase, setPhase] = useState('idle'); // idle | running | done | error | copied
+      var [logs,  setLogs]  = useState([]);
+      var esRef = useRef(null);
+
+      var dateRange = trend.dateRange || {};
+      var minDate   = dateRange.from  || '';
+      var maxDate   = dateRange.to    || '';
+
+      function connectSSE() {
+        if (esRef.current) { esRef.current.close(); esRef.current = null; }
+        var es = new EventSource('/api/ai/stream');
+        esRef.current = es;
+        es.onmessage = function(evt) {
+          var d = JSON.parse(evt.data);
+          if (d.type === 'log')  { setLogs(function(p) { return p.concat(d.text); }); }
+          if (d.type === 'done') {
+            es.close(); esRef.current = null;
+            setPhase(d.exitCode === 0 ? 'done' : 'error');
+            if (d.exitCode === 0) setTimeout(function() { window.location.reload(); }, 2000);
+          }
+        };
+        es.onerror = function() {
+          if (esRef.current) { esRef.current.close(); esRef.current = null; }
+          setPhase('error');
+        };
+      }
+
+      async function handleReanalyse() {
+        if (!date) return;
+        var cmd = 'npm run ai:regression -- --since ' + date + ' && npm run ai:report';
+        setPhase('running'); setLogs([]);
+        try {
+          var res = await fetch('/api/ai/analyse', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pivotDate: date })
+          });
+          if (res.status === 409 || res.ok) { connectSSE(); return; }
+          throw new Error('server_error');
+        } catch(_) {
+          try { await navigator.clipboard.writeText(cmd); setPhase('copied'); }
+          catch(_) { setPhase('error'); }
+          setTimeout(function() { setPhase('idle'); }, 3000);
+        }
+      }
+
+      var isChanged = date && date !== currentPivot;
+      var btnLabel  = phase === 'running' ? '\u23f3 Running\u2026'
+                    : phase === 'done'    ? '\u2713 Done!'
+                    : phase === 'error'   ? '\u26a0 Failed'
+                    : phase === 'copied'  ? '\u2713 Copied!'
+                    : '\u21ba Re-analyse';
+      var btnBg = phase === 'running' ? '#6366f1'
+                : phase === 'done'    ? '#10b981'
+                : phase === 'error'   ? '#ef4444'
+                : phase === 'copied'  ? '#10b981' : '#4f46e5';
+
+      return (
+        <>
+          <AiJobModal phase={phase} logs={logs}
+            onClose={function(){ setPhase('idle'); setLogs([]); }} />
+          <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', flexWrap:'wrap' }}>
+            <span style={{ fontSize:'0.72rem', color:'#94a3b8', whiteSpace:'nowrap' }}>Pivot date:</span>
+            <input
+              type="date"
+              value={date}
+              min={minDate}
+              max={maxDate}
+              onChange={function(e){ setDate(e.target.value); setPhase('idle'); }}
+              style={{
+                fontSize:'0.75rem', fontFamily:'monospace', fontWeight:600,
+                color:'#1e293b', background: isChanged ? '#eff6ff' : '#f8fafc',
+                border: isChanged ? '1.5px solid #93c5fd' : '1px solid #e2e8f0',
+                borderRadius:'6px', padding:'0.2rem 0.5rem', cursor:'pointer',
+                outline:'none', transition:'border-color 0.15s, background 0.15s'
+              }}
+            />
+            {isChanged && (
+              <button
+                onClick={handleReanalyse}
+                disabled={phase === 'running'}
+                style={{
+                  fontSize:'0.72rem', fontWeight:700, padding:'0.25rem 0.75rem',
+                  borderRadius:'6px', border:'none',
+                  cursor: phase === 'running' ? 'not-allowed' : 'pointer',
+                  background: btnBg, color:'white',
+                  transition:'background 0.15s', whiteSpace:'nowrap',
+                  opacity: phase === 'running' ? 0.75 : 1
+                }}
+              >{btnLabel}</button>
+            )}
+            {isChanged && phase === 'idle' && (
+              <span style={{ fontSize:'0.65rem', color:'#94a3b8', fontFamily:'monospace' }}>
+                npm run ai:regression -- --since {date}
+              </span>
+            )}
+          </div>
+        </>
+      );
+    }
+
     function RegressionDeltaSection({ report }) {
       if (!report) return (
         <div className="bg-white rounded-xl shadow-md p-6 mb-5">
@@ -1117,10 +1466,9 @@ const html = `<!DOCTYPE html>
             <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
               Regression Delta
             </h2>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <PivotDatePicker currentPivot={report.pivotDate} />
               <span className="text-xs text-slate-400">
-                Pivot: <span className="font-semibold text-slate-600">{report.pivotDate}</span>
-                &nbsp;·&nbsp;
                 Before: {report.beforeWindow?.runsAnalysed ?? 0} runs ({report.beforeWindow?.from} → {report.beforeWindow?.to})
                 {(report.beforeEnvs || []).length > 0 && (
                   <span className="ml-1">
@@ -1265,7 +1613,286 @@ const html = `<!DOCTYPE html>
       );
     }
 
+    // ── Top Risks — deterministic risk derivation ────────────────────────────
+
+    function deriveTopRisks() {
+      var risks = [];
+      var SEV_ORDER = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+
+      // R1: Most-failing test
+      var failingTests = (deep.perTestProfiles || [])
+        .filter(function(p) { return (p.failureRate || 0) > 0; })
+        .sort(function(a, b) { return (b.failureRate || 0) - (a.failureRate || 0); });
+      if (failingTests.length > 0) {
+        var t = failingTests[0];
+        var envs = Object.keys(t.failuresByEnv || {});
+        var sev = t.failureRate > 40 ? 'Critical' : t.failureRate > 20 ? 'High' : 'Medium';
+        var conf = t.failureCount >= 4 ? 'High' : t.failureCount >= 2 ? 'Medium' : 'Low';
+        risks.push({
+          title: 'Persistent test failures \u2014 ' + t.testTitle.replace(/ @shard\d+/, ''),
+          explanation: t.failureRate + '% failure rate across ' + t.totalRuns + ' runs' + (envs.length > 0 ? ' \u00b7 env-specific: ' + envs.join(', ') : ''),
+          severity: sev, confidence: conf,
+          evidence: t.failureCount + ' failures in ' + t.totalRuns + ' runs' + (t.timeoutSuspected ? ' \u00b7 timeout suspected' : '') + (envs.length > 0 ? ' \u00b7 ' + envs.join(', ') + ' only' : ''),
+          _sev: SEV_ORDER[sev]
+        });
+      }
+
+      // R2: Chronic flakiness
+      var flakyTests = (deep.perTestProfiles || [])
+        .filter(function(p) { return (p.flakyRate || 0) >= 20; })
+        .sort(function(a, b) { return (b.flakyRate || 0) - (a.flakyRate || 0); });
+      if (flakyTests.length > 0) {
+        var topF = flakyTests[0];
+        var sevF = topF.flakyRate >= 40 ? 'High' : 'Medium';
+        var confF = flakyTests.length >= 2 ? 'High' : 'Medium';
+        risks.push({
+          title: flakyTests.length > 1 ? flakyTests.length + ' tests with chronic flakiness' : 'Chronic flakiness \u2014 ' + topF.testTitle.replace(/ @shard\d+/, ''),
+          explanation: 'Non-deterministic results in ' + flakyTests.length + ' test(s) \u2014 unreliable CI signal',
+          severity: sevF, confidence: confF,
+          evidence: topF.testTitle.replace(/ @shard\d+/, '') + ': ' + topF.flakyRate + '% flaky over ' + topF.totalRuns + ' runs',
+          _sev: SEV_ORDER[sevF]
+        });
+      }
+
+      // R3: Degrading health trend
+      if (trend.trendDirection === 'Degrading') {
+        var degradingPat = (trend.patterns || []).filter(function(p) { return p.patternType === 'Degrading Trend'; })[0] || null;
+        risks.push({
+          title: 'Overall health trend degrading',
+          explanation: 'Test suite health is declining \u2014 clean run rate ' + trend.successRate + '%, avg pass rate ' + trend.avgTestPassRate + '%',
+          severity: 'High', confidence: 'High',
+          evidence: degradingPat ? degradingPat.description : 'Health score: ' + trend.overallHealthScore + ' \u00b7 ' + trend.runsAnalysed + ' runs analysed',
+          _sev: SEV_ORDER['High']
+        });
+      }
+
+      // R4: Post-pivot regression
+      if (regression && regression.overallVerdict === 'Regressed' && (regression.regressions || []).length > 0) {
+        var regCount = regression.regressions.length;
+        var topReg = regression.regressions.slice().sort(function(a, b) { return (b.flakyDelta || 0) - (a.flakyDelta || 0); })[0];
+        var confR = (topReg.flakyDelta || 0) > 20 ? 'High' : 'Medium';
+        risks.push({
+          title: regCount > 1 ? regCount + ' tests regressed since ' + regression.pivotDate : 'Regression detected since ' + regression.pivotDate,
+          explanation: 'New flaky or failing behaviour confirmed post-pivot \u00b7 verdict: ' + regression.overallVerdict,
+          severity: 'Medium', confidence: confR,
+          evidence: topReg.testTitle.replace(/ @shard\d+/, '') + ': flaky rate +' + (topReg.flakyDelta || 0) + '% post ' + regression.pivotDate,
+          _sev: SEV_ORDER['Medium']
+        });
+      }
+
+      // R5: Failure cluster / risk period
+      if ((trend.riskPeriods || []).length > 0) {
+        var rp = trend.riskPeriods[0];
+        risks.push({
+          title: 'Failure cluster identified',
+          explanation: 'Consecutive failures concentrated in a specific time window \u2014 ' + rp.period,
+          severity: 'Medium', confidence: 'High',
+          evidence: rp.description,
+          _sev: SEV_ORDER['Medium']
+        });
+      }
+
+      // R6: DB integrity violations
+      if (dbInteg && (dbInteg.totalViolations || 0) > 0) {
+        var critV = dbInteg.criticalViolations || 0;
+        var sevDB = critV > 0 ? 'Critical' : dbInteg.riskLevel === 'High' ? 'High' : 'Medium';
+        risks.push({
+          title: 'Database integrity violations detected',
+          explanation: dbInteg.totalViolations + ' check(s) failed against ' + (dbInteg.database || 'DB') + ' \u2014 data consistency risk',
+          severity: sevDB, confidence: 'High',
+          evidence: critV + ' critical + ' + (dbInteg.totalViolations - critV) + ' other violation(s) \u00b7 env: ' + (dbInteg.environment || '?'),
+          _sev: SEV_ORDER[sevDB]
+        });
+      }
+
+      risks.sort(function(a, b) { return a._sev - b._sev; });
+      return risks.slice(0, 5);
+    }
+
+    // ── Top Risks Section Component ──────────────────────────────────────────
+
+    function TopRisksSection() {
+      var risks = deriveTopRisks();
+      if (!risks.length) return null;
+
+      var SEV_STYLES = {
+        Critical: { bg:'#fff1f2', color:'#be123c', border:'#fda4af', icon:'\ud83d\udd34', bar:'#f43f5e' },
+        High:     { bg:'#fff7ed', color:'#c2410c', border:'#fed7aa', icon:'\ud83d\udfe0', bar:'#f97316' },
+        Medium:   { bg:'#fefce8', color:'#854d0e', border:'#fde68a', icon:'\ud83d\udfe1', bar:'#eab308' },
+        Low:      { bg:'#f0fdf4', color:'#166534', border:'#bbf7d0', icon:'\ud83d\udfe2', bar:'#22c55e' },
+      };
+      var CONF_STYLES = {
+        High:   { bg:'#eff6ff', color:'#1e40af', border:'#bfdbfe', label:'\u2191 High confidence' },
+        Medium: { bg:'#fdf4ff', color:'#7e22ce', border:'#e9d5ff', label:'\u007e Medium confidence' },
+        Low:    { bg:'#f8fafc', color:'#64748b', border:'#e2e8f0', label:'\u00b7 Low confidence'  },
+      };
+
+      function SevBadge({ level }) {
+        var s = SEV_STYLES[level] || SEV_STYLES.Low;
+        return (
+          <span style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem',
+            padding:'0.2rem 0.6rem', borderRadius:'999px', fontSize:'0.68rem', fontWeight:700,
+            background:s.bg, color:s.color, border:'1px solid '+s.border, flexShrink:0 }}>
+            <span>{s.icon}</span><span>{level}</span>
+          </span>
+        );
+      }
+
+      function ConfBadge({ level }) {
+        var s = CONF_STYLES[level] || CONF_STYLES.Low;
+        return (
+          <span style={{ display:'inline-flex', alignItems:'center',
+            padding:'0.15rem 0.55rem', borderRadius:'999px', fontSize:'0.65rem', fontWeight:600,
+            background:s.bg, color:s.color, border:'1px solid '+s.border, flexShrink:0,
+            whiteSpace:'nowrap' }}>
+            {s.label}
+          </span>
+        );
+      }
+
+      return (
+        <div id="s-top-risks" className="dash-section" style={{ marginBottom:'1.5rem' }}>
+
+          {/* Section header */}
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between',
+            flexWrap:'wrap', gap:'0.5rem', marginBottom:'0.85rem' }}>
+            <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', marginBottom:'0.2rem' }}>
+                <span style={{ fontSize:'0.65rem', fontWeight:700, textTransform:'uppercase',
+                  letterSpacing:'0.1em', color:'#ef4444', whiteSpace:'nowrap' }}>
+                  \u26a0 Top Risks Detected
+                </span>
+                <span style={{ flex:1, height:'1px', background:'#fecaca', display:'inline-block' }} />
+              </div>
+              <div style={{ fontSize:'0.72rem', color:'#64748b' }}>
+                Highest-impact instability and regression signals identified from recent analysis
+              </div>
+            </div>
+            <span style={{ fontSize:'0.7rem', fontWeight:700, padding:'0.25rem 0.8rem',
+              borderRadius:'999px', background:'#fff1f2', color:'#be123c',
+              border:'1px solid #fda4af', whiteSpace:'nowrap', flexShrink:0 }}>
+              {risks.length} risk{risks.length !== 1 ? 's' : ''} detected
+            </span>
+          </div>
+
+          {/* Risk cards grid */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(275px, 1fr))', gap:'0.75rem' }}>
+            {risks.map(function(risk, idx) {
+              var s = SEV_STYLES[risk.severity] || SEV_STYLES.Low;
+              return (
+                <div key={idx}
+                  style={{ background:'white', borderRadius:'10px', borderLeft:'4px solid '+s.bar,
+                    boxShadow:'0 1px 3px rgba(0,0,0,0.05),0 4px 12px rgba(0,0,0,0.04)',
+                    padding:'0.9rem 1.1rem', display:'flex', flexDirection:'column', gap:'0.5rem',
+                    transition:'box-shadow 0.18s ease,transform 0.18s ease' }}
+                  onMouseEnter={function(e) {
+                    e.currentTarget.style.boxShadow = '0 4px 10px rgba(0,0,0,0.08),0 12px 24px rgba(0,0,0,0.06)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={function(e) {
+                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05),0 4px 12px rgba(0,0,0,0.04)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  {/* Row 1: number + title + severity badge */}
+                  <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:'0.5rem' }}>
+                    <div style={{ display:'flex', alignItems:'flex-start', gap:'0.45rem', flex:1, minWidth:0 }}>
+                      <span style={{ flexShrink:0, width:'18px', height:'18px', borderRadius:'50%',
+                        background:s.bar, color:'white', fontSize:'0.6rem', fontWeight:800,
+                        display:'inline-flex', alignItems:'center', justifyContent:'center', marginTop:'0.12rem' }}>
+                        {idx + 1}
+                      </span>
+                      <span style={{ fontSize:'0.82rem', fontWeight:700, color:'#1e293b', lineHeight:1.35 }}>
+                        {risk.title}
+                      </span>
+                    </div>
+                    <SevBadge level={risk.severity} />
+                  </div>
+
+                  {/* Row 2: one-line explanation */}
+                  <div style={{ fontSize:'0.77rem', color:'#475569', lineHeight:1.55, paddingLeft:'1.55rem' }}>
+                    {risk.explanation}
+                  </div>
+
+                  {/* Row 3: evidence + confidence badge */}
+                  <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between',
+                    gap:'0.5rem', paddingLeft:'1.55rem' }}>
+                    <div style={{ fontSize:'0.68rem', color:'#94a3b8', lineHeight:1.5, background:'#f8fafc',
+                      borderRadius:'6px', padding:'0.2rem 0.55rem', flex:1, minWidth:0,
+                      fontFamily:'monospace', wordBreak:'break-word' }}>
+                      {risk.evidence}
+                    </div>
+                    <ConfBadge level={risk.confidence} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      );
+    }
+
     // ── App ──────────────────────────────────────────────────────────────────
+
+    // ── Scroll utilities (progress bar + active nav + back-to-top) ──────────
+    // Active-tab strategy: on every scroll event, walk the sections array in
+    // order and find the LAST one whose top edge is at or above the nav bottom
+    // (64px). This is O(n) on scroll but n=7 — and it is 100% reliable
+    // regardless of section height, unlike IntersectionObserver rootMargin.
+    function useScrollEffects() {
+      useEffect(function() {
+        // Order MUST match the visual DOM order on the page.
+        var sections = ['s-overview','s-top-risks','s-trends','s-regression','s-unstable','s-db','s-actions'];
+        var navLinks = {};
+        sections.forEach(function(id) {
+          var a = document.querySelector('.dash-nav a[href="#' + id + '"]');
+          if (a) navLinks[id] = a;
+        });
+
+        var bar = document.getElementById('scroll-progress');
+        var btn = document.getElementById('back-to-top');
+        var NAV_H = 64; // px — nav bar height + small buffer
+
+        function setActive(id) {
+          Object.values(navLinks).forEach(function(a) { a.classList.remove('active'); });
+          if (id && navLinks[id]) navLinks[id].classList.add('active');
+        }
+
+        function onScroll() {
+          var scrolled = window.scrollY;
+
+          // Progress bar
+          var total = document.documentElement.scrollHeight - window.innerHeight;
+          if (bar) bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+
+          // Back-to-top button
+          if (btn) {
+            if (scrolled > 300) btn.classList.add('visible');
+            else                btn.classList.remove('visible');
+          }
+
+          // Active nav: last section whose top is <= NAV_H from viewport top.
+          // Special case: if scrolled near the bottom, force the last section active
+          // (the final section may never reach the nav threshold if content is short).
+          var nearBottom = (window.innerHeight + scrolled) >= (document.documentElement.scrollHeight - 80);
+          var active = sections[0]; // default to first
+          sections.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el && el.getBoundingClientRect().top <= NAV_H) active = id;
+          });
+          if (nearBottom) active = sections[sections.length - 1];
+          setActive(active);
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll(); // run once on mount to set initial state
+
+        return function() {
+          window.removeEventListener('scroll', onScroll);
+        };
+      }, []);
+    }
 
     function App() {
       const score       = trend.overallHealthScore ?? 0;
@@ -1278,8 +1905,19 @@ const html = `<!DOCTYPE html>
       // ── Env runs modal state ───────────────────────────────────────────────
       const [envModal, setEnvModal] = useState(null); // { title, runs } | null
 
+      useScrollEffects();
+
       return (
         <div className="dash">
+
+          {/* ── Scroll progress bar (fixed, top of page) ── */}
+          <div id="scroll-progress" />
+
+          {/* ── Back to top button (fixed, bottom-right) ── */}
+          <button id="back-to-top" onClick={function(){ window.scrollTo({top:0,behavior:'smooth'}); }}
+            title="Back to top" aria-label="Back to top">
+            &#8679;
+          </button>
 
           {/* ── Env runs modal (portal-style, rendered at top of tree) ── */}
           {envModal && (
@@ -1345,8 +1983,11 @@ const html = `<!DOCTYPE html>
           <nav className="dash-nav">
             <div className="dash-nav-inner">
               <a href="#s-overview">📊 Overview</a>
+              <a href="#s-top-risks">⚠️ Top Risks</a>
               <a href="#s-trends">📈 Trends</a>
+              <a href="#s-regression">🔁 Regression</a>
               <a href="#s-unstable">🔴 Unstable Tests</a>
+              <a href="#s-db">🗄️ DB Integrity</a>
               <a href="#s-actions">✅ Action Items</a>
             </div>
           </nav>
@@ -1486,56 +2127,47 @@ const html = `<!DOCTYPE html>
 
               </div>
 
+              {/* Top Risks moved to its own top-level section below */}
+
               {/* Executive Summary */}
               <div className="card">
                 <div className="card-head"><h2>Executive Summary</h2></div>
-                <div className="card-body">
-                  <ExecSummaryPanel summary={trend.executiveSummary} label="Trend Analysis" />
+                <div className="card-body" style={{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:'1rem', alignItems:'start'}}>
+                  <ExecSummaryPanel summary={trend.executiveSummary} label="Trend Analysis" agentKey="trend" />
                   {deep.executiveSummary && (
-                    <div style={{marginTop:'1.25rem', paddingTop:'1.25rem', borderTop:'1px solid #f1f5f9'}}>
-                      <ExecSummaryPanel summary={deep.executiveSummary} label="Per-Test Analysis" />
-                    </div>
+                    <ExecSummaryPanel summary={deep.executiveSummary} label="Per-Test Analysis" agentKey="deep" />
                   )}
                 </div>
               </div>
 
-              {/* Database Integrity */}
-              <DatabaseIntegritySection report={dbInteg} />
+              {/* Database Integrity has its own dedicated tab — not duplicated here */}
 
               {/* AI Agents Used */}
               <div className="card">
                 <div className="card-head"><h2>AI Agents Used</h2></div>
                 <div className="card-body" style={{display:'flex',flexWrap:'wrap',gap:'0.6rem'}}>
-                  {[
-                    { label:'📊 Trend Analysis Agent',
-                      color:'#eff6ff', border:'#bfdbfe', text:'#1d4ed8',
-                      tip:'Analyses run history to detect macro patterns — degrading trends, flaky spikes, recurring failure windows, and overall health trajectory.' },
-                    { label:'🔍 Deep Failure Agent',
-                      color:'#fdf4ff', border:'#e9d5ff', text:'#7e22ce',
-                      tip:'Profiles each test individually — calculates per-test fail rate, flaky rate, last failure timestamp, and links to the Playwright HTML report for that run.' },
-                    { label:'📈 Regression Delta Agent',
-                      color:'#f0fdf4', border:'#bbf7d0', text:'#15803d',
-                      tip:'Compares test reliability before and after a pivot date to surface regressions and improvements. Useful for validating a release or identifying when things broke.' },
-                    { label:'🗄 DB Integrity Agent',
-                      color:'#fff7ed', border:'#fed7aa', text:'#c2410c',
-                      tip:'Runs 13 SQL integrity checks against the SIMS Finance database — orphaned records, transaction anomalies, workflow stalls, and row count deltas between pre/post test run snapshots.' },
-                  ].map((a,i) => (
-                    <span key={i} style={{display:'inline-flex',alignItems:'center',gap:'0.35rem',padding:'0.3rem 0.75rem',borderRadius:'999px',fontSize:'0.72rem',fontWeight:600,background:a.color,border:'1px solid ' + a.border,color:a.text}}>
-                      {a.label}
-                      <i className="info-trigger"
-                         data-tooltip={a.tip}
-                         style={{background:a.border, color:a.text}}>i</i>
-                    </span>
-                  ))}
+                  {Object.values(AGENTS).map(function(a) {
+                    return (
+                      <span key={a.key} style={{display:'inline-flex',alignItems:'center',gap:'0.35rem',padding:'0.3rem 0.85rem',borderRadius:'999px',fontSize:'0.72rem',fontWeight:600,background:a.bg,border:'1px solid '+a.border,color:a.text}}>
+                        {a.icon} {a.label}
+                        <i className="info-trigger"
+                           data-tooltip={a.tip}
+                           style={{background:a.border, color:a.text}}>i</i>
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
 
             </div>
 
+            {/* TopRisksSection renders id="s-top-risks" on its own root div */}
+            <TopRisksSection />
+
             {/* ══ 2. TRENDS ══ */}
             <div id="s-trends" className="dash-section">
 
-              <p className="section-label">Trends</p>
+              <p className="section-label">Trends <AgentBadge agentKey="trend" style={{marginLeft:'0.5rem'}} /></p>
 
               {/* Environment Breakdown */}
               {(() => {
@@ -1686,11 +2318,15 @@ const html = `<!DOCTYPE html>
                 </div>
               )}
 
-              <RegressionDeltaSection report={regression} />
-
             </div>
 
-            {/* ══ 3. UNSTABLE TESTS ══ */}
+            {/* ══ 3. REGRESSION DELTA ══ */}
+            <div id="s-regression" className="dash-section">
+              <p className="section-label">Regression Delta <AgentBadge agentKey="regression" style={{marginLeft:'0.5rem'}} /></p>
+              <RegressionDeltaSection report={regression} />
+            </div>
+
+            {/* ══ 4. UNSTABLE TESTS ══ */}
             <div id="s-unstable" className="dash-section">
 
               {(() => {
@@ -1703,6 +2339,7 @@ const html = `<!DOCTYPE html>
                     <span style={{width:'8px',height:'8px',borderRadius:'50%',background:dotColor,flexShrink:0,boxShadow:'0 0 0 3px ' + dotColor + '22'}} />
                     Unstable Tests
                     <span style={{fontSize:'0.65rem',fontWeight:700,color:dotColor,marginLeft:'0.25rem'}}>{statusText}</span>
+                    <AgentBadge agentKey="deep" style={{marginLeft:'0.5rem'}} />
                   </p>
                 );
               })()}
@@ -1728,10 +2365,16 @@ const html = `<!DOCTYPE html>
 
             </div>
 
-            {/* ══ 4. ACTION ITEMS ══ */}
+            {/* ══ 6. DB INTEGRITY ══ */}
+            <div id="s-db" className="dash-section">
+              <p className="section-label">DB Integrity <AgentBadge agentKey="db" style={{marginLeft:'0.5rem'}} /></p>
+              <DatabaseIntegritySection report={dbInteg} />
+            </div>
+
+            {/* ══ 7. ACTION ITEMS ══ */}
             <div id="s-actions" className="dash-section">
 
-              <p className="section-label">Action Items</p>
+              <p className="section-label">Action Items <AgentBadge agentKey="trend" style={{marginLeft:'0.5rem'}} /><AgentBadge agentKey="deep" style={{marginLeft:'0.25rem'}} /></p>
 
               <div className="card">
                 <div className="card-body" style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',gap:'2.5rem'}}>
@@ -1745,7 +2388,14 @@ const html = `<!DOCTYPE html>
           </main>
 
           <footer className="dash-footer">
-            &copy; {new Date().getFullYear()} SIMS Finance · AI Analysis Report · Playwright Test Suite
+            <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.4rem'}}>
+              <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                <span style={{display:'inline-block',width:'8px',height:'8px',borderRadius:'50%',background:'#10b981'}} />
+                <span style={{fontWeight:700,color:'#475569',letterSpacing:'0.03em'}}>SIMS Finance AI Dashboard</span>
+              </div>
+              <div>Playwright Test Suite &nbsp;&middot;&nbsp; AI Analysis Report &nbsp;&middot;&nbsp; &copy; {new Date().getFullYear()}</div>
+              <div style={{marginTop:'0.2rem',fontSize:'0.62rem',color:'#cbd5e1'}}>Generated {generatedAt} &nbsp;&middot;&nbsp; Powered by Azure AI Foundry</div>
+            </div>
           </footer>
 
         </div>
