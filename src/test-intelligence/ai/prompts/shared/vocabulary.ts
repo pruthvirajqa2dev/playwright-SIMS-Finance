@@ -21,4 +21,17 @@ Use these exact terms consistently. Do NOT invent synonyms.
   "partial failure"     — a run where some but not all tests failed (pass rate 1–99%)
   "regression"          — a test whose failure rate increased measurably after a pivot date
   "improvement"         — a test whose failure rate decreased measurably after a pivot date
+
+── API SIGNAL VOCABULARY ────────────────────────────────────────────────────
+When API signal data is present, use these exact terms. Do NOT invent synonyms.
+When API signal data is ABSENT, do NOT reference API-layer behaviour at all.
+
+  "api stable"              — API endpoint confirmed healthy (correct status, within latency)
+  "api latency spike"       — API responded but latency exceeded the configured threshold
+  "auth failure detected"   — auth endpoint returned 401/403 or session-invalid indicator
+  "persistence mismatch"    — UI reported success but API GET did not return the expected entity
+  "backend unavailable"     — API endpoint returned 5xx, timed out, or could not be reached
+  "inconsistent api response" — API returned 2xx but payload structure or values were unexpected
+  "ui instability"          — test failure where API signals show no backend fault (UI-only cause)
+  "backend-correlated failure" — test failure where API signals show a concurrent backend fault
 `.trim();

@@ -25,6 +25,7 @@ const deepPath       = process.argv[3] ?? 'ai-outputs/reports/deep-failure.json'
 const outPath        = process.argv[4] ?? 'ai-outputs/ai-report.html';
 const regressionPath = process.argv[5] ?? 'ai-outputs/reports/regression-delta.json';
 const dbIntegPath    = process.argv[6] ?? 'ai-outputs/reports/db-integrity.json';
+const apiIntelPath   = process.argv[7] ?? 'ai-outputs/reports/api-intelligence.json';
 
 function readJson(p, fallback) {
   try { return JSON.parse(fs.readFileSync(p, 'utf8')); }
@@ -35,6 +36,7 @@ const trend      = readJson(trendPath, {});
 const deep       = readJson(deepPath,  {});
 const regression = readJson(regressionPath, null);
 const dbInteg    = readJson(dbIntegPath, null);
+const apiIntel   = readJson(apiIntelPath, null);
 
 // ── Escape helper (also strips ANSI codes from error samples) ────────────────
 function escJson(obj) {
@@ -204,6 +206,7 @@ const html = `<!DOCTYPE html>
     .dash-section:nth-child(5) { animation-delay:0.2s; }
     .dash-section:nth-child(6) { animation-delay:0.25s; }
     .dash-section:nth-child(7) { animation-delay:0.3s; }
+    .dash-section:nth-child(8) { animation-delay:0.35s; }
 
     /* ── Card ── */
     .card { background:var(--c-surface); border-radius:var(--r-lg); box-shadow:var(--shadow-sm); margin-bottom:1.25rem; overflow:hidden; transition:box-shadow var(--t-base), transform var(--t-base); border:1px solid var(--c-border-soft); }
@@ -237,26 +240,38 @@ const html = `<!DOCTYPE html>
     /* ── Global Info Tooltip System ── */
     /* Trigger: any element with class "info-trigger" + data-tooltip attribute */
     .info-trigger { display:inline-flex; align-items:center; justify-content:center;
-                    width:15px; height:15px; border-radius:50%;
+                    width:16px; height:16px; border-radius:50%;
                     background:var(--c-border); color:var(--c-text-3);
                     font-size:0.6rem; font-weight:800; font-style:normal;
                     cursor:default; flex-shrink:0; user-select:none;
                     transition:background var(--t-fast), color var(--t-fast); }
     .info-trigger:hover { background:var(--c-brand); color:white; }
     /* Single global tooltip — lives on <body>, never clipped by any ancestor */
-    #global-tooltip { position:fixed; z-index:99999; max-width:250px; width:max-content;
-                      background:#1e293b; color:#e2e8f0;
-                      font-size:0.72rem; line-height:1.65;
-                      padding:0.65rem 0.85rem; border-radius:var(--r-md);
-                      box-shadow:0 8px 28px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.12);
-                      pointer-events:none; white-space:normal;
-                      opacity:0; transition:opacity 0.16s ease;
-                      display:none; }
+    #global-tooltip {
+      position:fixed; z-index:99999;
+      /* width:max-content lets short strings stay compact; max-width caps long ones */
+      width:max-content; max-width:320px;
+      background:#1e293b; color:#e2e8f0;
+      font-size:0.78rem; line-height:1.7; letter-spacing:0.01em;
+      padding:0.6rem 0.95rem 0.65rem;
+      border-radius:var(--r-md);
+      /* Thin brand-colour top stripe acts as a visual anchor */
+      border-top:2px solid var(--c-brand);
+      box-shadow:0 6px 20px rgba(0,0,0,0.28), 0 2px 6px rgba(0,0,0,0.14);
+      pointer-events:none; white-space:normal; word-break:break-word;
+      opacity:0; transition:opacity 0.18s ease;
+      display:none;
+    }
     #global-tooltip.tt-visible { display:block; }
     #global-tooltip.tt-show    { opacity:1; }
+    /* Arrow — inset by 2px to sit below the brand stripe on tt-below */
     #global-tooltip::after { content:''; position:absolute; border:5px solid transparent; }
     #global-tooltip.tt-above::after { top:100%; left:var(--ax,50%); transform:translateX(-50%); border-top-color:#1e293b; }
-    #global-tooltip.tt-below::after { bottom:100%; left:var(--ax,50%); transform:translateX(-50%); border-bottom-color:#1e293b; }
+    #global-tooltip.tt-below::after { bottom:100%; left:var(--ax,50%); transform:translateX(-50%); border-bottom-color:var(--c-brand); }
+    /* Narrow screens: go full-bleed with small padding */
+    @media (max-width:480px) {
+      #global-tooltip { max-width:calc(100vw - 24px); font-size:0.75rem; }
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-full font-sans">
@@ -268,13 +283,21 @@ const html = `<!DOCTYPE html>
       trend:      ${escJson(trend)},
       deep:       ${escJson(deep)},
       regression: ${escJson(regression)},
-      dbInteg:    ${escJson(dbInteg)}
+      dbInteg:    ${escJson(dbInteg)},
+      apiIntel:   ${escJson(apiIntel)}
     };
   <\/script>
 
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
-    const { trend, deep, regression, dbInteg } = window.__AI_DATA__;
+    const { trend, deep, regression, dbInteg, apiIntel } = window.__AI_DATA__;
+
+    // ── Operational threshold constants ─────────────────────────────────────
+    // Single source of truth for classification boundaries used across
+    // multiple functions. Change once here — all call sites update.
+    var FAIL_RATE_UNSTABLE   = 20; // % failureRate above this → Unstable label / High priority
+    var FAIL_RATE_INCREASING = 60; // % failureRate at/above this (+ recent failure) → Increasing lifecycle
+    var FLAKY_RATE_CHRONIC   = 20; // % flakyRate   at/above this → chronic flakiness concern / Medium priority
 
     // ── Colour helpers (mirrors dashboard palette) ──────────────────────────
 
@@ -318,12 +341,84 @@ const html = `<!DOCTYPE html>
       );
     }
 
+    // ── Reusable info icon ───────────────────────────────────────────────────
+    // Single source of truth for the <i className="info-trigger"> pattern.
+    // InfoIcon: general use (inherits default .info-trigger CSS styling).
+    // InfoIconDark: pre-styled for dark (slate-700) table headers.
+    function InfoIcon({ tip, style }) {
+      return <i className="info-trigger" data-tooltip={tip} style={style||{}}>i</i>;
+    }
+    function InfoIconDark({ tip }) {
+      return (
+        <i className="info-trigger"
+           style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+           data-tooltip={tip}>i</i>
+      );
+    }
+
+    // ── Table header cell with optional tooltip ──────────────────────────────
+    // Replaces the repeated <th><span style=...>{label}<InfoIconDark /></span></th> pattern.
+    // center=true adds text-center class and justifyContent:'center' to the inner span.
+    function ThWithTip({ label, tip, center }) {
+      return (
+        <th className={'px-4 py-3' + (center ? ' text-center' : '')}>
+          <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',
+            justifyContent:center ? 'center' : 'flex-start'}}>
+            {label}
+            <InfoIconDark tip={tip} />
+          </span>
+        </th>
+      );
+    }
+
+    // ── Shared colour-mapping helpers ────────────────────────────────────────
+    // Deterministic severity/verdict → Tailwind className.
+    // Each helper is scoped to its domain so palette changes stay isolated.
+
+    // DB integrity check severity (Critical/High/Medium → coloured pill, else slate)
+    function dbCheckSevCls(s) {
+      if (s === 'Critical') return 'bg-rose-100 text-rose-700 border-rose-200';
+      if (s === 'High')     return 'bg-amber-100 text-amber-700 border-amber-200';
+      if (s === 'Medium')   return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+      return 'bg-slate-100 text-slate-600 border-slate-200';
+    }
+
+    // DB risk level badge — extends dbCheckSevCls with 'Clean' → emerald
+    function dbRiskLevelCls(level) {
+      if (level === 'Clean') return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+      return dbCheckSevCls(level);
+    }
+
+    // Regression delta verdict pill (Regressed/New Failure → rose, Improved/Resolved → emerald)
+    function regressionVerdictCls(v) {
+      if (v === 'Regressed' || v === 'New Failure') return 'bg-rose-100 text-rose-700 border-rose-200';
+      if (v === 'Improved'  || v === 'Resolved')    return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+      return 'bg-slate-100 text-slate-500 border-slate-200';
+    }
+
+    // Failure rate delta → Tailwind text/weight className
+    function failDeltaCls(delta) {
+      if (delta > 10) return 'text-rose-600 font-bold';
+      if (delta > 0)  return 'text-amber-600 font-semibold';
+      if (delta < 0)  return 'text-emerald-600 font-semibold';
+      return 'text-slate-400';
+    }
+
+    // Flaky rate delta → Tailwind text/weight className
+    function flakyDeltaCls(delta) {
+      if (delta > 10) return 'text-amber-600 font-bold';
+      if (delta > 0)  return 'text-amber-500 font-semibold';
+      if (delta < 0)  return 'text-emerald-600 font-semibold';
+      return 'text-slate-400';
+    }
+
     // ── Agent colour registry (single source of truth) ─────────────────────
     var AGENTS = {
       trend:      { key:'trend',      icon:'📊', label:'Trend Analysis Agent',    bg:'#eff6ff', border:'#bfdbfe', text:'#1d4ed8', tip:'Analyses run history to detect macro patterns — degrading trends, flaky spikes, recurring failure windows, and overall health trajectory.' },
       deep:       { key:'deep',       icon:'🔍', label:'Deep Failure Agent',       bg:'#fdf4ff', border:'#e9d5ff', text:'#7e22ce', tip:'Profiles each test individually — calculates per-test fail rate, flaky rate, last failure timestamp, and links to the Playwright HTML report for that run.' },
       regression: { key:'regression', icon:'📈', label:'Regression Delta Agent',  bg:'#f0fdf4', border:'#bbf7d0', text:'#15803d', tip:'Compares test reliability before and after a pivot date to surface regressions and improvements.' },
       db:         { key:'db',         icon:'🗄',  label:'DB Integrity Agent',       bg:'#fff7ed', border:'#fed7aa', text:'#c2410c', tip:'Runs SQL integrity checks against the SIMS Finance database — orphaned records, transaction anomalies, workflow stalls, and row count deltas between pre/post test run snapshots.' },
+      api:        { key:'api',        icon:'🌐', label:'API Intelligence Agent',   bg:'#f0fdfa', border:'#99f6e4', text:'#0f766e', tip:'Passively captures all XHR/fetch traffic during test execution, classifies endpoints by SIMS Finance business domain, detects latency outliers, failed calls, and repeated calls, then uses AI to name workflow sequences and generate engineering insights.' },
     };
 
     // Small reusable agent badge pill
@@ -463,20 +558,35 @@ const html = `<!DOCTYPE html>
         });
       }
 
-      function Section({ title, items, bg, borderColor, titleColor, dotColor, prefix }) {
+      // borderColor prop removed — Section now uses only the left-border accent (dotColor).
+      function Section({ title, items, bg, titleColor, dotColor, prefix }) {
         if (!items.length) return null;
         return (
-          <div style={{background:bg, border:'1px solid '+borderColor, borderRadius:'8px', padding:'0.5rem 0.85rem', marginBottom:'0.4rem'}}>
-            <div style={{fontWeight:700, fontSize:'0.67rem', color:titleColor, marginBottom:'0.35rem', display:'flex', alignItems:'center', gap:'0.35rem', textTransform:'uppercase', letterSpacing:'0.07em'}}>
+          <div style={{
+            background: bg,
+            borderLeft: '2px solid ' + dotColor,
+            borderRadius: '6px',
+            padding: '0.7rem 1rem 0.7rem 0.85rem',
+            marginBottom: '0.5rem'
+          }}>
+            <div style={{
+              fontWeight: 700, fontSize: '0.7rem', color: titleColor,
+              marginBottom: '0.5rem', display: 'flex', alignItems: 'center',
+              gap: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.07em'
+            }}>
               <span>{prefix}</span>
               <span>{title}</span>
-              <span style={{marginLeft:'auto', fontWeight:600, fontSize:'0.62rem', color:titleColor, opacity:0.7}}>{items.length}</span>
+              <span style={{
+                marginLeft: 'auto', fontWeight: 600, fontSize: '0.6rem',
+                color: '#94a3b8', background: '#f1f5f9',
+                padding: '0.05rem 0.4rem', borderRadius: '999px', flexShrink: 0
+              }}>{items.length}</span>
             </div>
-            <ul style={{margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:'0.13rem'}}>
+            <ul style={{margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:'0.45rem'}}>
               {items.map(function(item, i) {
                 return (
-                  <li key={i} style={{display:'flex', alignItems:'flex-start', gap:'0.4rem', fontSize:'0.775rem', color:'#374151', lineHeight:1.42}}>
-                    <span style={{color:dotColor, flexShrink:0, fontWeight:800, marginTop:'0.06rem', fontSize:'0.68rem'}}>&rsaquo;</span>
+                  <li key={i} style={{display:'flex', alignItems:'flex-start', gap:'0.5rem', fontSize:'0.8rem', color:'#374151', lineHeight:1.55}}>
+                    <span style={{color:dotColor, flexShrink:0, fontWeight:900, marginTop:'0.28rem', fontSize:'0.42rem', lineHeight:1}}>&#9679;</span>
                     <span>{highlightItem(item)}</span>
                   </li>
                 );
@@ -487,26 +597,85 @@ const html = `<!DOCTYPE html>
       }
 
       return (
-        <div>
-          {label && (() => {
-            var a = agentKey && AGENTS[agentKey];
-            return a
-              ? <div style={{marginBottom:'0.6rem'}}><AgentBadge agentKey={agentKey} /></div>
-              : <div style={{fontSize:'0.65rem', fontWeight:700, color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.55rem'}}>{label}</div>;
-          })()}
+        <div style={{display:'flex', flexDirection:'column', gap:'0'}}>
           <Section prefix="&#128202;" title="Key Observations" items={obs}
-            bg="#f8fafc" borderColor="#e2e8f0" titleColor="#475569" dotColor="#64748b" />
+            bg="#f8fafc" titleColor="#475569" dotColor="#64748b" />
           <Section prefix="&#9888;" title="Risk Indicators" items={risks}
-            bg="#fffbeb" borderColor="#fde68a" titleColor="#b45309" dotColor="#d97706" />
+            bg="#fffbeb" titleColor="#b45309" dotColor="#d97706" />
           <Section prefix="&#128203;" title="Impact &amp; Considerations" items={impacts}
-            bg="#eff6ff" borderColor="#bfdbfe" titleColor="#1d4ed8" dotColor="#3b82f6" />
+            bg="#eff6ff" titleColor="#1d4ed8" dotColor="#3b82f6" />
+        </div>
+      );
+    }
+
+    // ── Deterministic Signal Strip ───────────────────────────────────────────
+    // Operational posture banner + supporting signal pills for the Executive Summary.
+    // Derived entirely from existing lifecycle/category/profile data — no AI, no inference.
+    // Computation delegated to pure operational functions; this component renders only.
+    function DeterministicSignalStrip({ deepData }) {
+      var { counts, totalProfiles } = aggregateInstabilityCounts(deepData);
+      if (totalProfiles === 0) return null;
+      var posture = deriveOperationalPosture(counts);
+      var signals = buildInstabilitySignals(counts, totalProfiles);
+
+      return (
+        <div style={{marginBottom:'1rem'}}>
+
+          {/* Posture banner — primary focal point */}
+          <div style={{
+            padding:'0.85rem 1.1rem',
+            background: posture.bg,
+            borderLeft: '4px solid '+posture.accent,
+            borderRadius: '6px',
+            marginBottom: '0.7rem',
+          }}>
+            <div style={{
+              fontSize:'0.58rem', fontWeight:800, textTransform:'uppercase',
+              letterSpacing:'0.1em', color:posture.accent, marginBottom:'0.3rem',
+            }}>Current Operational Posture</div>
+            <div style={{fontSize:'0.86rem', fontWeight:500, color:posture.color, lineHeight:1.55}}>
+              {posture.statement}
+            </div>
+            {counts.total > 0 && (
+              <div style={{marginTop:'0.35rem',fontSize:'0.67rem',color:posture.accent,opacity:0.7}}>
+                Use the Focus filters in the Per-Test Analysis table to drill into specific categories.
+              </div>
+            )}
+          </div>
+
+          {/* Supporting signals — secondary context */}
+          {signals.length > 0 && (
+            <div>
+              <div style={{
+                fontSize:'0.57rem', fontWeight:700, textTransform:'uppercase',
+                letterSpacing:'0.09em', color:'#94a3b8', marginBottom:'0.3rem',
+              }}>Supporting Signals</div>
+              <div style={{display:'flex', flexWrap:'wrap', gap:'0.3rem'}}>
+                {signals.map(function(s, si) {
+                  return (
+                    <span key={si} style={{
+                      display:'inline-flex', alignItems:'center', gap:'0.28rem',
+                      padding:'0.15rem 0.48rem',
+                      borderRadius:'4px',
+                      fontSize:'0.67rem', fontWeight:500, lineHeight:1.4,
+                      background:s.bg, border:'1px solid '+s.border, color:s.color,
+                    }}>
+                      <span style={{width:'4px',height:'4px',borderRadius:'50%',background:s.dot,flexShrink:0}} />
+                      {s.text}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
         </div>
       );
     }
 
     // ── Environment Runs Modal ───────────────────────────────────────────────
     // Shown when a user clicks a count in the Environment Breakdown table.
-    // runs: Array<{timestamp, successRate, flaky}>, title: string, reportBaseUrl: string, onClose: fn
+    // runs: Array<{timestamp, successRate, flaky, isWeekend?}>, title: string, reportBaseUrl: string, onClose: fn
 
     function EnvRunsModal({ runs, title, reportBaseUrl: baseUrl, onClose }) {
       if (!runs) return null;
@@ -564,22 +733,19 @@ const html = `<!DOCTYPE html>
                         <th style={{padding:'0.6rem 1rem', textAlign:'left', fontWeight:600, letterSpacing:'0.04em', fontSize:'0.72rem', textTransform:'uppercase'}}>
                           <span style={{display:'inline-flex',alignItems:'center',gap:'0.35rem'}}>
                             Run Timestamp
-                            <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                               data-tooltip="UTC timestamp in YYYY-MM-DD_HH-MM-SS format from the CI run that produced this result. Click the link (when available) to open the full Playwright HTML report for that run.">i</i>
+                            <InfoIconDark tip="UTC timestamp in YYYY-MM-DD_HH-MM-SS format from the CI run that produced this result. Click the link (when available) to open the full Playwright HTML report for that run." />
                           </span>
                         </th>
                         <th style={{padding:'0.6rem 1rem', textAlign:'center', fontWeight:600, letterSpacing:'0.04em', fontSize:'0.72rem', textTransform:'uppercase'}}>
                           <span style={{display:'inline-flex',alignItems:'center',gap:'0.35rem',justifyContent:'center'}}>
                             Pass Rate
-                            <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                               data-tooltip="passed ÷ executed × 100 for this specific run. 100% = all tests passed. Values below 100% indicate at least one test failed (not counting flaky retries).">i</i>
+                            <InfoIconDark tip="passed ÷ executed × 100 for this specific run. 100% = all tests passed. Values below 100% indicate at least one test failed (not counting flaky retries)." />
                           </span>
                         </th>
                         <th style={{padding:'0.6rem 1rem', textAlign:'center', fontWeight:600, letterSpacing:'0.04em', fontSize:'0.72rem', textTransform:'uppercase'}}>
                           <span style={{display:'inline-flex',alignItems:'center',gap:'0.35rem',justifyContent:'center'}}>
                             Status
-                            <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                               data-tooltip="Clean = 100% pass, no flakiness · Partial failure = some tests failed (pass rate 1–99%) · Complete failure = 0% pass rate · Flaky = at least one test retried and eventually passed.">i</i>
+                            <InfoIconDark tip="Clean = 100% pass, no flakiness · Partial failure = some tests failed (pass rate 1–99%) · Complete failure = 0% pass rate · Flaky = at least one test retried and eventually passed." />
                           </span>
                         </th>
                       </tr>
@@ -587,11 +753,20 @@ const html = `<!DOCTYPE html>
                     <tbody>
                       {runs.map((r, idx) => {
                         const rate = r.successRate ?? 0;
-                        const rateColor = rate >= 95 ? '#059669' : rate >= 50 ? '#d97706' : '#dc2626';
+                        const zeroExec = rate === 0 && !r.flaky;
+                        const rateColor = r.isWeekend ? '#94a3b8' : rate >= 95 ? '#059669' : rate >= 50 ? '#d97706' : '#dc2626';
                         const badges = [];
-                        if (rate < 100) badges.push({ label: rate === 0 ? 'Complete failure' : 'Partial failure', bg:'#fee2e2', fg:'#b91c1c' });
-                        if (r.flaky)    badges.push({ label: 'Flaky', bg:'#fef3c7', fg:'#92400e' });
-                        if (rate === 100 && !r.flaky) badges.push({ label: 'Clean', bg:'#d1fae5', fg:'#065f46' });
+                        if (r.isWeekend && zeroExec) {
+                          badges.push({ label: 'Weekend — offline', bg:'#f1f5f9', fg:'#64748b' });
+                        } else if (r.isWeekend) {
+                          badges.push({ label: 'Weekend', bg:'#f1f5f9', fg:'#64748b' });
+                          if (rate < 100) badges.push({ label: rate === 0 ? 'Complete failure' : 'Partial failure', bg:'#fee2e2', fg:'#b91c1c' });
+                          if (r.flaky)    badges.push({ label: 'Flaky', bg:'#fef3c7', fg:'#92400e' });
+                        } else {
+                          if (rate < 100) badges.push({ label: rate === 0 ? 'Complete failure' : 'Partial failure', bg:'#fee2e2', fg:'#b91c1c' });
+                          if (r.flaky)    badges.push({ label: 'Flaky', bg:'#fef3c7', fg:'#92400e' });
+                          if (rate === 100 && !r.flaky) badges.push({ label: 'Clean', bg:'#d1fae5', fg:'#065f46' });
+                        }
                         return (
                           <tr key={idx} style={{borderBottom:'1px solid #f1f5f9', background: idx % 2 === 0 ? '#fff' : '#f8fafc'}}>
                             <td style={{padding:'0.55rem 1rem', color:'#94a3b8', fontFamily:'monospace'}}>{idx + 1}</td>
@@ -648,28 +823,10 @@ const html = `<!DOCTYPE html>
           <table className="w-full text-sm text-left">
             <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
               <tr>
-                <th className="px-4 py-3">
-                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
-                    Pattern
-                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="Category of recurring behaviour detected by the AI — e.g. 'Consistent Failure', 'Flaky Spike', 'Day-of-week Cluster', 'Execution Time Anomaly'.">i</i>
-                  </span>
-                </th>
+                <ThWithTip label="Pattern" tip="Category of recurring behaviour detected by the AI — e.g. 'Consistent Failure', 'Flaky Spike', 'Day-of-week Cluster', 'Execution Time Anomaly'." />
                 <th className="px-4 py-3">Description</th>
-                <th className="px-4 py-3">
-                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
-                    Severity
-                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="Impact rating: Critical = blocking / data-loss risk · High = repeated failures affecting confidence · Medium = intermittent / watch list · Low = cosmetic or rare.">i</i>
-                  </span>
-                </th>
-                <th className="px-4 py-3 text-center">
-                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
-                    Runs
-                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="Number of individual CI runs in which this pattern was observed. Higher = more persistent and reliable signal.">i</i>
-                  </span>
-                </th>
+                <ThWithTip label="Severity" tip="Impact rating: Critical = blocking / data-loss risk · High = repeated failures affecting confidence · Medium = intermittent / watch list · Low = cosmetic or rare." />
+                <ThWithTip label="Runs" tip="Number of individual CI runs in which this pattern was observed. Higher = more persistent and reliable signal." center={true} />
                 <th className="px-4 py-3">Recommendation</th>
               </tr>
             </thead>
@@ -689,12 +846,543 @@ const html = `<!DOCTYPE html>
       );
     }
 
+    // ── Failure Category Classification ─────────────────────────────────────
+    // Deterministic keyword/signal matching only — no AI inference.
+    // All categories are explainable from observable signals in error text and flags.
+
+    var FAILURE_CATEGORIES = {
+      Timing:         { label: 'Timing',       bg: '#fff7ed', border: '#fed7aa', text: '#c2410c',
+        tip: 'Matched by: timeoutSuspected flag, or keywords — timeout, timed out, waitFor, network idle. Root cause candidates: async rendering delay, slow network, or overly strict wait condition.',
+        action: 'Raise the timeout threshold for this step or add an explicit waitFor guard. Check whether the page/element is genuinely slow or whether the selector fires before the DOM is ready.',
+        investigate: [
+          'Compare passing vs failing run timings in the Playwright trace',
+          'Review all waitFor guards immediately before the failing assertion',
+          'Check whether retries also time out (consistent) or only the first attempt (intermittent)',
+          'Determine if the slowness is in the UI render, network response, or selector resolution',
+        ],
+        businessImpact: [
+          'May affect workflow reliability under slower or resource-constrained environments',
+          'Could contribute to intermittent execution instability in CI pipelines',
+        ] },
+      Authentication: { label: 'Auth',         bg: '#fdf4ff', border: '#e9d5ff', text: '#7e22ce',
+        tip: 'Matched by: keywords — login, session, token, credential, 401, 403, unauthorized. Root cause candidates: session expiry between retries, token invalidation, or auth fixture teardown issue.',
+        action: 'Verify the auth fixture creates and disposes tokens correctly. Check whether the session expires mid-run. Ensure storageState is refreshed before each retry.',
+        investigate: [
+          'Validate session and token expiry handling across retries',
+          'Compare storageState age against the session expiry window',
+          'Check whether parallel workers share the same auth state file',
+          'Review 401/403 timestamps against the token refresh schedule',
+        ],
+        businessImpact: [
+          'May affect session continuity during longer or parallel test executions',
+          'Could indicate auth infrastructure gaps affecting overall test suite reliability',
+        ] },
+      Environment:    { label: 'Environment',  bg: '#eff6ff', border: '#bfdbfe', text: '#1d4ed8',
+        tip: 'Matched by: environmentSpecific flag, or keywords — baseURL, ECONNREFUSED, connection refused, 502/503/504. Root cause candidates: target environment offline or misconfigured URL.',
+        action: 'Compare the Failures by Env column to confirm the failure is env-isolated. Verify the target URL in playwright.config.ts and check whether the environment was reachable at the run timestamp.',
+        investigate: [
+          'Review environment and network availability at the run timestamp',
+          'Compare failure rate across environments using the Failures by Env column',
+          'Check DNS resolution and TLS cert validity for the target base URL',
+          'Confirm whether the failure is consistent across retries or intermittent',
+        ],
+        businessImpact: [
+          'May indicate environment-specific instability affecting release confidence',
+          'Could cause false negatives that obscure genuine application failures',
+        ] },
+      Locator:        { label: 'Locator',      bg: '#f0fdf4', border: '#bbf7d0', text: '#15803d',
+        tip: 'Matched by: keywords — locator, selector, not found, toBeVisible, strict mode, getBy*. Root cause candidates: DOM structure changed, element rendered late, or selector now ambiguous.',
+        action: 'Update the selector to match the current DOM. If the element is rendered asynchronously, add a waitFor before the interaction. If strict mode fires, narrow the locator to a unique match.',
+        investigate: [
+          'Validate dynamic selector stability in the Playwright trace at failure point',
+          'Review timing dependencies before element interaction (loading states, conditional renders)',
+          'Confirm the selector is unique — strict mode fires on multiple matches',
+          'Check whether the element is behind a feature flag, auth guard, or async load',
+        ],
+        businessImpact: [
+          'May indicate UI structural changes reducing test coverage reliability',
+          'Could reduce selector resilience across framework or component library updates',
+        ] },
+      Data:           { label: 'Data',         bg: '#fefce8', border: '#fde68a', text: '#854d0e',
+        tip: 'Matched by: keywords — expected/received mismatch, assertion, null, undefined, TypeError, record not found. Root cause candidates: test data state left dirty by a prior run, schema change, or missing cleanup fixture.',
+        action: 'Review the afterEach/afterAll cleanup fixture. Confirm the test does not depend on data created by a previous test. If a schema changed, update the expected values in the assertion.',
+        investigate: [
+          'Compare expected vs actual values in the assertion failure message',
+          'Validate test data isolation — confirm afterEach/afterAll cleanup runs on failure',
+          'Check whether this test depends on data written by a prior test in the same suite',
+          'Confirm no schema or API contract change was deployed since the last passing run',
+        ],
+        businessImpact: [
+          'Could affect consistency of reported financial or workflow outputs',
+          'May indicate data isolation gaps between test runs that could mask regressions',
+        ] },
+      'Backend/API':  { label: 'Backend/API',  bg: '#fff1f2', border: '#fecdd3', text: '#be123c',
+        tip: 'Matched by: keywords — fetch, HTTP 4xx/5xx, failed to fetch, network request failed. Root cause candidates: backend service error, slow response, or API contract change.',
+        action: 'Check the service health and API logs for the matching run timestamp (use the ↗1 View Report link). If the contract changed, update the test expectations to match the new response shape.',
+        investigate: [
+          'Cross-reference HTTP status and endpoint in the error against service health logs',
+          'Check whether the failure reproduces consistently or only under load (rate limiting)',
+          'Compare request payload and response body against the current API contract',
+          'Verify the test does not assert on response time under variable network conditions',
+        ],
+        businessImpact: [
+          'May reflect backend service instability affecting integration test reliability',
+          'Could indicate API contract drift between service layers that warrants investigation',
+        ] },
+      Concurrency:    { label: 'Concurrency',  bg: '#f5f3ff', border: '#ddd6fe', text: '#6d28d9',
+        tip: 'Matched by: keywords — race condition, concurrent, deadlock, conflict. Root cause candidates: shared state between parallel shards or test ordering dependency.',
+        action: 'Isolate test data per shard — each shard should own its own records. Review shared fixture scope and ensure no test writes global state that another shard reads.',
+        investigate: [
+          'Identify which shard or worker owns the failing test and what ran in parallel',
+          'Check for shared database records or shared file paths across workers',
+          'Review fixture scope — worker-scoped fixtures can leak state between tests',
+          'Confirm the test passes when run in isolation (npx playwright test --workers=1)',
+        ],
+        businessImpact: [
+          'May indicate shared-resource contention under parallel execution',
+          'Could produce non-deterministic results that reduce confidence in the test suite',
+        ] },
+      Unknown:        { label: 'Unknown',      bg: '#f8fafc', border: '#e2e8f0', text: '#64748b',
+        tip: 'No deterministic keyword pattern matched the available error signal. The test has recorded failures or flakiness but the error text did not map to a known category.',
+        action: 'Inspect the raw error in the Playwright HTML report for this run (use the ↗1 View Report link). Once the error type is clear, consider adding a keyword to the classifyFailure() matcher in generate-ai-report.js.',
+        investigate: [
+          'Open the Playwright HTML report and locate the raw error stack trace',
+          'Search the error for class names or stack frames that hint at a category',
+          'Check whether the failure is 100% consistent or intermittent across runs',
+          'Once categorised, add the matched keyword to classifyFailure() in generate-ai-report.js',
+        ],
+        businessImpact: [
+          'Impact cannot be assessed until the failure is categorised',
+          'Unclassified failures may mask higher-severity issues — triage is recommended',
+        ] },
+    };
+
+    // ── Classification Rule Arrays ────────────────────────────────────────────
+    // Each rule: { priority, category, framework, pattern? | flag? }
+    //   priority  — integer; lower = checked first (1 = highest priority)
+    //   flag      — string key of a boolean field on the analysis object (a[rule.flag])
+    //   pattern   — RegExp tested against lowercase errText
+    //   framework — 'common' | 'playwright'
+    //               Future frameworks extend by concat + sort (see CLASSIFICATION_RULES below).
+    // NOTE: regex literals inside this template literal must avoid \d \s \w — use
+    //       [0-9], character classes, or explicit alternatives instead.
+
+    // Framework-agnostic keyword rules. Apply to any test runner.
+    var commonClassificationRules = [
+      { priority: 2, category: 'Authentication', framework: 'common',
+        pattern: /login|logout|\bauth\b|session|token|credential|password|sign.in|sign.out|unauthori[sz]ed|\b40[13]\b/ },
+      { priority: 4, category: 'Environment',    framework: 'common',
+        pattern: /baseurl|econnrefused|connect.*refused|connection refused|network error|\bdns\b|\bssl\b|certificate|\b50[234]\b/ },
+      { priority: 6, category: 'Data',           framework: 'common',
+        pattern: /expected.*received|toequal|tocontain|assertion failed|assertionerror|typeerror|\bnull\b|\bundefined\b|cannot read|no rows|no record|record not found|\bempty\b/ },
+      { priority: 7, category: 'Backend/API',    framework: 'common',
+        pattern: /\bapi\b|\bfetch\b|\bxhr\b|status [45][0-9][0-9]|failed to fetch|network request failed|\b40[04]\b|\b500\b/ },
+      { priority: 8, category: 'Concurrency',    framework: 'common',
+        pattern: /race condition|concurrent|deadlock|\bconflict\b/ },
+      { priority: 9, category: 'Timing',         framework: 'common',
+        pattern: /timeout|timed out|waitfor|wait for|network idle|domcontentloaded|page load/ },
+    ];
+
+    // Playwright-specific rules: agent boolean flags + Playwright Locator API keywords.
+    var playwrightClassificationRules = [
+      { priority: 1, category: 'Timing',      framework: 'playwright', flag: 'timeoutSuspected' },
+      { priority: 3, category: 'Environment', framework: 'playwright', flag: 'environmentSpecific' },
+      { priority: 5, category: 'Locator',     framework: 'playwright',
+        pattern: /\blocator\b|\bselector\b|not found|strict mode|tobevisible|tohavetext|tocontaintext|getbyrole|getbytext|getbylabel|getbytestid|getbyplaceholder|waiting for element/ },
+    ];
+
+    // Merged, priority-sorted execution sequence.
+    // To add a future framework: .concat(telerikClassificationRules).sort(...)
+    var CLASSIFICATION_RULES = commonClassificationRules
+      .concat(playwrightClassificationRules)
+      .sort(function(ruleA, ruleB) { return ruleA.priority - ruleB.priority; });
+
+    // Returns a FAILURE_CATEGORIES key, or null for fully stable tests.
+    // Iterates CLASSIFICATION_RULES in ascending priority order; first match wins.
+    // Uses only observable signals — no AI inference.
+    function classifyFailure(a, p) {
+      var fr = a.failureRate ?? (p ? p.failureRate : 0) ?? 0;
+      var fl = a.flakyRate  ?? (p ? p.flakyRate  : 0) ?? 0;
+      if (fr === 0 && fl === 0) return null; // fully stable
+
+      // Build one lowercase string from all available error signals.
+      // Uses [0-9] not \d — backslash escapes are consumed by the outer template literal.
+      var errText = [
+        a.mostFrequentError || '',
+        (p && p.errorSamples ? p.errorSamples.join(' ') : '')
+      ].join(' ').toLowerCase();
+
+      for (var i = 0; i < CLASSIFICATION_RULES.length; i++) {
+        var rule = CLASSIFICATION_RULES[i];
+        if (rule.flag ? a[rule.flag] : rule.pattern.test(errText)) return rule.category;
+      }
+      return 'Unknown';
+    }
+
+    // Compact badge wired into the global tooltip engine.
+    // Inline styles override .info-trigger's 16x16 circle geometry.
+    function FailureCategoryBadge({ category }) {
+      if (!category) return null;
+      var c = FAILURE_CATEGORIES[category];
+      if (!c) return null;
+      return (
+        <span
+          className="info-trigger"
+          data-tooltip={c.tip}
+          style={{
+            width:'auto', height:'auto', borderRadius:'999px',
+            padding:'0.1rem 0.5rem',
+            fontSize:'0.62rem', fontWeight:700, letterSpacing:'0.02em',
+            background:c.bg, border:'1px solid '+c.border, color:c.text,
+            display:'inline-flex', alignItems:'center',
+            cursor:'default', userSelect:'none',
+            flexShrink:0
+          }}
+        >
+          {c.label}
+        </span>
+      );
+    }
+
+    // ── Failure Lifecycle Intelligence ───────────────────────────────────────
+    // Deterministic lifecycle state derived from aggregate profile fields only.
+    // No AI, no time-series data, no predictive scoring.
+    var LIFECYCLE_STATES = {
+      'Newly Observed': {
+        label: 'Newly Observed', bg: '#f0f9ff', border: '#bae6fd', text: '#0369a1',
+        tip: 'Determined by: 3 or fewer profiled runs with at least one failure or flaky result. Not enough run history to establish a recurring pattern.' },
+      'Recurring': {
+        label: 'Recurring', bg: '#fff1f2', border: '#fecdd3', text: '#be123c',
+        tip: 'Determined by: multiple failure occurrences across profiled runs with no recent recovery. The test fails consistently and has not shown a passing recovery trend.' },
+      'Increasing': {
+        label: 'Increasing ↑', bg: '#fef2f2', border: '#fca5a5', text: '#991b1b',
+        tip: 'Determined by: failure rate at or above 60% across profiled runs, with the most recent profiled run recorded as a failure. Failures are dominating the run history.' },
+      'Improving': {
+        label: 'Improving ↓', bg: '#f0fdf4', border: '#bbf7d0', text: '#15803d',
+        tip: 'Determined by: mix of failures and passes in profiled history, with the most recent profiled run NOT recorded as a failure. Failure trend appears to be declining.' },
+      'Reappeared': {
+        label: 'Reappeared', bg: '#fffbeb', border: '#fde68a', text: '#b45309',
+        tip: 'Determined by: at least 30% of profiled runs were passing, but the most recent profiled run is a failure. A period of prior stability has been broken.' },
+      'Stable': {
+        label: 'Stable', bg: '#f8fafc', border: '#e2e8f0', text: '#64748b',
+        tip: 'Determined by: zero failures and zero flaky results across all profiled runs.' },
+    };
+
+    // Returns a LIFECYCLE_STATES key.
+    // Uses only aggregate profile counts and lastFailureTimestamp vs lastSeen comparison.
+    // lastFailureTimestamp >= lastSeen means the most recent profiled run was a failure.
+    function getLifecycle(a, p) {
+      // Normalize rates to [0,100] numbers. The +(...)||0 pattern converts to number
+      // and replaces NaN with 0, preventing silent comparison failures on malformed data.
+      var fr           = Math.min(100, Math.max(0, +(p.failureRate  ?? a.failureRate  ?? 0) || 0));
+      var fl           = Math.min(100, Math.max(0, +(p.flakyRate    ?? a.flakyRate    ?? 0) || 0));
+      var totalRuns    = p.totalRuns    ?? 0;
+      var failureCount = p.failureCount ?? 0;
+      var passCount    = p.passCount    ?? 0;
+
+      if (fr === 0 && fl === 0) return 'Stable';
+
+      // Newly Observed: too few runs to establish a recurring pattern
+      if (totalRuns <= 3) return 'Newly Observed';
+
+      // Recency: were the most recent profiled runs failures?
+      // lastSeen tracks all runs; lastFailureTimestamp tracks only failures.
+      // When equal, the most recent run was a failure.
+      // Fallback when either timestamp is absent: recentlyFailed = false (safe default —
+      // avoids false positives; the test may still be classified Improving if it has passes).
+      var recentlyFailed = !!(p.lastFailureTimestamp && p.lastSeen && p.lastFailureTimestamp >= p.lastSeen);
+
+      // Improving: has both passing and failing history, but the most recent run was NOT a failure
+      if (passCount > 0 && failureCount > 0 && !recentlyFailed) return 'Improving';
+
+      // Reappeared: meaningful passing history (>= 30% of runs passed) but currently failing again
+      if (recentlyFailed && passCount >= Math.round(totalRuns * 0.3) && fr < FAIL_RATE_INCREASING) return 'Reappeared';
+
+      // Increasing: failure rate dominates (>= FAIL_RATE_INCREASING) and test is still actively failing
+      if (fr >= FAIL_RATE_INCREASING && recentlyFailed) return 'Increasing';
+
+      // Recurring: default for persistent, consistent instability without a clear trend
+      return 'Recurring';
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // OPERATIONAL COMPUTATION FUNCTIONS
+    // Pure functions: take data descriptors, return derived values.
+    // No JSX, no React dependencies — can be tested or ported independently.
+    // Called by rendering components which receive already-computed values.
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    // ── Profile signal aggregation ────────────────────────────────────────────
+    // Iterates all test profiles and builds a flat counts object classifying
+    // each profile by lifecycle state and failure category.
+    // Returns { counts, totalProfiles }.
+    function aggregateInstabilityCounts(deepData) {
+      var profiles  = (deepData && deepData.perTestProfiles)  || [];
+      var analyses  = (deepData && deepData.perTestAnalyses)  || [];
+      var aMap = {};
+      // Guard: skip analyses without a testTitle to prevent undefined map-key pollution.
+      analyses.forEach(function(a) { if (a && a.testTitle) aMap[a.testTitle] = a; });
+
+      var totalProfiles = profiles.length;
+      var counts = {
+        total: 0, increasing: 0, reappeared: 0, newlyObserved: 0,
+        improving: 0, recurring: 0, retryMasked: 0, envRelated: 0, stable: 0,
+        // Invariant on exit: counts.total + counts.stable === totalProfiles
+      };
+
+      profiles.forEach(function(p) {
+        // Guard: skip profiles without a testTitle (malformed data).
+        if (!p || !p.testTitle) return;
+        var a = aMap[p.testTitle] || {};
+        // Normalize: coerce rates to [0,100] numbers; NaN becomes 0.
+        var fr = Math.min(100, Math.max(0, +(p.failureRate ?? 0) || 0));
+        var fl = Math.min(100, Math.max(0, +(p.flakyRate   ?? 0) || 0));
+        if (fr === 0 && fl === 0) { counts.stable++; return; }
+        counts.total++;
+        var lc = getLifecycle(a, p);
+        var ct = classifyFailure(a, p);
+        if (lc === 'Increasing')     counts.increasing++;
+        if (lc === 'Reappeared')     counts.reappeared++;
+        if (lc === 'Newly Observed') counts.newlyObserved++;
+        if (lc === 'Improving')      counts.improving++;
+        if (lc === 'Recurring')      counts.recurring++;
+        if (fl > 0 && fr === 0)      counts.retryMasked++;
+        if (ct === 'Environment' || !!(a.environmentSpecific)) counts.envRelated++;
+      });
+
+      return { counts, totalProfiles };
+    }
+
+    // ── Operational posture derivation ────────────────────────────────────────
+    // Derives the primary posture banner descriptor from aggregated counts.
+    // Branch evaluation priority (first match wins — do NOT reorder without review):
+    //   1. all-stable       (total === 0)
+    //   2. high-alert only  (increasing/reappeared present, no improving)
+    //   3. high-alert mixed (increasing/reappeared AND improving coexist)
+    //   4. improving-only   (no recurring or retry-masked noise)
+    //   5. retry-masked-only (no hard failures — instability is masked, not absent)
+    //   6. env-isolated     (no increasing — failure is scoped, not widening)
+    //   7. newly-observed   (no recurring or increasing — too early to act)
+    //   8. catch-all        (moderate/mixed: recurring, or overlapping categories)
+    // Returns { accent, bg, border, color, statement }.
+    function deriveOperationalPosture(counts) {
+      var highAlert = counts.increasing + counts.reappeared;
+      if (counts.total === 0) {
+        return { accent:'#10b981', bg:'#f0fdf4', border:'#bbf7d0', color:'#065f46',
+          statement: 'All profiled tests are currently stable across recent runs.' };
+      }
+      if (highAlert > 0 && counts.improving === 0) {
+        return { accent:'#ef4444', bg:'#fef2f2', border:'#fca5a5', color:'#7f1d1d',
+          statement: 'Active instability detected: ' + highAlert + ' test' + (highAlert !== 1 ? 's' : '') +
+            ' show' + (highAlert === 1 ? 's' : '') + ' increasing or reappearing failures. Investigation recommended before next release.' };
+      }
+      if (highAlert > 0 && counts.improving > 0) {
+        return { accent:'#f59e0b', bg:'#fffbeb', border:'#fde68a', color:'#78350f',
+          statement: 'Mixed instability picture: ' + highAlert + ' test' + (highAlert !== 1 ? 's' : '') +
+            ' are worsening while ' + counts.improving + ' show' + (counts.improving === 1 ? 's' : '') + ' improving behaviour.' };
+      }
+      if (counts.improving > 0 && counts.recurring === 0 && counts.retryMasked === 0) {
+        return { accent:'#10b981', bg:'#f0fdf4', border:'#bbf7d0', color:'#065f46',
+          statement: 'Instability is present but trending in the right direction. Most unstable tests (' + counts.improving + ') are currently improving.' };
+      }
+      if (counts.retryMasked > 0 && counts.increasing === 0 && counts.reappeared === 0) {
+        return { accent:'#d97706', bg:'#fffbeb', border:'#fde68a', color:'#78350f',
+          statement: 'Execution is broadly stable, but ' + counts.retryMasked + ' retry-masked test' + (counts.retryMasked !== 1 ? 's' : '') +
+            ' pass only after retry. Underlying instability is present despite clean run counts.' };
+      }
+      if (counts.envRelated > 0 && counts.increasing === 0) {
+        return { accent:'#3b82f6', bg:'#eff6ff', border:'#bfdbfe', color:'#1e3a8a',
+          statement: 'Environment-specific instability observed. Failures appear concentrated rather than widespread across the test suite.' };
+      }
+      if (counts.newlyObserved > 0 && counts.recurring === 0 && counts.increasing === 0) {
+        return { accent:'#3b82f6', bg:'#eff6ff', border:'#bfdbfe', color:'#1e3a8a',
+          statement: 'New instability signals detected with limited run history. Monitor closely over the next few runs before acting.' };
+      }
+      return { accent:'#f59e0b', bg:'#fffbeb', border:'#fde68a', color:'#78350f',
+        statement: 'Moderate instability detected. No dominant increasing trend identified — instability appears contained.' };
+    }
+
+    // ── Supporting signal pills ────────────────────────────────────────────────
+    // Derives secondary context pill descriptors from aggregated counts.
+    // Returns an array of { text, bg, border, color, dot } for the renderer to map over.
+    function buildInstabilitySignals(counts, totalProfiles) {
+      // Normalize totalProfiles to prevent "X of 0" or "X of NaN" in the stable pill.
+      totalProfiles = Math.max(0, +totalProfiles || 0);
+      var signals = [];
+      if (counts.increasing > 0)
+        signals.push({ text: counts.increasing + ' test' + (counts.increasing !== 1 ? 's' : '') + ' increasing failure frequency',
+          bg:'#fef2f2', border:'#fca5a5', color:'#991b1b', dot:'#ef4444' });
+      if (counts.reappeared > 0)
+        signals.push({ text: counts.reappeared + ' test' + (counts.reappeared !== 1 ? 's' : '') + ' reappeared after stable period',
+          bg:'#fffbeb', border:'#fde68a', color:'#b45309', dot:'#f59e0b' });
+      if (counts.newlyObserved > 0)
+        signals.push({ text: counts.newlyObserved + ' newly observed \u2014 limited history',
+          bg:'#eff6ff', border:'#bfdbfe', color:'#1d4ed8', dot:'#3b82f6' });
+      if (counts.envRelated > 0)
+        signals.push({ text: counts.envRelated + ' environment-related failure' + (counts.envRelated !== 1 ? 's' : ''),
+          bg:'#eff6ff', border:'#bfdbfe', color:'#1d4ed8', dot:'#60a5fa' });
+      if (counts.retryMasked > 0)
+        signals.push({ text: counts.retryMasked + ' retry-masked',
+          bg:'#fefce8', border:'#fde68a', color:'#854d0e', dot:'#d97706' });
+      if (counts.recurring > 0)
+        signals.push({ text: counts.recurring + ' recurring \u2014 no improvement trend',
+          bg:'#fff1f2', border:'#fecdd3', color:'#be123c', dot:'#f87171' });
+      if (counts.improving > 0)
+        signals.push({ text: counts.improving + ' test' + (counts.improving !== 1 ? 's' : '') + ' improving',
+          bg:'#f0fdf4', border:'#bbf7d0', color:'#15803d', dot:'#34d399' });
+      if (counts.stable > 0)
+        signals.push({ text: counts.stable + ' of ' + totalProfiles + ' fully stable',
+          bg:'#f8fafc', border:'#e2e8f0', color:'#64748b', dot:'#94a3b8' });
+      return signals;
+    }
+
+    // ── Per-row priority derivation ────────────────────────────────────────────
+    // Derives display priority when the AI omits it (backwards compat with old JSON).
+    // Reads stability label + failure/flaky rates from analysis and profile objects.
+    function derivePriority(a, p) {
+      var fr   = a.failureRate ?? p.failureRate ?? 0;
+      var fl   = a.flakyRate  ?? p.flakyRate  ?? 0;
+      var stab = a.stabilityLabel ?? a.stabilityCategory ?? '';
+      if (stab === 'Unstable' || fr > FAIL_RATE_UNSTABLE) return 'High';
+      if (fl > FLAKY_RATE_CHRONIC || a.environmentSpecific) return 'Medium';
+      return 'Low';
+    }
+
+    // ── Quick-focus filter predicate ──────────────────────────────────────────
+    // Returns true when the row should be visible for the given filter id.
+    // Filter ids mirror the QUICK_FILTERS registry in PerTestTable.
+    // IMPORTANT: the 'attention' lifecycle set here MUST stay in sync with the
+    // keys tracked by calculatePriorityCounts() — drift silently misaligns the
+    // alert bar badge count shown above the table.
+    function rowMatchesFilter(a, p, lifecycle, cat, filter) {
+      if (filter === 'all') return true;
+      var fr = p.failureRate ?? a.failureRate ?? 0;
+      var fl = p.flakyRate  ?? a.flakyRate  ?? 0;
+      if (filter === 'attention')    return lifecycle === 'Increasing' || lifecycle === 'Reappeared' || lifecycle === 'Newly Observed';
+      if (filter === 'increasing')   return lifecycle === 'Increasing';
+      if (filter === 'reappeared')   return lifecycle === 'Reappeared';
+      if (filter === 'new')          return lifecycle === 'Newly Observed';
+      if (filter === 'retry-masked') return fl > 0 && fr === 0; // passes only after retry
+      if (filter === 'environment')  return cat === 'Environment' || !!(a.environmentSpecific);
+      return true; // unknown filter id: safe default — show all rows
+    }
+
+    // ── Row expandability check ───────────────────────────────────────────────
+    // A row is expandable when it has an error signal, a timeout/env flag, or flakiness.
+    // flakyRate > 0 rows expand to show the Flakiness Signal card even when failureRate === 0.
+    function isExpandable(a, p) {
+      return !!(a.mostFrequentError && a.mostFrequentError !== 'none')
+        || !!(a.timeoutSuspected)
+        || !!(a.environmentSpecific)
+        || (p.flakyRate ?? 0) > 0;
+    }
+
+    // ── Priority attention counts ─────────────────────────────────────────────
+    // Aggregates Increasing / Reappeared / Newly Observed lifecycle counts for the
+    // summary alert bar at the top of PerTestTable.
+    // IMPORTANT: these three key strings MUST match:
+    //   (a) the lifecycle state strings returned by getLifecycle()
+    //   (b) the 'attention' filter lifecycle set in rowMatchesFilter()
+    // Drift between these three sites will silently misalign the alert bar badge count.
+    // Returns { priorityCounts, highAlertTotal }.
+    function calculatePriorityCounts(allRows, profileMap) {
+      var counts = { Increasing: 0, Reappeared: 0, 'Newly Observed': 0 };
+      allRows.forEach(function(row) {
+        if (!row || !row.testTitle) return; // guard: skip malformed rows
+        var rp = profileMap[row.testTitle] || {};
+        var lc = getLifecycle(row, rp);
+        if (counts[lc] !== undefined) counts[lc]++;
+      });
+      return {
+        priorityCounts: counts,
+        highAlertTotal: counts.Increasing + counts.Reappeared + counts['Newly Observed'],
+      };
+    }
+
+    // ── Test stability stats ──────────────────────────────────────────────────
+    // Aggregates per-profile failure/flaky/unstable counts for the KPI tiles.
+    // Returns { total, failing, flaky, unstable, pct }.
+    function deriveTestStabilityStats(profiles) {
+      var total    = profiles.length;
+      var failing  = profiles.filter(function(p) { return (p.failureRate ?? 0) > 0; }).length;
+      var flaky    = profiles.filter(function(p) { return (p.flakyRate  ?? 0) > 0; }).length;
+      var unstable = profiles.filter(function(p) { return (p.failureRate ?? 0) > 0 || (p.flakyRate ?? 0) > 0; }).length;
+      var pct      = total > 0 ? Math.round(unstable / total * 100) : 0;
+      return { total, failing, flaky, unstable, pct };
+    }
+
+    // ── Suite reliability stats ───────────────────────────────────────────────
+    // Counts profiles with zero failures and zero flakiness for the KPI tile.
+    // Returns { total, clean, pct }.
+    function deriveSuiteReliabilityStats(profiles) {
+      var total = profiles.length;
+      var clean = profiles.filter(function(p) { return (p.failureRate ?? 0) === 0 && (p.flakyRate ?? 0) === 0; }).length;
+      var pct   = total > 0 ? Math.round(clean / total * 100) : 0;
+      return { total, clean, pct };
+    }
+
+    // Lifecycle badge pill — wired into the global tooltip engine.
+    function LifecycleBadge({ state }) {
+      if (!state || state === 'Stable') return null;
+      var s = LIFECYCLE_STATES[state];
+      if (!s) return null;
+      return (
+        <span
+          className="info-trigger"
+          data-tooltip={s.tip}
+          style={{
+            width:'auto', height:'auto', borderRadius:'999px',
+            padding:'0.1rem 0.5rem',
+            fontSize:'0.62rem', fontWeight:700, letterSpacing:'0.02em',
+            background:s.bg, border:'1px solid '+s.border, color:s.text,
+            display:'inline-flex', alignItems:'center',
+            cursor:'default', userSelect:'none',
+            flexShrink:0
+          }}
+        >
+          {s.label}
+        </span>
+      );
+    }
+
     // ── Per-Test Table ───────────────────────────────────────────────────────
+
+    // Maps lifecycle state to a row-level visual accent.
+    // Returns null for states that need no visual emphasis.
+    function getSeverityAccent(lifecycle) {
+      if (lifecycle === 'Increasing')     return { border: '#ef4444', bg: '#fef7f7' };
+      if (lifecycle === 'Reappeared')     return { border: '#f59e0b', bg: '#fffdf5' };
+      if (lifecycle === 'Newly Observed') return { border: '#3b82f6', bg: '#f8faff' };
+      if (lifecycle === 'Recurring')      return { border: '#fca5a5', bg: null       };
+      if (lifecycle === 'Improving')      return { border: '#34d399', bg: null       };
+      return null;
+    }
 
     function PerTestTable({ analyses, profiles, reportBaseUrl }) {
       const profileMap = Object.fromEntries((profiles || []).map(p => [p.testTitle, p]));
-      if (!analyses || analyses.length === 0)
+      if ((!analyses || analyses.length === 0) && (!profiles || profiles.length === 0))
         return <p className="text-sm text-slate-400 py-4">No per-test data available.</p>;
+
+      // Merge: start with AI analyses, then append any profile entries the AI omitted.
+      const analysisMap = Object.fromEntries((analyses || []).map(a => [a.testTitle, a]));
+      const syntheticForMissing = (profiles || [])
+        .filter(p => !analysisMap[p.testTitle])
+        .map(p => ({
+          testTitle: p.testTitle,
+          stabilityLabel: p.failureRate > FAIL_RATE_UNSTABLE ? 'Unstable' : p.flakyRate > 10 ? 'Flaky' : 'Stable',
+          priority: p.failureRate > FAIL_RATE_UNSTABLE ? 'High' : p.flakyRate > 10 ? 'Medium' : 'Low',
+          failureRate: p.failureRate,
+          flakyRate: p.flakyRate,
+          mostFrequentError: null,
+          timeoutSuspected: false,
+          environmentSpecific: false,
+          failureHypothesis: null,
+          recommendation: p.failureRate === 0 && p.flakyRate === 0
+            ? 'No action required — test is fully stable.'
+            : 'Review profile data; AI analysis was not generated for this test.',
+          _synthetic: true
+        }));
+      const allRows = [...(analyses || []), ...syntheticForMissing];
 
       // Detect whether multi-env breakdown is present
       const allEnvs = [...new Set(
@@ -702,8 +1390,127 @@ const html = `<!DOCTYPE html>
       )].sort();
       const isMultiEnv = allEnvs.length > 1;
 
+      // Expandable rows state: Set of testTitle strings that are currently expanded
+      const [expandedRows, setExpandedRows] = React.useState(new Set());
+      function toggleRow(title) {
+        setExpandedRows(prev => {
+          const next = new Set(prev);
+          next.has(title) ? next.delete(title) : next.add(title);
+          return next;
+        });
+      }
+
+      // Active quick-focus filter — single value, default 'all'
+      const [activeFilter, setActiveFilter] = React.useState('all');
+
+      // Quick-focus filter definitions. Each has: id, label, style {bg,border,text,activeBg,activeText}
+      var QUICK_FILTERS = [
+        { id: 'all',         label: 'All Tests',
+          style: { bg:'#f8fafc', border:'#e2e8f0', text:'#475569', activeBg:'#334155', activeText:'#fff' } },
+        { id: 'attention',   label: '⚠ High Attention',
+          style: { bg:'#fff1f2', border:'#fca5a5', text:'#be123c', activeBg:'#be123c', activeText:'#fff' } },
+        { id: 'increasing',  label: '↑ Increasing',
+          style: { bg:'#fef2f2', border:'#fca5a5', text:'#991b1b', activeBg:'#ef4444', activeText:'#fff' } },
+        { id: 'reappeared',  label: '↩ Reappeared',
+          style: { bg:'#fffbeb', border:'#fde68a', text:'#b45309', activeBg:'#f59e0b', activeText:'#fff' } },
+        { id: 'new',         label: '◉ Newly Observed',
+          style: { bg:'#eff6ff', border:'#bfdbfe', text:'#1d4ed8', activeBg:'#3b82f6', activeText:'#fff' } },
+        { id: 'retry-masked',label: '↺ Retry-Masked',
+          style: { bg:'#fefce8', border:'#fde68a', text:'#854d0e', activeBg:'#d97706', activeText:'#fff' } },
+        { id: 'environment', label: '🌍 Environment',
+          style: { bg:'#eff6ff', border:'#bfdbfe', text:'#1d4ed8', activeBg:'#1d4ed8', activeText:'#fff' } },
+      ];
+
+      const { priorityCounts, highAlertTotal } = calculatePriorityCounts(allRows, profileMap);
+
+      // How many env columns are rendered (affects colspan)
+      const extraCols = isMultiEnv ? 1 : 0;
+      const totalCols = 9 + extraCols; // Test + Stability + Fail + Flaky + [Env] + Priority + Error + Rec + Report
+
       return (
         <div className="overflow-x-auto">
+          {highAlertTotal > 0 && (
+            <div style={{
+              display:'flex', alignItems:'center', gap:'0.5rem', flexWrap:'wrap',
+              margin:'0 0 0.75rem', padding:'0.5rem 0.9rem',
+              background:'#fef2f2', border:'1px solid #fca5a5',
+              borderLeft:'3px solid #ef4444', borderRadius:'6px',
+              fontSize:'0.72rem', fontWeight:600, color:'#7f1d1d'
+            }}>
+              <span style={{fontSize:'0.75rem'}}>&#9888;</span>
+              <span style={{fontWeight:700, color:'#b91c1c'}}>{highAlertTotal} test{highAlertTotal !== 1 ? 's' : ''} need attention&nbsp;&nbsp;</span>
+              {priorityCounts.Increasing > 0 && (
+                <span style={{padding:'0.1rem 0.5rem',borderRadius:'999px',background:'#fee2e2',border:'1px solid #fca5a5',color:'#991b1b',fontSize:'0.65rem',fontWeight:700}}>
+                  {priorityCounts.Increasing} Increasing
+                </span>
+              )}
+              {priorityCounts.Reappeared > 0 && (
+                <span style={{padding:'0.1rem 0.5rem',borderRadius:'999px',background:'#fef3c7',border:'1px solid #fde68a',color:'#92400e',fontSize:'0.65rem',fontWeight:700}}>
+                  {priorityCounts.Reappeared} Reappeared
+                </span>
+              )}
+              {priorityCounts['Newly Observed'] > 0 && (
+                <span style={{padding:'0.1rem 0.5rem',borderRadius:'999px',background:'#dbeafe',border:'1px solid #bfdbfe',color:'#1e3a8a',fontSize:'0.65rem',fontWeight:700}}>
+                  {priorityCounts['Newly Observed']} Newly Observed
+                </span>
+              )}
+              <span style={{marginLeft:'auto',color:'#9f1239',fontWeight:400}}>&#8594; expand a row for investigation guidance</span>
+            </div>
+          )}
+          <div style={{
+            display:'flex', alignItems:'center', gap:'0.4rem', flexWrap:'wrap',
+            margin:'0 0 0.6rem',
+          }}>
+            <span style={{fontSize:'0.62rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.07em',color:'#94a3b8',whiteSpace:'nowrap',flexShrink:0}}>Focus:</span>
+            {QUICK_FILTERS.map(function(f) {
+              var isActive = activeFilter === f.id;
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => setActiveFilter(f.id)}
+                  style={{
+                    padding:'0.18rem 0.65rem',
+                    borderRadius:'999px',
+                    fontSize:'0.68rem',
+                    fontWeight: isActive ? 700 : 600,
+                    cursor:'pointer',
+                    border: '1px solid ' + (isActive ? 'transparent' : f.style.border),
+                    background: isActive ? f.style.activeBg : f.style.bg,
+                    color: isActive ? f.style.activeText : f.style.text,
+                    transition:'all .15s',
+                    outline:'none',
+                    boxShadow: isActive ? '0 1px 4px rgba(0,0,0,0.15)' : 'none',
+                    whiteSpace:'nowrap',
+                  }}
+                >{f.label}</button>
+              );
+            })}
+          </div>
+          {/* Filtered-state breadcrumb — only visible when a non-'all' filter is active.
+              Provides immediate count feedback and a one-click reset during a triage walkthrough. */}
+          {activeFilter !== 'all' && (() => {
+            var _af = QUICK_FILTERS.find(function(f){ return f.id === activeFilter; });
+            var _fc = allRows.filter(function(row) {
+              var rp = profileMap[row.testTitle] || {};
+              var lc = getLifecycle(row, rp);
+              var ct = classifyFailure(row, rp);
+              return rowMatchesFilter(row, rp, lc, ct, activeFilter);
+            }).length;
+            return (
+              <div style={{
+                fontSize:'0.68rem', color:'#64748b',
+                marginBottom:'0.45rem', display:'flex', alignItems:'center', gap:'0.4rem', flexWrap:'wrap',
+              }}>
+                <span>Showing <strong style={{color:'#475569'}}>{_fc}</strong> of {allRows.length} test{allRows.length !== 1 ? 's' : ''}</span>
+                <span style={{color:'#cbd5e1', userSelect:'none'}}>·</span>
+                <span style={{fontWeight:600, color:'#475569'}}>{_af ? _af.label : activeFilter}</span>
+                <button onClick={() => setActiveFilter('all')} style={{
+                  fontSize:'0.68rem', color:'#94a3b8', background:'none', border:'none',
+                  cursor:'pointer', padding:0, textDecoration:'underline', textUnderlineOffset:'2px',
+                }}>← Show all</button>
+              </div>
+            );
+          })()}
           <table className="w-full text-sm text-left">
             <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
               <tr>
@@ -712,21 +1519,21 @@ const html = `<!DOCTYPE html>
                   <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
                     Stability
                     <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="AI-assigned label: Stable (rare/no failures) · Flaky (passes and fails inconsistently) · Consistently Failing (fails in most runs) · Intermittent (occasional failures without a clear flakiness pattern).">i</i>
+                       data-tooltip="AI-assigned label: Unstable (fail rate > 20%) · Flaky (passes after retry, flaky rate > 10%) · Stable (neither condition met).">i</i>
                   </span>
                 </th>
-                <th className="px-4 py-3">
-                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                <th className="px-4 py-3 text-center" style={{minWidth:'110px'}}>
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
                     Fail Rate
                     <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="failedRuns ÷ totalRuns × 100. A run counts as a failure for this test if the test did not pass (excluding flaky retries that eventually passed).">i</i>
+                       data-tooltip="failedRuns ÷ totalRuns × 100. A run counts as a failure if the test did not ultimately pass after all retries.">i</i>
                   </span>
                 </th>
-                <th className="px-4 py-3">
-                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                <th className="px-4 py-3 text-center" style={{minWidth:'110px'}}>
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
                     Flaky Rate
                     <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="flakyRuns ÷ totalRuns × 100. A run counts as flaky for this test if it was retried and passed on a subsequent attempt — indicating a non-deterministic result.">i</i>
+                       data-tooltip="flakyRuns ÷ totalRuns × 100. A run counts as flaky when the test failed at least once but ultimately passed after a retry — the result is non-deterministic. Profiled per-test by the Deep Failure Agent across all fetched runs. A high flaky rate without a corresponding failure rate indicates timing sensitivity, shared state, or ordering dependency rather than an outright defect. Retry count is set in playwright.config.ts.">i</i>
                   </span>
                 </th>
                 {isMultiEnv && (
@@ -742,7 +1549,14 @@ const html = `<!DOCTYPE html>
                   <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
                     Priority
                     <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="AI-ranked urgency to investigate this test: P1 (Critical) · P2 (High) · P3 (Medium) · P4 (Low). Factors: fail rate, recency, environment spread, and co-failure frequency.">i</i>
+                       data-tooltip="AI-ranked urgency: High = Unstable or fail rate > 20% · Medium = high flakiness or env-specific · Low = minor/stable.">i</i>
+                  </span>
+                </th>
+                <th className="px-4 py-3">
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                    AI Hypothesis
+                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                       data-tooltip="AI's root-cause hypothesis for this test's failure pattern. Expand (+) to see the error signal detail and failure screenshot.">i</i>
                   </span>
                 </th>
                 <th className="px-4 py-3">Recommendation</th>
@@ -750,64 +1564,321 @@ const html = `<!DOCTYPE html>
                   <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
                     Report
                     <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="Links to the Playwright HTML report for the run in which this test last failed. Published to GitHub Pages at {baseUrl}/{timestamp}/index.html.">i</i>
+                       data-tooltip="Links to the Playwright HTML report for the run in which this test last failed. Published to GitHub Pages.">i</i>
                   </span>
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {analyses.map((a, i) => {
+              {(() => {
+                const visibleRows = allRows.filter(function(a) {
+                  var rp = profileMap[a.testTitle] || {};
+                  var lc = getLifecycle(a, rp);
+                  var ct = classifyFailure(a, rp);
+                  return rowMatchesFilter(a, rp, lc, ct, activeFilter);
+                });
+                if (visibleRows.length === 0) {
+                  // Per-filter contextual empty state — explains what the filter means when empty.
+                  // For high-concern filters (attention, increasing) an empty result is good news.
+                  var emptyMsgs = {
+                    attention:    { msg: 'No high-attention tests. No Increasing, Reappeared, or Newly Observed lifecycle states are present.', tone: 'good' },
+                    increasing:   { msg: 'No tests with an increasing failure trend. Failure frequency is not worsening in any profiled test.', tone: 'good' },
+                    reappeared:   { msg: 'No reappeared failures. No previously stable tests have regressed in this profile.', tone: 'good' },
+                    'new':        { msg: 'No newly observed instability. All active failures have an established run history.', tone: 'neutral' },
+                    'retry-masked': { msg: 'No retry-masked tests detected. Retry-masked tests pass only after automatic retry and are not visible in standard pass/fail reporting.', tone: 'neutral' },
+                    environment:  { msg: 'No environment-specific failures detected in this profile.', tone: 'neutral' },
+                  };
+                  var em = emptyMsgs[activeFilter];
+                  var emptyColor = em && em.tone === 'good' ? '#15803d' : '#94a3b8';
+                  var emptyBg   = em && em.tone === 'good' ? '#f0fdf4' : 'transparent';
+                  var emptyText = em ? em.msg : ('No tests match the ' + (QUICK_FILTERS.find(function(f){return f.id===activeFilter;})||{}).label + ' filter.');
+                  return (
+                    <tr>
+                      <td colSpan={totalCols} style={{padding:'1.25rem 1.5rem'}}>
+                        <div style={{
+                          display:'inline-flex', alignItems:'flex-start', gap:'0.6rem',
+                          background:emptyBg, borderRadius:'6px',
+                          padding: em && em.tone === 'good' ? '0.6rem 0.9rem' : '0',
+                        }}>
+                          {em && em.tone === 'good' && (
+                            <span style={{color:'#10b981',fontSize:'0.85rem',flexShrink:0,marginTop:'0.05rem'}}>&#10003;</span>
+                          )}
+                          <span style={{color:emptyColor,fontSize:'0.82rem'}}>
+                            {emptyText}
+                          </span>
+                        </div>
+                        <button onClick={() => setActiveFilter('all')} style={{display:'block',marginTop:'0.5rem',fontSize:'0.73rem',color:'#64748b',background:'none',border:'none',cursor:'pointer',textDecoration:'underline',paddingLeft: em && em.tone === 'good' ? '0' : '0'}}>&#8592; Show all tests</button>
+                      </td>
+                    </tr>
+                  );
+                }
+                return visibleRows.map((a, i) => {
                 const p = profileMap[a.testTitle] || {};
                 const reportUrl = reportBaseUrl && p.lastFailureTimestamp
                   ? \`\${reportBaseUrl}\${p.lastFailureTimestamp}/index.html\`
                   : null;
+                const stabilityLabel = a.stabilityLabel ?? a.stabilityCategory ?? 'Stable';
+                const priority = a.priority ?? derivePriority(a, p);
+                const mostFrequentError = a.mostFrequentError && a.mostFrequentError !== 'none'
+                  ? a.mostFrequentError
+                  : null;
+                const lastSeenDate = p.lastSeen ? p.lastSeen.split('_')[0] : null;
+                const hyp = a.failureHypothesis;
+                const hasHyp = hyp && hyp !== 'No failures observed across profiled runs.';
+                const expandable = isExpandable(a, p);
+                const isExpanded = expandedRows.has(a.testTitle);
+                const cat = classifyFailure(a, p);
+                const lifecycle = getLifecycle(a, p);
+                const accent = getSeverityAccent(lifecycle);
+
                 return (
-                  <tr key={i} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 font-medium text-slate-800 text-xs max-w-xs">
-                      <div>{a.testTitle}</div>
-                      {(p.errorSamples || []).map((e, j) => (
-                        <div key={j} className="mt-1 font-mono text-slate-400 text-xs truncate max-w-xs" title={e}>{e}</div>
-                      ))}
-                    </td>
-                    <td className="px-4 py-3 text-center whitespace-nowrap">{stabilityPill(a.stabilityLabel)}</td>
-                    <td className="px-4 py-3 min-w-[100px]">
-                      <RateBar value={p.failureRate ?? 0}
-                        colorClass={(p.failureRate ?? 0) > 20 ? 'bg-rose-500' : 'bg-emerald-500'} />
-                    </td>
-                    <td className="px-4 py-3 min-w-[100px]">
-                      <RateBar value={p.flakyRate ?? 0} colorClass="bg-amber-400" />
-                    </td>
-                    {isMultiEnv && (
-                      <td className="px-4 py-3 text-xs">
-                        {allEnvs.map(env => {
-                          const fails = (p.failuresByEnv || {})[env] ?? 0;
-                          const runs  = (p.runsByEnv   || {})[env] ?? 0;
-                          const isHot = runs > 0 && fails / runs > 0.2;
-                          return (
-                            <span key={env} className="inline-flex items-center gap-0.5 mr-2 whitespace-nowrap">
-                              <span className="text-slate-400">{env}:</span>
-                              <span className={isHot ? 'font-bold text-rose-600' : 'text-slate-500'}>
-                                {fails}/{runs}
-                              </span>
-                            </span>
-                          );
-                        })}
+                  <React.Fragment key={i}>
+                    <tr
+                      className="hover:bg-slate-50"
+                      style={accent && accent.bg ? {background: accent.bg} : {}}
+                    >
+                      <td className="px-4 py-3 font-medium text-slate-800 text-xs max-w-xs"
+                          style={accent ? {borderLeft: '3px solid ' + accent.border} : {borderLeft: '3px solid transparent'}}>
+                        <div style={{display:'flex',alignItems:'flex-start',gap:'0.4rem'}}>
+                          {expandable && (
+                            <button
+                              onClick={() => toggleRow(a.testTitle)}
+                              style={{
+                                flexShrink:0, marginTop:'0.05rem',
+                                width:'18px', height:'18px',
+                                display:'inline-flex', alignItems:'center', justifyContent:'center',
+                                borderRadius:'4px', border:'1px solid #cbd5e1',
+                                background: isExpanded ? '#e0f2fe' : '#f8fafc',
+                                color: isExpanded ? '#0369a1' : '#64748b',
+                                cursor:'pointer', fontSize:'11px', fontWeight:'bold',
+                                lineHeight:1, transition:'all .15s'
+                              }}
+                              title={isExpanded ? 'Collapse investigation detail' : 'Expand investigation detail for this test'}
+                            >
+                              {isExpanded ? '−' : '+'}
+                            </button>
+                          )}
+                          <div>
+                            <div>{a.testTitle}</div>
+                            {p.totalRuns > 0 && (
+                              <div style={{marginTop:'0.2rem',fontSize:'0.65rem',color:'#94a3b8'}}>
+                                {p.totalRuns} run{p.totalRuns !== 1 ? 's' : ''}
+                                {lastSeenDate ? <> · last {lastSeenDate}</> : null}
+                              </div>
+                            )}
+                            {(cat || (lifecycle && lifecycle !== 'Stable')) && (
+                              <div style={{display:'flex',gap:'0.3rem',flexWrap:'wrap',marginTop:'0.3rem'}}>
+                                {cat && <FailureCategoryBadge category={cat} />}
+                                {lifecycle && lifecycle !== 'Stable' && <LifecycleBadge state={lifecycle} />}
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </td>
+                      <td className="px-4 py-3 text-center whitespace-nowrap">{stabilityPill(stabilityLabel)}</td>
+                      <td className="px-4 py-3" style={{minWidth:'110px'}}>
+                        <RateBar value={p.failureRate ?? 0}
+                          colorClass={(p.failureRate ?? 0) > FAIL_RATE_UNSTABLE ? 'bg-rose-500' : (p.failureRate ?? 0) > 0 ? 'bg-amber-400' : 'bg-emerald-500'} />
+                      </td>
+                      <td className="px-4 py-3" style={{minWidth:'110px'}}>
+                        <RateBar value={p.flakyRate ?? 0} colorClass="bg-amber-400" />
+                      </td>
+                      {isMultiEnv && (
+                        <td className="px-4 py-3 text-xs">
+                          {allEnvs.map(env => {
+                            const fails = (p.failuresByEnv || {})[env] ?? 0;
+                            const runs  = (p.runsByEnv   || {})[env] ?? 0;
+                            const isHot = runs > 0 && fails / runs > 0.2;
+                            return (
+                              <span key={env} className="inline-flex items-center gap-0.5 mr-2 whitespace-nowrap">
+                                <span className="text-slate-400">{env}:</span>
+                                <span className={isHot ? 'font-bold text-rose-600' : 'text-slate-500'}>
+                                  {fails}/{runs}
+                                </span>
+                              </span>
+                            );
+                          })}
+                        </td>
+                      )}
+                      <td className="px-4 py-3 text-center whitespace-nowrap">{severityPill(priority)}</td>
+                      <td className="px-4 py-3 text-xs" style={{maxWidth:'240px'}}>
+                        {hasHyp
+                          ? <span style={{color:'#1e40af',lineHeight:1.55,display:'block'}}>{hyp}</span>
+                          : <span style={{color:'#cbd5e1'}}>—</span>
+                        }
+                      </td>
+                      <td className="px-4 py-3 text-slate-600 text-xs max-w-xs">{a.recommendation}</td>
+                      <td className="px-4 py-3 text-center">
+                        {reportUrl
+                          ? <a href={reportUrl} target="_blank" rel="noreferrer"
+                               className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800 font-semibold text-xs transition">
+                              ↗ View Report
+                            </a>
+                          : <span className="text-slate-300 text-xs">—</span>
+                        }
+                      </td>
+                    </tr>
+                    {expandable && isExpanded && (
+                      <tr style={{background:'#fafafa',borderTop:'1px solid #e2e8f0'}}>
+                        <td colSpan={totalCols} style={{padding:'0.75rem 1.25rem'}}>
+                          <div style={{display:'flex',gap:'1.5rem',flexWrap:'wrap',alignItems:'flex-start'}}>
+                            <div style={{flex:'1 1 280px'}}>
+                              {/* Only render Error Signal section when there is actual error content.
+                                  flakyRate-only rows (retry-masked, no error text or flags) skip
+                                  straight to the Flakiness Signal card below. */}
+                              {(mostFrequentError || a.timeoutSuspected || a.environmentSpecific) && (
+                                <div style={{marginBottom:'0.5rem'}}>
+                                  <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.35rem'}}>
+                                    <span style={{fontSize:'0.7rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.05em',color:'#64748b'}}>⚡ Error Signal</span>
+                                  </div>
+                                  {mostFrequentError && (
+                                    <div style={{fontSize:'0.78rem',color:'#475569',marginBottom:'0.4rem',lineHeight:1.5}}>{mostFrequentError}</div>
+                                  )}
+                                  {/* Env-specific with no error text: add a guiding sentence so
+                                      the investigator knows where to look next. */}
+                                  {!mostFrequentError && a.environmentSpecific && !a.timeoutSuspected && (
+                                    <div style={{fontSize:'0.75rem',color:'#475569',marginBottom:'0.4rem',lineHeight:1.5}}>
+                                      No specific error text recorded. Compare the Failures by Env column to identify which environment is affected.
+                                    </div>
+                                  )}
+                                  <div style={{display:'flex',gap:'0.3rem',flexWrap:'wrap'}}>
+                                    {a.timeoutSuspected && (
+                                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.2rem',padding:'0.1rem 0.45rem',borderRadius:'999px',fontSize:'0.65rem',fontWeight:700,background:'#fff7ed',border:'1px solid #fed7aa',color:'#c2410c'}}>
+                                        ⏱ Timeout
+                                      </span>
+                                    )}
+                                    {a.environmentSpecific && (
+                                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.2rem',padding:'0.1rem 0.45rem',borderRadius:'999px',fontSize:'0.65rem',fontWeight:700,background:'#eff6ff',border:'1px solid #bfdbfe',color:'#1d4ed8'}}>
+                                        🌍 Env-specific
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                              {(p.flakyRate ?? 0) > 0 && (
+                                <div style={{
+                                  marginTop:'0.55rem',
+                                  padding:'0.4rem 0.7rem',
+                                  borderRadius:'6px',
+                                  background:'#fffbeb',
+                                  border:'1px solid #fde68a',
+                                  borderLeft:'3px solid #f59e0b',
+                                }}>
+                                  <div style={{fontSize:'0.62rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.06em',color:'#b45309',marginBottom:'0.25rem'}}>
+                                    ⚠️ Flakiness Signal
+                                  </div>
+                                  <div style={{display:'flex',gap:'1.25rem',flexWrap:'wrap',alignItems:'baseline'}}>
+                                    <span style={{fontSize:'0.78rem',color:'#374151',lineHeight:1.5}}>
+                                      <strong style={{color:'#b45309'}}>{p.flakyRate}%</strong> flaky rate
+                                      {p.flakyCount > 0 && p.totalRuns > 0
+                                        ? <span style={{color:'#92400e',fontSize:'0.72rem'}}> · {p.flakyCount} of {p.totalRuns} runs failed at least once before passing</span>
+                                        : null}
+                                    </span>
+                                  </div>
+                                  <div style={{marginTop:'0.3rem',fontSize:'0.72rem',color:'#78350f',lineHeight:1.5}}>
+                                    Test is non-deterministic — it passes eventually after retry but cannot be trusted without investigation.
+                                    {p.failureRate === 0
+                                      ? ' No outright failures recorded; instability is retry-masked.'
+                                      : null}
+                                  </div>
+                                </div>
+                              )}
+                              {cat && FAILURE_CATEGORIES[cat] && FAILURE_CATEGORIES[cat].action && (
+                                <div style={{
+                                  marginTop:'0.65rem',
+                                  padding:'0.45rem 0.75rem',
+                                  borderRadius:'6px',
+                                  background: FAILURE_CATEGORIES[cat].bg,
+                                  border:'1px solid ' + FAILURE_CATEGORIES[cat].border,
+                                  borderLeft:'3px solid ' + FAILURE_CATEGORIES[cat].text,
+                                }}>
+                                  <div style={{fontSize:'0.62rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.06em',color:FAILURE_CATEGORIES[cat].text,marginBottom:'0.25rem'}}>
+                                    🔧 Recommended Action
+                                  </div>
+                                  <div style={{fontSize:'0.78rem',color:'#374151',lineHeight:1.55}}>
+                                    {FAILURE_CATEGORIES[cat].action}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                            {cat && FAILURE_CATEGORIES[cat] && FAILURE_CATEGORIES[cat].investigate && (
+                              <div style={{flex:'1 1 240px'}}>
+                                <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.35rem'}}>
+                                  <span style={{fontSize:'0.7rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.05em',color:'#64748b'}}>🔍 Suggested Next Investigation</span>
+                                  <span style={{
+                                    fontSize:'0.6rem',fontWeight:700,padding:'0.08rem 0.4rem',borderRadius:'999px',
+                                    background:FAILURE_CATEGORIES[cat].bg,
+                                    border:'1px solid '+FAILURE_CATEGORIES[cat].border,
+                                    color:FAILURE_CATEGORIES[cat].text,
+                                  }}>{FAILURE_CATEGORIES[cat].label}</span>
+                                </div>
+                                <div style={{display:'flex',flexDirection:'column',gap:'0.3rem'}}>
+                                  {FAILURE_CATEGORIES[cat].investigate.map(function(step, si) {
+                                    return (
+                                      <div key={si} style={{display:'flex',alignItems:'flex-start',gap:'0.4rem'}}>
+                                        <span style={{flexShrink:0,fontSize:'0.65rem',fontWeight:700,color:FAILURE_CATEGORIES[cat].text,marginTop:'0.1rem'}}>{'0'+(si+1)}</span>
+                                        <span style={{fontSize:'0.78rem',color:'#374151',lineHeight:1.5}}>{step}</span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                                {/* Report link — placed here so it is visible while reading investigation steps */}
+                                {reportUrl && (
+                                  <div style={{marginTop:'0.65rem',paddingTop:'0.5rem',borderTop:'1px solid #e2e8f0'}}>
+                                    <a href={reportUrl} target="_blank" rel="noreferrer" style={{
+                                      display:'inline-flex', alignItems:'center', gap:'0.3rem',
+                                      fontSize:'0.75rem', fontWeight:600,
+                                      color:'#059669', textDecoration:'none',
+                                    }}>
+                                      &#8599; Open last failure report
+                                    </a>
+                                    {p.lastFailureTimestamp && (
+                                      <span style={{marginLeft:'0.4rem',fontSize:'0.65rem',color:'#94a3b8'}}>
+                                        {p.lastFailureTimestamp.split('_')[0]}
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          {cat && FAILURE_CATEGORIES[cat] && FAILURE_CATEGORIES[cat].businessImpact && (
+                            <div style={{
+                              marginTop:'0.75rem',
+                              paddingTop:'0.6rem',
+                              borderTop:'1px solid #e2e8f0',
+                              display:'flex',
+                              alignItems:'flex-start',
+                              gap:'0.75rem',
+                              flexWrap:'wrap',
+                            }}>
+                              <span style={{
+                                flexShrink:0,
+                                fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase',
+                                letterSpacing:'0.07em', color:'#94a3b8',
+                                paddingTop:'0.1rem', whiteSpace:'nowrap',
+                              }}>&#x1F4CB; Operational Context</span>
+                              <div style={{display:'flex', gap:'0.4rem', flexWrap:'wrap', flex:1}}>
+                                {FAILURE_CATEGORIES[cat].businessImpact.map(function(note, ni) {
+                                  return (
+                                    <span key={ni} style={{
+                                      fontSize:'0.72rem', color:'#64748b',
+                                      background:'#f8fafc', border:'1px solid #e2e8f0',
+                                      borderRadius:'5px', padding:'0.2rem 0.55rem',
+                                      lineHeight:1.5,
+                                    }}>{note}</span>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
                     )}
-                    <td className="px-4 py-3 text-center whitespace-nowrap">{severityPill(a.priority)}</td>
-                    <td className="px-4 py-3 text-slate-600 text-xs max-w-xs">{a.recommendation}</td>
-                    <td className="px-4 py-3 text-center">
-                      {reportUrl
-                        ? <a href={reportUrl} target="_blank" rel="noreferrer"
-                             className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800 font-semibold text-xs transition">
-                            ↗ View Report
-                          </a>
-                        : <span className="text-slate-300 text-xs">—</span>
-                      }
-                    </td>
-                  </tr>
+                  </React.Fragment>
                 );
-              })}
+              });
+              })()}
             </tbody>
           </table>
         </div>
@@ -823,20 +1894,8 @@ const html = `<!DOCTYPE html>
           <table className="w-full text-sm text-left">
             <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
               <tr>
-                <th className="px-4 py-3">
-                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
-                    Test Pair
-                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="Two or more tests that failed in the same CI run. Ranked by the number of runs where ALL listed tests failed together.">i</i>
-                  </span>
-                </th>
-                <th className="px-4 py-3 text-center">
-                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
-                    Co-failures
-                    <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                       data-tooltip="Number of runs in which every test in this pair failed simultaneously. Higher co-failure count = stronger signal of a shared root cause.">i</i>
-                  </span>
-                </th>
+                <ThWithTip label="Test Pair" tip="Two or more tests that failed in the same CI run. Ranked by the number of runs where ALL listed tests failed together." />
+                <ThWithTip label="Co-failures" tip="Number of runs in which every test in this pair failed simultaneously. Higher co-failure count = stronger signal of a shared root cause." center={true} />
                 <th className="px-4 py-3">Hypothesis</th>
               </tr>
             </thead>
@@ -1015,23 +2074,13 @@ const html = `<!DOCTYPE html>
         </div>
       );
 
-      const riskColour =
-        report.riskLevel === 'Critical' ? 'bg-rose-100 text-rose-700 border-rose-200' :
-        report.riskLevel === 'High'     ? 'bg-amber-100 text-amber-700 border-amber-200' :
-        report.riskLevel === 'Medium'   ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
-        report.riskLevel === 'Clean'    ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
-                                          'bg-slate-100 text-slate-600 border-slate-200';
+      const riskColour = dbRiskLevelCls(report.riskLevel);
       const riskEmoji =
         report.riskLevel === 'Critical' ? '🔴' :
         report.riskLevel === 'High'     ? '🟠' :
         report.riskLevel === 'Medium'   ? '🟡' : '🟢';
 
-      const sevColour = (s) =>
-        s === 'Critical' ? 'bg-rose-100 text-rose-700 border-rose-200' :
-        s === 'High'     ? 'bg-amber-100 text-amber-700 border-amber-200' :
-        s === 'Medium'   ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
-                           'bg-slate-100 text-slate-600 border-slate-200';
-
+      // dbCheckSevCls() is the top-level helper — no need for a local sevColour copy
       const [expandedSql, setExpandedSql] = useState(null);
       const [showAllChecks, setShowAllChecks] = useState(false);
 
@@ -1131,7 +2180,7 @@ const html = `<!DOCTYPE html>
                       <tr className="hover:bg-slate-50">
                         <td className="px-4 py-3 font-semibold text-slate-800 text-xs">[{c.id}] {c.name}</td>
                         <td className="px-4 py-3 text-center">
-                          <span className={\`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border \${sevColour(c.severity)}\`}>{c.severity}</span>
+                          <span className={\`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border \${dbCheckSevCls(c.severity)}\`}>{c.severity}</span>
                         </td>
                         <td className="px-4 py-3 text-center font-bold text-rose-600 text-sm">{c.violationCount}</td>
                         <td className="px-4 py-3 text-xs text-slate-500">{c.description}</td>
@@ -1272,7 +2321,7 @@ const html = `<!DOCTYPE html>
                       <details key={i} className="group px-6 py-3 hover:bg-slate-50">
                         <summary className="flex items-center gap-3 cursor-pointer list-none">
                           <span className={\`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border \${statusCls}\`}>{c.status}</span>
-                          <span className={\`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border \${sevColour(c.severity)}\`}>{c.severity}</span>
+                          <span className={\`inline-block px-2 py-0.5 rounded-full text-xs font-semibold border \${dbCheckSevCls(c.severity)}\`}>{c.severity}</span>
                           <span className="text-xs font-semibold text-slate-700 font-mono">[{c.id}]</span>
                           <span className="text-xs text-slate-600">{c.name}</span>
                           {c.status === 'Fail' && c.violationCount > 0 && (
@@ -1419,10 +2468,7 @@ const html = `<!DOCTYPE html>
         </div>
       );
 
-      const verdictColour =
-        report.overallVerdict === 'Regressed' ? 'bg-rose-100 text-rose-700 border-rose-200' :
-        report.overallVerdict === 'Improved'  ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
-                                                'bg-slate-100 text-slate-600 border-slate-200';
+      const verdictColour = regressionVerdictCls(report.overallVerdict);
       const verdictEmoji =
         report.overallVerdict === 'Regressed' ? '🔴' :
         report.overallVerdict === 'Improved'  ? '🟢' : '🟡';
@@ -1435,17 +2481,11 @@ const html = `<!DOCTYPE html>
       ];
 
       function deltaRow(d, i) {
-        const sign = d.failureDelta >= 0 ? '+' : '';
-        const deltaColour =
-          d.failureDelta > 10 ? 'text-rose-600 font-bold' :
-          d.failureDelta > 0  ? 'text-amber-600 font-semibold' :
-          d.failureDelta < 0  ? 'text-emerald-600 font-semibold' : 'text-slate-400';
-        const verdictPillCls =
-          d.verdict === 'Regressed'   ? 'bg-rose-100 text-rose-700 border-rose-200' :
-          d.verdict === 'New Failure' ? 'bg-rose-100 text-rose-700 border-rose-200' :
-          d.verdict === 'Improved'    ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
-          d.verdict === 'Resolved'    ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
-                                        'bg-slate-100 text-slate-500 border-slate-200';
+        const sign          = d.failureDelta >= 0 ? '+' : '';
+        const deltaColour   = failDeltaCls(d.failureDelta);
+        const flakySign     = (d.flakyDelta ?? 0) >= 0 ? '+' : '';
+        const flakyDeltaColour = flakyDeltaCls(d.flakyDelta ?? 0);
+        const verdictPillCls   = regressionVerdictCls(d.verdict);
         return (
           <tr key={i} className="hover:bg-slate-50">
             <td className="px-4 py-3 font-medium text-slate-800 text-xs max-w-xs">{d.testTitle}</td>
@@ -1455,6 +2495,11 @@ const html = `<!DOCTYPE html>
             <td className="px-4 py-3 text-xs text-slate-500 text-center">{d.beforeFailureRate}%</td>
             <td className="px-4 py-3 text-xs text-slate-700 font-medium text-center">{d.afterFailureRate}%</td>
             <td className={\`px-4 py-3 text-xs text-center \${deltaColour}\`}>{sign}{d.failureDelta}%</td>
+            <td className={\`px-4 py-3 text-xs text-center \${flakyDeltaColour}\`}>
+              {(d.flakyDelta ?? 0) !== 0
+                ? <>{flakySign}{d.flakyDelta}%</>
+                : <span style={{color:'#cbd5e1'}}>—</span>}
+            </td>
             <td className="px-4 py-3 text-xs text-slate-500 text-center">{d.riskLevel}</td>
           </tr>
         );
@@ -1540,9 +2585,16 @@ const html = `<!DOCTYPE html>
                     </th>
                     <th className="px-4 py-3 text-center">
                       <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
-                        Δ
+                        Fail Δ
                         <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
-                           data-tooltip="After − Before pass rate. Positive (green) = improvement. Negative (red) = regression. The larger the absolute value, the more significant the change.">i</i>
+                           data-tooltip="After − Before failure rate. Positive = more failures after pivot (regression). Negative = fewer failures (improvement).">i</i>
+                      </span>
+                    </th>
+                    <th className="px-4 py-3 text-center">
+                      <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                        Flaky Δ
+                        <i className="info-trigger" style={{background:'rgba(255,255,255,0.15)',color:'#cbd5e1'}}
+                           data-tooltip="After − Before flaky rate. A test is flaky when it retries and eventually passes. Positive = new flakiness introduced after pivot. This is why a test can show Regressed even with 0% failure rate change.">i</i>
                       </span>
                     </th>
                     <th className="px-4 py-3 text-center">
@@ -1626,7 +2678,7 @@ const html = `<!DOCTYPE html>
       if (failingTests.length > 0) {
         var t = failingTests[0];
         var envs = Object.keys(t.failuresByEnv || {});
-        var sev = t.failureRate > 40 ? 'Critical' : t.failureRate > 20 ? 'High' : 'Medium';
+        var sev = t.failureRate > 40 ? 'Critical' : t.failureRate > FAIL_RATE_UNSTABLE ? 'High' : 'Medium';
         var conf = t.failureCount >= 4 ? 'High' : t.failureCount >= 2 ? 'Medium' : 'Low';
         risks.push({
           title: 'Persistent test failures \u2014 ' + t.testTitle.replace(/ @shard\d+/, ''),
@@ -1639,7 +2691,7 @@ const html = `<!DOCTYPE html>
 
       // R2: Chronic flakiness
       var flakyTests = (deep.perTestProfiles || [])
-        .filter(function(p) { return (p.flakyRate || 0) >= 20; })
+        .filter(function(p) { return (p.flakyRate || 0) >= FLAKY_RATE_CHRONIC; })
         .sort(function(a, b) { return (b.flakyRate || 0) - (a.flakyRate || 0); });
       if (flakyTests.length > 0) {
         var topF = flakyTests[0];
@@ -1843,7 +2895,7 @@ const html = `<!DOCTYPE html>
     function useScrollEffects() {
       useEffect(function() {
         // Order MUST match the visual DOM order on the page.
-        var sections = ['s-overview','s-top-risks','s-trends','s-regression','s-unstable','s-db','s-actions'];
+        var sections = ['s-overview','s-top-risks','s-trends','s-regression','s-unstable','s-db','s-api','s-actions'];
         var navLinks = {};
         sections.forEach(function(id) {
           var a = document.querySelector('.dash-nav a[href="#' + id + '"]');
@@ -1892,6 +2944,391 @@ const html = `<!DOCTYPE html>
           window.removeEventListener('scroll', onScroll);
         };
       }, []);
+    }
+
+    // ── API Intelligence Section ─────────────────────────────────────────────
+
+    // Severity pill for API insights (teal accent instead of rose/amber).
+    // Top-level so Babel never has to parse JSX inside another JSX function body.
+    function apiSevPill(s) {
+      var map = {
+        High:   'bg-rose-100 text-rose-700 border-rose-200',
+        Medium: 'bg-amber-100 text-amber-700 border-amber-200',
+        Low:    'bg-sky-100 text-sky-700 border-sky-200',
+        Info:   'bg-teal-100 text-teal-700 border-teal-200',
+      };
+      var cls = map[s] || 'bg-slate-100 text-slate-600 border-slate-200';
+      return <span className={\`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold border \${cls}\`}>{s}</span>;
+    }
+
+    function DomainChip({ domain }) {
+      return (
+        <span style={{display:'inline-block',padding:'0.12rem 0.5rem',borderRadius:'4px',fontSize:'0.65rem',fontWeight:700,
+          background:'#f0fdfa',border:'1px solid #99f6e4',color:'#0f766e',letterSpacing:'0.02em',whiteSpace:'nowrap'}}>
+          {domain}
+        </span>
+      );
+    }
+
+    function MethodChip({ method }) {
+      var colors = {
+        GET:    { bg:'#eff6ff', border:'#bfdbfe', text:'#1d4ed8' },
+        POST:   { bg:'#f0fdf4', border:'#bbf7d0', text:'#15803d' },
+        PUT:    { bg:'#fefce8', border:'#fde68a', text:'#854d0e' },
+        PATCH:  { bg:'#fff7ed', border:'#fed7aa', text:'#c2410c' },
+        DELETE: { bg:'#fef2f2', border:'#fecaca', text:'#991b1b' },
+      };
+      var c = colors[method] || { bg:'#f8fafc', border:'#e2e8f0', text:'#475569' };
+      return (
+        <span style={{display:'inline-block',padding:'0.1rem 0.45rem',borderRadius:'4px',fontSize:'0.65rem',
+          fontWeight:800,background:c.bg,border:'1px solid '+c.border,color:c.text,fontFamily:'monospace',letterSpacing:'0.04em'}}>
+          {method}
+        </span>
+      );
+    }
+
+    function ApiIntelligenceSection({ report }) {
+      if (!report) return null;
+
+      var profiles      = report.endpointProfiles      || [];
+      var workflows     = report.workflowSequences     || [];
+      var insights      = report.insights              || [];
+      var failed        = report.failedEndpoints       || [];
+      var latencyOL     = report.latencyOutliers       || [];
+      var repeated      = report.repeatedCallEndpoints || [];
+      var byDomain      = report.byDomain              || {};
+      var summary       = report.executiveSummary      || '';
+
+      // ── KPI tiles
+      var kpis = [
+        { label:'Traces Captured',  value: report.filteredTraces ?? report.totalTraces ?? 0, tip:'Total HTTP XHR/fetch requests captured passively during the test session, after filtering static assets and telemetry.' },
+        { label:'Unique Endpoints', value: report.uniqueEndpoints ?? profiles.length,        tip:'Distinct normalised endpoint paths observed. Path parameters like IDs, UUIDs, and dates are collapsed (e.g. /api/invoices/12345 → /api/invoices/{id}).' },
+        { label:'Workflows Mapped', value: workflows.length,                                  tip:'Test-level API call sequences identified and named by the AI. Each workflow represents the ordered API interaction pattern for one test.' },
+        { label:'Failed Endpoints', value: failed.length,                                     tip:'Endpoints that returned 4xx or 5xx responses at least once during the session. Review these for backend instability or data-state issues.' },
+        { label:'Latency Outliers', value: latencyOL.length,                                  tip:'Endpoints whose p95 response time exceeded 3 000 ms. High latency can cause test timeouts and masks real application performance problems.' },
+        { label:'Insights',         value: insights.length,                                   tip:'AI-generated findings covering failed endpoints, latency patterns, repeated calls, and workflow anomalies. Each insight includes a severity rating and concrete recommendation.' },
+      ];
+
+      // ── Domain breakdown rows (non-empty only)
+      // byDomain values are string[] arrays from the contract
+      var domainRows = Object.entries(byDomain)
+        .map(function(e) { return { domain: e[0], endpoints: Array.isArray(e[1]) ? e[1] : [] }; })
+        .filter(function(d) { return d.endpoints.length > 0; })
+        .sort(function(a, b) { return a.domain.localeCompare(b.domain); });
+
+      return (
+        <div>
+
+          {/* ── KPI strip ── */}
+          <div className="kpi-row" style={{gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))'}}>
+            {kpis.map(function(k, ki) {
+              return (
+                <div key={ki} className="kpi-tile" style={{borderTop:'3px solid #0d9488'}}>
+                  <div className="kpi-label" style={{display:'flex',alignItems:'center',gap:'0.3rem'}}>
+                    {k.label}
+                    <i className="info-trigger" data-tooltip={k.tip}>i</i>
+                  </div>
+                  <div className="kpi-value" style={{color:'#0f766e',fontSize:'2rem'}}>{k.value}</div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* ── Executive Summary ── */}
+          {summary && (
+            <div className="card">
+              <div className="card-head">
+                <h2>Executive Summary</h2>
+                <p>AI-generated narrative from captured API traffic</p>
+              </div>
+              <div className="card-body">
+                <ExecSummaryPanel summary={summary} agentKey="api" />
+              </div>
+            </div>
+          )}
+
+          {/* ── Insights ── */}
+          {insights.length > 0 && (
+            <div className="card">
+              <div className="card-head">
+                <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                  <h2>Engineering Insights</h2>
+                  <i className="info-trigger" data-tooltip="AI-generated findings from the captured API traffic. Each insight is triggered by a deterministic signal (failed status code, p95 latency threshold, repeated call count) and enriched with a hypothesis and recommendation. Severity is assigned by the AI based on the financial domain and call frequency.">i</i>
+                </div>
+                <p>{insights.length} finding{insights.length !== 1 ? 's' : ''} across {report.uniqueEndpoints ?? 0} endpoints</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+                    <tr>
+                      <th className="px-4 py-3">Severity</th>
+                      <th className="px-4 py-3">Finding</th>
+                      <th className="px-4 py-3">Endpoints</th>
+                      <th className="px-4 py-3">Recommendation</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {insights.map(function(ins, ii) {
+                      return (
+                        <tr key={ii} className="hover:bg-slate-50">
+                          <td className="px-4 py-3 whitespace-nowrap">{apiSevPill(ins.severity)}</td>
+                          <td className="px-4 py-3">
+                            <div style={{fontWeight:600,fontSize:'0.82rem',color:'#1e293b',marginBottom:'0.25rem'}}>{ins.title}</div>
+                            <div style={{fontSize:'0.75rem',color:'#64748b',lineHeight:1.55}}>{ins.description}</div>
+                          </td>
+                          <td className="px-4 py-3">
+                            <div style={{display:'flex',flexDirection:'column',gap:'0.2rem'}}>
+                              {(ins.endpoints||[]).slice(0,3).map(function(ep, ei) {
+                                return (
+                                  <code key={ei} style={{fontSize:'0.7rem',background:'#f1f5f9',padding:'0.1rem 0.4rem',borderRadius:'3px',color:'#0f766e',fontFamily:'monospace'}}>
+                                    {ep}
+                                  </code>
+                                );
+                              })}
+                              {(ins.endpoints||[]).length > 3 && (
+                                <span style={{fontSize:'0.68rem',color:'#94a3b8'}}>+{ins.endpoints.length - 3} more</span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-slate-600 max-w-xs" style={{lineHeight:1.55}}>{ins.recommendation}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ── Failed Endpoints ── */}
+          {failed.length > 0 && (
+            <div className="card">
+              <div className="card-head">
+                <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                  <h2>Failed Endpoints</h2>
+                  <i className="info-trigger" data-tooltip="Endpoints that returned a 4xx or 5xx HTTP response at least once during the captured session. Error count = total requests to that endpoint that returned an error status. These are the highest-priority stability signals from the API layer.">i</i>
+                </div>
+                <p>{failed.length} endpoint{failed.length !== 1 ? 's' : ''} with errors</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+                    <tr>
+                      <th className="px-4 py-3">Method</th>
+                      <th className="px-4 py-3">Endpoint</th>
+                      <th className="px-4 py-3 text-center">Errors</th>
+                      <th className="px-4 py-3 text-center">Status Codes</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {failed.map(function(ep, fi) {
+                      return (
+                        <tr key={fi} className="hover:bg-slate-50">
+                          <td className="px-4 py-3"><MethodChip method={ep.method} /></td>
+                          <td className="px-4 py-3 font-mono text-xs text-slate-700">{ep.normalizedPath}</td>
+                          <td className="px-4 py-3 text-center font-bold text-rose-600">{ep.errorCount}</td>
+                          <td className="px-4 py-3 text-center">
+                            <div style={{display:'flex',flexWrap:'wrap',gap:'0.2rem',justifyContent:'center'}}>
+                              {Object.entries(ep.statusCodes||{}).map(function(sc, si) {
+                                var code = parseInt(sc[0], 10);
+                                var bg = code >= 500 ? '#fef2f2' : code >= 400 ? '#fffbeb' : '#f0fdf4';
+                                var fg = code >= 500 ? '#991b1b' : code >= 400 ? '#92400e' : '#166534';
+                                return (
+                                  <span key={si} style={{padding:'0.1rem 0.4rem',borderRadius:'4px',fontSize:'0.7rem',fontWeight:700,background:bg,color:fg,fontFamily:'monospace'}}>
+                                    {sc[0]}: {sc[1]}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ── Latency Outliers ── */}
+          {latencyOL.length > 0 && (
+            <div className="card">
+              <div className="card-head">
+                <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                  <h2>Latency Outliers</h2>
+                  <i className="info-trigger" data-tooltip="Endpoints whose 95th percentile response time exceeded 3 000 ms across all calls in the session. p95 is used rather than mean to avoid outlier distortion — it represents the worst 5% of real user-facing latency. These are candidates for timeout-related test flakiness.">i</i>
+                </div>
+                <p>p95 &gt; 3 000 ms</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+                    <tr>
+                      <th className="px-4 py-3">Method</th>
+                      <th className="px-4 py-3">Endpoint</th>
+                      <th className="px-4 py-3 text-center">p95 (ms)</th>
+                      <th className="px-4 py-3 text-center">Avg (ms)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {latencyOL.map(function(ep, li) {
+                      var p95 = ep.p95Ms || 0;
+                      var p95Color = p95 > 8000 ? '#dc2626' : p95 > 5000 ? '#d97706' : '#0f766e';
+                      return (
+                        <tr key={li} className="hover:bg-slate-50">
+                          <td className="px-4 py-3"><MethodChip method={ep.method} /></td>
+                          <td className="px-4 py-3 font-mono text-xs text-slate-700">{ep.normalizedPath}</td>
+                          <td className="px-4 py-3 text-center font-bold" style={{color:p95Color}}>{p95}</td>
+                          <td className="px-4 py-3 text-center text-slate-600 font-mono">{ep.avgMs || '—'}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ── Workflow Sequences ── */}
+          {workflows.length > 0 && (
+            <div className="card">
+              <div className="card-head">
+                <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                  <h2>Workflow Sequences</h2>
+                  <i className="info-trigger" data-tooltip="Ordered API call sequences captured per test, named by the AI using SIMS Finance business context. Each workflow shows the API steps a test exercised, their HTTP methods, status codes, and latency. Useful for understanding which business operations each test covers at the API layer.">i</i>
+                </div>
+                <p>{workflows.length} test workflow{workflows.length !== 1 ? 's' : ''} mapped</p>
+              </div>
+              <div className="card-body" style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
+                {workflows.map(function(wf, wi) {
+                  var allOk = wf.allSucceeded;
+                  return (
+                    <div key={wi} style={{border:'1px solid #e2e8f0',borderRadius:'8px',overflow:'hidden'}}>
+                      {/* Workflow header */}
+                      <div style={{padding:'0.65rem 1rem',background: allOk ? '#f0fdf4' : '#fff7ed',
+                        borderBottom:'1px solid #e2e8f0',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'0.75rem',flexWrap:'wrap'}}>
+                        <div>
+                          <div style={{fontWeight:700,fontSize:'0.82rem',color:'#1e293b'}}>{wf.name || wf.testTitle}</div>
+                          {wf.name && wf.name !== wf.testTitle && (
+                            <div style={{fontSize:'0.68rem',color:'#94a3b8',marginTop:'0.1rem',fontStyle:'italic'}}>test: {wf.testTitle}</div>
+                          )}
+                        </div>
+                        <div style={{display:'flex',alignItems:'center',gap:'0.5rem',flexShrink:0}}>
+                          <span style={{fontSize:'0.7rem',color:'#64748b'}}>{wf.steps ? wf.steps.length : 0} calls &middot; {wf.totalDurationMs}ms</span>
+                          <span style={{padding:'0.15rem 0.55rem',borderRadius:'999px',fontSize:'0.68rem',fontWeight:700,
+                            background: allOk ? '#d1fae5' : '#fee2e2', color: allOk ? '#065f46' : '#991b1b'}}>
+                            {allOk ? '✓ All succeeded' : '⚠ Has errors'}
+                          </span>
+                        </div>
+                      </div>
+                      {/* Steps */}
+                      <div style={{overflowX:'auto'}}>
+                        <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.75rem'}}>
+                          <tbody>
+                            {(wf.steps||[]).map(function(step, si) {
+                              var code = step.responseStatus || 0;
+                              var codeColor = code >= 500 ? '#dc2626' : code >= 400 ? '#d97706' : code >= 200 && code < 300 ? '#059669' : '#64748b';
+                              var rowBg = (code >= 400) ? '#fff7f7' : si % 2 === 0 ? '#fff' : '#f8fafc';
+                              return (
+                                <tr key={si} style={{borderBottom:'1px solid #f1f5f9',background:rowBg}}>
+                                  <td style={{padding:'0.4rem 0.75rem',color:'#94a3b8',fontFamily:'monospace',width:'2rem',textAlign:'right'}}>{si + 1}</td>
+                                  <td style={{padding:'0.4rem 0.5rem',width:'4rem'}}><MethodChip method={step.method} /></td>
+                                  <td style={{padding:'0.4rem 0.5rem',fontFamily:'monospace',color:'#334155',maxWidth:'280px',wordBreak:'break-all'}}>{step.normalizedPath}</td>
+                                  <td style={{padding:'0.4rem 0.5rem',width:'3rem',textAlign:'center',fontWeight:700,fontFamily:'monospace',color:codeColor}}>{step.responseStatus}</td>
+                                  <td style={{padding:'0.4rem 0.5rem',width:'5rem',textAlign:'right',color:'#64748b',fontFamily:'monospace'}}>{step.durationMs}ms</td>
+                                  <td style={{padding:'0.4rem 0.75rem'}}><DomainChip domain={step.domain} /></td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ── Domain Breakdown ── */}
+          {domainRows.length > 0 && (
+            <div className="card">
+              <div className="card-head">
+                <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                  <h2>Coverage by Business Domain</h2>
+                  <i className="info-trigger" data-tooltip="Endpoints classified by SIMS Finance business domain using deterministic URL path rules. Coverage shows which parts of the application were exercised at the API layer during this test session. Empty domains indicate no API traffic was observed for that area.">i</i>
+                </div>
+                <p>SIMS Finance domain classification of observed endpoints</p>
+              </div>
+              <div className="card-body">
+                <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:'0.6rem'}}>
+                  {domainRows.map(function(d, di) {
+                    var epList = d.endpoints;
+                    return (
+                      <div key={di} style={{padding:'0.65rem 0.85rem',background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:'8px'}}>
+                        <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.45rem'}}>
+                          <DomainChip domain={d.domain} />
+                          <span style={{fontSize:'0.65rem',color:'#94a3b8'}}>{epList.length} endpoint{epList.length !== 1 ? 's' : ''}</span>
+                        </div>
+                        <div style={{display:'flex',flexDirection:'column',gap:'0.18rem'}}>
+                          {epList.slice(0,5).map(function(ep, ei) {
+                            return (
+                              <code key={ei} style={{fontSize:'0.68rem',color:'#334155',fontFamily:'monospace',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',display:'block'}}>
+                                {ep}
+                              </code>
+                            );
+                          })}
+                          {epList.length > 5 && (
+                            <span style={{fontSize:'0.65rem',color:'#94a3b8'}}>+{epList.length - 5} more</span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── Repeated Calls ── */}
+          {repeated.length > 0 && (
+            <div className="card">
+              <div className="card-head">
+                <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                  <h2>Repeated API Calls</h2>
+                  <i className="info-trigger" data-tooltip="Endpoints called more than 3 times within a single test. Repeated calls to the same endpoint in one test may indicate polling loops, missing caching, redundant data fetches, or tests that poll for state rather than reacting to events. High call counts on reference data endpoints (e.g. cost centres, VAT codes) suggest caching opportunities.">i</i>
+                </div>
+                <p>Endpoints called more than 3 times in a single test — potential caching or polling opportunities</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-700 text-white text-xs uppercase tracking-wide">
+                    <tr>
+                      <th className="px-4 py-3">Endpoint</th>
+                      <th className="px-4 py-3 text-center">Total Calls</th>
+                      <th className="px-4 py-3 text-center">Tests</th>
+                      <th className="px-4 py-3 text-center">Avg / Test</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {repeated.map(function(ep, ri) {
+                      return (
+                        <tr key={ri} className="hover:bg-slate-50">
+                          <td className="px-4 py-3 font-mono text-xs text-slate-700">{ep.normalizedPath}</td>
+                          <td className="px-4 py-3 text-center font-bold text-amber-600">{ep.callCount}</td>
+                          <td className="px-4 py-3 text-center text-slate-500">{ep.testCount}</td>
+                          <td className="px-4 py-3 text-center text-slate-600">{ep.avgCallsPerTest ? ep.avgCallsPerTest.toFixed(1) : '—'}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+        </div>
+      );
     }
 
     function App() {
@@ -1988,6 +3425,7 @@ const html = `<!DOCTYPE html>
               <a href="#s-regression">🔁 Regression</a>
               <a href="#s-unstable">🔴 Unstable Tests</a>
               <a href="#s-db">🗄️ DB Integrity</a>
+              {apiIntel && <a href="#s-api">🌐 API Intelligence</a>}
               <a href="#s-actions">✅ Action Items</a>
             </div>
           </nav>
@@ -2007,17 +3445,23 @@ const html = `<!DOCTYPE html>
                   <div style={{display:'flex',alignItems:'center',gap:'0.4rem'}}>
                     <div className="kpi-label" style={{margin:0}}>Health Score</div>
                     <i className="info-trigger"
-                       data-tooltip="Composite 0–100 score from four signals: Pass rate (% runs with zero failures) · Flaky rate (tests with inconsistent outcomes) · Failure frequency (recurrent test failures) · Execution trend (improving vs degrading). 75+ = Healthy · 50–74 = Warning · <50 = Critical">i</i>
+                       data-tooltip="Composite 0–100 score (0 = critical, 100 = perfect) derived from four deterministic signals: clean run rate, average test pass rate, flaky test frequency, and whether the trend is improving or degrading. Computed by the Trend Analysis Agent from the consolidated run history — no AI inference involved. Thresholds: 75+ Healthy · 50–74 Warning · below 50 Critical. A single outlier run has limited impact; the score reflects sustained behaviour.">i</i>
                   </div>
                   <HealthRing score={score} />
                   <span style={{fontSize:'0.7rem',fontWeight:700,color:healthColor(score),letterSpacing:'0.05em',textTransform:'uppercase'}}>
                     {score>=75?'● Healthy':score>=50?'● Warning':'● Critical'}
                   </span>
-                  <span style={{
-                    fontSize:'0.72rem', fontWeight:700, letterSpacing:'0.04em',
-                    color: trendDir==='Improving' ? '#059669' : trendDir==='Degrading' ? '#dc2626' : '#64748b'
-                  }}>
-                    {trendDir==='Improving' ? '↑ Improving' : trendDir==='Degrading' ? '↓ Degrading' : '→ Stable'}
+                  <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem'}}>
+                    <span style={{
+                      fontSize:'0.72rem', fontWeight:700, letterSpacing:'0.04em',
+                      color: trendDir==='Improving' ? '#059669' : trendDir==='Degrading' ? '#dc2626' : '#64748b'
+                    }}>
+                      {trendDir==='Improving' ? '↑ Improving' : trendDir==='Degrading' ? '↓ Degrading' : '→ Stable'}
+                    </span>
+                    <i className="info-trigger"
+                       style={{background: trendDir==='Improving' ? '#d1fae5' : trendDir==='Degrading' ? '#fee2e2' : '#f1f5f9',
+                               color:      trendDir==='Improving' ? '#065f46' : trendDir==='Degrading' ? '#991b1b' : '#475569'}}
+                       data-tooltip="Direction of the health trend across recent business-day runs. Improving = clean run rate and pass rate are rising over the window. Degrading = both are declining or failure frequency is increasing. Stable = no statistically meaningful change detected. Determined by the Trend Analysis Agent by comparing the first half of the run window against the second half — not a single-run snapshot.">i</i>
                   </span>
                 </div>
 
@@ -2060,18 +3504,14 @@ const html = `<!DOCTYPE html>
                 {/* ── 4. Unstable Tests — replaces run-level Flaky Rate ── */}
                 {(() => {
                   const profiles = deep.perTestProfiles || [];
-                  const total    = profiles.length;
-                  if (total === 0) return (
+                  if (!profiles.length) return (
                     <div className="kpi-tile">
                       <div className="kpi-label">Unstable Tests</div>
                       <div className="kpi-value" style={{color:'#94a3b8'}}>—</div>
                       <div className="kpi-sub">no profile data</div>
                     </div>
                   );
-                  const failing  = profiles.filter(p => (p.failureRate ?? 0) > 0).length;
-                  const flaky    = profiles.filter(p => (p.flakyRate  ?? 0) > 0).length;
-                  const unstable = profiles.filter(p => (p.failureRate ?? 0) > 0 || (p.flakyRate ?? 0) > 0).length;
-                  const pct      = Math.round(unstable / total * 100);
+                  const { total, failing, flaky, unstable, pct } = deriveTestStabilityStats(profiles);
                   const valColor = pct === 0 ? '#059669' : pct <= 33 ? '#d97706' : '#dc2626';
                   return (
                     <div className="kpi-tile">
@@ -2096,16 +3536,14 @@ const html = `<!DOCTYPE html>
                 {/* ── 5. Suite Reliability — replaces Tests Profiled ── */}
                 {(() => {
                   const profiles = deep.perTestProfiles || [];
-                  const total    = profiles.length;
-                  if (total === 0) return (
+                  if (!profiles.length) return (
                     <div className="kpi-tile">
                       <div className="kpi-label">Suite Reliability</div>
                       <div className="kpi-value" style={{color:'#94a3b8'}}>—</div>
                       <div className="kpi-sub">no profile data</div>
                     </div>
                   );
-                  const clean = profiles.filter(p => (p.failureRate ?? 0) === 0 && (p.flakyRate ?? 0) === 0).length;
-                  const pct   = Math.round(clean / total * 100);
+                  const { total, clean, pct } = deriveSuiteReliabilityStats(profiles);
                   const valColor = pct >= 80 ? '#059669' : pct >= 50 ? '#d97706' : '#dc2626';
                   return (
                     <div className="kpi-tile">
@@ -2132,11 +3570,31 @@ const html = `<!DOCTYPE html>
               {/* Executive Summary */}
               <div className="card">
                 <div className="card-head"><h2>Executive Summary</h2></div>
-                <div className="card-body" style={{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:'1rem', alignItems:'start'}}>
-                  <ExecSummaryPanel summary={trend.executiveSummary} label="Trend Analysis" agentKey="trend" />
-                  {deep.executiveSummary && (
-                    <ExecSummaryPanel summary={deep.executiveSummary} label="Per-Test Analysis" agentKey="deep" />
-                  )}
+                <div className="card-body">
+                  <DeterministicSignalStrip deepData={deep} />
+                  <div style={{
+                    display:'grid',
+                    gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',
+                    gap:'1rem',
+                    alignItems:'start',
+                    paddingTop:'0.65rem',
+                    borderTop:'1px solid #f1f5f9',
+                  }}>
+                    <div>
+                      <div style={{fontSize:'0.6rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',color:'#94a3b8',marginBottom:'0.5rem',display:'flex',alignItems:'center',gap:'0.35rem'}}>
+                        <AgentBadge agentKey="trend" />
+                      </div>
+                      <ExecSummaryPanel summary={trend.executiveSummary} />
+                    </div>
+                    {deep.executiveSummary && (
+                      <div>
+                        <div style={{fontSize:'0.6rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',color:'#94a3b8',marginBottom:'0.5rem',display:'flex',alignItems:'center',gap:'0.35rem'}}>
+                          <AgentBadge agentKey="deep" />
+                        </div>
+                        <ExecSummaryPanel summary={deep.executiveSummary} />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -2230,8 +3688,8 @@ const html = `<!DOCTYPE html>
                               </td>
                               <td className="px-4 py-3 text-center">
                                 <button
-                                  onClick={() => setEnvModal({ title: env + ' \u2014 All Runs (' + d.total + ')', runs: d.runs || [] })}
-                                  title="View all runs for this environment"
+                                  onClick={() => setEnvModal({ title: env + ' \u2014 All Runs (' + d.total + ' weekday' + ((d.runs||[]).length - d.total > 0 ? ' + ' + ((d.runs||[]).length - d.total) + ' weekend' : '') + ')', runs: d.runs || [] })}
+                                  title="View all runs for this environment (weekday + weekend)"
                                   style={{fontFamily:'monospace',fontWeight:700,color:'#334155',background:'none',border:'none',cursor:'pointer',padding:'0.1rem 0.3rem',borderRadius:'4px',textDecoration:'underline dotted',textUnderlineOffset:'3px'}}
                                   onMouseEnter={e=>e.currentTarget.style.color='#4f46e5'}
                                   onMouseLeave={e=>e.currentTarget.style.color='#334155'}
@@ -2322,7 +3780,7 @@ const html = `<!DOCTYPE html>
 
             {/* ══ 3. REGRESSION DELTA ══ */}
             <div id="s-regression" className="dash-section">
-              <p className="section-label">Regression Delta <AgentBadge agentKey="regression" style={{marginLeft:'0.5rem'}} /></p>
+              <p className="section-label">Regression Delta <AgentBadge agentKey="regression" style={{marginLeft:'0.5rem'}} /><i className="info-trigger" style={{marginLeft:'0.4rem'}} data-tooltip="Compares test-level failure and flaky rates between two execution windows split by a pivot date. Before window = all runs prior to the pivot; After window = runs on or after it. A test is Regressed if its failure or flaky rate increased; Improved if it decreased; New Failure if absent before; Resolved if absent after. Computed deterministically by the Regression Delta Agent from per-run test-results.json files — no AI scoring is involved in the classification itself. AI is used only to generate the narrative summary and action items.">i</i></p>
               <RegressionDeltaSection report={regression} />
             </div>
 
@@ -2355,7 +3813,7 @@ const html = `<!DOCTYPE html>
                     <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
                       <h2>Co-Failure Patterns</h2>
                       <i className="info-trigger"
-                         data-tooltip="Tests that fail together in the same run. A high co-failure count suggests a shared root cause — e.g. a common fixture, shared database state, or an upstream service dependency.">i</i>
+                         data-tooltip="Test pairs that fail in the same CI run more than once. Co-occurrence is counted deterministically — if tests A and B both fail in 3 separate runs, their co-failure count is 3. Only hard failures count; flaky retries are excluded. A high co-failure count is a signal of shared root cause: a common test fixture, database state dependency, or an upstream service. The possible cause text is AI-generated by the Deep Failure Agent and is hypothetical — verify before acting.">i</i>
                     </div>
                     <p>Tests that fail together — shared root cause likely.</p>
                   </div>
@@ -2367,19 +3825,28 @@ const html = `<!DOCTYPE html>
 
             {/* ══ 6. DB INTEGRITY ══ */}
             <div id="s-db" className="dash-section">
-              <p className="section-label">DB Integrity <AgentBadge agentKey="db" style={{marginLeft:'0.5rem'}} /></p>
+              <p className="section-label">DB Integrity <AgentBadge agentKey="db" style={{marginLeft:'0.5rem'}} /><i className="info-trigger" style={{marginLeft:'0.4rem'}} data-tooltip="Results of read-only SQL integrity checks executed against the SIMS Finance database after the test run. Checks cover: orphaned records, broken referential integrity, transaction workflow stalls, and row count deltas (pre vs post run). Each check is a deterministic SQL query — Pass or Fail based on whether the query returns rows. AI is used only to classify severity and generate the remediation narrative. Requires DB credentials in src/config/.env.">i</i></p>
               <DatabaseIntegritySection report={dbInteg} />
             </div>
 
-            {/* ══ 7. ACTION ITEMS ══ */}
+            {/* ══ 7. API INTELLIGENCE ══ */}
+            {apiIntel && (
+              <div id="s-api" className="dash-section">
+                <p className="section-label">API Intelligence <AgentBadge agentKey="api" style={{marginLeft:'0.5rem'}} /><i className="info-trigger" style={{marginLeft:'0.4rem'}} data-tooltip="Passively captured HTTP traffic from test execution, classified by SIMS Finance business domain. The agent detects failed endpoints, latency outliers, repeated API calls, and AI-named workflow sequences. No test code changes required — network events are captured transparently via Playwright page listeners.">i</i></p>
+                <ApiIntelligenceSection report={apiIntel} />
+              </div>
+            )}
+
+            {/* ══ 8. ACTION ITEMS ══ */}
             <div id="s-actions" className="dash-section">
 
-              <p className="section-label">Action Items <AgentBadge agentKey="trend" style={{marginLeft:'0.5rem'}} /><AgentBadge agentKey="deep" style={{marginLeft:'0.25rem'}} /></p>
+              <p className="section-label">Action Items <AgentBadge agentKey="trend" style={{marginLeft:'0.5rem'}} /><AgentBadge agentKey="deep" style={{marginLeft:'0.25rem'}} />{apiIntel && <AgentBadge agentKey="api" style={{marginLeft:'0.25rem'}} />}</p>
 
               <div className="card">
                 <div className="card-body" style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',gap:'2.5rem'}}>
                   <ActionList items={trend.actionItems} title="Trend-Level" />
                   <ActionList items={deep.actionItems}  title="Per-Test" />
+                  {apiIntel && <ActionList items={(apiIntel.insights||[]).map(function(i){return i.recommendation;}).filter(Boolean)} title="API Layer" />}
                 </div>
               </div>
 
@@ -2403,9 +3870,6 @@ const html = `<!DOCTYPE html>
     }
 
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-
-    // ── Close env modal on Escape key ────────────────────────────────────────
-    // (handled inside EnvRunsModal via backdrop click; keyboard escape is a nice extra)
   <\/script>
 
   <script>
@@ -2415,9 +3879,9 @@ const html = `<!DOCTYPE html>
        Uses getBoundingClientRect() + position:fixed — immune to all
        overflow:hidden, transform, or stacking-context ancestors.        */
     (function () {
-      var MAX_W   = 250;
-      var MARGIN  = 10;
-      var GAP     = 7;
+      var MAX_W   = 320;   /* wider — matches the CSS max-width; prevents mid-word wrapping */
+      var MARGIN  = 12;   /* px clear of viewport edges — slightly more on narrow screens */
+      var GAP     = 8;    /* px gap between trigger and tooltip box */
       var DELAY   = 150;   /* ms before showing */
       var tt      = document.createElement('div');
       tt.id = 'global-tooltip';
@@ -2492,6 +3956,10 @@ const html = `<!DOCTYPE html>
         lastTrigger = t || lastTrigger;
       });
       window.addEventListener('scroll', function () {
+        if (tt.classList.contains('tt-show') && lastTrigger) position(lastTrigger);
+      }, { passive:true });
+      /* Reposition on resize — viewport width changes (e.g. DevTools dock) */
+      window.addEventListener('resize', function () {
         if (tt.classList.contains('tt-show') && lastTrigger) position(lastTrigger);
       }, { passive:true });
     })();

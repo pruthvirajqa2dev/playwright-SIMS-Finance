@@ -64,9 +64,16 @@ export interface CoFailurePattern {
 export interface PerTestAnalysis {
     testTitle: string;
     stabilityLabel: "Unstable" | "Flaky" | "Stable";
-    pattern: string; // ≤ 2 sentences specific to the data
-    recommendation: string;
+    /** Legacy field name returned by older prompt versions — same meaning as stabilityLabel */
+    stabilityCategory?: "Unstable" | "Flaky" | "Stable";
     priority: "High" | "Medium" | "Low";
+    failureRate: number;
+    flakyRate: number;
+    mostFrequentError: string;
+    timeoutSuspected: boolean;
+    environmentSpecific: boolean;
+    failureHypothesis: string;
+    recommendation: string;
 }
 
 export interface DeepFailureReport {
@@ -357,6 +364,11 @@ export async function runDeepAnalysis(
         return GitHubReportsClient.extractTestOutcomes(r, env);
     });
 
+    const reportBaseUrl =
+        process.env.GITHUB_REPO_OWNER && process.env.GITHUB_REPO_NAME
+            ? `https://${process.env.GITHUB_REPO_OWNER}.github.io/${process.env.GITHUB_REPO_NAME}/published-reports/`
+            : "";
+
     const profiles = buildPerTestProfiles(runOutcomes);
     const coFailures = detectCoFailures(runOutcomes);
     const environments = [
@@ -417,10 +429,7 @@ export async function runDeepAnalysis(
         generatedAt: new Date().toISOString(),
         runsAnalysed: reports.length,
         runsWithIssues: interestingRuns.length,
-        reportBaseUrl:
-            process.env.GITHUB_REPO_OWNER && process.env.GITHUB_REPO_NAME
-                ? `https://${process.env.GITHUB_REPO_OWNER}.github.io/${process.env.GITHUB_REPO_NAME}/`
-                : "",
+        reportBaseUrl,
         perTestProfiles: profiles,
         perTestAnalyses: parsed.perTestAnalyses ?? [],
         coFailurePatterns: mergedCoFailures,

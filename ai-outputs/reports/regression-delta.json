@@ -1,17 +1,18 @@
 {
-  "generatedAt": "2026-05-06T11:45:36.424Z",
-  "pivotDate": "2026-04-29",
+  "generatedAt": "2026-05-08T11:31:29.701Z",
+  "pivotDate": "2026-05-01",
   "beforeWindow": {
     "from": "2026-04-20",
-    "to": "2026-04-28",
-    "runsAnalysed": 7
+    "to": "2026-04-30",
+    "runsAnalysed": 9
   },
   "afterWindow": {
-    "from": "2026-04-29",
-    "to": "2026-05-06",
-    "runsAnalysed": 7
+    "from": "2026-05-01",
+    "to": "2026-05-08",
+    "runsAnalysed": 5
   },
   "beforeEnvs": [
+    "TRAINING",
     "UAT"
   ],
   "afterEnvs": [
@@ -20,26 +21,13 @@
   "overallVerdict": "Regressed",
   "regressions": [
     {
-      "testTitle": "RSS310Q - Attachments @shard2",
-      "beforeFailureRate": 0,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 0,
-      "afterFlakyRate": 29,
-      "failureDelta": 0,
-      "flakyDelta": 29,
-      "verdict": "Regressed",
-      "riskLevel": "Low",
-      "errorSamplesBefore": [],
-      "errorSamplesAfter": []
-    },
-    {
       "testTitle": "File upload using SPC420 @shard2",
       "beforeFailureRate": 0,
       "afterFailureRate": 0,
       "beforeFlakyRate": 0,
-      "afterFlakyRate": 14,
+      "afterFlakyRate": 20,
       "failureDelta": 0,
-      "flakyDelta": 14,
+      "flakyDelta": 20,
       "verdict": "Regressed",
       "riskLevel": "Low",
       "errorSamplesBefore": [],
@@ -50,28 +38,13 @@
   "newFailures": [],
   "resolvedFailures": [
     {
-      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
-      "beforeFailureRate": 14,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 29,
-      "afterFlakyRate": 29,
-      "failureDelta": -14,
-      "flakyDelta": 0,
-      "verdict": "Resolved",
-      "riskLevel": "Low",
-      "errorSamplesBefore": [
-        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
-      ],
-      "errorSamplesAfter": []
-    },
-    {
       "testTitle": "RSS570 - Crystal Report @shard1",
-      "beforeFailureRate": 14,
+      "beforeFailureRate": 11,
       "afterFailureRate": 0,
-      "beforeFlakyRate": 43,
-      "afterFlakyRate": 29,
-      "failureDelta": -14,
-      "flakyDelta": -14,
+      "beforeFlakyRate": 33,
+      "afterFlakyRate": 40,
+      "failureDelta": -11,
+      "flakyDelta": 7,
       "verdict": "Resolved",
       "riskLevel": "Low",
       "errorSamplesBefore": [
@@ -80,12 +53,27 @@
       "errorSamplesAfter": []
     },
     {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 11,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 33,
+      "afterFlakyRate": 20,
+      "failureDelta": -11,
+      "flakyDelta": -13,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ],
+      "errorSamplesAfter": []
+    },
+    {
       "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 57,
+      "beforeFailureRate": 44,
       "afterFailureRate": 0,
       "beforeFlakyRate": 0,
       "afterFlakyRate": 0,
-      "failureDelta": -57,
+      "failureDelta": -44,
       "flakyDelta": 0,
       "verdict": "Resolved",
       "riskLevel": "Low",
@@ -97,18 +85,17 @@
     }
   ],
   "actionItems": [
-    "Investigate the flaky behaviour of 'RSS310Q - Attachments' and 'File upload using SPC420'.",
-    "Analyze the impact of the environment change from UAT to TRAINING on test stability.",
-    "Review the timing issues indicated by the new flakiness in previously stable tests.",
-    "Examine the error logs for patterns related to the regressions observed post-pivot.",
-    "Conduct a thorough review of the recent code changes made before the pivot date."
+    "Investigate the flaky behaviour of 'File upload using SPC420 @shard2' which changed from 0% to 20%.",
+    "Analyze the impact of the recent code changes on financial transaction tests.",
+    "Review the environment-specific factors in the TRAINING environment that may contribute to instability.",
+    "Conduct a deeper analysis of the timing issues observed in the regression tests.",
+    "Monitor the performance of the 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report' for any resurgence of issues."
   ],
   "executiveSummary": [
-    "2 tests regressed while 3 tests improved after the pivot on 2026-04-29.",
-    "'RSS310Q - Attachments' and 'File upload using SPC420' now exhibit flaky behaviour, with rates of 29% and 14%, respectively.",
-    "This pattern may indicate timing issues introduced by the recent code changes.",
-    "Flaky behaviour could lead to inconsistent results in document attachments and file uploads.",
-    "Further analysis of the environment change may clarify the impact on test outcomes.",
-    "Reviewing error logs may provide insights into the observed flakiness in these tests."
+    "One regression was observed in 'File upload using SPC420 @shard2' with a new flaky rate of 20%.",
+    "Three tests improved, including 'NML510 - Trial Balance Report' which dropped from 44% to 0% failure rate.",
+    "The pivot date of May 1, 2026, may suggest changes affecting test stability in the TRAINING environment.",
+    "The increase in flakiness for 'File upload using SPC420' could indicate a timing issue introduced by recent changes.",
+    "May affect the reliability of file uploads critical for financial operations."
   ]
 }

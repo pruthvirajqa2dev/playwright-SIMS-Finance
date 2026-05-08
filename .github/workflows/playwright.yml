@@ -559,10 +559,14 @@ jobs:
                   EOF
                   )
 
-                  jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' \
-                    test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
-                  jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' \
-                    test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+                  if [ "$EXECUTED_TESTS" -gt 0 ]; then
+                    jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' \
+                      test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+                    jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' \
+                      test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+                  else
+                    echo "⚠️  Zero tests executed — skipping consolidated.json update to preserve history slots."
+                  fi
 
                   git add test-results-history/consolidated.json
                   git commit -m "Update test history with run from $TIMESTAMP" || echo "No changes to commit"

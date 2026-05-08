@@ -1,87 +1,130 @@
 {
-  "generatedAt": "2026-05-06T11:44:46.342Z",
-  "runsAnalysed": 24,
-  "weekendExcluded": 6,
+  "generatedAt": "2026-05-08T11:30:39.084Z",
+  "runsAnalysed": 26,
+  "weekendExcluded": 4,
   "dateRange": {
     "from": "2026-04-20",
-    "to": "2026-05-06"
+    "to": "2026-05-08"
   },
-  "overallHealthScore": 75,
-  "trendDirection": "Degrading",
-  "successRate": 33,
+  "overallHealthScore": 80,
+  "trendDirection": "Improving",
+  "successRate": 38,
   "avgTestPassRate": 92,
-  "flakyRate": 46,
+  "flakyRate": 42,
   "byEnvironment": {
     "TRAINING": {
-      "total": 13,
+      "total": 16,
       "failures": 0,
       "flaky": 7,
-      "avgSuccess": 92,
+      "avgSuccess": 94,
       "runs": [
+        {
+          "timestamp": "2026-05-08_09-39-59",
+          "successRate": 100,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-05-07_10-59-59",
+          "successRate": 100,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-05-06_12-38-34",
+          "successRate": 100,
+          "flaky": false,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-05-06_10-32-55",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-05-05_10-14-29",
           "successRate": 100,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-05-04_10-26-47",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-05-03_09-35-56",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-05-02_09-21-50",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
         },
         {
           "timestamp": "2026-05-01_17-55-11",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-05-01_14-24-17",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-05-01_09-59-15",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-30_18-28-47",
           "successRate": 0,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-30_15-17-37",
           "successRate": 100,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-30_13-55-57",
           "successRate": 100,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-30_12-20-44",
           "successRate": 100,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-30_10-16-51",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-29_10-17-27",
           "successRate": 100,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-29_09-15-58",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         }
       ],
       "failureRuns": [],
@@ -89,202 +132,231 @@
         {
           "timestamp": "2026-05-06_10-32-55",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-05-04_10-26-47",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-05-01_17-55-11",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-05-01_14-24-17",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-05-01_09-59-15",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-30_10-16-51",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-29_09-15-58",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         }
       ]
     },
     "UAT": {
-      "total": 11,
+      "total": 10,
       "failures": 6,
       "flaky": 4,
-      "avgSuccess": 91,
+      "avgSuccess": 90,
       "runs": [
         {
           "timestamp": "2026-04-28_10-30-28",
           "successRate": 86,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-27_10-28-29",
           "successRate": 100,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-04-26_09-17-07",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-04-25_09-09-11",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
         },
         {
           "timestamp": "2026-04-24_09-57-10",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-23_10-03-15",
           "successRate": 86,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-23_06-51-55",
           "successRate": 86,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-22_09-38-17",
           "successRate": 86,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-21_09-50-54",
           "successRate": 100,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-20_10-41-01",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-20_10-11-46",
           "successRate": 86,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-20_09-59-45",
           "successRate": 71,
-          "flaky": false
-        },
-        {
-          "timestamp": "2026-04-20_09-46-09",
-          "successRate": 100,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         }
       ],
       "failureRuns": [
         {
           "timestamp": "2026-04-28_10-30-28",
           "successRate": 86,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-23_10-03-15",
           "successRate": 86,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-23_06-51-55",
           "successRate": 86,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-22_09-38-17",
           "successRate": 86,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-20_10-11-46",
           "successRate": 86,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-20_09-59-45",
           "successRate": 71,
-          "flaky": false
+          "flaky": false,
+          "isWeekend": false
         }
       ],
       "flakyRuns": [
         {
           "timestamp": "2026-04-24_09-57-10",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-23_06-51-55",
           "successRate": 86,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-22_09-38-17",
           "successRate": 86,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         },
         {
           "timestamp": "2026-04-20_10-41-01",
           "successRate": 100,
-          "flaky": true
+          "flaky": true,
+          "isWeekend": false
         }
       ]
     }
   },
   "patterns": [
     {
-      "patternType": "Degrading Trend",
-      "description": "The average success rate dropped from 86% to 71% in the last 7 runs, indicating a decline in stability.",
-      "affectedRuns": 7,
-      "severity": "High",
-      "recommendation": "Investigate the causes of the recent decline in test success rates."
-    },
-    {
       "patternType": "Chronic Flakiness",
-      "description": "46% of runs exhibited flaky tests, suggesting instability in test reliability.",
+      "description": "42% of runs exhibited flaky tests, indicating potential instability in certain test cases.",
       "affectedRuns": 11,
       "severity": "Medium",
-      "recommendation": "Identify and stabilize the tests contributing to flakiness."
+      "recommendation": "Identify and stabilize flaky tests to improve overall reliability."
     },
     {
-      "patternType": "Failure Cluster",
-      "description": "Three clusters of consecutive failures were observed, indicating potential systemic issues.",
-      "affectedRuns": 6,
-      "severity": "High",
-      "recommendation": "Analyze the test cases involved in these clusters for common dependencies."
+      "patternType": "Improving Trend",
+      "description": "The average success rate improved from 71% to 86% in the last 7 runs, suggesting positive momentum.",
+      "affectedRuns": 7,
+      "severity": "Low",
+      "recommendation": "Continue monitoring to ensure this trend persists."
+    },
+    {
+      "patternType": "Day-of-Week Risk",
+      "description": "Monday and Thursday runs had higher failure rates, with 40% and 25% respectively experiencing failures.",
+      "affectedRuns": 5,
+      "severity": "Medium",
+      "recommendation": "Investigate potential issues specific to these days."
     }
   ],
   "riskPeriods": [
     {
       "period": "2026-04-20 to 2026-04-24",
-      "description": "Two clusters of consecutive failures occurred, indicating a potential risk period."
+      "description": "This period had a cluster of failures with 3 consecutive runs showing issues."
     }
   ],
   "actionItems": [
-    "Investigate the recent drop in average success rates.",
-    "Identify and address flaky tests contributing to instability.",
-    "Analyze failure clusters for common patterns or dependencies.",
-    "Review test execution environments for discrepancies.",
-    "Enhance monitoring around failure timestamps for better insights."
+    "Investigate and stabilize flaky tests identified in recent runs.",
+    "Analyze failure patterns on Mondays and Thursdays for potential causes.",
+    "Continue tracking the success rate to ensure improvements are sustained."
   ],
   "executiveSummary": [
-    "33% of runs were fully passed with no failures or flakiness.",
-    "Average test pass rate decreased from 86% to 71% in the last 7 runs.",
-    "46% of runs experienced flaky tests, indicating reliability issues.",
-    "Three clusters of consecutive failures were recorded between April 20 and April 24.",
-    "UAT environment had 6 failures out of 11 runs, compared to 0 in TRAINING.",
-    "Recent trends may affect the reliability of financial reporting processes.",
-    "Focus on analyzing test failures and flakiness to improve stability.",
-    "Investigate potential environmental factors contributing to UAT failures."
+    "38% of runs passed fully without failures or flakiness.",
+    "42% of runs showed flaky tests, indicating potential instability.",
+    "Average success rate improved from 71% to 86% over the last 7 runs.",
+    "Monday and Thursday runs had higher failure rates, suggesting day-specific issues.",
+    "No complete outages were recorded during this period."
   ]
 }

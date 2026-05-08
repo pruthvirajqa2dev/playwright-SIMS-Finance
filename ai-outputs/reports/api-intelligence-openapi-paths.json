@@ -1,0 +1,878 @@
+{
+  "/api/cost-centres": {
+    "get": {
+      "summary": "GET /api/cost-centres",
+      "tags": [
+        "BudgetManagement"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "BudgetManagement",
+      "x-observed-calls": 3,
+      "x-auto-generated": true
+    }
+  },
+  "/api/invoices/{id}/submit": {
+    "post": {
+      "summary": "POST /api/invoices/{id}/submit",
+      "tags": [
+        "AccountsPayable"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Path parameter inferred from observed URL patterns"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {}
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "AccountsPayable",
+      "x-observed-calls": 3,
+      "x-auto-generated": true
+    }
+  },
+  "/api/reports/jobs/RPT-001-TB": {
+    "get": {
+      "summary": "GET /api/reports/jobs/RPT-001-TB",
+      "tags": [
+        "Reporting"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Reporting",
+      "x-observed-calls": 3,
+      "x-auto-generated": true
+    }
+  },
+  "/api/invoices": {
+    "post": {
+      "summary": "POST /api/invoices",
+      "tags": [
+        "AccountsPayable"
+      ],
+      "parameters": [],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "supplierId": "S001",
+                "invoiceNumber": "INV-2026-0088",
+                "amount": 1250,
+                "vatCode": "S1",
+                "vatAmount": 250,
+                "ledgerCode": "4001",
+                "costCentre": "CC003",
+                "description": "Stationery Q2 2026"
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "AccountsPayable",
+      "x-observed-calls": 2,
+      "x-auto-generated": true
+    },
+    "get": {
+      "summary": "GET /api/invoices",
+      "tags": [
+        "AccountsPayable"
+      ],
+      "parameters": [
+        {
+          "name": "status",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "supplier",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "AccountsPayable",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/upload/document": {
+    "post": {
+      "summary": "POST /api/upload/document",
+      "tags": [
+        "FileOperations"
+      ],
+      "parameters": [],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": "[multipart body — not captured]"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Service Unavailable"
+        }
+      },
+      "x-sims-domain": "FileOperations",
+      "x-observed-calls": 2,
+      "x-auto-generated": true
+    }
+  },
+  "/api/auth/login": {
+    "post": {
+      "summary": "POST /api/auth/login",
+      "tags": [
+        "Authentication"
+      ],
+      "parameters": [],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "username": "finance.user"
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Authentication",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/auth/session": {
+    "get": {
+      "summary": "GET /api/auth/session",
+      "tags": [
+        "Authentication"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Authentication",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/suppliers": {
+    "get": {
+      "summary": "GET /api/suppliers",
+      "tags": [
+        "SupplierWorkflow"
+      ],
+      "parameters": [
+        {
+          "name": "active",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "SupplierWorkflow",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/vat-codes": {
+    "get": {
+      "summary": "GET /api/vat-codes",
+      "tags": [
+        "VATHandling"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "VATHandling",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/ledger-codes": {
+    "get": {
+      "summary": "GET /api/ledger-codes",
+      "tags": [
+        "Unknown"
+      ],
+      "parameters": [
+        {
+          "name": "year",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Unknown",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/invoices/{id}": {
+    "get": {
+      "summary": "GET /api/invoices/{id}",
+      "tags": [
+        "AccountsPayable"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Path parameter inferred from observed URL patterns"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "AccountsPayable",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/purchase-orders": {
+    "get": {
+      "summary": "GET /api/purchase-orders",
+      "tags": [
+        "PurchaseLedger"
+      ],
+      "parameters": [
+        {
+          "name": "status",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "supplier",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "PurchaseLedger",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/suppliers/S002": {
+    "get": {
+      "summary": "GET /api/suppliers/S002",
+      "tags": [
+        "SupplierWorkflow"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "SupplierWorkflow",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/invoices/{id}/credit-note": {
+    "post": {
+      "summary": "POST /api/invoices/{id}/credit-note",
+      "tags": [
+        "AccountsPayable"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Path parameter inferred from observed URL patterns"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "creditAmount": 250,
+                "reason": "Returned goods",
+                "vatCode": "S1",
+                "vatAmount": 50
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "AccountsPayable",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/payments/bacs/pending": {
+    "get": {
+      "summary": "GET /api/payments/bacs/pending",
+      "tags": [
+        "AccountsPayable"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "AccountsPayable",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/payments/bacs/generate": {
+    "post": {
+      "summary": "POST /api/payments/bacs/generate",
+      "tags": [
+        "AccountsPayable"
+      ],
+      "parameters": [],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "paymentDate": "2026-05-09",
+                "bankSortCode": "20-00-00",
+                "includeInvoiceIds": [
+                  12345,
+                  12346
+                ]
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "AccountsPayable",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/payments/bacs/BACS-2026-0012/download": {
+    "get": {
+      "summary": "GET /api/payments/bacs/BACS-2026-0012/download",
+      "tags": [
+        "AccountsPayable"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "AccountsPayable",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/financial-periods": {
+    "get": {
+      "summary": "GET /api/financial-periods",
+      "tags": [
+        "Unknown"
+      ],
+      "parameters": [
+        {
+          "name": "year",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "active",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Unknown",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/reports/trial-balance": {
+    "post": {
+      "summary": "POST /api/reports/trial-balance",
+      "tags": [
+        "Reporting"
+      ],
+      "parameters": [],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "financialYear": 2026,
+                "periodId": 1,
+                "format": "PDF",
+                "includeNominalCodes": true
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "202": {
+          "description": "HTTP 202",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Reporting",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/reports/download/RPT-001-TB.pdf": {
+    "get": {
+      "summary": "GET /api/reports/download/RPT-001-TB.pdf",
+      "tags": [
+        "Reporting"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Reporting",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/upload/config": {
+    "get": {
+      "summary": "GET /api/upload/config",
+      "tags": [
+        "FileOperations"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "FileOperations",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/upload/document/DOC-2026-0881/validate": {
+    "get": {
+      "summary": "GET /api/upload/document/DOC-2026-0881/validate",
+      "tags": [
+        "FileOperations"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "FileOperations",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/reports/crystal/templates": {
+    "get": {
+      "summary": "GET /api/reports/crystal/templates",
+      "tags": [
+        "Reporting"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Reporting",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/reports/crystal/generate": {
+    "post": {
+      "summary": "POST /api/reports/crystal/generate",
+      "tags": [
+        "Reporting"
+      ],
+      "parameters": [],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "templateId": "RSS570",
+                "parameters": {
+                  "dateFrom": "2026-04-01",
+                  "dateTo": "2026-04-30",
+                  "supplierId": null,
+                  "format": "PDF"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "202": {
+          "description": "HTTP 202",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Reporting",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/reports/jobs/RPT-002-CR": {
+    "get": {
+      "summary": "GET /api/reports/jobs/RPT-002-CR",
+      "tags": [
+        "Reporting"
+      ],
+      "parameters": [],
+      "responses": {
+        "500": {
+          "description": "Internal Server Error"
+        }
+      },
+      "x-sims-domain": "Reporting",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  },
+  "/api/auth/logout": {
+    "post": {
+      "summary": "POST /api/auth/logout",
+      "tags": [
+        "Authentication"
+      ],
+      "parameters": [],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {}
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "x-sims-domain": "Authentication",
+      "x-observed-calls": 1,
+      "x-auto-generated": true
+    }
+  }
+}

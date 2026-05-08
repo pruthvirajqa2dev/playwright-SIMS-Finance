@@ -16,6 +16,9 @@
         "ai:db:pre": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --mode pre ai-outputs/reports/db-snapshot.json",
         "ai:db:post": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --mode post ai-outputs/reports/db-integrity.json",
         "ai:db:dry-run": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --dry-run",
+        "ai:api": "npx ts-node src/test-intelligence/ai/agents/ApiIntelligenceAgent.ts ai-outputs/traces/network-traces.json ai-outputs/reports/api-intelligence.json",
+        "ai:api:postman": "npx ts-node src/test-intelligence/ai/agents/ApiIntelligenceAgent.ts ai-outputs/traces/network-traces.json ai-outputs/reports/api-intelligence.json --postman",
+        "ai:api:openapi": "npx ts-node src/test-intelligence/ai/agents/ApiIntelligenceAgent.ts ai-outputs/traces/network-traces.json ai-outputs/reports/api-intelligence.json --openapi",
         "ai:serve": "node scripts/ai-server.js"
     },
     "keywords": [],
@@ -41,6 +44,7 @@
     },
     "dependencies": {
         "crypto": "^1.0.1",
+        "docx": "^9.6.1",
         "googleapis": "^149.0.0",
         "open": "^10.1.2",
         "winston": "^3.17.0",

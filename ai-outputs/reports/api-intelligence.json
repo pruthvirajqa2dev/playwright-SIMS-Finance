@@ -1,0 +1,1172 @@
+{
+  "generatedAt": "2026-05-08T11:35:17.517Z",
+  "sessionId": "traces",
+  "totalTraces": 35,
+  "filteredTraces": 35,
+  "uniqueEndpoints": 27,
+  "endpointProfiles": [
+    {
+      "normalizedPath": "/api/cost-centres",
+      "method": "GET",
+      "domain": "BudgetManagement",
+      "category": "DataFetch",
+      "callCount": 3,
+      "testCount": 2,
+      "statusCodes": {
+        "200": 3
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 188,
+        "max": 204,
+        "avg": 197,
+        "p95": 204
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"costCentres\":[{\"code\":\"CC001\",\"description\":\"Admin\"},{\"code\":\"CC002\",\"description\":\"IT\"},{\"code\":\"CC003\",\"description\":\"Finance\"}]}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:01:09.600Z",
+      "lastSeen": "2026-05-08T09:01:20.500Z"
+    },
+    {
+      "normalizedPath": "/api/invoices/{id}/submit",
+      "method": "POST",
+      "domain": "AccountsPayable",
+      "category": "DataMutation",
+      "callCount": 3,
+      "testCount": 3,
+      "statusCodes": {
+        "200": 3
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 492,
+        "max": 621,
+        "avg": 552,
+        "p95": 621
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "{}",
+      "sampleResponseBody": "{\"id\":12345,\"status\":\"Submitted\",\"workflowId\":\"WF-4411\"}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:01:22.100Z",
+      "lastSeen": "2026-05-08T09:03:50.200Z"
+    },
+    {
+      "normalizedPath": "/api/reports/jobs/RPT-001-TB",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "DataFetch",
+      "callCount": 3,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 3
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 129,
+        "max": 140,
+        "avg": 134,
+        "p95": 140
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"jobId\":\"RPT-001-TB\",\"status\":\"Processing\",\"progress\":40}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:06:04.000Z",
+      "lastSeen": "2026-05-08T09:06:09.000Z"
+    },
+    {
+      "normalizedPath": "/api/invoices",
+      "method": "POST",
+      "domain": "AccountsPayable",
+      "category": "DataMutation",
+      "callCount": 2,
+      "testCount": 2,
+      "statusCodes": {
+        "201": 2
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 487,
+        "max": 728,
+        "avg": 608,
+        "p95": 728
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "{\"supplierId\":\"S001\",\"invoiceNumber\":\"INV-2026-0088\",\"amount\":1250.00,\"vatCode\":\"S1\",\"vatAmount\":250.00,\"ledgerCode\":\"4001\",\"costCentre\":\"CC003\",\"description\":\"Stationery Q2 2026\"}",
+      "sampleResponseBody": "{\"id\":12345,\"status\":\"Draft\",\"invoiceNumber\":\"INV-2026-0088\",\"createdAt\":\"2026-05-08T09:01:18Z\"}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:01:18.900Z",
+      "lastSeen": "2026-05-08T09:02:35.100Z"
+    },
+    {
+      "normalizedPath": "/api/upload/document",
+      "method": "POST",
+      "domain": "FileOperations",
+      "category": "FileTransfer",
+      "callCount": 2,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1,
+        "503": 1
+      },
+      "errorCount": 1,
+      "latency": {
+        "min": 2100,
+        "max": 5120,
+        "avg": 3610,
+        "p95": 5120
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "[multipart body — not captured]",
+      "sampleResponseBody": "{\"error\":\"Service temporarily unavailable\",\"retryAfter\":30}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:07:02.000Z",
+      "lastSeen": "2026-05-08T09:07:35.000Z"
+    },
+    {
+      "normalizedPath": "/api/auth/login",
+      "method": "POST",
+      "domain": "Authentication",
+      "category": "Authentication",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 342,
+        "max": 342,
+        "avg": 342,
+        "p95": 342
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "{\"username\":\"finance.user\"}",
+      "sampleResponseBody": "{\"token\":\"[REDACTED]\",\"user\":{\"id\":101,\"role\":\"FinanceClerk\"},\"expires\":\"2026-05-08T17:00:00Z\"}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:00:01.120Z",
+      "lastSeen": "2026-05-08T09:00:01.120Z"
+    },
+    {
+      "normalizedPath": "/api/auth/session",
+      "method": "GET",
+      "domain": "Authentication",
+      "category": "Authentication",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 118,
+        "max": 118,
+        "avg": 118,
+        "p95": 118
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"userId\":101,\"role\":\"FinanceClerk\",\"permissions\":[\"invoices.read\",\"invoices.write\",\"reports.read\"]}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:00:01.820Z",
+      "lastSeen": "2026-05-08T09:00:01.820Z"
+    },
+    {
+      "normalizedPath": "/api/suppliers",
+      "method": "GET",
+      "domain": "SupplierWorkflow",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 289,
+        "max": 289,
+        "avg": 289,
+        "p95": 289
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"suppliers\":[{\"id\":\"S001\",\"name\":\"Office Depot Ltd\",\"vatNumber\":\"GB123456789\"},{\"id\":\"S002\",\"name\":\"Tech Supplies Co\",\"vatNumber\":\"GB987654321\"}],\"total\":2}",
+      "observedQueryParams": [
+        "active"
+      ],
+      "firstSeen": "2026-05-08T09:01:05.001Z",
+      "lastSeen": "2026-05-08T09:01:05.001Z"
+    },
+    {
+      "normalizedPath": "/api/vat-codes",
+      "method": "GET",
+      "domain": "VATHandling",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 195,
+        "max": 195,
+        "avg": 195,
+        "p95": 195
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"vatCodes\":[{\"code\":\"S1\",\"rate\":20,\"description\":\"Standard Rate\"},{\"code\":\"Z0\",\"rate\":0,\"description\":\"Zero Rate\"},{\"code\":\"E0\",\"rate\":0,\"description\":\"Exempt\"}]}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:01:06.400Z",
+      "lastSeen": "2026-05-08T09:01:06.400Z"
+    },
+    {
+      "normalizedPath": "/api/ledger-codes",
+      "method": "GET",
+      "domain": "Unknown",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 177,
+        "max": 177,
+        "avg": 177,
+        "p95": 177
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"ledgerCodes\":[{\"code\":\"4001\",\"description\":\"Stationery\",\"type\":\"Expenditure\"},{\"code\":\"4002\",\"description\":\"IT Equipment\",\"type\":\"Capital\"}]}",
+      "observedQueryParams": [
+        "year"
+      ],
+      "firstSeen": "2026-05-08T09:01:13.200Z",
+      "lastSeen": "2026-05-08T09:01:13.200Z"
+    },
+    {
+      "normalizedPath": "/api/invoices/{id}",
+      "method": "GET",
+      "domain": "AccountsPayable",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 143,
+        "max": 143,
+        "avg": 143,
+        "p95": 143
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"id\":12345,\"status\":\"Draft\",\"invoiceNumber\":\"INV-2026-0088\",\"supplierId\":\"S001\",\"amount\":1250.00,\"vatAmount\":250.00}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:01:19.900Z",
+      "lastSeen": "2026-05-08T09:01:19.900Z"
+    },
+    {
+      "normalizedPath": "/api/purchase-orders",
+      "method": "GET",
+      "domain": "PurchaseLedger",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 331,
+        "max": 331,
+        "avg": 331,
+        "p95": 331
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"purchaseOrders\":[{\"id\":\"PO-2026-001\",\"supplierId\":\"S002\",\"totalValue\":5000.00,\"remainingValue\":3500.00,\"lines\":[{\"lineNo\":1,\"description\":\"Laptops\",\"quantity\":5,\"unitPrice\":1000.00}]}]}",
+      "observedQueryParams": [
+        "status",
+        "supplier"
+      ],
+      "firstSeen": "2026-05-08T09:02:30.000Z",
+      "lastSeen": "2026-05-08T09:02:30.000Z"
+    },
+    {
+      "normalizedPath": "/api/suppliers/S002",
+      "method": "GET",
+      "domain": "SupplierWorkflow",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 209,
+        "max": 209,
+        "avg": 209,
+        "p95": 209
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"id\":\"S002\",\"name\":\"Tech Supplies Co\",\"vatNumber\":\"GB987654321\",\"bankAccount\":{\"sortCode\":\"20-00-00\",\"accountNumber\":\"[REDACTED]\"},\"paymentTerms\":30}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:02:32.500Z",
+      "lastSeen": "2026-05-08T09:02:32.500Z"
+    },
+    {
+      "normalizedPath": "/api/invoices",
+      "method": "GET",
+      "domain": "AccountsPayable",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 263,
+        "max": 263,
+        "avg": 263,
+        "p95": 263
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"invoices\":[{\"id\":12345,\"invoiceNumber\":\"INV-2026-0088\",\"amount\":1250.00,\"status\":\"Submitted\"}],\"total\":1}",
+      "observedQueryParams": [
+        "status",
+        "supplier"
+      ],
+      "firstSeen": "2026-05-08T09:03:45.000Z",
+      "lastSeen": "2026-05-08T09:03:45.000Z"
+    },
+    {
+      "normalizedPath": "/api/invoices/{id}/credit-note",
+      "method": "POST",
+      "domain": "AccountsPayable",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "201": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 614,
+        "max": 614,
+        "avg": 614,
+        "p95": 614
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "{\"creditAmount\":250.00,\"reason\":\"Returned goods\",\"vatCode\":\"S1\",\"vatAmount\":50.00}",
+      "sampleResponseBody": "{\"id\":12399,\"type\":\"CreditNote\",\"linkedInvoiceId\":12345,\"amount\":-250.00,\"status\":\"Draft\"}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:03:48.100Z",
+      "lastSeen": "2026-05-08T09:03:48.100Z"
+    },
+    {
+      "normalizedPath": "/api/payments/bacs/pending",
+      "method": "GET",
+      "domain": "AccountsPayable",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 412,
+        "max": 412,
+        "avg": 412,
+        "p95": 412
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"pendingPayments\":[{\"supplierId\":\"S001\",\"invoiceIds\":[12345],\"totalAmount\":1000.00},{\"supplierId\":\"S002\",\"invoiceIds\":[12346],\"totalAmount\":2000.00}],\"totalValue\":3000.00}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:05:10.000Z",
+      "lastSeen": "2026-05-08T09:05:10.000Z"
+    },
+    {
+      "normalizedPath": "/api/payments/bacs/generate",
+      "method": "POST",
+      "domain": "AccountsPayable",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 3870,
+        "max": 3870,
+        "avg": 3870,
+        "p95": 3870
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "{\"paymentDate\":\"2026-05-09\",\"bankSortCode\":\"20-00-00\",\"includeInvoiceIds\":[12345,12346]}",
+      "sampleResponseBody": "{\"bacsFileId\":\"BACS-2026-0012\",\"status\":\"Generated\",\"totalPayments\":2,\"totalValue\":3000.00,\"fileReference\":\"BACS20260509\"}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:05:13.000Z",
+      "lastSeen": "2026-05-08T09:05:13.000Z"
+    },
+    {
+      "normalizedPath": "/api/payments/bacs/BACS-2026-0012/download",
+      "method": "GET",
+      "domain": "AccountsPayable",
+      "category": "FileTransfer",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 1240,
+        "max": 1240,
+        "avg": 1240,
+        "p95": 1240
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "[Binary file — not captured]",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:05:17.200Z",
+      "lastSeen": "2026-05-08T09:05:17.200Z"
+    },
+    {
+      "normalizedPath": "/api/financial-periods",
+      "method": "GET",
+      "domain": "Unknown",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 223,
+        "max": 223,
+        "avg": 223,
+        "p95": 223
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"periods\":[{\"id\":1,\"name\":\"Period 1\",\"startDate\":\"2026-04-01\",\"endDate\":\"2026-04-30\",\"status\":\"Closed\"},{\"id\":2,\"name\":\"Period 2\",\"startDate\":\"2026-05-01\",\"endDate\":\"2026-05-31\",\"status\":\"Open\"}]}",
+      "observedQueryParams": [
+        "year",
+        "active"
+      ],
+      "firstSeen": "2026-05-08T09:06:00.000Z",
+      "lastSeen": "2026-05-08T09:06:00.000Z"
+    },
+    {
+      "normalizedPath": "/api/reports/trial-balance",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "202": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 318,
+        "max": 318,
+        "avg": 318,
+        "p95": 318
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "{\"financialYear\":2026,\"periodId\":1,\"format\":\"PDF\",\"includeNominalCodes\":true}",
+      "sampleResponseBody": "{\"jobId\":\"RPT-001-TB\",\"status\":\"Queued\",\"estimatedSeconds\":45}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:06:03.000Z",
+      "lastSeen": "2026-05-08T09:06:03.000Z"
+    },
+    {
+      "normalizedPath": "/api/reports/download/RPT-001-TB.pdf",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "FileTransfer",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 4210,
+        "max": 4210,
+        "avg": 4210,
+        "p95": 4210
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "[Binary PDF — not captured]",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:06:09.500Z",
+      "lastSeen": "2026-05-08T09:06:09.500Z"
+    },
+    {
+      "normalizedPath": "/api/upload/config",
+      "method": "GET",
+      "domain": "FileOperations",
+      "category": "FileTransfer",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 87,
+        "max": 87,
+        "avg": 87,
+        "p95": 87
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"maxFileSizeMb\":10,\"allowedTypes\":[\"csv\",\"xlsx\",\"pdf\"],\"uploadEndpoint\":\"/api/upload/document\"}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:07:00.000Z",
+      "lastSeen": "2026-05-08T09:07:00.000Z"
+    },
+    {
+      "normalizedPath": "/api/upload/document/DOC-2026-0881/validate",
+      "method": "GET",
+      "domain": "FileOperations",
+      "category": "FileTransfer",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 1890,
+        "max": 1890,
+        "avg": 1890,
+        "p95": 1890
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"documentId\":\"DOC-2026-0881\",\"validationStatus\":\"Passed\",\"recordsValid\":45,\"recordsFailed\":0,\"warnings\":[]}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:08:01.000Z",
+      "lastSeen": "2026-05-08T09:08:01.000Z"
+    },
+    {
+      "normalizedPath": "/api/reports/crystal/templates",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 156,
+        "max": 156,
+        "avg": 156,
+        "p95": 156
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"templates\":[{\"id\":\"RSS570\",\"name\":\"Supplier Payment Analysis\",\"category\":\"Payments\"},{\"id\":\"NML510\",\"name\":\"Trial Balance\",\"category\":\"Ledger\"}]}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:09:00.000Z",
+      "lastSeen": "2026-05-08T09:09:00.000Z"
+    },
+    {
+      "normalizedPath": "/api/reports/crystal/generate",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "202": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 392,
+        "max": 392,
+        "avg": 392,
+        "p95": 392
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "{\"templateId\":\"RSS570\",\"parameters\":{\"dateFrom\":\"2026-04-01\",\"dateTo\":\"2026-04-30\",\"supplierId\":null,\"format\":\"PDF\"}}",
+      "sampleResponseBody": "{\"jobId\":\"RPT-002-CR\",\"status\":\"Queued\",\"estimatedSeconds\":60}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:09:02.000Z",
+      "lastSeen": "2026-05-08T09:09:02.000Z"
+    },
+    {
+      "normalizedPath": "/api/reports/jobs/RPT-002-CR",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "500": 1
+      },
+      "errorCount": 1,
+      "latency": {
+        "min": 8920,
+        "max": 8920,
+        "avg": 8920,
+        "p95": 8920
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "{\"error\":\"Internal Server Error\",\"message\":\"Crystal Reports rendering engine encountered an unexpected error\",\"jobId\":\"RPT-002-CR\"}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:09:05.000Z",
+      "lastSeen": "2026-05-08T09:09:05.000Z"
+    },
+    {
+      "normalizedPath": "/api/auth/logout",
+      "method": "POST",
+      "domain": "Authentication",
+      "category": "Authentication",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 121,
+        "max": 121,
+        "avg": 121,
+        "p95": 121
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "{}",
+      "sampleResponseBody": "{\"message\":\"Session terminated\"}",
+      "observedQueryParams": [],
+      "firstSeen": "2026-05-08T09:10:00.000Z",
+      "lastSeen": "2026-05-08T09:10:00.000Z"
+    }
+  ],
+  "workflowSequences": [
+    {
+      "name": "User Authentication Workflow",
+      "testTitle": "Login @shard1",
+      "steps": [
+        {
+          "seq": 1,
+          "method": "POST",
+          "normalizedPath": "/api/auth/login",
+          "responseStatus": 200,
+          "durationMs": 342,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 2,
+          "method": "GET",
+          "normalizedPath": "/api/auth/session",
+          "responseStatus": 200,
+          "durationMs": 118,
+          "domain": "Authentication"
+        }
+      ],
+      "totalDurationMs": 460,
+      "allSucceeded": true,
+      "description": "This sequence represents the user login process, validating credentials and establishing a session."
+    },
+    {
+      "name": "Non-PO Invoice Submission Flow",
+      "testTitle": "PRL300Q - Add Non-PO Invoice @shard1",
+      "steps": [
+        {
+          "seq": 3,
+          "method": "GET",
+          "normalizedPath": "/api/suppliers",
+          "responseStatus": 200,
+          "durationMs": 289,
+          "domain": "SupplierWorkflow"
+        },
+        {
+          "seq": 4,
+          "method": "GET",
+          "normalizedPath": "/api/vat-codes",
+          "responseStatus": 200,
+          "durationMs": 195,
+          "domain": "VATHandling"
+        },
+        {
+          "seq": 5,
+          "method": "GET",
+          "normalizedPath": "/api/cost-centres",
+          "responseStatus": 200,
+          "durationMs": 204,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 6,
+          "method": "GET",
+          "normalizedPath": "/api/ledger-codes",
+          "responseStatus": 200,
+          "durationMs": 177,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 7,
+          "method": "POST",
+          "normalizedPath": "/api/invoices",
+          "responseStatus": 201,
+          "durationMs": 487,
+          "domain": "AccountsPayable"
+        },
+        {
+          "seq": 8,
+          "method": "GET",
+          "normalizedPath": "/api/invoices/{id}",
+          "responseStatus": 200,
+          "durationMs": 143,
+          "domain": "AccountsPayable"
+        },
+        {
+          "seq": 9,
+          "method": "POST",
+          "normalizedPath": "/api/invoices/{id}/submit",
+          "responseStatus": 200,
+          "durationMs": 621,
+          "domain": "AccountsPayable"
+        },
+        {
+          "seq": 35,
+          "method": "GET",
+          "normalizedPath": "/api/cost-centres",
+          "responseStatus": 200,
+          "durationMs": 188,
+          "domain": "BudgetManagement"
+        }
+      ],
+      "totalDurationMs": 2304,
+      "allSucceeded": true,
+      "description": "This workflow captures the steps to create and submit a non-PO invoice, including supplier and VAT code retrieval."
+    },
+    {
+      "name": "PO Invoice Submission Flow",
+      "testTitle": "PRL300Q - Add PO Invoice @shard1",
+      "steps": [
+        {
+          "seq": 10,
+          "method": "GET",
+          "normalizedPath": "/api/purchase-orders",
+          "responseStatus": 200,
+          "durationMs": 331,
+          "domain": "PurchaseLedger"
+        },
+        {
+          "seq": 11,
+          "method": "GET",
+          "normalizedPath": "/api/suppliers/S002",
+          "responseStatus": 200,
+          "durationMs": 209,
+          "domain": "SupplierWorkflow"
+        },
+        {
+          "seq": 12,
+          "method": "POST",
+          "normalizedPath": "/api/invoices",
+          "responseStatus": 201,
+          "durationMs": 728,
+          "domain": "AccountsPayable"
+        },
+        {
+          "seq": 13,
+          "method": "POST",
+          "normalizedPath": "/api/invoices/{id}/submit",
+          "responseStatus": 200,
+          "durationMs": 543,
+          "domain": "AccountsPayable"
+        }
+      ],
+      "totalDurationMs": 1811,
+      "allSucceeded": true,
+      "description": "This sequence details the process of adding a purchase order invoice, including supplier selection and invoice submission."
+    },
+    {
+      "name": "Credit Note Submission Flow",
+      "testTitle": "PRL300Q - Add Credit Note @shard1",
+      "steps": [
+        {
+          "seq": 14,
+          "method": "GET",
+          "normalizedPath": "/api/invoices",
+          "responseStatus": 200,
+          "durationMs": 263,
+          "domain": "AccountsPayable"
+        },
+        {
+          "seq": 15,
+          "method": "POST",
+          "normalizedPath": "/api/invoices/{id}/credit-note",
+          "responseStatus": 201,
+          "durationMs": 614,
+          "domain": "AccountsPayable"
+        },
+        {
+          "seq": 16,
+          "method": "POST",
+          "normalizedPath": "/api/invoices/{id}/submit",
+          "responseStatus": 200,
+          "durationMs": 492,
+          "domain": "AccountsPayable"
+        }
+      ],
+      "totalDurationMs": 1369,
+      "allSucceeded": true,
+      "description": "This workflow illustrates the steps to create and submit a credit note against an existing invoice."
+    },
+    {
+      "name": "BACS File Generation Workflow",
+      "testTitle": "BACSRun - Generate BACS File @shard2",
+      "steps": [
+        {
+          "seq": 17,
+          "method": "GET",
+          "normalizedPath": "/api/payments/bacs/pending",
+          "responseStatus": 200,
+          "durationMs": 412,
+          "domain": "AccountsPayable"
+        },
+        {
+          "seq": 18,
+          "method": "POST",
+          "normalizedPath": "/api/payments/bacs/generate",
+          "responseStatus": 200,
+          "durationMs": 3870,
+          "domain": "AccountsPayable"
+        },
+        {
+          "seq": 19,
+          "method": "GET",
+          "normalizedPath": "/api/payments/bacs/BACS-2026-0012/download",
+          "responseStatus": 200,
+          "durationMs": 1240,
+          "domain": "AccountsPayable"
+        }
+      ],
+      "totalDurationMs": 5522,
+      "allSucceeded": true,
+      "description": "This sequence outlines the process of generating a BACS payment file, including fetching pending payments."
+    },
+    {
+      "name": "Trial Balance Report Generation",
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "steps": [
+        {
+          "seq": 20,
+          "method": "GET",
+          "normalizedPath": "/api/financial-periods",
+          "responseStatus": 200,
+          "durationMs": 223,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 21,
+          "method": "POST",
+          "normalizedPath": "/api/reports/trial-balance",
+          "responseStatus": 202,
+          "durationMs": 318,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 22,
+          "method": "GET",
+          "normalizedPath": "/api/reports/jobs/RPT-001-TB",
+          "responseStatus": 200,
+          "durationMs": 140,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 23,
+          "method": "GET",
+          "normalizedPath": "/api/reports/jobs/RPT-001-TB",
+          "responseStatus": 200,
+          "durationMs": 133,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 24,
+          "method": "GET",
+          "normalizedPath": "/api/reports/jobs/RPT-001-TB",
+          "responseStatus": 200,
+          "durationMs": 129,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 25,
+          "method": "GET",
+          "normalizedPath": "/api/reports/download/RPT-001-TB.pdf",
+          "responseStatus": 200,
+          "durationMs": 4210,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 34,
+          "method": "GET",
+          "normalizedPath": "/api/cost-centres",
+          "responseStatus": 200,
+          "durationMs": 199,
+          "domain": "BudgetManagement"
+        }
+      ],
+      "totalDurationMs": 5352,
+      "allSucceeded": true,
+      "description": "This workflow represents the steps to generate a trial balance report, including job retrieval and report download."
+    },
+    {
+      "name": "Document Upload Workflow",
+      "testTitle": "SPC420 - File Upload @shard2",
+      "steps": [
+        {
+          "seq": 26,
+          "method": "GET",
+          "normalizedPath": "/api/upload/config",
+          "responseStatus": 200,
+          "durationMs": 87,
+          "domain": "FileOperations"
+        },
+        {
+          "seq": 27,
+          "method": "POST",
+          "normalizedPath": "/api/upload/document",
+          "responseStatus": 503,
+          "durationMs": 5120,
+          "domain": "FileOperations"
+        },
+        {
+          "seq": 28,
+          "method": "POST",
+          "normalizedPath": "/api/upload/document",
+          "responseStatus": 200,
+          "durationMs": 2100,
+          "domain": "FileOperations"
+        },
+        {
+          "seq": 29,
+          "method": "GET",
+          "normalizedPath": "/api/upload/document/DOC-2026-0881/validate",
+          "responseStatus": 200,
+          "durationMs": 1890,
+          "domain": "FileOperations"
+        }
+      ],
+      "totalDurationMs": 9197,
+      "allSucceeded": false,
+      "description": "This sequence captures the process of uploading a document, including validation and handling errors."
+    },
+    {
+      "name": "Crystal Report Generation Workflow",
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "steps": [
+        {
+          "seq": 30,
+          "method": "GET",
+          "normalizedPath": "/api/reports/crystal/templates",
+          "responseStatus": 200,
+          "durationMs": 156,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 31,
+          "method": "POST",
+          "normalizedPath": "/api/reports/crystal/generate",
+          "responseStatus": 202,
+          "durationMs": 392,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 32,
+          "method": "GET",
+          "normalizedPath": "/api/reports/jobs/RPT-002-CR",
+          "responseStatus": 500,
+          "durationMs": 8920,
+          "domain": "Reporting"
+        }
+      ],
+      "totalDurationMs": 9468,
+      "allSucceeded": false,
+      "description": "This workflow illustrates the steps to generate a crystal report, including job retrieval and handling failures."
+    }
+  ],
+  "byDomain": {
+    "AccountsPayable": [
+      "POST /api/invoices/{id}/submit",
+      "POST /api/invoices",
+      "GET /api/invoices/{id}",
+      "GET /api/invoices",
+      "POST /api/invoices/{id}/credit-note",
+      "GET /api/payments/bacs/pending",
+      "POST /api/payments/bacs/generate",
+      "GET /api/payments/bacs/BACS-2026-0012/download"
+    ],
+    "PurchaseLedger": [
+      "GET /api/purchase-orders"
+    ],
+    "SalesLedger": [],
+    "Requisitioning": [],
+    "VATHandling": [
+      "GET /api/vat-codes"
+    ],
+    "FinancialPeriods": [],
+    "SupplierWorkflow": [
+      "GET /api/suppliers",
+      "GET /api/suppliers/S002"
+    ],
+    "BudgetManagement": [
+      "GET /api/cost-centres"
+    ],
+    "Reporting": [
+      "GET /api/reports/jobs/RPT-001-TB",
+      "POST /api/reports/trial-balance",
+      "GET /api/reports/download/RPT-001-TB.pdf",
+      "GET /api/reports/crystal/templates",
+      "POST /api/reports/crystal/generate",
+      "GET /api/reports/jobs/RPT-002-CR"
+    ],
+    "Authentication": [
+      "POST /api/auth/login",
+      "GET /api/auth/session",
+      "POST /api/auth/logout"
+    ],
+    "FileOperations": [
+      "POST /api/upload/document",
+      "GET /api/upload/config",
+      "GET /api/upload/document/DOC-2026-0881/validate"
+    ],
+    "EmailDistribution": [],
+    "ReferenceData": [],
+    "SystemAdmin": [],
+    "Unknown": [
+      "GET /api/ledger-codes",
+      "GET /api/financial-periods"
+    ]
+  },
+  "failedEndpoints": [
+    {
+      "normalizedPath": "/api/upload/document",
+      "method": "POST",
+      "errorCount": 1,
+      "statusCodes": {
+        "200": 1,
+        "503": 1
+      }
+    },
+    {
+      "normalizedPath": "/api/reports/jobs/RPT-002-CR",
+      "method": "GET",
+      "errorCount": 1,
+      "statusCodes": {
+        "500": 1
+      }
+    }
+  ],
+  "repeatedCallEndpoints": [],
+  "latencyOutliers": [
+    {
+      "normalizedPath": "/api/reports/jobs/RPT-002-CR",
+      "method": "GET",
+      "p95Ms": 8920,
+      "avgMs": 8920
+    },
+    {
+      "normalizedPath": "/api/upload/document",
+      "method": "POST",
+      "p95Ms": 5120,
+      "avgMs": 3610
+    },
+    {
+      "normalizedPath": "/api/reports/download/RPT-001-TB.pdf",
+      "method": "GET",
+      "p95Ms": 4210,
+      "avgMs": 4210
+    },
+    {
+      "normalizedPath": "/api/payments/bacs/generate",
+      "method": "POST",
+      "p95Ms": 3870,
+      "avgMs": 3870
+    }
+  ],
+  "insights": [
+    {
+      "type": "PerformanceBottleneck",
+      "severity": "High",
+      "title": "High Latency on Report Generation",
+      "description": "GET /api/reports/jobs/RPT-002-CR showed a p95 latency of 8920ms, indicating a significant delay in report generation.",
+      "endpoints": [
+        "/api/reports/jobs/RPT-002-CR"
+      ],
+      "recommendation": "Investigate the report generation process to identify potential optimizations."
+    },
+    {
+      "type": "PerformanceBottleneck",
+      "severity": "Medium",
+      "title": "Slow Document Upload Endpoint",
+      "description": "POST /api/upload/document had a p95 latency of 5120ms, which may affect user experience during document uploads.",
+      "endpoints": [
+        "/api/upload/document"
+      ],
+      "recommendation": "Review the upload process for performance improvements."
+    },
+    {
+      "type": "BackendUnavailable",
+      "severity": "High",
+      "title": "Upload Document Failure",
+      "description": "POST /api/upload/document returned a 503 error, indicating backend unavailability during the upload process.",
+      "endpoints": [
+        "/api/upload/document"
+      ],
+      "recommendation": "Monitor the upload service for stability and investigate the cause of the 503 error."
+    },
+    {
+      "type": "ValidationChainFound",
+      "severity": "Medium",
+      "title": "Validation Steps in Invoice Submission",
+      "description": "The sequence for adding a non-PO invoice includes multiple validation steps, which is common in approval workflows.",
+      "endpoints": [
+        "/api/suppliers",
+        "/api/vat-codes",
+        "/api/cost-centres"
+      ],
+      "recommendation": "Ensure that validation steps are efficient to streamline the invoice submission process."
+    }
+  ],
+  "executiveSummary": [
+    "• All tests executed successfully except for two, indicating overall stability.",
+    "• High latency observed in report generation, with p95 reaching 8920ms.",
+    "• Document upload endpoint experienced a 503 error, impacting user uploads.",
+    "• Multiple validation steps were noted in the invoice submission process.",
+    "• Performance bottlenecks could affect user experience during critical financial operations.",
+    "• Further investigation into the upload service and report generation is recommended.",
+    "• Monitoring and optimization efforts may enhance overall system responsiveness.",
+    "• Ensuring efficient validation processes will improve invoice handling efficiency."
+  ],
+  "postmanCollection": null,
+  "openApiPaths": "{\n  \"/api/cost-centres\": {\n    \"get\": {\n      \"summary\": \"GET /api/cost-centres\",\n      \"tags\": [\n        \"BudgetManagement\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"BudgetManagement\",\n      \"x-observed-calls\": 3,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/invoices/{id}/submit\": {\n    \"post\": {\n      \"summary\": \"POST /api/invoices/{id}/submit\",\n      \"tags\": [\n        \"AccountsPayable\"\n      ],\n      \"parameters\": [\n        {\n          \"name\": \"id\",\n          \"in\": \"path\",\n          \"required\": true,\n          \"schema\": {\n            \"type\": \"string\"\n          },\n          \"description\": \"Path parameter inferred from observed URL patterns\"\n        }\n      ],\n      \"requestBody\": {\n        \"required\": true,\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"example\": {}\n            }\n          }\n        }\n      },\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"AccountsPayable\",\n      \"x-observed-calls\": 3,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/reports/jobs/RPT-001-TB\": {\n    \"get\": {\n      \"summary\": \"GET /api/reports/jobs/RPT-001-TB\",\n      \"tags\": [\n        \"Reporting\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Reporting\",\n      \"x-observed-calls\": 3,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/invoices\": {\n    \"post\": {\n      \"summary\": \"POST /api/invoices\",\n      \"tags\": [\n        \"AccountsPayable\"\n      ],\n      \"parameters\": [],\n      \"requestBody\": {\n        \"required\": true,\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"example\": {\n                \"supplierId\": \"S001\",\n                \"invoiceNumber\": \"INV-2026-0088\",\n                \"amount\": 1250,\n                \"vatCode\": \"S1\",\n                \"vatAmount\": 250,\n                \"ledgerCode\": \"4001\",\n                \"costCentre\": \"CC003\",\n                \"description\": \"Stationery Q2 2026\"\n              }\n            }\n          }\n        }\n      },\n      \"responses\": {\n        \"201\": {\n          \"description\": \"Created\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"AccountsPayable\",\n      \"x-observed-calls\": 2,\n      \"x-auto-generated\": true\n    },\n    \"get\": {\n      \"summary\": \"GET /api/invoices\",\n      \"tags\": [\n        \"AccountsPayable\"\n      ],\n      \"parameters\": [\n        {\n          \"name\": \"status\",\n          \"in\": \"query\",\n          \"required\": false,\n          \"schema\": {\n            \"type\": \"string\"\n          }\n        },\n        {\n          \"name\": \"supplier\",\n          \"in\": \"query\",\n          \"required\": false,\n          \"schema\": {\n            \"type\": \"string\"\n          }\n        }\n      ],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"AccountsPayable\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/upload/document\": {\n    \"post\": {\n      \"summary\": \"POST /api/upload/document\",\n      \"tags\": [\n        \"FileOperations\"\n      ],\n      \"parameters\": [],\n      \"requestBody\": {\n        \"required\": true,\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"example\": \"[multipart body — not captured]\"\n            }\n          }\n        }\n      },\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        },\n        \"503\": {\n          \"description\": \"Service Unavailable\"\n        }\n      },\n      \"x-sims-domain\": \"FileOperations\",\n      \"x-observed-calls\": 2,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/auth/login\": {\n    \"post\": {\n      \"summary\": \"POST /api/auth/login\",\n      \"tags\": [\n        \"Authentication\"\n      ],\n      \"parameters\": [],\n      \"requestBody\": {\n        \"required\": true,\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"example\": {\n                \"username\": \"finance.user\"\n              }\n            }\n          }\n        }\n      },\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Authentication\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/auth/session\": {\n    \"get\": {\n      \"summary\": \"GET /api/auth/session\",\n      \"tags\": [\n        \"Authentication\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Authentication\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/suppliers\": {\n    \"get\": {\n      \"summary\": \"GET /api/suppliers\",\n      \"tags\": [\n        \"SupplierWorkflow\"\n      ],\n      \"parameters\": [\n        {\n          \"name\": \"active\",\n          \"in\": \"query\",\n          \"required\": false,\n          \"schema\": {\n            \"type\": \"string\"\n          }\n        }\n      ],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"SupplierWorkflow\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/vat-codes\": {\n    \"get\": {\n      \"summary\": \"GET /api/vat-codes\",\n      \"tags\": [\n        \"VATHandling\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"VATHandling\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/ledger-codes\": {\n    \"get\": {\n      \"summary\": \"GET /api/ledger-codes\",\n      \"tags\": [\n        \"Unknown\"\n      ],\n      \"parameters\": [\n        {\n          \"name\": \"year\",\n          \"in\": \"query\",\n          \"required\": false,\n          \"schema\": {\n            \"type\": \"string\"\n          }\n        }\n      ],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Unknown\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/invoices/{id}\": {\n    \"get\": {\n      \"summary\": \"GET /api/invoices/{id}\",\n      \"tags\": [\n        \"AccountsPayable\"\n      ],\n      \"parameters\": [\n        {\n          \"name\": \"id\",\n          \"in\": \"path\",\n          \"required\": true,\n          \"schema\": {\n            \"type\": \"string\"\n          },\n          \"description\": \"Path parameter inferred from observed URL patterns\"\n        }\n      ],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"AccountsPayable\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/purchase-orders\": {\n    \"get\": {\n      \"summary\": \"GET /api/purchase-orders\",\n      \"tags\": [\n        \"PurchaseLedger\"\n      ],\n      \"parameters\": [\n        {\n          \"name\": \"status\",\n          \"in\": \"query\",\n          \"required\": false,\n          \"schema\": {\n            \"type\": \"string\"\n          }\n        },\n        {\n          \"name\": \"supplier\",\n          \"in\": \"query\",\n          \"required\": false,\n          \"schema\": {\n            \"type\": \"string\"\n          }\n        }\n      ],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"PurchaseLedger\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/suppliers/S002\": {\n    \"get\": {\n      \"summary\": \"GET /api/suppliers/S002\",\n      \"tags\": [\n        \"SupplierWorkflow\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"SupplierWorkflow\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/invoices/{id}/credit-note\": {\n    \"post\": {\n      \"summary\": \"POST /api/invoices/{id}/credit-note\",\n      \"tags\": [\n        \"AccountsPayable\"\n      ],\n      \"parameters\": [\n        {\n          \"name\": \"id\",\n          \"in\": \"path\",\n          \"required\": true,\n          \"schema\": {\n            \"type\": \"string\"\n          },\n          \"description\": \"Path parameter inferred from observed URL patterns\"\n        }\n      ],\n      \"requestBody\": {\n        \"required\": true,\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"example\": {\n                \"creditAmount\": 250,\n                \"reason\": \"Returned goods\",\n                \"vatCode\": \"S1\",\n                \"vatAmount\": 50\n              }\n            }\n          }\n        }\n      },\n      \"responses\": {\n        \"201\": {\n          \"description\": \"Created\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"AccountsPayable\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/payments/bacs/pending\": {\n    \"get\": {\n      \"summary\": \"GET /api/payments/bacs/pending\",\n      \"tags\": [\n        \"AccountsPayable\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"AccountsPayable\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/payments/bacs/generate\": {\n    \"post\": {\n      \"summary\": \"POST /api/payments/bacs/generate\",\n      \"tags\": [\n        \"AccountsPayable\"\n      ],\n      \"parameters\": [],\n      \"requestBody\": {\n        \"required\": true,\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"example\": {\n                \"paymentDate\": \"2026-05-09\",\n                \"bankSortCode\": \"20-00-00\",\n                \"includeInvoiceIds\": [\n                  12345,\n                  12346\n                ]\n              }\n            }\n          }\n        }\n      },\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"AccountsPayable\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/payments/bacs/BACS-2026-0012/download\": {\n    \"get\": {\n      \"summary\": \"GET /api/payments/bacs/BACS-2026-0012/download\",\n      \"tags\": [\n        \"AccountsPayable\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"AccountsPayable\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/financial-periods\": {\n    \"get\": {\n      \"summary\": \"GET /api/financial-periods\",\n      \"tags\": [\n        \"Unknown\"\n      ],\n      \"parameters\": [\n        {\n          \"name\": \"year\",\n          \"in\": \"query\",\n          \"required\": false,\n          \"schema\": {\n            \"type\": \"string\"\n          }\n        },\n        {\n          \"name\": \"active\",\n          \"in\": \"query\",\n          \"required\": false,\n          \"schema\": {\n            \"type\": \"string\"\n          }\n        }\n      ],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Unknown\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/reports/trial-balance\": {\n    \"post\": {\n      \"summary\": \"POST /api/reports/trial-balance\",\n      \"tags\": [\n        \"Reporting\"\n      ],\n      \"parameters\": [],\n      \"requestBody\": {\n        \"required\": true,\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"example\": {\n                \"financialYear\": 2026,\n                \"periodId\": 1,\n                \"format\": \"PDF\",\n                \"includeNominalCodes\": true\n              }\n            }\n          }\n        }\n      },\n      \"responses\": {\n        \"202\": {\n          \"description\": \"HTTP 202\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Reporting\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/reports/download/RPT-001-TB.pdf\": {\n    \"get\": {\n      \"summary\": \"GET /api/reports/download/RPT-001-TB.pdf\",\n      \"tags\": [\n        \"Reporting\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Reporting\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/upload/config\": {\n    \"get\": {\n      \"summary\": \"GET /api/upload/config\",\n      \"tags\": [\n        \"FileOperations\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"FileOperations\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/upload/document/DOC-2026-0881/validate\": {\n    \"get\": {\n      \"summary\": \"GET /api/upload/document/DOC-2026-0881/validate\",\n      \"tags\": [\n        \"FileOperations\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"FileOperations\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/reports/crystal/templates\": {\n    \"get\": {\n      \"summary\": \"GET /api/reports/crystal/templates\",\n      \"tags\": [\n        \"Reporting\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Reporting\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/reports/crystal/generate\": {\n    \"post\": {\n      \"summary\": \"POST /api/reports/crystal/generate\",\n      \"tags\": [\n        \"Reporting\"\n      ],\n      \"parameters\": [],\n      \"requestBody\": {\n        \"required\": true,\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"example\": {\n                \"templateId\": \"RSS570\",\n                \"parameters\": {\n                  \"dateFrom\": \"2026-04-01\",\n                  \"dateTo\": \"2026-04-30\",\n                  \"supplierId\": null,\n                  \"format\": \"PDF\"\n                }\n              }\n            }\n          }\n        }\n      },\n      \"responses\": {\n        \"202\": {\n          \"description\": \"HTTP 202\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Reporting\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/reports/jobs/RPT-002-CR\": {\n    \"get\": {\n      \"summary\": \"GET /api/reports/jobs/RPT-002-CR\",\n      \"tags\": [\n        \"Reporting\"\n      ],\n      \"parameters\": [],\n      \"responses\": {\n        \"500\": {\n          \"description\": \"Internal Server Error\"\n        }\n      },\n      \"x-sims-domain\": \"Reporting\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  },\n  \"/api/auth/logout\": {\n    \"post\": {\n      \"summary\": \"POST /api/auth/logout\",\n      \"tags\": [\n        \"Authentication\"\n      ],\n      \"parameters\": [],\n      \"requestBody\": {\n        \"required\": true,\n        \"content\": {\n          \"application/json\": {\n            \"schema\": {\n              \"type\": \"object\",\n              \"example\": {}\n            }\n          }\n        }\n      },\n      \"responses\": {\n        \"200\": {\n          \"description\": \"OK\",\n          \"content\": {\n            \"application/json\": {\n              \"schema\": {\n                \"type\": \"object\"\n              }\n            }\n          }\n        }\n      },\n      \"x-sims-domain\": \"Authentication\",\n      \"x-observed-calls\": 1,\n      \"x-auto-generated\": true\n    }\n  }\n}"
+}

@@ -22,11 +22,33 @@
  *                                     │   DeepFailurePatternAgent → DeepFailureReport
  *                                     │   RegressionDeltaAgent → RegressionDeltaReport
  *                                     └──────────────────────────────────────
+ *
+ * API Signal enrichment (optional, progressive):
+ *
+ *   [Test execution] → ApiSignalCollector.flush() → testInfo attachment
+ *       ↓ (future: extracted by playwrightAdapter from test-results.json)
+ *   TestResult.apiSignals + TestRun.apiContext
+ *       ↓
+ *   Agent prompts receive API signal context as optional enrichment
  */
 
 // ── Contracts ─────────────────────────────────────────────────────────────────
 export type { TestResult } from "./contracts/TestResult";
 export type { TestRun } from "./contracts/TestRun";
+export type {
+    ApiSignal,
+    ApiSignalType,
+    ApiRunContext
+} from "./contracts/ApiSignal";
+export type {
+    ApiTrace,
+    EndpointProfile,
+    WorkflowSequence,
+    ApiIntelligenceReport,
+    ApiInsight,
+    SIMSDomain,
+    ApiCategory
+} from "./contracts/ApiTrace";
 
 // ── Adapters ──────────────────────────────────────────────────────────────────
 export {
@@ -42,3 +64,11 @@ export { analyseTrends } from "./ai/agents/TrendPatternAgent";
 export { runDeepAnalysis } from "./ai/agents/DeepFailurePatternAgent";
 export { runRegressionDelta } from "./ai/agents/RegressionDeltaAgent";
 export { runDatabaseIntegrityCheck } from "./ai/agents/DatabaseIntegrityAgent";
+export { runApiIntelligence } from "./ai/agents/ApiIntelligenceAgent";
+
+// ── API traffic analysis (pre-AI, deterministic) ──────────────────────────────
+export { ApiTrafficAnalyzer } from "./ai/utils/ApiTrafficAnalyzer";
+export {
+    generatePostmanCollection,
+    generateOpenApiPaths
+} from "./ai/utils/ApiExporters";

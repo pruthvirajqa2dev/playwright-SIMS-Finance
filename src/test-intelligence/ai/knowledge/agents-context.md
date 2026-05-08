@@ -386,3 +386,105 @@ otherwise                             →  result status as-is
 | `GITHUB_TOKEN`            | DeepFailurePatternAgent | No                     |
 | `DEEP_MAX_RUNS`           | DeepFailurePatternAgent | No (default: `15`)     |
 | `GITHUB_STEP_SUMMARY`     | Both agents (CI)        | No                     |
+
+---
+
+## API Signal Intelligence Layer
+
+This layer is an **optional enrichment** to the existing platform. It does not
+replace any existing agent or reporting path. Agents consume API signals as
+contextual enrichment only when signals are present.
+
+### Design Principles
+
+- **Deterministic-first**: all signal classification is done by `ApiSignalCollector`
+  using HTTP facts (status codes, latency thresholds, response body matching).
+  No AI inference is involved in signal generation.
+- **Additive only**: `TestResult.apiSignals` and `TestRun.apiContext` are optional
+  fields. All existing runs (without API signals) continue to work unchanged.
+- **Low-noise**: signals are emitted at targeted, high-value investigation points
+  (auth, persistence verification, environment health) — not for every request.
+- **Not a separate framework**: `ApiSignalCollector` is a test-time utility,
+  not an API test suite. It annotates existing UI tests with backend observations.
+
+### Contracts Added
+
+```ts
+// src/test-intelligence/contracts/ApiSignal.ts
+
+type ApiSignalType =
+    | "apiStable" // endpoint healthy, within latency threshold
+    | "apiLatencySpike" // responded but latency exceeded threshold
+    | "authFailureDetected" // 401/403 or session-invalid response
+    | "persistenceMismatch" // UI success but API GET found no entity
+    | "backendUnavailable" // 5xx, timeout, or connection refused
+    | "inconsistentApiResponse"; // 2xx but payload structure/values unexpected
+
+interface ApiSignal {
+    signal: ApiSignalType;
+    endpoint: string; // relative path, no credentials
+    httpStatus?: number;
+    latencyMs?: number;
+    note?: string; // ≤ 120 chars, no PII
+}
+
+interface ApiRunContext {
+    capturedAt: string;
+    environmentAvailable: boolean;
+    authSignal: "apiStable" | "authFailureDetected" | "backendUnavailable";
+    avgLatencyMs?: number;
+    probeCount: number;
+}
+```
+
+**`TestResult.apiSignals?: ApiSignal[]`** — per-test signals collected during execution.  
+**`TestRun.apiContext?: ApiRunContext`** — run-level environment health summary.
+
+### ApiSignalCollector (`src/utils/ApiSignalCollector.ts`)
+
+Test-time utility. Accepts a Playwright `APIRequestContext` and `TestInfo`.
+
+| Method                                 | Emits                                                            |
+| -------------------------------------- | ---------------------------------------------------------------- |
+| `probeAuth(endpoint)`                  | `apiStable` \| `authFailureDetected` \| `backendUnavailable`     |
+| `probePersistence(ep, field, v)`       | `apiStable` \| `persistenceMismatch` \| `backendUnavailable`     |
+| `probeEndpoint(endpoint)`              | `apiStable` \| `apiLatencySpike` \| `backendUnavailable`         |
+| `probeResponseConsistency(ep, fields)` | `apiStable` \| `inconsistentApiResponse` \| `backendUnavailable` |
+| `flush()`                              | Attaches collected signals to testInfo as JSON                   |
+
+Configurable thresholds: `latencySpikeThresholdMs` (default 3 000 ms), `timeoutMs` (default 10 000 ms).
+
+### Safe Initial Probe Targets for SIMS Finance
+
+| Scenario                     | Method             | Value                                              |
+| ---------------------------- | ------------------ | -------------------------------------------------- |
+| Auth gate health             | `probeAuth`        | Explains auth failures without UI parsing          |
+| Purchase order creation      | `probePersistence` | Confirms PO persisted vs UI showing false success  |
+| Invoice submission           | `probePersistence` | Confirms invoice record exists post-submit         |
+| Environment availability     | `probeEndpoint`    | Separates environment instability from test faults |
+| Report endpoint availability | `probeEndpoint`    | Distinguishes Crystal/XQuery latency from UI waits |
+
+### Operational Value Map
+
+| Investigation Ambiguity              | API Signal Resolves It By                                         |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| "Is this a test bug or backend?"     | `backendUnavailable` on same timestamp → backend-correlated       |
+| "Why is flakiness retry-masked?"     | `apiLatencySpike` during flaky run → backend latency caused retry |
+| "Did the transaction actually save?" | `persistenceMismatch` after UI success → silent write failure     |
+| "Is the environment broken today?"   | `environmentAvailable: false` → entire run context explained      |
+| "Why do auth tests fail randomly?"   | `authFailureDetected` → auth layer instability, not test code     |
+
+### Agent Integration Roadmap (Phase 2)
+
+When API signals flow through the adapter pipeline, agents can reference them:
+
+- **DeepFailurePatternAgent**: `failureHypothesis` can cite `backendUnavailable`
+  or `apiLatencySpike` as a backend-correlated explanation rather than "unknown cause".
+- **TrendPatternAgent**: `byEnvironment` health can incorporate `authSignal`
+  from `TestRun.apiContext` to correlate flaky periods with auth instability.
+- **RegressionDeltaAgent**: `TestDelta` can note whether API signal changed
+  between before/after windows (e.g. auth was stable before, degraded after).
+
+**Phase 2 requires**: updating `GitHubReportsClient.TestResult` to include
+`attachments`, extracting `api-signals` attachment content in `extractTestOutcomes()`,
+and passing `apiSignals` through `PerTestOutcome` → `TestResult`.

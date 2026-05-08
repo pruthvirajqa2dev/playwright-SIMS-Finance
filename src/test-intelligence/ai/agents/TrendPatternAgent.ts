@@ -69,23 +69,27 @@ export interface TrendReport {
             failures: number;
             flaky: number;
             avgSuccess: number;
-            /** All weekday runs for this env (timestamp + successRate) */
+            /** All runs for this env (weekdays + weekends). Weekend entries are flagged isWeekend=true
+             *  and are excluded from the health-metric counts (total/failures/flaky/avgSuccess). */
             runs: Array<{
                 timestamp: string;
                 successRate: number;
                 flaky: boolean;
+                isWeekend: boolean;
             }>;
-            /** Subset of runs where successRate < 100 */
+            /** Subset of weekday runs where successRate < 100 */
             failureRuns: Array<{
                 timestamp: string;
                 successRate: number;
                 flaky: boolean;
+                isWeekend: boolean;
             }>;
-            /** Subset of runs with at least one flaky test */
+            /** Subset of weekday runs with at least one flaky test */
             flakyRuns: Array<{
                 timestamp: string;
                 successRate: number;
                 flaky: boolean;
+                isWeekend: boolean;
             }>;
         }
     >;
@@ -255,7 +259,7 @@ function computeStatistics(enriched: EnrichedRun[]) {
         previous.reduce((s, r) => s + r.successRate, 0) /
         (previous.length || 1);
 
-    // Per-environment breakdown (weekday runs only)
+    // Per-environment breakdown (all runs; weekend entries flagged isWeekend; stats are weekday-only)
     const byEnvironment: Record<
         string,
         {
@@ -267,20 +271,25 @@ function computeStatistics(enriched: EnrichedRun[]) {
                 timestamp: string;
                 successRate: number;
                 flaky: boolean;
+                isWeekend: boolean;
             }>;
             failureRuns: Array<{
                 timestamp: string;
                 successRate: number;
                 flaky: boolean;
+                isWeekend: boolean;
             }>;
             flakyRuns: Array<{
                 timestamp: string;
                 successRate: number;
                 flaky: boolean;
+                isWeekend: boolean;
             }>;
         }
     > = {};
-    for (const r of weekdayRuns) {
+    // Iterate ALL enriched runs so weekend runs appear in byEnvironment.runs (flagged isWeekend).
+    // Health-metric counts (total/failures/flaky/avgSuccess) are incremented for weekday runs only.
+    for (const r of enriched) {
         // Normalise missing/blank env — CI defaults "Unknown" when TEST_ENV not set in .env
         const env =
             r.environment && r.environment.trim()
@@ -299,19 +308,23 @@ function computeStatistics(enriched: EnrichedRun[]) {
         const entry = {
             timestamp: r.timestamp,
             successRate: r.successRate,
-            flaky: r.hasFlakiness
+            flaky: r.hasFlakiness,
+            isWeekend: r.isWeekend
         };
-        byEnvironment[env].total++;
         byEnvironment[env].runs.push(entry);
-        if (r.hasFailures) {
-            byEnvironment[env].failures++;
-            byEnvironment[env].failureRuns.push(entry);
+        if (!r.isWeekend) {
+            // Only weekday runs count toward health metrics
+            byEnvironment[env].total++;
+            if (r.hasFailures) {
+                byEnvironment[env].failures++;
+                byEnvironment[env].failureRuns.push(entry);
+            }
+            if (r.hasFlakiness) {
+                byEnvironment[env].flaky++;
+                byEnvironment[env].flakyRuns.push(entry);
+            }
+            byEnvironment[env].avgSuccess += r.successRate;
         }
-        if (r.hasFlakiness) {
-            byEnvironment[env].flaky++;
-            byEnvironment[env].flakyRuns.push(entry);
-        }
-        byEnvironment[env].avgSuccess += r.successRate;
     }
     for (const e of Object.values(byEnvironment)) {
         e.avgSuccess = e.total > 0 ? Math.round(e.avgSuccess / e.total) : 0;
