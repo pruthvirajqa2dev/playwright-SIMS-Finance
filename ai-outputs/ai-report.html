@@ -2761,6 +2761,62 @@
       return risks.slice(0, 5);
     }
 
+    // ── Report Generation SLA Alert ─────────────────────────────────────────
+    // Surfaces a dedicated banner whenever a test that owns the background-
+    // processing green-icon wait (RSS570, NML510) has timeoutSuspected:true
+    // AND has at least one failure.  This links the infrastructure signal
+    // from the extended 240 s wait (with 180 s warning) back to the dashboard.
+    function ReportSlaAlert() {
+      var SLA_TESTS = ['rss570', 'nml510'];
+      var slaFailures = (deep.perTestAnalyses || []).filter(function(a) {
+        var key = (a.testTitle || '').toLowerCase();
+        return a.timeoutSuspected && (a.failureRate > 0) &&
+               SLA_TESTS.some(function(k) { return key.includes(k); });
+      });
+      if (!slaFailures.length) return null;
+      return (
+        <div style={{
+          margin: '0 0 1rem 0',
+          padding: '0.8rem 1.1rem',
+          background: '#fffbeb',
+          border: '1px solid #fcd34d',
+          borderLeft: '4px solid #f59e0b',
+          borderRadius: '8px',
+          display: 'flex', alignItems: 'flex-start', gap: '0.75rem',
+        }}>
+          <span style={{ fontSize: '1rem', flexShrink: 0, lineHeight: 1.4 }}>⏱</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase',
+              letterSpacing: '0.08em', color: '#b45309', marginBottom: '0.3rem' }}>
+              Report Generation SLA — Slow Background Processing Detected
+            </div>
+            <div style={{ fontSize: '0.78rem', color: '#78350f', lineHeight: 1.55, marginBottom: '0.4rem' }}>
+              The following test(s) timed out waiting for the background-processing green icon
+              (240 s limit, 180 s soft warning). This indicates the server-side report
+              generation job is taking longer than the defined SLA.  Check UAT server load,
+              SQL query performance, and report engine resource allocation.
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+              {slaFailures.map(function(a) {
+                var name = (a.testTitle || '').replace(/ @shard\d+$/i, '');
+                return (
+                  <span key={a.testTitle} style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
+                    padding: '0.15rem 0.55rem', borderRadius: '999px',
+                    fontSize: '0.68rem', fontWeight: 700,
+                    background: '#fef3c7', color: '#92400e', border: '1px solid #fcd34d',
+                  }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#f59e0b', flexShrink: 0, display: 'inline-block' }} />
+                    {name} &mdash; {a.failureRate}% failure rate
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     // ── Top Risks Section Component ──────────────────────────────────────────
 
     function TopRisksSection() {
@@ -2826,6 +2882,9 @@
               {risks.length} risk{risks.length !== 1 ? 's' : ''} detected
             </span>
           </div>
+
+          {/* Report SLA alert — shown above risk cards when applicable */}
+          <ReportSlaAlert />
 
           {/* Risk cards grid */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(275px, 1fr))', gap:'0.75rem' }}>

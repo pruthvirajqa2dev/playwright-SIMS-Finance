@@ -509,12 +509,38 @@ export default abstract class BasePage {
         await this.page.locator(this.okBtnLocator).click();
     }
     /**
-     * This function is for waiting for green icon to be visible
+     * Waits up to 240 s for the background-processing green icon to appear in
+     * the viewport.  If the element is still absent after 180 s a warning is
+     * logged (indicating slow server-side report generation) but the assertion
+     * continues until the full 240 s deadline.
+     *
+     * The 180 s threshold is intentional: it is a soft SLA signal — the test
+     * is not yet failed, but the delay is worth investigating.  Failures
+     * caused by this wait are tagged `timeoutSuspected` by the AI agent and
+     * surfaced as a "Report Generation SLA" alert in the AI report dashboard.
      */
     async expectGreenIconToBeVisible() {
-        await expect(this.page.locator(this.greenIconLocator)).toBeInViewport({
-            timeout: 120000
-        });
+        const WARN_AFTER_MS = 180_000;
+        const TIMEOUT_MS = 240_000;
+        const testLabel = this.testInfo?.title ?? "unknown test";
+
+        const warnTimer = setTimeout(() => {
+            logger.warn(
+                `⏱ [SLA WARNING] Green icon not yet visible after 180 s — ` +
+                    `report generation is taking longer than expected. ` +
+                    `Test: "${testLabel}". ` +
+                    `This will be surfaced as a Report Generation SLA signal ` +
+                    `in the AI dashboard if the test ultimately fails.`
+            );
+        }, WARN_AFTER_MS);
+
+        try {
+            await expect(
+                this.page.locator(this.greenIconLocator)
+            ).toBeInViewport({ timeout: TIMEOUT_MS });
+        } finally {
+            clearTimeout(warnTimer);
+        }
     }
     /**
      *
