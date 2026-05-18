@@ -1,101 +1,76 @@
 {
-  "generatedAt": "2026-05-08T11:31:29.701Z",
-  "pivotDate": "2026-05-01",
+  "generatedAt": "2026-05-18T06:02:41.266Z",
+  "pivotDate": "2026-05-11",
   "beforeWindow": {
-    "from": "2026-04-20",
-    "to": "2026-04-30",
-    "runsAnalysed": 9
+    "from": "2026-04-27",
+    "to": "2026-05-08",
+    "runsAnalysed": 8
   },
   "afterWindow": {
-    "from": "2026-05-01",
-    "to": "2026-05-08",
-    "runsAnalysed": 5
+    "from": "2026-05-11",
+    "to": "2026-05-15",
+    "runsAnalysed": 4
   },
   "beforeEnvs": [
     "TRAINING",
     "UAT"
   ],
   "afterEnvs": [
-    "TRAINING"
+    "UAT"
   ],
   "overallVerdict": "Regressed",
   "regressions": [
     {
-      "testTitle": "File upload using SPC420 @shard2",
-      "beforeFailureRate": 0,
-      "afterFailureRate": 0,
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 13,
+      "afterFailureRate": 100,
       "beforeFlakyRate": 0,
-      "afterFlakyRate": 20,
-      "failureDelta": 0,
-      "flakyDelta": 20,
+      "afterFlakyRate": 0,
+      "failureDelta": 87,
+      "flakyDelta": 0,
       "verdict": "Regressed",
-      "riskLevel": "Low",
+      "riskLevel": "Critical",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ]
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 75,
+      "beforeFlakyRate": 25,
+      "afterFlakyRate": 0,
+      "failureDelta": 75,
+      "flakyDelta": -25,
+      "verdict": "Regressed",
+      "riskLevel": "Critical",
       "errorSamplesBefore": [],
-      "errorSamplesAfter": []
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ]
     }
   ],
   "improvements": [],
   "newFailures": [],
-  "resolvedFailures": [
-    {
-      "testTitle": "RSS570 - Crystal Report @shard1",
-      "beforeFailureRate": 11,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 33,
-      "afterFlakyRate": 40,
-      "failureDelta": -11,
-      "flakyDelta": 7,
-      "verdict": "Resolved",
-      "riskLevel": "Low",
-      "errorSamplesBefore": [
-        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
-      ],
-      "errorSamplesAfter": []
-    },
-    {
-      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
-      "beforeFailureRate": 11,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 33,
-      "afterFlakyRate": 20,
-      "failureDelta": -11,
-      "flakyDelta": -13,
-      "verdict": "Resolved",
-      "riskLevel": "Low",
-      "errorSamplesBefore": [
-        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
-      ],
-      "errorSamplesAfter": []
-    },
-    {
-      "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 44,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 0,
-      "afterFlakyRate": 0,
-      "failureDelta": -44,
-      "flakyDelta": 0,
-      "verdict": "Resolved",
-      "riskLevel": "Low",
-      "errorSamplesBefore": [
-        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
-      ],
-      "errorSamplesAfter": []
-    }
-  ],
+  "resolvedFailures": [],
   "actionItems": [
-    "Investigate the flaky behaviour of 'File upload using SPC420 @shard2' which changed from 0% to 20%.",
-    "Analyze the impact of the recent code changes on financial transaction tests.",
-    "Review the environment-specific factors in the TRAINING environment that may contribute to instability.",
-    "Conduct a deeper analysis of the timing issues observed in the regression tests.",
-    "Monitor the performance of the 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report' for any resurgence of issues."
+    "Investigate the cause of the 100% failure rate in 'NML510 - Trial Balance Report'.",
+    "Analyze the 75% failure rate in 'RSS570 - Crystal Report' for potential shared dependencies.",
+    "Review the environment differences between the before and after windows for potential confounds.",
+    "Examine the timing issues indicated by the pre-pivot timeout errors.",
+    "Monitor for any further regressions in the upcoming runs."
   ],
   "executiveSummary": [
-    "One regression was observed in 'File upload using SPC420 @shard2' with a new flaky rate of 20%.",
-    "Three tests improved, including 'NML510 - Trial Balance Report' which dropped from 44% to 0% failure rate.",
-    "The pivot date of May 1, 2026, may suggest changes affecting test stability in the TRAINING environment.",
-    "The increase in flakiness for 'File upload using SPC420' could indicate a timing issue introduced by recent changes.",
-    "May affect the reliability of file uploads critical for financial operations."
+    "100% failure rate observed for 'NML510 - Trial Balance Report' after the pivot date.",
+    "75% failure rate recorded for 'RSS570 - Crystal Report', indicating a significant regression.",
+    "Both tests showed critical risk, with 'NML510' failing entirely post-pivot.",
+    "The observed pattern may indicate instability introduced by recent code changes.",
+    "These issues could affect the accuracy of financial reporting for users.",
+    "Further investigation into the shared environment may clarify the regression causes.",
+    "Reviewing error logs around the pivot date may provide additional insights.",
+    "No improvements were noted, highlighting a need for immediate attention."
   ]
 }

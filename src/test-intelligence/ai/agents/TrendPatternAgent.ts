@@ -93,6 +93,18 @@ export interface TrendReport {
             }>;
         }
     >;
+    /** Weekend run attempts — recorded even when excluded from health metrics.
+     *  Captures monitoring activity (e.g. auth-gate failures confirming env-down)
+     *  so consumers can show "Last monitored: Sat 17 May — env offline at auth gate"
+     *  rather than giving the impression nothing happened over the weekend. */
+    weekendRuns: Array<{
+        timestamp: string;
+        date: string;
+        dayOfWeek: string;
+        environment: string;
+        outcome: "auth-gate" | "zero-execution" | "ran-with-results";
+        successRate: number;
+    }>;
     patterns: TrendPattern[];
     riskPeriods: Array<{ period: string; description: string }>;
     actionItems: string[];
@@ -168,7 +180,8 @@ function enrichRuns(runs: TestRun[]): EnrichedRun[] {
 
 function computeStatistics(enriched: EnrichedRun[]) {
     // Auto-detect weekend runs from UTC timestamp — excluded from health metrics
-    const weekendExcluded = enriched.filter((r) => r.isWeekend).length;
+    const weekendRuns = enriched.filter((r) => r.isWeekend);
+    const weekendExcluded = weekendRuns.length;
     const weekdayRuns = enriched.filter((r) => !r.isWeekend);
     const total = weekdayRuns.length;
     if (total === 0) return null;
@@ -330,9 +343,32 @@ function computeStatistics(enriched: EnrichedRun[]) {
         e.avgSuccess = e.total > 0 ? Math.round(e.avgSuccess / e.total) : 0;
     }
 
+    // Build weekend monitoring activity records for dashboard/report surfacing
+    const weekendRunDetails = weekendRuns.map((r) => ({
+        timestamp: r.timestamp,
+        date: r.date,
+        dayOfWeek: r.dayOfWeek,
+        environment:
+            (r.environment ?? "UNKNOWN").trim().toUpperCase() || "UNKNOWN",
+        // Classify the run outcome so consumers can show appropriate context:
+        // - auth-gate: workflow fired but env rejected auth (env down, expected on weekends)
+        // - zero-execution: no tests ran at all (env offline / pre-test abort)
+        // - ran-with-results: tests actually executed (unexpected for a weekend run)
+        outcome: (r.summary.total === 0
+            ? "zero-execution"
+            : r.successRate === 0
+              ? "auth-gate"
+              : "ran-with-results") as
+            | "auth-gate"
+            | "zero-execution"
+            | "ran-with-results",
+        successRate: r.successRate
+    }));
+
     return {
         total,
         weekendExcluded,
+        weekendRunDetails,
         fullyPassed,
         withFailures,
         completeOutages,
@@ -370,6 +406,29 @@ function buildUserPrompt(
     stats: ReturnType<typeof computeStatistics>
 ): string {
     const dateRange = `${enriched[enriched.length - 1]?.date ?? "?"} → ${enriched[0]?.date ?? "?"}`;
+
+    // Build weekend monitoring activity section for the prompt
+    const weekendSection =
+        stats!.weekendRunDetails && stats!.weekendRunDetails.length > 0
+            ? `── WEEKEND MONITORING ACTIVITY (${stats!.weekendRunDetails.length} run(s)) ──────────────────
+${stats!.weekendRunDetails
+    .map(
+        (r) =>
+            `  ${r.timestamp.padEnd(26)}| ${r.dayOfWeek.padEnd(10)}| env: ${r.environment.padEnd(10)}| outcome: ${
+                r.outcome === "auth-gate"
+                    ? "auth-gate (env offline, workflow ran, auth rejected — EXPECTED)"
+                    : r.outcome === "zero-execution"
+                      ? "zero-execution (env offline before any tests ran — EXPECTED)"
+                      : `ran-with-results (${r.successRate}% pass — unexpected weekend execution)`
+            }`
+    )
+    .join("\n")}
+
+IMPORTANT: Weekend monitoring activity is EXPECTED BEHAVIOUR. Auth-gate failures and
+zero-execution runs on weekends confirm the monitoring workflow is healthy and that the
+environment was offline as per the planned schedule. Do NOT treat these as failures or
+include them in failure counts. Reference them only to confirm monitoring coverage.`
+            : "── WEEKEND MONITORING ACTIVITY ─────────────────────────────────────\n  No weekend runs recorded in this data window.";
 
     return `
 Analyse ${stats!.total} historical Playwright test runs (${dateRange}).
@@ -444,6 +503,8 @@ ${
               )
               .join("\n")
 }
+
+${weekendSection}
 
 ── PER-RUN DETAIL (most recent 20 runs, newest first; [WKND] rows excluded from metrics) ───
 timestamp                 | env  | executed | passed | failed | flaky | successRate | execTimeSec | execLabel
@@ -528,6 +589,7 @@ export async function analyseTrends(
         avgTestPassRate: stats.avgTestPassRate,
         flakyRate: stats.flakyRateOverall,
         byEnvironment: stats.byEnvironment,
+        weekendRuns: stats.weekendRunDetails ?? [],
         patterns: parsed.patterns ?? [],
         riskPeriods: parsed.riskPeriods ?? [],
         actionItems: parsed.actionItems ?? [],

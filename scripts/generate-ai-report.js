@@ -1311,14 +1311,57 @@ const html = `<!DOCTYPE html>
       return { total, failing, flaky, unstable, pct };
     }
 
-    // ── Suite reliability stats ───────────────────────────────────────────────
-    // Counts profiles with zero failures and zero flakiness for the KPI tile.
-    // Returns { total, clean, pct }.
-    function deriveSuiteReliabilityStats(profiles) {
-      var total = profiles.length;
-      var clean = profiles.filter(function(p) { return (p.failureRate ?? 0) === 0 && (p.flakyRate ?? 0) === 0; }).length;
-      var pct   = total > 0 ? Math.round(clean / total * 100) : 0;
-      return { total, clean, pct };
+    // ── Last Execution Age by environment ─────────────────────────────────────
+    // Reads the newest run timestamp from trend.byEnvironment[env].runs[0]
+    // (array is newest-first). Returns [{ env, daysAgo, lastDate }] sorted
+    // alphabetically. daysAgo = 0 means it ran today.
+    function deriveLastExecAgeByEnv(byEnvironment) {
+      var msPerDay = 1000 * 60 * 60 * 24;
+      return Object.keys(byEnvironment || {}).sort().map(function(env) {
+        var runs = (byEnvironment[env].runs || []);
+        var latest = runs.length ? runs[0].timestamp : null;
+        if (!latest) return { env: env, daysAgo: null, lastDate: null };
+        var iso = latest.replace('_', 'T').replace(/-([0-9]{2})-([0-9]{2})$/, ':$1:$2') + 'Z';
+        var d = new Date(iso);
+        var daysAgo = isNaN(d.getTime()) ? null : Math.floor((Date.now() - d.getTime()) / msPerDay);
+        return { env: env, daysAgo: daysAgo, lastDate: latest.split('_')[0] };
+      });
+    }
+
+    // ── Last Failure Age by environment ──────────────────────────────────────
+    // Scans trend.byEnvironment[env].runs (newest-first) for the most recent
+    // run where successRate < 100, and cross-references perTestProfiles to
+    // find the top failing/flaky test per environment.
+    // Returns [{ env, daysAgo, lastDate, topTest, topTestKind }] sorted alphabetically.
+    function deriveLastFailureAgeByEnv(byEnvironment, profiles) {
+      var msPerDay = 1000 * 60 * 60 * 24;
+      return Object.keys(byEnvironment || {}).sort().map(function(env) {
+        var runs = (byEnvironment[env].runs || []);
+        var found = null;
+        for (var i = 0; i < runs.length; i++) {
+          if ((runs[i].successRate ?? 100) < 100) { found = runs[i].timestamp; break; }
+        }
+        var topTest = null; var topTestKind = null; var topCount = 0;
+        (profiles || []).forEach(function(p) {
+          var c = (p.failuresByEnv || {})[env] || 0;
+          if (c > topCount) { topCount = c; topTest = p.testTitle; topTestKind = 'failing'; }
+        });
+        if (!topTest) {
+          var topFlaky = 0;
+          (profiles || []).forEach(function(p) {
+            var ran = (p.runsByEnv || {})[env] || 0;
+            if (ran > 0 && (p.flakyCount || 0) > topFlaky) {
+              topFlaky = p.flakyCount; topTest = p.testTitle; topTestKind = 'flaky';
+            }
+          });
+        }
+        var topTestDisplay = topTest ? topTest.replace(/\\s*@shard\\d+$/i, '') : null;
+        if (!found) return { env: env, daysAgo: null, lastDate: null, topTest: topTestDisplay, topTestKind: topTestKind };
+        var iso = found.replace('_', 'T').replace(/-([0-9]{2})-([0-9]{2})$/, ':$1:$2') + 'Z';
+        var d = new Date(iso);
+        var daysAgo = isNaN(d.getTime()) ? null : Math.floor((Date.now() - d.getTime()) / msPerDay);
+        return { env: env, daysAgo: daysAgo, lastDate: found.split('_')[0], topTest: topTestDisplay, topTestKind: topTestKind };
+      });
     }
 
     // Lifecycle badge pill — wired into the global tooltip engine.
@@ -2761,6 +2804,56 @@ const html = `<!DOCTYPE html>
       return risks.slice(0, 5);
     }
 
+    // ── Report Generation SLA Alert ─────────────────────────────────────────
+    // Amber banner shown in Top Risks when a report-generation test
+    // (RSS570, NML510) has timeoutSuspected:true AND has failures.
+    function ReportSlaAlert() {
+      var SLA_TESTS = ['rss570', 'nml510'];
+      var slaFailures = (deep.perTestAnalyses || []).filter(function(a) {
+        var key = (a.testTitle || '').toLowerCase();
+        return a.timeoutSuspected && (a.failureRate > 0) &&
+               SLA_TESTS.some(function(k) { return key.includes(k); });
+      });
+      if (!slaFailures.length) return null;
+      return (
+        <div style={{
+          margin: '0 0 1rem 0', padding: '0.8rem 1.1rem',
+          background: '#fffbeb', border: '1px solid #fcd34d',
+          borderLeft: '4px solid #f59e0b', borderRadius: '8px',
+          display: 'flex', alignItems: 'flex-start', gap: '0.75rem',
+        }}>
+          <span style={{fontSize:'1rem',flexShrink:0,lineHeight:1.4}}>⏱</span>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:'0.7rem',fontWeight:800,textTransform:'uppercase',
+              letterSpacing:'0.08em',color:'#b45309',marginBottom:'0.3rem'}}>
+              Report Generation SLA — Slow Background Processing Detected
+            </div>
+            <div style={{fontSize:'0.78rem',color:'#78350f',lineHeight:1.55,marginBottom:'0.4rem'}}>
+              The following test(s) timed out waiting for the background-processing green icon
+              (240 s limit, 180 s soft warning). Check UAT server load, SQL query performance,
+              and report engine resource allocation.
+            </div>
+            <div style={{display:'flex',flexWrap:'wrap',gap:'0.35rem'}}>
+              {slaFailures.map(function(a) {
+                var name = (a.testTitle || '').replace(/ @shard\\d+$/i, '');
+                return (
+                  <span key={a.testTitle} style={{
+                    display:'inline-flex',alignItems:'center',gap:'0.3rem',
+                    padding:'0.15rem 0.55rem',borderRadius:'999px',
+                    fontSize:'0.68rem',fontWeight:700,
+                    background:'#fef3c7',color:'#92400e',border:'1px solid #fcd34d',
+                  }}>
+                    <span style={{width:6,height:6,borderRadius:'50%',background:'#f59e0b',flexShrink:0,display:'inline-block'}} />
+                    {name} — {a.failureRate}% failure rate
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     // ── Top Risks Section Component ──────────────────────────────────────────
 
     function TopRisksSection() {
@@ -2826,6 +2919,9 @@ const html = `<!DOCTYPE html>
               {risks.length} risk{risks.length !== 1 ? 's' : ''} detected
             </span>
           </div>
+
+          {/* Report Generation SLA alert banner */}
+          <ReportSlaAlert />
 
           {/* Risk cards grid */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(275px, 1fr))', gap:'0.75rem' }}>
@@ -3481,25 +3577,45 @@ const html = `<!DOCTYPE html>
                   )}
                 </div>
 
-                {/* ── 3. Clean Runs — promoted from sub-metric ── */}
-                <div className="kpi-tile">
-                  <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.5rem'}}>
-                    <div className="kpi-label" style={{margin:0}}>Clean Runs</div>
-                    <i className="info-trigger"
-                       data-tooltip="Strict metric: % of business-day runs where 100% of tests passed with zero flakiness. Even a single flaky retry disqualifies a run. The gap between this and Avg Test Pass Rate reveals how often minor issues creep in.">i</i>
-                  </div>
-                  <div className="kpi-value" style={{color:healthColor(trend.successRate??0)}}>{trend.successRate??0}%</div>
-                  <RateBar value={trend.successRate??0} colorClass={(trend.successRate??0)>=75?'bg-emerald-500':(trend.successRate??0)>=40?'bg-amber-400':'bg-rose-500'} />
-                  <div className="kpi-sub" style={{marginTop:'0.5rem',borderTop:'1px solid #f1f5f9',paddingTop:'0.4rem',fontSize:'0.72rem'}}>
-                    <span style={{color:'#94a3b8'}}>Avg pass rate: </span>
-                    <span style={{fontWeight:700,color:healthColor(trend.avgTestPassRate??0)}}>{trend.avgTestPassRate??0}%</span>
-                    <span style={{color:'#cbd5e1',margin:'0 0.25rem'}}>·</span>
-                    <span style={{color:'#94a3b8'}}>gap: </span>
-                    <span style={{fontWeight:700,color:(trend.avgTestPassRate??0)-(trend.successRate??0)>30?'#dc2626':'#64748b'}}>
-                      {(trend.avgTestPassRate??0)-(trend.successRate??0)}pp
-                    </span>
-                  </div>
-                </div>
+                {/* ── 3. Last Execution Age (per environment) ── */}
+                {(() => {
+                  const execRows = deriveLastExecAgeByEnv(trend.byEnvironment);
+                  if (!execRows.length) return (
+                    <div className="kpi-tile">
+                      <div className="kpi-label">Last Execution Age</div>
+                      <div className="kpi-value" style={{color:'#94a3b8'}}>—</div>
+                      <div className="kpi-sub">no environment data</div>
+                    </div>
+                  );
+                  const worst   = execRows.reduce((a, b) => (b.daysAgo ?? 0) > (a.daysAgo ?? 0) ? b : a);
+                  const hdDays  = worst.daysAgo;
+                  const hdColor = hdDays === null ? '#94a3b8' : hdDays <= 1 ? '#059669' : hdDays <= 3 ? '#d97706' : '#dc2626';
+                  const hdLabel = hdDays === null ? '—' : hdDays === 0 ? 'Today' : hdDays === 1 ? '1 day ago' : (hdDays + ' days ago');
+                  return (
+                    <div className="kpi-tile">
+                      <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.5rem'}}>
+                        <div className="kpi-label" style={{margin:0}}>Last Execution Age</div>
+                        <i className="info-trigger"
+                           data-tooltip="Per-environment: how long ago the most recent CI run completed. Green 0–1d = running regularly. Amber 2–3d = slightly stale. Red 4+d = environment may be blocked or skipped. Headline shows the stalest environment.">i</i>
+                      </div>
+                      <div className="kpi-value" style={{color:hdColor,marginBottom:'0.6rem'}}>{hdLabel}</div>
+                      <div style={{display:'flex',flexDirection:'column',gap:'0.35rem',borderTop:'1px solid #f1f5f9',paddingTop:'0.5rem'}}>
+                        {execRows.map(({env, daysAgo, lastDate}) => {
+                          const dotColor = daysAgo === null ? '#94a3b8' : daysAgo <= 1 ? '#059669' : daysAgo <= 3 ? '#d97706' : '#dc2626';
+                          const ageLabel = daysAgo === null ? '—' : daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1d ago' : (daysAgo + 'd ago');
+                          return (
+                            <div key={env} style={{display:'flex',alignItems:'center',gap:'0.4rem'}}>
+                              <span style={{width:7,height:7,borderRadius:'50%',background:dotColor,flexShrink:0,display:'inline-block'}}></span>
+                              <span style={{fontSize:'0.68rem',fontWeight:700,letterSpacing:'0.04em',color:'#475569',background:'#f1f5f9',padding:'0.1rem 0.45rem',borderRadius:'999px',flexShrink:0}}>{env}</span>
+                              <span style={{flex:1,fontSize:'0.7rem',color:'#94a3b8',textAlign:'right'}}>{lastDate ?? '—'}</span>
+                              <span style={{fontSize:'0.72rem',fontWeight:700,color:dotColor,minWidth:'4.5rem',textAlign:'right'}}>{ageLabel}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* ── 4. Unstable Tests — replaces run-level Flaky Rate ── */}
                 {(() => {
@@ -3533,31 +3649,52 @@ const html = `<!DOCTYPE html>
                   );
                 })()}
 
-                {/* ── 5. Suite Reliability — replaces Tests Profiled ── */}
+                {/* ── 5. Last Failure Age (per environment) ── */}
                 {(() => {
-                  const profiles = deep.perTestProfiles || [];
-                  if (!profiles.length) return (
+                  const envRows = deriveLastFailureAgeByEnv(trend.byEnvironment, deep.perTestProfiles);
+                  if (!envRows.length) return (
                     <div className="kpi-tile">
-                      <div className="kpi-label">Suite Reliability</div>
+                      <div className="kpi-label">Last Failure Age</div>
                       <div className="kpi-value" style={{color:'#94a3b8'}}>—</div>
-                      <div className="kpi-sub">no profile data</div>
+                      <div className="kpi-sub">no environment data</div>
                     </div>
                   );
-                  const { total, clean, pct } = deriveSuiteReliabilityStats(profiles);
-                  const valColor = pct >= 80 ? '#059669' : pct >= 50 ? '#d97706' : '#dc2626';
+                  const active = envRows.filter(r => r.daysAgo !== null);
+                  const worst  = active.length ? active.reduce((a,b) => b.daysAgo < a.daysAgo ? b : a) : null;
+                  const hdDays = worst ? worst.daysAgo : null;
+                  const hdColor = hdDays === null ? '#059669' : hdDays >= 14 ? '#059669' : hdDays >= 7 ? '#d97706' : '#dc2626';
+                  const hdLabel = hdDays === null ? 'All clean' : hdDays === 0 ? 'Today' : hdDays === 1 ? '1 day ago' : (hdDays + ' days ago');
                   return (
                     <div className="kpi-tile">
                       <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.5rem'}}>
-                        <div className="kpi-label" style={{margin:0}}>Suite Reliability</div>
+                        <div className="kpi-label" style={{margin:0}}>Last Failure Age</div>
                         <i className="info-trigger"
-                           data-tooltip="Percentage of profiled tests that are completely clean — zero failures and zero flakiness across all scanned runs. The inverse of Unstable Tests. 100% means every test passes every time, consistently.">i</i>
+                           data-tooltip="Per-environment: days since the most recent CI run where at least one test failed. Green ≥14d = historical. Amber 7–13d = recent. Red 0–6d = active issue. Headline shows the worst environment.">i</i>
                       </div>
-                      <div className="kpi-value" style={{color:valColor}}>{pct}%</div>
-                      <RateBar value={pct} colorClass={pct>=80?'bg-emerald-500':pct>=50?'bg-amber-400':'bg-rose-500'} />
-                      <div className="kpi-sub" style={{marginTop:'0.5rem',borderTop:'1px solid #f1f5f9',paddingTop:'0.4rem'}}>
-                        <span style={{color:'#94a3b8'}}>{clean}/{total} tests clean</span>
-                        <span style={{color:'#cbd5e1',margin:'0 0.25rem'}}>·</span>
-                        <span style={{color:'#94a3b8'}}>{deep.runsAnalysed??0} runs scanned</span>
+                      <div className="kpi-value" style={{color:hdColor,marginBottom:'0.6rem'}}>{hdLabel}</div>
+                      <div style={{display:'flex',flexDirection:'column',gap:'0.35rem',borderTop:'1px solid #f1f5f9',paddingTop:'0.5rem'}}>
+                        {envRows.map(({env, daysAgo, lastDate, topTest, topTestKind}) => {
+                          const dotColor = daysAgo === null ? '#059669' : daysAgo >= 14 ? '#059669' : daysAgo >= 7 ? '#d97706' : '#dc2626';
+                          const ageLabel = daysAgo === null ? 'Never' : daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1d ago' : (daysAgo + 'd ago');
+                          const truncated = topTest && topTest.length > 26 ? topTest.slice(0, 24) + '…' : topTest;
+                          const kindColor = topTestKind === 'flaky' ? '#d97706' : '#dc2626';
+                          return (
+                            <div key={env} style={{display:'flex',flexDirection:'column',gap:'0.15rem'}}>
+                              <div style={{display:'flex',alignItems:'center',gap:'0.4rem'}}>
+                                <span style={{width:7,height:7,borderRadius:'50%',background:dotColor,flexShrink:0,display:'inline-block'}}></span>
+                                <span style={{fontSize:'0.68rem',fontWeight:700,letterSpacing:'0.04em',color:'#475569',background:'#f1f5f9',padding:'0.1rem 0.45rem',borderRadius:'999px',flexShrink:0}}>{env}</span>
+                                <span style={{flex:1,fontSize:'0.7rem',color:'#94a3b8',textAlign:'right'}}>{lastDate ?? '—'}</span>
+                                <span style={{fontSize:'0.72rem',fontWeight:700,color:dotColor,minWidth:'4.5rem',textAlign:'right'}}>{ageLabel}</span>
+                              </div>
+                              {topTest && (
+                                <div style={{paddingLeft:'1.1rem',display:'flex',alignItems:'center',gap:'0.3rem'}}>
+                                  <span style={{fontSize:'0.6rem',fontWeight:700,color:kindColor,flexShrink:0}}>{topTestKind}</span>
+                                  <span title={topTest} style={{fontSize:'0.67rem',fontStyle:'italic',color:'#94a3b8',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{truncated}</span>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   );

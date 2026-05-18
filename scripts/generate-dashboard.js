@@ -183,43 +183,124 @@ const template = /* html */`<!DOCTYPE html>
     // -----------------------------------------------------------------------
     // Summary Cards (latest run)
     // -----------------------------------------------------------------------
+    // Detect if a date string (YYYY-MM-DD) falls on a weekend (UTC)
+    // -----------------------------------------------------------------------
+    function isWeekendDate(dateStr) {
+      if (!dateStr) return false;
+      const d = new Date(dateStr + 'T12:00:00Z'); // noon UTC avoids DST edge cases
+      const day = d.getUTCDay();
+      return day === 0 || day === 6; // 0=Sun, 6=Sat
+    }
+
+    // Returns the day-of-week label for a YYYY-MM-DD string
+    function dayLabel(dateStr) {
+      if (!dateStr) return '';
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      return days[new Date(dateStr + 'T12:00:00Z').getUTCDay()] ?? '';
+    }
+
+    // -----------------------------------------------------------------------
     function SummaryCards() {
+      // Most-recent run attempt (may be a weekend / auth-gate failure)
       const latest = normalisedData[0];
       if (!latest) return null;
 
+      // Most-recent run that actually executed tests (not an auth-gate or pure weekend stub)
+      const lastComplete = useMemo(
+        () => normalisedData.find(r => r.failedStage !== 'auth' && r.status !== 'Unknown'),
+        []
+      );
+
+      // Is the most recent entry a weekend auth-gate (env-down) attempt?
+      const isWeekendAuthGate = latest.failedStage === 'auth' && isWeekendDate(latest.date);
+      // Is it a weekday auth-gate (unexpected — env should be up)?
+      const isWeekdayAuthGate = latest.failedStage === 'auth' && !isWeekendDate(latest.date);
+
       const successRate = useMemo(() => {
+        const baseRow = lastComplete ?? latest;
         const run = (testHistory.runs || []).find(r =>
-          r.timestamp && r.timestamp.startsWith(latest.date)
+          r.timestamp && r.timestamp.startsWith(baseRow.date)
         );
         if (!run || !run.counts || !run.counts.executed) return null;
         return Math.round((run.counts.passed / run.counts.executed) * 100);
-      }, [latest]);
+      }, [latest, lastComplete]);
 
-      const statusColor = latest.status === 'Passed'
-        ? 'bg-emerald-500 text-white'
-        : latest.status === 'Failed'
-          ? 'bg-rose-500 text-white'
-          : 'bg-slate-400 text-white';
+      // Status card values: when the latest is a weekend auth-gate, describe it
+      // differently to avoid a misleading "FAILED" impression on an expected event.
+      const statusColor = isWeekendAuthGate
+        ? 'bg-slate-500 text-white'
+        : isWeekdayAuthGate
+          ? 'bg-rose-600 text-white'
+          : latest.status === 'Passed'
+            ? 'bg-emerald-500 text-white'
+            : latest.status === 'Failed'
+              ? 'bg-rose-500 text-white'
+              : 'bg-slate-400 text-white';
 
-      const statusIcon = latest.status === 'Passed' ? '✓' : latest.status === 'Failed' ? '✕' : '?';
+      const statusIcon  = isWeekendAuthGate ? '🔐' : isWeekdayAuthGate ? '🔐' : latest.status === 'Passed' ? '✓' : latest.status === 'Failed' ? '✕' : '?';
+      const statusLabel = isWeekendAuthGate ? 'Env Offline' : isWeekdayAuthGate ? 'Auth Failed' : latest.status;
+
+      // Header: show "Last Attempted" vs "Last Complete Run" when they differ
+      const headerDate = latest.date;
+      const headerTime = latest.time;
+      const showCompleteSeparately = lastComplete && lastComplete.date !== latest.date;
 
       return (
         <section className="px-6 py-5">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3">Latest Run — {latest.date} {latest.time}</h2>
+          {/* Weekend auth-gate callout banner */}
+          {isWeekendAuthGate && (
+            <div className="mb-4 flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+              <span className="text-xl mt-0.5">🔐</span>
+              <div>
+                <p className="text-sm font-semibold text-slate-700">
+                  Monitoring active over the weekend — environment was offline as expected
+                </p>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  The workflow ran on <strong>{dayLabel(latest.date)} {latest.date}</strong> and confirmed
+                  the environment was down at the auth gate. This is <strong>expected planned downtime</strong>,
+                  not a test failure. Last complete execution was on <strong>{lastComplete?.date ?? '—'}</strong>.
+                </p>
+              </div>
+            </div>
+          )}
+
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">
+            Last Attempted — {dayLabel(headerDate)} {headerDate} {headerTime}
+            {isWeekendAuthGate && <span className="ml-2 inline-block px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 text-xs font-bold normal-case tracking-normal">Weekend</span>}
+          </h2>
+          {showCompleteSeparately && (
+            <p className="text-xs text-slate-400 mb-3">
+              Last complete execution: <strong className="text-slate-600">{dayLabel(lastComplete.date)} {lastComplete.date}</strong>
+            </p>
+          )}
+          {!showCompleteSeparately && <div className="mb-3" />}
+
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
             {/* Status */}
             <div className="bg-white rounded-xl shadow-md p-5 flex flex-col gap-1">
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Status</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                {isWeekendAuthGate ? 'Last Attempt' : 'Status'}
+              </span>
               <div className={\`mt-2 inline-flex items-center gap-2 self-start px-4 py-2 rounded-lg text-lg font-bold \${statusColor}\`}>
                 <span>{statusIcon}</span>
-                <span>{latest.status}</span>
+                <span>{statusLabel}</span>
               </div>
+              {isWeekendAuthGate && (
+                <span className="text-xs text-slate-400 mt-1">Planned downtime · auth gate</span>
+              )}
+              {showCompleteSeparately && !isWeekendAuthGate && (
+                <span className="text-xs text-slate-400 mt-1">
+                  Last complete: <span className="font-semibold text-slate-600">{lastComplete.status}</span>
+                </span>
+              )}
             </div>
 
-            {/* Success Rate */}
+            {/* Success Rate — based on last complete run, not a weekend stub */}
             <div className="bg-white rounded-xl shadow-md p-5 flex flex-col gap-1">
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Success Rate</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                Success Rate{showCompleteSeparately ? <span className="ml-1 font-normal text-slate-400 normal-case tracking-normal">(last complete)</span> : ''}
+              </span>
               {successRate !== null
                 ? <>
                     <span className={\`text-4xl font-extrabold mt-1 \${successRate === 100 ? 'text-emerald-500' : successRate >= 80 ? 'text-amber-500' : 'text-rose-500'}\`}>
@@ -236,39 +317,48 @@ const template = /* html */`<!DOCTYPE html>
               }
             </div>
 
-            {/* Wall-Clock Times */}
-            <div className="bg-white rounded-xl shadow-md p-5 flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Execution Time</span>
-              <div className="flex flex-col gap-1 mt-1">
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-xs text-slate-500 font-medium">🧪 Playwright</span>
-                  <span className="text-lg font-extrabold text-violet-600">{latest.execTime || 'N/A'}</span>
-                </div>
-                {latest.shardTimes && latest.shardTimes.length > 0 && (
-                  <div className="shard-tooltip self-start ml-5 mb-1">
-                    <span className="text-xs text-slate-400 underline decoration-dotted cursor-help">shard details ▾</span>
-                    <div className="tooltip-box">
-                      {latest.shardTimes.map(s => (
-                        <div key={s.shard} className="flex gap-3 justify-between">
-                          <span className="font-semibold">Shard {s.shard}</span>
-                          <span>{s.label}</span>
+            {/* Wall-Clock Times — use last complete row when latest is a weekend stub */}
+            {(() => {
+              const timeRow = (isWeekendAuthGate && lastComplete) ? lastComplete : latest;
+              return (
+                <div className="bg-white rounded-xl shadow-md p-5 flex flex-col gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                    Execution Time{isWeekendAuthGate && lastComplete ? <span className="ml-1 font-normal text-slate-400 normal-case tracking-normal">(last complete)</span> : ''}
+                  </span>
+                  <div className="flex flex-col gap-1 mt-1">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="text-xs text-slate-500 font-medium">🧪 Playwright</span>
+                      <span className="text-lg font-extrabold text-violet-600">{timeRow.execTime || 'N/A'}</span>
+                    </div>
+                    {timeRow.shardTimes && timeRow.shardTimes.length > 0 && (
+                      <div className="shard-tooltip self-start ml-5 mb-1">
+                        <span className="text-xs text-slate-400 underline decoration-dotted cursor-help">shard details ▾</span>
+                        <div className="tooltip-box">
+                          {timeRow.shardTimes.map(s => (
+                            <div key={s.shard} className="flex gap-3 justify-between">
+                              <span className="font-semibold">Shard {s.shard}</span>
+                              <span>{s.label}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      </div>
+                    )}
+                    <div className="flex items-baseline justify-between gap-2 border-t border-slate-100 pt-1">
+                      <span className="text-xs text-slate-500 font-medium">⚙️ Workflow</span>
+                      <span className="text-lg font-extrabold text-indigo-500">{timeRow.workflowTime || 'N/A'}</span>
                     </div>
                   </div>
-                )}
-                <div className="flex items-baseline justify-between gap-2 border-t border-slate-100 pt-1">
-                  <span className="text-xs text-slate-500 font-medium">⚙️ Workflow</span>
-                  <span className="text-lg font-extrabold text-indigo-500">{latest.workflowTime || 'N/A'}</span>
                 </div>
-              </div>
-            </div>
+              );
+            })()}
 
             {/* Environment */}
             <div className="bg-white rounded-xl shadow-md p-5 flex flex-col gap-1">
               <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Environment</span>
               <div className="mt-2">{envBadge(latest.environment)}</div>
-              <span className="text-xs text-slate-400 mt-1">Target under test</span>
+              <span className="text-xs text-slate-400 mt-1">
+                {isWeekendAuthGate ? 'Offline at auth gate (weekend)' : 'Target under test'}
+              </span>
             </div>
 
           </div>
@@ -359,6 +449,96 @@ const template = /* html */`<!DOCTYPE html>
     }
 
     // -----------------------------------------------------------------------
+    // WeekendMonitoringSection
+    // Shows a compact information row for every weekend (Sat/Sun) run recorded
+    // in reportsData — particularly auth-gate failures that confirm the
+    // environment was offline as per the planned schedule.
+    // Visible only when at least one weekend run exists in the last 14 days.
+    // -----------------------------------------------------------------------
+    function WeekendMonitoringSection() {
+      const cutoff = useMemo(() => {
+        const d = new Date();
+        d.setUTCDate(d.getUTCDate() - 14);
+        return d.toISOString().slice(0, 10);
+      }, []);
+
+      const weekendRows = useMemo(() =>
+        normalisedData.filter(r => r.date >= cutoff && isWeekendDate(r.date))
+      , [cutoff]);
+
+      if (weekendRows.length === 0) return null;
+
+      return (
+        <section className="px-6 pb-2 pt-0">
+          <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            {/* Section header */}
+            <div className="flex items-center gap-3 px-5 py-3 bg-slate-50 border-b border-slate-100">
+              <span className="text-base">📡</span>
+              <div>
+                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-600">Weekend Monitoring Activity</h2>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  The CI workflow ran on the following weekend dates and recorded monitoring outcomes.
+                  Auth-gate stops on weekends are <strong>expected planned downtime</strong> — not failures.
+                </p>
+              </div>
+            </div>
+
+            {/* Row per weekend run */}
+            <div className="divide-y divide-slate-100">
+              {weekendRows.map((r, i) => {
+                const isAuth    = r.failedStage === 'auth';
+                const dayName   = dayLabel(r.date);
+                const outcome   = isAuth ? 'Auth gate — env offline' : r.status === 'Passed' ? 'Completed (unexpected)' : 'Failed (unexpected)';
+                const outcomeColor = isAuth
+                  ? 'text-slate-500'
+                  : r.status === 'Passed'
+                    ? 'text-emerald-600'
+                    : 'text-rose-600';
+                const badge = isAuth
+                  ? <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">🔐 Planned Downtime</span>
+                  : r.status === 'Passed'
+                    ? <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">✓ Ran (weekend)</span>
+                    : <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">⚠ Unexpected failure</span>;
+                return (
+                  <div key={i} className="flex flex-wrap items-center gap-x-6 gap-y-1 px-5 py-2.5">
+                    {/* Date + day */}
+                    <div className="flex items-center gap-2 min-w-[120px]">
+                      <span className="text-xs font-mono text-slate-700">{r.date}</span>
+                      <span className="text-xs font-semibold text-slate-400">{dayName}</span>
+                    </div>
+                    {/* Time */}
+                    <span className="text-xs font-mono text-slate-400">{r.time}</span>
+                    {/* Environment */}
+                    <span className="text-xs">{envBadge(r.environment)}</span>
+                    {/* Outcome badge */}
+                    {badge}
+                    {/* Human-readable outcome */}
+                    <span className={\`text-xs \${outcomeColor}\`}>{outcome}</span>
+                    {/* Link */}
+                    {r.link && r.link !== '#' && (
+                      <a href={r.link} target="_blank" rel="noreferrer"
+                         className="text-xs text-emerald-600 hover:text-emerald-800 underline decoration-dotted transition ml-auto">
+                        View run ↗
+                      </a>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Footer note */}
+            <div className="px-5 py-2 bg-slate-50 border-t border-slate-100">
+              <p className="text-xs text-slate-400">
+                ✅ <strong>Monitoring coverage confirmed</strong> — the workflow is scheduled and running.
+                Weekend downtime is a known environment constraint, not a test suite regression.
+              </p>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // -----------------------------------------------------------------------
     // App
     // -----------------------------------------------------------------------
     function App() {
@@ -446,6 +626,9 @@ const template = /* html */`<!DOCTYPE html>
             {/* ---- Summary Cards ---- */}
             <SummaryCards />
 
+            {/* ---- Weekend Monitoring Activity ---- */}
+            <WeekendMonitoringSection />
+
             {/* ---- Filters ---- */}
             <section className="bg-white rounded-xl shadow-md px-6 py-4 mb-5 flex flex-wrap gap-5 items-end">
               <div className="flex flex-col gap-1">
@@ -502,9 +685,14 @@ const template = /* html */`<!DOCTYPE html>
                             No reports match the current filters.
                           </td>
                         </tr>
-                      ) : paginated.map((r, i) => (
-                        <tr key={i} className="hover:bg-slate-50 transition-colors">
-                          <td className="px-4 py-3 font-mono text-xs text-slate-600 whitespace-nowrap">{r.date}</td>
+                      ) : paginated.map((r, i) => {
+                        const isWkndAuth = r.failedStage === 'auth' && isWeekendDate(r.date);
+                        return (
+                        <tr key={i} className={\`hover:bg-slate-50 transition-colors \${isWkndAuth ? 'bg-slate-50/70' : ''}\`}>
+                          <td className="px-4 py-3 font-mono text-xs text-slate-600 whitespace-nowrap">
+                            {r.date}
+                            {isWkndAuth && <span className="ml-1.5 text-slate-400 text-xs font-medium">({dayLabel(r.date)})</span>}
+                          </td>
                           <td className="px-4 py-3 font-mono text-xs text-slate-500 whitespace-nowrap">{r.time}</td>
                           <td className="px-4 py-3">
                             <a href={r.link} target="_blank" rel="noreferrer"
@@ -512,11 +700,16 @@ const template = /* html */`<!DOCTYPE html>
                               ↗ View
                             </a>
                           </td>
-                          <td className="px-4 py-3">{statusPill(r.status)}</td>
+                          <td className="px-4 py-3">
+                            {isWkndAuth
+                              ? <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">⏸ Env Offline</span>
+                              : statusPill(r.status)
+                            }
+                          </td>
                           <td className="px-4 py-3">{envBadge(r.environment)}</td>
                           <td className="px-4 py-3 text-xs">
-                            <span className="font-semibold text-slate-700">{r.execTime}</span>
-                            {r.shardTimes && r.shardTimes.length > 0 && (
+                            <span className={\`font-semibold \${isWkndAuth ? 'text-slate-400' : 'text-slate-700'}\`}>{isWkndAuth ? '—' : r.execTime}</span>
+                            {!isWkndAuth && r.shardTimes && r.shardTimes.length > 0 && (
                               <div className="shard-tooltip">
                                 <span className="block text-slate-400 underline decoration-dotted cursor-help text-xs mt-0.5">
                                   shard details ▾
@@ -535,15 +728,20 @@ const template = /* html */`<!DOCTYPE html>
                           <td className="px-4 py-3 text-xs">
                             {r.failedStage && r.failedStage !== 'None'
                               ? <span className={\`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold border \${
-                                  r.failedStage === 'auth' ? 'bg-rose-100 text-rose-700 border-rose-200' : 'bg-amber-100 text-amber-700 border-amber-200'
+                                  isWkndAuth
+                                    ? 'bg-slate-100 text-slate-500 border-slate-200'
+                                    : r.failedStage === 'auth'
+                                      ? 'bg-rose-100 text-rose-700 border-rose-200'
+                                      : 'bg-amber-100 text-amber-700 border-amber-200'
                                 }\`}>
-                                  {r.failedStage === 'auth' ? '🔐' : '🧪'} {r.failedStage}
+                                  {r.failedStage === 'auth' ? '🔐' : '🧪'} {isWkndAuth ? 'auth · planned downtime' : r.failedStage}
                                 </span>
                               : <span className="text-slate-300">—</span>
                             }
                           </td>
                         </tr>
-                      ))}
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
