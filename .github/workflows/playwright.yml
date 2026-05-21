@@ -692,7 +692,7 @@ jobs:
 
             - name: Commit Current Report to GitHub Pages
               run: |
-                  git add published-reports/$TIMESTAMP/
+                  git add published-reports/$TIMESTAMP/ published-reports/index.html
                   git commit -m "Update Playwright reports with $TIMESTAMP"
                   git push origin gh-pages
 
