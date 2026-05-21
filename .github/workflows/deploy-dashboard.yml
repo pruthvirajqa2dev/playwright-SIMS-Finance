@@ -1,0 +1,221 @@
+name: Deploy Dashboard (manual)
+
+# Runs fresh AI analysis against the existing network traces on Main, then
+# regenerates index.html and publishes both to gh-pages — without running
+# any Playwright tests.
+#
+# Use this when you want to:
+#   • Re-analyse API intelligence without waiting for a full test run
+#   • Immediately push a recovered/edited dashboard to GitHub Pages
+#
+# Trigger: Actions → "Deploy Dashboard (manual)" → Run workflow
+
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: write     # push to gh-pages
+    pages:    write     # upload Pages artifact
+    id-token: write     # OIDC for deploy-pages
+
+concurrency:
+    group: pages
+    cancel-in-progress: false
+
+jobs:
+    ai-and-deploy:
+        name: 🤖 AI Analysis + Deploy
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        env:
+            AZURE_OPENAI_ENDPOINT:   ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+            AZURE_OPENAI_API_KEY:    ${{ secrets.AZURE_OPENAI_API_KEY }}
+            AZURE_OPENAI_DEPLOYMENT: ${{ secrets.AZURE_OPENAI_DEPLOYMENT }}
+            ENABLE_NETWORK_CAPTURE:  "true"
+
+        steps:
+            # ------------------------------------------------------------------
+            # 1. Checkout Main — scripts, history, existing network traces
+            # ------------------------------------------------------------------
+            - name: Checkout Main
+              uses: actions/checkout@v4
+              with:
+                  ref: Main
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Configure Git
+              run: |
+                  git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
+                  git config --global user.name "pruthvirajqa2dev"
+
+            # ------------------------------------------------------------------
+            # 2. Run AI pipeline against existing traces (no new test data needed)
+            # ------------------------------------------------------------------
+            - name: Run AI pipeline
+              id: ai-run
+              run: npm run ai:full
+              continue-on-error: true
+
+            # ------------------------------------------------------------------
+            # 3. Stage everything needed BEFORE switching branches
+            #    (generate-dashboard + publish-ai-intelligence are pure Node —
+            #     no npm deps — so copying to /tmp is sufficient)
+            # ------------------------------------------------------------------
+            - name: Stage files for branch switch
+              run: |
+                  mkdir -p /tmp/scripts /tmp/ai-reports
+                  cp scripts/generate-dashboard.js      /tmp/scripts/
+                  cp scripts/publish-ai-intelligence.js /tmp/scripts/
+                  cp scripts/merge-trace-shards.js      /tmp/scripts/
+
+                  if [ -d ai-outputs/reports ] && [ "$(ls -A ai-outputs/reports)" ]; then
+                    cp -r ai-outputs/reports/. /tmp/ai-reports/
+                  fi
+
+                  if [ ! -f test-results-history/consolidated.json ]; then
+                    echo '{"runs":[]}' > test-results-history/consolidated.json
+                  fi
+                  cp test-results-history/consolidated.json /tmp/consolidated_data.json
+
+            # ------------------------------------------------------------------
+            # 4. Switch to gh-pages — build rows JSON + regenerate index.html
+            # ------------------------------------------------------------------
+            - name: Checkout gh-pages
+              run: |
+                  git fetch origin
+                  git checkout gh-pages
+                  git pull --rebase origin gh-pages || echo "No changes to pull"
+
+            - name: Resolve latest run timestamp (for AI correlation)
+              run: |
+                  LATEST_TS=$(ls -1d published-reports/[0-9]* 2>/dev/null | sort -r | head -1 | xargs -I{} basename {} 2>/dev/null || true)
+                  TIMESTAMP=${LATEST_TS:-$(date +'%Y-%m-%d_%H-%M-%S')}
+                  echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+                  echo "Correlating AI intelligence to run: $TIMESTAMP"
+
+            - name: Build rows JSON from gh-pages report dirs
+              run: |
+                  TIMESTAMP_REGEX="^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$"
+                  ROWS_JSON="["
+                  for dir in $(find published-reports/ -maxdepth 1 -mindepth 1 -type d | sort -r); do
+                    DIR_TIMESTAMP=$(basename "$dir")
+                    if [[ $DIR_TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
+                      if [ -f "published-reports/$DIR_TIMESTAMP/index.html" ]; then
+                        DATE_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f1)
+                        TIME_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
+
+                        ROW_STATUS="Unknown"; ROW_ENV=""; ROW_FAILED_STAGE=""
+                        if [ -f "published-reports/$DIR_TIMESTAMP/status.json" ]; then
+                          ROW_STATUS=$(jq -r '.status'                  "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                          ROW_ENV=$(jq    -r '.environment // ""'       "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                          ROW_FAILED_STAGE=$(jq -r '.failedStage // ""' "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                        fi
+
+                        EXEC_TIME="N/A"
+                        [ -f "published-reports/$DIR_TIMESTAMP/execution-time.txt" ] && \
+                          EXEC_TIME=$(cat "published-reports/$DIR_TIMESTAMP/execution-time.txt")
+
+                        SHARD_TIMES="[]"
+                        [ -f "published-reports/$DIR_TIMESTAMP/shard-times.json" ] && \
+                          SHARD_TIMES=$(cat "published-reports/$DIR_TIMESTAMP/shard-times.json")
+
+                        WORKFLOW_TIME="N/A"
+                        [ -f "published-reports/$DIR_TIMESTAMP/workflow-time.txt" ] && \
+                          WORKFLOW_TIME=$(cat "published-reports/$DIR_TIMESTAMP/workflow-time.txt")
+
+                        ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"failedStage\":\"$ROW_FAILED_STAGE\",\"execTime\":\"$EXEC_TIME\",\"workflowTime\":\"$WORKFLOW_TIME\",\"shardTimes\":$SHARD_TIMES},"
+                      fi
+                    fi
+                  done
+                  ROWS_JSON="${ROWS_JSON%,}]"
+                  echo "$ROWS_JSON" > /tmp/rows_data.json
+                  echo "Built $(echo "$ROWS_JSON" | jq 'length') row(s)"
+
+            - name: Regenerate dashboard index.html
+              run: |
+                  node /tmp/scripts/generate-dashboard.js \
+                    /tmp/consolidated_data.json \
+                    /tmp/rows_data.json \
+                    published-reports/index.html
+
+            # ------------------------------------------------------------------
+            # 5. Publish AI intelligence to gh-pages
+            # ------------------------------------------------------------------
+            - name: Publish AI intelligence
+              id: ai-publish
+              run: |
+                  # Restore ai-outputs to the gh-pages working dir (untracked — survives checkout)
+                  mkdir -p ai-outputs/reports
+                  cp -r /tmp/ai-reports/. ai-outputs/reports/ 2>/dev/null || true
+
+                  node /tmp/scripts/publish-ai-intelligence.js \
+                    --timestamp "$TIMESTAMP" \
+                    --reports   ai-outputs/reports \
+                    --dest      published-reports
+              continue-on-error: true
+
+            # ------------------------------------------------------------------
+            # 6. Commit both index.html and ai-intelligence/ to gh-pages
+            # ------------------------------------------------------------------
+            - name: Commit to gh-pages
+              run: |
+                  git add published-reports/index.html
+                  git add published-reports/ai-intelligence/ 2>/dev/null || true
+                  git diff --cached --quiet && echo "Nothing changed — skipping commit" || \
+                    git commit -m "dashboard: AI analysis refresh (run ${{ github.run_id }})"
+                  git push origin gh-pages || echo "Nothing to push"
+
+            # ------------------------------------------------------------------
+            # 7. Deploy to GitHub Pages
+            # ------------------------------------------------------------------
+            - name: Setup Pages
+              uses: actions/configure-pages@v5
+
+            - name: Upload Pages artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: published-reports/
+
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
+
+            # ------------------------------------------------------------------
+            # 8. Step summary
+            # ------------------------------------------------------------------
+            - name: Emit step summary
+              if: always()
+              run: |
+                  echo "## 🤖 AI + Deploy Summary" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
+                  echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+                  if [ "${{ steps.ai-run.outcome }}" = "success" ]; then
+                    echo "| AI pipeline | ✅ completed |" >> $GITHUB_STEP_SUMMARY
+                  else
+                    echo "| AI pipeline | ⚠️ errors (non-blocking) |" >> $GITHUB_STEP_SUMMARY
+                  fi
+                  if [ "${{ steps.ai-publish.outcome }}" = "success" ]; then
+                    echo "| Publish AI to gh-pages | ✅ done |" >> $GITHUB_STEP_SUMMARY
+                  else
+                    echo "| Publish AI to gh-pages | ⚠️ skipped or errors |" >> $GITHUB_STEP_SUMMARY
+                  fi
+                  echo "| Dashboard regenerated | ✅ done |" >> $GITHUB_STEP_SUMMARY
+                  echo "| Deployed to Pages | ✅ done |" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  if [ -f published-reports/ai-intelligence/latest/manifest.json ]; then
+                    SECTIONS=$(node -e "const m=JSON.parse(require('fs').readFileSync('published-reports/ai-intelligence/latest/manifest.json','utf8')); console.log((m.sectionsAvailable||[]).join(', ') || 'none')" 2>/dev/null || echo '?')
+                    ENDPOINTS=$(node -e "const m=JSON.parse(require('fs').readFileSync('published-reports/ai-intelligence/latest/manifest.json','utf8')); console.log(m.endpointCount||0)" 2>/dev/null || echo '?')
+                    echo "**AI sections:** ${SECTIONS}" >> $GITHUB_STEP_SUMMARY
+                    echo "**Unique endpoints:** ${ENDPOINTS}" >> $GITHUB_STEP_SUMMARY
+                    echo "**Correlated run:** \`${TIMESTAMP}\`" >> $GITHUB_STEP_SUMMARY
+                  fi
