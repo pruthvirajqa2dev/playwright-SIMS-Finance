@@ -173,11 +173,25 @@ const server = http.createServer((req, res) => {
   res.writeHead(404); res.end('Not found');
 });
 
-server.listen(PORT, () => {
-  const url = `http://localhost:${PORT}`;
-  console.log(`\n🚀  AI Report Server  →  ${url}`);
-  console.log(`     Open ${url} in your browser to view the live dashboard.`);
-  console.log(`     Click "Analyse with AI Now" to run agents in real-time.`);
-  console.log(`     The page auto-reloads when analysis completes.\n`);
-  console.log(`     Press Ctrl+C to stop.\n`);
-});
+function startServer(port) {
+  server.listen(port, () => {
+    const url = `http://localhost:${port}`;
+    console.log(`\n🚀  AI Report Server  →  ${url}`);
+    console.log(`     Open ${url} in your browser to view the live dashboard.`);
+    console.log(`     Click "Analyse with AI Now" to run agents in real-time.`);
+    console.log(`     The page auto-reloads when analysis completes.\n`);
+    console.log(`     Press Ctrl+C to stop.\n`);
+  });
+
+  server.once('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`⚠️  Port ${port} is already in use — trying ${port + 1} instead...`);
+      server.removeAllListeners('error');
+      startServer(port + 1);
+    } else {
+      throw err;
+    }
+  });
+}
+
+startServer(PORT);

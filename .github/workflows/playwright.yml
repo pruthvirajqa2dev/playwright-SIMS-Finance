@@ -16,16 +16,25 @@ on:
         - cron: "0 17 1 5 *"    # 6 PM UK
         
 # ─────────────────────────────────────────────────────────────────────────────
-# PIPELINE OVERVIEW
+# PIPELINE OVERVIEW  (5 jobs)
 #
-#   auth-gate  ──►  postchecks (shard1 ‖ shard2, fail-fast)  ──►  merge-reports  ──►  deploy
+#   auth-gate  ──►  postchecks (shard1 ‖ shard2, fail-fast)
+#              ──►  merge-reports  ──►  ai-intelligence (non-blocking)
+#                                  └──►  Deploy-to-GitHub-Pages
 #
 #   • auth-gate validates login with up to 2 retries (configured in playwright.config.ts).
 #     If it fails the pipeline stops here — no wasted 20 min running postchecks.
 #   • postchecks runs two shards in parallel with fail-fast: true.
 #     If one shard fails the other is cancelled immediately.
+#     Network traces are captured per shard and uploaded as artifacts.
 #   • merge-reports runs with if: always() so the dashboard is updated even on
 #     auth failure, clearly indicating WHICH stage broke.
+#     Exposes TIMESTAMP as a job output for downstream correlation.
+#   • ai-intelligence runs after merge-reports (continue-on-error: true at job level).
+#     Downloads shard traces, runs the AI pipeline, publishes to gh-pages.
+#     A failure here NEVER blocks the Pages deploy.
+#   • Deploy-to-GitHub-Pages waits for both merge-reports AND ai-intelligence
+#     (always()) so the full gh-pages branch (dashboard + AI artifacts) deploys together.
 # ─────────────────────────────────────────────────────────────────────────────
 
 jobs:
@@ -174,6 +183,8 @@ jobs:
 
             - name: Run Playwright tests (shard ${{ matrix.shardIndex }})
               id: run-tests
+              env:
+                  ENABLE_NETWORK_CAPTURE: "true"
               run: |
                   set +e
                   npx playwright test \
@@ -184,6 +195,21 @@ jobs:
                   mv test-results.json test-results-${{ matrix.shardIndex }}.json
                   echo "Current directory:"; pwd
                   echo "Files:"; ls -l
+
+            - name: Diagnose trace capture (shard ${{ matrix.shardIndex }})
+              if: always()
+              run: |
+                  echo "── Network trace diagnostics ──────────────────────────────"
+                  if [ -f ai-outputs/traces/network-traces.json ]; then
+                    TRACE_COUNT=$(node -e "const d=JSON.parse(require('fs').readFileSync('ai-outputs/traces/network-traces.json','utf8')); console.log(Array.isArray(d)?d.length:0)" 2>/dev/null || echo 0)
+                    echo "✅ network-traces.json: ${TRACE_COUNT} trace(s)"
+                  else
+                    echo "⚠️  network-traces.json not found — capture may not have run"
+                  fi
+                  echo "worker shard files:"
+                  ls ai-outputs/traces/worker-*.json 2>/dev/null && \
+                    wc -l ai-outputs/traces/worker-*.json || echo "  (none found)"
+                  echo "───────────────────────────────────────────────────────────"
 
             - name: Upload Test Results for Shard ${{ matrix.shardIndex }}
               if: always()
@@ -233,6 +259,16 @@ jobs:
                   name: stage-status-shard-${{ matrix.shardIndex }}
                   path: stage-status.json
 
+            - name: Upload network traces (shard ${{ matrix.shardIndex }})
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: network-traces-shard-${{ matrix.shardIndex }}
+                  path: ai-outputs/traces/network-traces.json
+                  if-no-files-found: warn
+                  retention-days: 1
+              continue-on-error: true
+
     # =========================================================================
     # JOB 3 — Merge reports & publish dashboard
     # Runs with if: always() so the dashboard reflects even an auth failure.
@@ -242,6 +278,9 @@ jobs:
         needs: [auth-gate, postchecks]
         if: ${{ always() }}
         runs-on: ubuntu-latest
+        outputs:
+            # Passed to ai-intelligence so AI history entries correlate 1:1 with run dirs
+            timestamp: ${{ steps.add-report.outputs.timestamp }}
         permissions:
             contents: write
             pages: write
@@ -479,6 +518,7 @@ jobs:
                   echo "workflow-time.txt:  $(cat workflow-time.txt  2>/dev/null || echo NOT FOUND)"
 
             - name: Add Current Report with Timestamp
+              id: add-report
               run: |
                   TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
                   mkdir -p published-reports/$TIMESTAMP
@@ -489,6 +529,7 @@ jobs:
                   [ -f workflow-time.txt ]  && cp workflow-time.txt  published-reports/$TIMESTAMP/
                   echo "$FAILED_STAGE" > published-reports/$TIMESTAMP/failed-stage.txt
                   echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+                  echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
 
             - name: Download Shard Statuses
               uses: actions/download-artifact@v4
@@ -655,15 +696,6 @@ jobs:
                   git commit -m "Update Playwright reports with $TIMESTAMP"
                   git push origin gh-pages
 
-            - name: Setup Pages
-              uses: actions/configure-pages@v2
-
-            - name: Upload Pages artifact
-              uses: actions/upload-pages-artifact@v3
-              with:
-                  name: github-pages
-                  path: published-reports/
-
             - name: Set FINAL_STATUS from status.json
               run: |
                   STATUS=$(jq -r '.status' published-reports/$TIMESTAMP/status.json)
@@ -697,11 +729,174 @@ jobs:
                   from: ${{ secrets.EMAIL_USERNAME }}
                   cc: princy.rajkumar@parentpay.com
 
+            - name: Upload merged test results artifact
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: merged-test-results
+                  path: test-results.json
+                  retention-days: 1
+              continue-on-error: true
+
     # =========================================================================
-    # JOB 4 — Deploy to GitHub Pages
+    # JOB 4 — AI Intelligence (downstream; non-blocking)
+    # Runs after merge-reports regardless of test outcome.
+    # All steps are continue-on-error so AI failures NEVER block Pages deploy.
+    # =========================================================================
+    ai-intelligence:
+        name: 🤖 AI Intelligence
+        needs: [merge-reports]
+        if: ${{ always() && needs.merge-reports.result != 'skipped' }}
+        runs-on: ubuntu-latest
+        continue-on-error: true        # job-level: workflow always proceeds to deploy
+        permissions:
+            contents: write
+        env:
+            AZURE_OPENAI_ENDPOINT:   ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+            AZURE_OPENAI_API_KEY:    ${{ secrets.AZURE_OPENAI_API_KEY }}
+            AZURE_OPENAI_DEPLOYMENT: ${{ secrets.AZURE_OPENAI_DEPLOYMENT }}
+            ENABLE_NETWORK_CAPTURE:  "true"
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Download per-shard network traces
+              uses: actions/download-artifact@v4
+              with:
+                  path: /tmp/shard-traces
+                  pattern: network-traces-shard-*
+                  merge-multiple: false
+              continue-on-error: true
+
+            - name: Merge shard traces → network-traces.json
+              run: |
+                  node scripts/merge-trace-shards.js \
+                    /tmp/shard-traces \
+                    ai-outputs/traces/network-traces.json
+                  echo "── Trace merge result ───────────────────────────────────────────────"
+                  if [ -f ai-outputs/traces/network-traces.json ]; then
+                    TRACE_COUNT=$(node -e "const d=JSON.parse(require('fs').readFileSync('ai-outputs/traces/network-traces.json','utf8')); console.log(Array.isArray(d)?d.length:0)" 2>/dev/null || echo 0)
+                    echo "✅ network-traces.json ready: ${TRACE_COUNT} trace(s)"
+                  else
+                    echo "⚠️  network-traces.json not produced — AI will use existing seed or skip capture"
+                  fi
+              continue-on-error: true
+
+            - name: Download merged test results
+              uses: actions/download-artifact@v4
+              with:
+                  name: merged-test-results
+                  path: .
+              continue-on-error: true
+
+            - name: Configure Git
+              run: |
+                  git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
+                  git config --global user.name "pruthvirajqa2dev"
+
+            - name: Checkout Main for history
+              run: |
+                  git fetch origin
+                  git checkout Main
+                  git pull --rebase origin Main || echo "No changes to pull"
+
+            - name: Run AI pipeline
+              id: ai-run
+              run: npm run ai:full
+              continue-on-error: true
+
+            - name: Upload AI outputs artifact
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ai-intelligence-outputs
+                  path: ai-outputs/reports/
+                  retention-days: 1
+              continue-on-error: true
+
+            - name: Checkout gh-pages for publishing
+              run: |
+                  git fetch origin
+                  git checkout gh-pages
+                  git pull --rebase origin gh-pages || echo "No changes to pull"
+              continue-on-error: true
+
+            - name: Publish AI intelligence to gh-pages
+              id: ai-publish
+              run: |
+                  # Use the same TIMESTAMP as the Playwright run for 1:1 history correlation
+                  TIMESTAMP="${{ needs.merge-reports.outputs.timestamp }}"
+                  if [ -z "$TIMESTAMP" ]; then
+                    echo "⚠️  merge-reports timestamp not available — using current time as fallback"
+                    TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
+                  fi
+                  echo "Publishing AI intelligence for run: $TIMESTAMP"
+                  node scripts/publish-ai-intelligence.js \
+                    --timestamp "$TIMESTAMP" \
+                    --reports   ai-outputs/reports \
+                    --dest      published-reports
+              continue-on-error: true
+
+            - name: Commit AI intelligence to gh-pages
+              run: |
+                  git add published-reports/ai-intelligence/ 2>/dev/null || true
+                  git diff --cached --quiet || \
+                    git commit -m "AI intelligence: update for run ${{ github.run_id }}"
+                  git push origin gh-pages || echo "Nothing to push"
+              continue-on-error: true
+
+            - name: Emit AI step summary
+              if: always()
+              run: |
+                  echo "## 🤖 AI Intelligence Summary" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
+                  echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+                  if [ "${{ steps.ai-run.outcome }}" = "success" ]; then
+                    echo "| AI pipeline | ✅ completed |" >> $GITHUB_STEP_SUMMARY
+                  else
+                    echo "| AI pipeline | ⚠️ errors (non-blocking) |" >> $GITHUB_STEP_SUMMARY
+                  fi
+                  if [ "${{ steps.ai-publish.outcome }}" = "success" ]; then
+                    echo "| Publish to gh-pages | ✅ done |" >> $GITHUB_STEP_SUMMARY
+                  else
+                    echo "| Publish to gh-pages | ⚠️ errors |" >> $GITHUB_STEP_SUMMARY
+                  fi
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  if [ -f ai-outputs/traces/network-traces.json ]; then
+                    TRACE_COUNT=$(node -e "const d=JSON.parse(require('fs').readFileSync('ai-outputs/traces/network-traces.json','utf8')); console.log(Array.isArray(d)?d.length:0)" 2>/dev/null || echo '?')
+                    echo "**Traces merged:** ${TRACE_COUNT}" >> $GITHUB_STEP_SUMMARY
+                  else
+                    echo "**Traces merged:** none (capture not available)" >> $GITHUB_STEP_SUMMARY
+                  fi
+                  if [ -f published-reports/ai-intelligence/latest/manifest.json ]; then
+                    SECTIONS=$(node -e "const m=JSON.parse(require('fs').readFileSync('published-reports/ai-intelligence/latest/manifest.json','utf8')); console.log((m.sectionsAvailable||[]).join(', ') || 'none')" 2>/dev/null || echo '?')
+                    ENDPOINTS=$(node -e "const m=JSON.parse(require('fs').readFileSync('published-reports/ai-intelligence/latest/manifest.json','utf8')); console.log(m.endpointCount||0)" 2>/dev/null || echo '?')
+                    echo "**Sections published:** ${SECTIONS}" >> $GITHUB_STEP_SUMMARY
+                    echo "**Unique endpoints:** ${ENDPOINTS}" >> $GITHUB_STEP_SUMMARY
+                    CORR_TS="${{ needs.merge-reports.outputs.timestamp }}"
+                    [ -n "$CORR_TS" ] && echo "**Correlated run:** \`${CORR_TS}\`" >> $GITHUB_STEP_SUMMARY
+                  fi
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "_Pages deploy proceeds regardless of AI status._" >> $GITHUB_STEP_SUMMARY
+
+    # =========================================================================
+    # JOB 5 — Deploy to GitHub Pages
+    # Waits for BOTH merge-reports AND ai-intelligence so the full gh-pages
+    # branch (dashboard + AI artifacts) is deployed in one shot.
+    # Uses always() so a failing ai-intelligence never blocks deploy.
     # =========================================================================
     Deploy-to-GitHub-Pages:
-        needs: merge-reports
+        name: \U0001f680 Deploy to GitHub Pages
+        needs: [merge-reports, ai-intelligence]
+        if: ${{ always() && needs.merge-reports.result != 'skipped' }}
         permissions:
             pages: write
             id-token: write
@@ -710,6 +905,20 @@ jobs:
             url: ${{ steps.deployment.outputs.page_url }}
         runs-on: ubuntu-latest
         steps:
+            - name: Checkout gh-pages
+              uses: actions/checkout@v4
+              with:
+                  ref: gh-pages
+
+            - name: Setup Pages
+              uses: actions/configure-pages@v2
+
+            - name: Upload Pages artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  name: github-pages
+                  path: published-reports/
+
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v4

@@ -206,6 +206,14 @@ export interface WorkflowSequence {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface ApiIntelligenceReport {
+    /**
+     * Set to true when no real network traces have been captured yet
+     * (input file was the seed/mock placeholder). The HTML report renders
+     * a "no data" activation prompt instead of any data tables.
+     * Absent on reports generated from real captured traffic.
+     */
+    _captureNotRun?: true;
+
     generatedAt: string;
 
     /** Source test execution session identifier */
@@ -264,6 +272,14 @@ export interface ApiIntelligenceReport {
 
     /** Draft OpenAPI paths block (JSON string) — null if not requested */
     openApiPaths: string | null;
+
+    /**
+     * When true, this report was loaded from a seed/mock file rather than
+     * being generated from real captured network traces.
+     * The HTML report renders a "🧪 Mock Data" banner when this is true.
+     * Absent (undefined) on all agent-generated reports.
+     */
+    _isMockData?: true;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

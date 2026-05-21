@@ -131,6 +131,18 @@ const template = /* html */`<!DOCTYPE html>
     };
   </script>
 
+  <!-- AI Plugin Registry — Phase 3A PoC (one section; expand after validation) -->
+  <script id="ai-plugin-registry">
+    window.__AI_PLUGIN_REGISTRY__ = [
+      {
+        id:        "api-intelligence",
+        label:     "API Intelligence",
+        dataPath:  "./ai-intelligence/latest/api-intelligence.json",
+        component: "ApiIntelligenceSection"
+      }
+    ];
+  </script>
+
   <script type="text/babel">
     const { useState, useEffect, useRef, useMemo } = React;
     const { testHistory, reportsData } = window.__APP_DATA__;
@@ -790,11 +802,260 @@ const template = /* html */`<!DOCTYPE html>
               </div>
             </div>
 
+            {/* ---- AI Intelligence Strip (lazy, manifest-driven, fault-isolated) ---- */}
+            <AiIntelligenceStrip />
+
           </main>
 
           <footer className="text-center py-5 text-slate-400 text-xs border-t border-slate-200">
             &copy; {new Date().getFullYear()} SIMS Finance · Playwright Test Reports · All rights reserved.
           </footer>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // AI Intelligence Strip — Phase 3A proof-of-concept
+    //
+    // Architecture:
+    //   useManifest()          — async fetch, never blocks render
+    //   AiErrorBoundary        — isolates crashes; deterministic dashboard unaffected
+    //   ApiIntelligenceSection — fetches data only when user expands the strip
+    //   AvailabilityBadge      — reflects manifest state (loading/available/stale/unavailable)
+    //   AiIntelligenceStrip    — collapsed by default; drives the whole thing
+    // =========================================================================
+
+    const STALE_THRESHOLD_MS = 48 * 60 * 60 * 1000; // 48 h → data older than this is flagged stale
+
+    // ── useManifest ──────────────────────────────────────────────────────────
+    // Fetches manifest.json asynchronously on mount.
+    // Never throws — always resolves to a state object.
+    // Returns: { status: 'loading'|'available'|'stale'|'unavailable', manifest }
+    function useManifest() {
+      const [ms, setMs] = useState({ status: 'loading', manifest: null });
+      useEffect(() => {
+        const t0 = performance.now();
+        fetch('./ai-intelligence/latest/manifest.json')
+          .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+          .then(function(m) {
+            var age     = Date.now() - new Date(m.generatedAt).getTime();
+            var isStale = age > STALE_THRESHOLD_MS;
+            var elapsed = Math.round(performance.now() - t0);
+            console.debug('[AI] manifest loaded ' + elapsed + 'ms — '
+              + (m.sectionsAvailable || []).length + ' section(s)'
+              + (isStale ? ' [STALE — ' + Math.round(age / 3600000) + 'h old]' : ''));
+            setMs({ status: isStale ? 'stale' : 'available', manifest: m });
+          })
+          .catch(function(err) {
+            console.debug('[AI] manifest unavailable —', err.message);
+            setMs({ status: 'unavailable', manifest: null });
+          });
+      }, []);
+      return ms;
+    }
+
+    // ── AiErrorBoundary ──────────────────────────────────────────────────────
+    // Catches rendering errors in AI sections so they never propagate to the
+    // deterministic dashboard.
+    class AiErrorBoundary extends React.Component {
+      constructor(props) { super(props); this.state = { crashed: false }; }
+      static getDerivedStateFromError() { return { crashed: true }; }
+      componentDidCatch(err) { console.error('[AI] Section error caught by boundary:', err.message); }
+      render() {
+        if (this.state.crashed) return (
+          <div className="rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-xs text-rose-700 flex items-center gap-2">
+            <span>⚠</span>
+            <span>AI section encountered an error and was isolated. Dashboard is unaffected.</span>
+          </div>
+        );
+        return this.props.children;
+      }
+    }
+
+    // ── AvailabilityBadge ────────────────────────────────────────────────────
+    // Shows the manifest-derived availability status for a single section id.
+    function AvailabilityBadge({ mStatus, manifest, id }) {
+      if (mStatus === 'loading')
+        return <span className="text-xs text-slate-400">…</span>;
+      if (mStatus === 'unavailable')
+        return <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-500 border border-slate-200">Not available</span>;
+      if (mStatus === 'stale')
+        return <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-700 border border-amber-200">⚠ Stale</span>;
+      var avail = (manifest && manifest.sectionsAvailable || []).includes(id);
+      return avail
+        ? <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-emerald-100 text-emerald-700 border border-emerald-200">✓ Available</span>
+        : <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-500 border border-slate-200">Not published</span>;
+    }
+
+    // ── ApiIntelligenceSection ───────────────────────────────────────────────
+    // Lazy-loaded: mounts only when the strip is expanded.
+    // Fetches plugin.dataPath once on mount; shows skeleton → data or error.
+    function ApiIntelligenceSection({ plugin }) {
+      const [phase, setPhase] = useState('loading');
+      const [data, setData]   = useState(null);
+      useEffect(function() {
+        var t0 = performance.now();
+        fetch(plugin.dataPath)
+          .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+          .then(function(json) {
+            var ms = Math.round(performance.now() - t0);
+            console.debug('[AI] api-intelligence loaded ' + ms + 'ms — '
+              + (json.totalTraces || 0) + ' traces, '
+              + (json.uniqueEndpoints || 0) + ' endpoints');
+            setData(json);
+            setPhase('loaded');
+          })
+          .catch(function(err) {
+            console.warn('[AI] api-intelligence fetch failed:', err.message);
+            setPhase('error:' + err.message);
+          });
+      }, [plugin.dataPath]);
+
+      if (phase === 'loading') return (
+        <div className="animate-pulse space-y-2 py-2">
+          <div className="h-2.5 bg-slate-200 rounded w-1/3" />
+          <div className="h-2.5 bg-slate-200 rounded w-1/2" />
+          <div className="h-2.5 bg-slate-200 rounded w-2/5" />
+        </div>
+      );
+      if (phase.startsWith('error')) return (
+        <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-xs text-amber-700 flex items-center gap-2">
+          <span>⚠</span>
+          <span>Could not load data: {phase.slice(6)}</span>
+        </div>
+      );
+      if (!data) return null;
+
+      var totalTraces    = data.totalTraces    || 0;
+      var uniqueEndpoints= data.uniqueEndpoints|| 0;
+      var workflows      = data.workflows      || [];
+      var insights       = data.insights       || [];
+
+      return (
+        <div className="space-y-4">
+
+          {/* Stats row */}
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-slate-50 rounded-lg px-4 py-3 text-center">
+              <div className="text-2xl font-bold text-indigo-600">{totalTraces}</div>
+              <div className="text-xs text-slate-500 mt-0.5">Requests</div>
+            </div>
+            <div className="bg-slate-50 rounded-lg px-4 py-3 text-center">
+              <div className="text-2xl font-bold text-emerald-600">{uniqueEndpoints}</div>
+              <div className="text-xs text-slate-500 mt-0.5">Endpoints</div>
+            </div>
+            <div className="bg-slate-50 rounded-lg px-4 py-3 text-center">
+              <div className="text-2xl font-bold text-violet-600">{workflows.length}</div>
+              <div className="text-xs text-slate-500 mt-0.5">Workflows</div>
+            </div>
+          </div>
+
+          {/* Key insights */}
+          {insights.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Key Insights</p>
+              <ul className="space-y-1.5">
+                {insights.slice(0, 3).map(function(ins, i) {
+                  return (
+                    <li key={i} className="text-xs text-slate-600 flex items-start gap-2">
+                      <span className="text-indigo-400 mt-0.5 shrink-0">•</span>
+                      <span>{ins.summary || ins.finding || ins.description || JSON.stringify(ins)}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+
+          {/* Workflows */}
+          {workflows.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Workflows</p>
+              <ul className="divide-y divide-slate-100">
+                {workflows.slice(0, 5).map(function(w, i) {
+                  return (
+                    <li key={i} className="flex items-center justify-between text-xs py-1.5">
+                      <span className="text-slate-600">{w.name || w.workflow || '-'}</span>
+                      {w.requestCount !== undefined &&
+                        <span className="text-slate-400 tabular-nums">{w.requestCount} req</span>
+                      }
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+
+        </div>
+      );
+    }
+
+    // ── AiIntelligenceStrip ──────────────────────────────────────────────────
+    // Container for all AI sections.
+    // Collapsed by default — manifest loads in background; sections load on expand.
+    function AiIntelligenceStrip() {
+      var manifestState = useManifest();
+      var mStatus  = manifestState.status;
+      var manifest = manifestState.manifest;
+      var [expanded, setExpanded] = useState(false);
+      var registry = window.__AI_PLUGIN_REGISTRY__ || [];
+
+      return (
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+
+          {/* Toggle header — always visible */}
+          <button
+            className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-slate-50 transition-colors group"
+            onClick={function() { setExpanded(function(e) { return !e; }); }}
+            aria-expanded={expanded}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-lg" aria-hidden="true">🤖</span>
+              <div>
+                <h2 className="text-sm font-semibold text-slate-700">AI Intelligence</h2>
+                <p className="text-xs text-slate-400 mt-0.5">Automated analysis from the last CI run</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              {registry[0] && (
+                <AvailabilityBadge mStatus={mStatus} manifest={manifest} id={registry[0].id} />
+              )}
+              <span className="text-slate-400 text-xs select-none">{expanded ? '▲' : '▼'}</span>
+            </div>
+          </button>
+
+          {/* Expanded content — sections are mounted (and fetched) only here */}
+          {expanded && (
+            <div className="border-t border-slate-100">
+              {registry.map(function(plugin) {
+                return (
+                  <div key={plugin.id} className="px-6 py-5">
+                    {/* Section header */}
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="text-xs font-bold uppercase tracking-wide text-slate-600">{plugin.label}</h3>
+                      <AvailabilityBadge mStatus={mStatus} manifest={manifest} id={plugin.id} />
+                      {manifest && (
+                        <span className="text-xs text-slate-400 ml-auto">
+                          {'Run: ' + (manifest.timestamp || '—')}
+                          {manifest.traceCount > 0 ? ' · ' + manifest.traceCount + ' traces' : ''}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Section body */}
+                    {mStatus === 'unavailable'
+                      ? <p className="text-xs text-slate-400">AI artifacts not yet available. Run the CI workflow to generate them.</p>
+                      : (
+                          <AiErrorBoundary>
+                            <ApiIntelligenceSection plugin={plugin} />
+                          </AiErrorBoundary>
+                        )
+                    }
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       );
     }

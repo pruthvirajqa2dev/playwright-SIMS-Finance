@@ -205,11 +205,56 @@ export async function runApiIntelligence(
         throw new Error(`Traces file not found: ${tracesPath}`);
     }
 
-    const rawTraces: ApiTrace[] = JSON.parse(
-        fs.readFileSync(tracesPath, "utf-8")
-    );
+    const raw: unknown = JSON.parse(fs.readFileSync(tracesPath, "utf-8"));
+
+    // Support two input formats:
+    //   1. Plain ApiTrace[] array  — written by NetworkTraceStore (real captures)
+    //   2. { _isMockData: true, traces: ApiTrace[] } — seed/mock file
+    // The _isMockData flag is propagated to the output report so the HTML
+    // dashboard can render a "🧪 Mock Data" banner accordingly.
+    let rawTraces: ApiTrace[];
+    let isMockInput = false;
+
+    if (Array.isArray(raw)) {
+        rawTraces = raw as ApiTrace[];
+    } else if (
+        raw !== null &&
+        typeof raw === "object" &&
+        "_isMockData" in raw
+    ) {
+        isMockInput = (raw as Record<string, unknown>)._isMockData === true;
+        rawTraces =
+            ((raw as Record<string, unknown>).traces as ApiTrace[]) ?? [];
+    } else {
+        rawTraces = [];
+    }
+
     const sessionId =
         options.sessionId ?? path.basename(path.dirname(tracesPath));
+
+    // ── When input is the seed/mock placeholder — skip all analysis ──────
+    // Write a minimal report flagged as _captureNotRun so the dashboard
+    // renders a clean "no data" activation prompt instead of fake data.
+    if (isMockInput) {
+        return {
+            _captureNotRun: true as const,
+            generatedAt: new Date().toISOString(),
+            sessionId,
+            totalTraces: 0,
+            filteredTraces: 0,
+            uniqueEndpoints: 0,
+            endpointProfiles: [],
+            workflowSequences: [],
+            byDomain: {} as Record<string, string[]>,
+            failedEndpoints: [],
+            repeatedCallEndpoints: [],
+            latencyOutliers: [],
+            insights: [],
+            executiveSummary: "",
+            postmanCollection: null,
+            openApiPaths: null
+        } as unknown as ApiIntelligenceReport;
+    }
 
     // ── Deterministic pre-analysis (no AI) ───────────────────────────────
     const analysis = ApiTrafficAnalyzer.analyze(rawTraces);
@@ -288,6 +333,7 @@ export async function runApiIntelligence(
         : null;
 
     return {
+        ...(isMockInput ? { _isMockData: true as const } : {}),
         generatedAt: new Date().toISOString(),
         sessionId,
         totalTraces: rawTraces.length,

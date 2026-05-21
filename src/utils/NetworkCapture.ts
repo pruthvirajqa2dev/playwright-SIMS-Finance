@@ -134,10 +134,22 @@ const DEFAULT_IGNORED_PATH_PATTERNS: readonly string[] = [
 ];
 
 /**
- * Resource types captured. "document" is included to detect navigation-triggered
- * API calls but filtered further by hostname matching.
+ * Resource types captured.
+ *
+ * "document" is included to capture server-rendered page requests and form
+ * submissions (common in ASP.NET/WebForms applications like Pecuniam). These
+ * represent real business operations and are filtered by hostname so only
+ * requests to the application URL are recorded.
+ *
+ * "xhr" / "fetch" capture AJAX and Fetch API calls.
+ * "websocket" captures real-time event streams.
  */
-const CAPTURED_RESOURCE_TYPES = new Set(["xhr", "fetch", "websocket"]);
+const CAPTURED_RESOURCE_TYPES = new Set([
+    "document",
+    "xhr",
+    "fetch",
+    "websocket"
+]);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Options
@@ -246,6 +258,9 @@ export class NetworkCapture {
         this.active = true;
         this.page.on("request", this._onRequest);
         this.page.on("response", this._onResponse);
+        console.log(
+            `[NetworkCapture] Started for: "${this.testInfo.title}" | hostnames: [${this.opts.includedHostnames.join(", ")}]`
+        );
     }
 
     /**
@@ -257,6 +272,10 @@ export class NetworkCapture {
         this.active = false;
         this.page.off("request", this._onRequest);
         this.page.off("response", this._onResponse);
+
+        console.log(
+            `[NetworkCapture] Stopped for: "${this.testInfo.title}" | traces captured: ${this.traces.length}`
+        );
 
         if (this.opts.attachToReport && this.traces.length > 0) {
             try {
@@ -458,21 +477,59 @@ export class NetworkCapture {
     }
 
     /**
-     * Mask common sensitive patterns in request/response bodies.
-     * Uses pattern replacement — does not parse JSON structure.
+     * Mask sensitive patterns in request/response bodies.
+     *
+     * Applied in layers:
+     *   1. Known-key JSON field masking (auth + finance domain keys)
+     *   2. Auth token header patterns that leak into bodies
+     *   3. UK finance PII patterns (NI numbers, sort codes, card numbers)
+     *
+     * Uses regex replacement — does not parse JSON structure, so it is
+     * safe on malformed or partial JSON and on plain-text bodies.
      */
     private _maskSensitiveContent(content: string): string {
         return (
             content
-                // JSON field masking: "password":"...", "token":"...", etc.
+                // ── 1a. Auth / session string fields ──────────────────────────────
                 .replace(
-                    /"(password|token|secret|apiKey|api_key|cookie|sessionId|csrfToken)":\s*"[^"]*"/gi,
+                    /"(password|token|secret|apiKey|api_key|cookie|sessionId|csrfToken|accessToken|access_token|refreshToken|refresh_token|idToken|id_token|authToken|auth_token|jwt|bearerToken|bearer_token)":\s*"[^"]*"/gi,
                     (_, key) => `"${key}":"[REDACTED]"`
                 )
-                // Bearer tokens in body
+                // ── 1b. Finance domain string fields ──────────────────────────────
+                .replace(
+                    /"(accountNumber|account_number|accountNo|account_no|sortCode|sort_code|bankAccount|bank_account|bankSortCode|bank_sort_code|iban|bic|swift|swiftCode|swift_code|cardNumber|card_number|cardNo|card_no|cvv|cvc|cvc2|cvv2|pin|pinNumber|pin_number|niNumber|ni_number|nino|nationalInsurance|national_insurance|nationalInsuranceNumber|national_insurance_number|payrollNumber|payroll_number|taxReference|tax_reference|utr|vatNumber|vat_number|vatRegistration|vat_registration)":\s*"[^"]*"/gi,
+                    (_, key) => `"${key}":"[REDACTED]"`
+                )
+                // ── 1c. Finance domain numeric fields ─────────────────────────────
+                .replace(
+                    /"(accountNumber|account_number|accountNo|account_no|sortCode|sort_code|cardNumber|card_number|cvv|cvc|pin|pinNumber|pin_number)":\s*[0-9]+/gi,
+                    (_, key) => `"${key}":[REDACTED]`
+                )
+                // ── 1d. URL-encoded form fields (POST login bodies: key=value&key=value) ─
+                // Masks logon.password=..., auth_token=..., etc. regardless of
+                // dot/underscore separator or field-name prefix.
+                .replace(
+                    /([^&=\s]*(?:password|secret|auth[_.\-]?token|api[_.\-]?key|apikey)[^&=\s]*)=([^&\s]*)/gi,
+                    (_, key) => `${key}=[REDACTED]`
+                )
+                // ── 2. Auth token patterns in body text ───────────────────────────
                 .replace(/Bearer\s+[A-Za-z0-9\-._~+/]+=*/g, "Bearer [REDACTED]")
-                // Basic auth patterns
                 .replace(/Basic\s+[A-Za-z0-9+/=]+/g, "Basic [REDACTED]")
+                // ── 3a. UK National Insurance numbers ─────────────────────────────
+                // Format: 2 letters (constrained set) + 6 digits + 1 letter A–D
+                // E.g. AB123456C — avoids over-matching common 2+6+1 sequences
+                .replace(
+                    /\b[A-CEGHJ-PR-TW-Z][ABCEGHJ-NPR-TW-Z]\d{6}[A-D]\b/gi,
+                    "[NI_REDACTED]"
+                )
+                // ── 3b. UK sort codes (nn-nn-nn format) ───────────────────────────
+                .replace(/\b\d{2}-\d{2}-\d{2}\b/g, "[SORT_CODE_REDACTED]")
+                // ── 3c. Payment card numbers ──────────────────────────────────────
+                // Visa (13/16 digit), Mastercard (16 digit), Amex (15 digit)
+                .replace(
+                    /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})\b/g,
+                    "[CARD_REDACTED]"
+                )
         );
     }
 }

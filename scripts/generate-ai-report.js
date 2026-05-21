@@ -3086,6 +3086,28 @@ const html = `<!DOCTYPE html>
     function ApiIntelligenceSection({ report }) {
       if (!report) return null;
 
+      // No real captures yet — show activation prompt, no data
+      if (report._captureNotRun === true) {
+        return (
+          <div className="bg-white rounded-xl shadow-md p-8 mb-5" style={{textAlign:'center'}}>
+            <div style={{fontSize:'3rem',marginBottom:'0.75rem'}}>🔌</div>
+            <h2 style={{fontSize:'0.9rem',fontWeight:600,color:'#334155',marginBottom:'0.5rem'}}>No Network Traces Captured Yet</h2>
+            <p style={{fontSize:'0.82rem',color:'#64748b',marginBottom:'1.25rem',maxWidth:'480px',margin:'0 auto 1.25rem'}}>
+              API Intelligence only shows real traffic captured during test execution.
+              No sample or placeholder data is displayed.
+            </p>
+            <div style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:'0.5rem',padding:'1rem',textAlign:'left',maxWidth:'480px',margin:'0 auto'}}>
+              <div style={{fontSize:'0.65rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',color:'#94a3b8',marginBottom:'0.75rem'}}>How to activate</div>
+              <div style={{fontSize:'0.75rem',color:'#475569',fontFamily:'monospace',lineHeight:2}}>
+                <div><span style={{color:'#059669',fontWeight:700}}>1 </span>Confirm <code style={{background:'#f1f5f9',padding:'0 4px',borderRadius:'3px'}}>src/config/.env</code> has <code style={{background:'#f1f5f9',padding:'0 4px',borderRadius:'3px'}}>ENABLE_NETWORK_CAPTURE=true</code></div>
+                <div><span style={{color:'#059669',fontWeight:700}}>2 </span>Run tests: <code style={{background:'#f1f5f9',padding:'0 4px',borderRadius:'3px'}}>npm run test:uat</code></div>
+                <div><span style={{color:'#059669',fontWeight:700}}>3 </span>Generate insights: <code style={{background:'#f1f5f9',padding:'0 4px',borderRadius:'3px'}}>npm run ai:full</code></div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
       var profiles      = report.endpointProfiles      || [];
       var workflows     = report.workflowSequences     || [];
       var insights      = report.insights              || [];

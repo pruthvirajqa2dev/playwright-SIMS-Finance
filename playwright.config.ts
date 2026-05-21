@@ -66,7 +66,8 @@ export default defineConfig({
         trace: "on-first-retry",
         screenshot: "on"
     },
-    // globalSetup: `src//utils//globalSetup.ts`,
+    globalSetup: `src/utils/globalSetup.ts`,
+    globalTeardown: `src/utils/globalTeardown.ts`,
 
     // ── maxFailures: stop early once 2 tests have failed ────────────────────
     // Applied globally; auth gate has its own retries=2 below so a transient

@@ -4,13 +4,13 @@
     "main": "index.js",
     "scripts": {
         "start": "set NODE_ENV=uat && echo %NODE_ENV%",
-        "test:training": "cross-env TEST_ENV=training npx playwright test src/tests/PostChecksTests.spec.ts",
-        "test:uat": "cross-env TEST_ENV=uat npx playwright test src/tests/PostChecksTests.spec.ts",
+        "test:training": "cross-env TEST_ENV=training npx playwright test src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts",
+        "test:uat": "cross-env TEST_ENV=uat npx playwright test src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts",
         "ai:analyse": "node src/test-intelligence/ai/extract-failures.js test-results.json failures.json && npx ts-node src/test-intelligence/ai/agents/FailureAnalystAgent.ts failures.json ai-failure-report.json",
         "ai:trends": "npx ts-node src/test-intelligence/ai/agents/TrendPatternAgent.ts test-results-history/consolidated.json ai-outputs/reports/trend.json",
         "ai:deep": "npx ts-node src/test-intelligence/ai/agents/DeepFailurePatternAgent.ts test-results-history/consolidated.json ai-outputs/reports/deep-failure.json",
         "ai:full": "node scripts/run-ai-full.js",
-        "ai:report": "node scripts/generate-ai-report.js ai-outputs/reports/trend.json ai-outputs/reports/deep-failure.json ai-outputs/ai-report.html ai-outputs/reports/regression-delta.json ai-outputs/reports/db-integrity.json",
+        "ai:report": "node scripts/generate-ai-report.js ai-outputs/reports/trend.json ai-outputs/reports/deep-failure.json ai-outputs/ai-report.html ai-outputs/reports/regression-delta.json ai-outputs/reports/db-integrity.json ai-outputs/reports/api-intelligence.json",
         "ai:regression": "npx ts-node src/test-intelligence/ai/agents/RegressionDeltaAgent.ts test-results-history/consolidated.json ai-outputs/reports/regression-delta.json",
         "ai:db:check": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --mode check ai-outputs/reports/db-integrity.json",
         "ai:db:pre": "npx ts-node src/test-intelligence/ai/agents/DatabaseIntegrityAgent.ts --mode pre ai-outputs/reports/db-snapshot.json",
@@ -19,7 +19,9 @@
         "ai:api": "npx ts-node src/test-intelligence/ai/agents/ApiIntelligenceAgent.ts ai-outputs/traces/network-traces.json ai-outputs/reports/api-intelligence.json",
         "ai:api:postman": "npx ts-node src/test-intelligence/ai/agents/ApiIntelligenceAgent.ts ai-outputs/traces/network-traces.json ai-outputs/reports/api-intelligence.json --postman",
         "ai:api:openapi": "npx ts-node src/test-intelligence/ai/agents/ApiIntelligenceAgent.ts ai-outputs/traces/network-traces.json ai-outputs/reports/api-intelligence.json --openapi",
-        "ai:serve": "node scripts/ai-server.js"
+        "ai:serve": "node scripts/ai-server.js",
+        "ai:publish": "node scripts/publish-ai-intelligence.js",
+        "merge:traces": "node scripts/merge-trace-shards.js"
     },
     "keywords": [],
     "author": "",
