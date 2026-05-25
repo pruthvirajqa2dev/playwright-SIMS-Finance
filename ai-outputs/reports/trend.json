@@ -1,23 +1,47 @@
 {
-  "generatedAt": "2026-05-21T08:52:10.341Z",
-  "runsAnalysed": 28,
+  "generatedAt": "2026-05-25T08:58:54.113Z",
+  "runsAnalysed": 29,
   "weekendExcluded": 2,
   "dateRange": {
-    "from": "2026-04-30",
-    "to": "2026-05-21"
+    "from": "2026-05-01",
+    "to": "2026-05-25"
   },
   "overallHealthScore": 75,
   "trendDirection": "Degrading",
-  "successRate": 36,
-  "avgTestPassRate": 89,
-  "flakyRate": 25,
+  "successRate": 28,
+  "avgTestPassRate": 90,
+  "flakyRate": 24,
   "byEnvironment": {
     "UAT": {
-      "total": 15,
-      "failures": 12,
+      "total": 19,
+      "failures": 16,
       "flaky": 2,
-      "avgSuccess": 86,
+      "avgSuccess": 85,
       "runs": [
+        {
+          "timestamp": "2026-05-25_08-39-17",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-05-22_11-06-38",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-05-21_11-40-34",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-05-21_08-47-36",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-05-21_06-20-14",
           "successRate": 86,
@@ -111,6 +135,30 @@
       ],
       "failureRuns": [
         {
+          "timestamp": "2026-05-25_08-39-17",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-05-22_11-06-38",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-05-21_11-40-34",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-05-21_08-47-36",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
           "timestamp": "2026-05-21_06-20-14",
           "successRate": 86,
           "flaky": false,
@@ -199,10 +247,10 @@
       ]
     },
     "TRAINING": {
-      "total": 13,
+      "total": 10,
       "failures": 0,
       "flaky": 5,
-      "avgSuccess": 92,
+      "avgSuccess": 100,
       "runs": [
         {
           "timestamp": "2026-05-08_13-48-46",
@@ -275,24 +323,6 @@
           "successRate": 100,
           "flaky": true,
           "isWeekend": false
-        },
-        {
-          "timestamp": "2026-04-30_18-28-47",
-          "successRate": 0,
-          "flaky": false,
-          "isWeekend": false
-        },
-        {
-          "timestamp": "2026-04-30_15-17-37",
-          "successRate": 100,
-          "flaky": false,
-          "isWeekend": false
-        },
-        {
-          "timestamp": "2026-04-30_13-55-57",
-          "successRate": 100,
-          "flaky": false,
-          "isWeekend": false
         }
       ],
       "failureRuns": [],
@@ -351,49 +381,47 @@
   "patterns": [
     {
       "patternType": "Chronic Flakiness",
-      "description": "7 runs (25%) exhibited flaky tests, indicating potential instability in specific test cases.",
+      "description": "7 runs (24%) exhibited flaky tests, indicating instability in test reliability.",
       "affectedRuns": 7,
       "severity": "Medium",
-      "recommendation": "Identify and stabilize flaky tests to improve overall reliability."
+      "recommendation": "Investigate the flaky tests to identify common failure points."
     },
     {
       "patternType": "Degrading Trend",
-      "description": "The average success rate decreased from 88% to 86% in the last 7 runs, suggesting a downward trend.",
+      "description": "The average success rate dropped from 90% to 84% in the last 7 runs, suggesting declining stability.",
       "affectedRuns": 7,
       "severity": "Medium",
-      "recommendation": "Investigate recent failures to identify root causes and prevent further decline."
+      "recommendation": "Analyze recent test failures to determine underlying causes."
     },
     {
       "patternType": "Recurring Outage",
-      "description": "Three consecutive runs from 2026-05-11 to 2026-05-12 recorded failures, indicating a potential issue during this period.",
-      "affectedRuns": 3,
+      "description": "12 consecutive runs from May 18 to May 25 recorded failures, indicating a significant risk period.",
+      "affectedRuns": 12,
       "severity": "High",
-      "recommendation": "Conduct a detailed review of the tests executed during this timeframe."
+      "recommendation": "Conduct a thorough review of the test environment and dependencies during this period."
     }
   ],
   "riskPeriods": [
     {
-      "period": "2026-05-11 to 2026-05-12",
-      "description": "Three consecutive runs with failures suggest a potential systemic issue."
-    },
-    {
-      "period": "2026-05-18 to 2026-05-21",
-      "description": "Eight consecutive runs with failures indicate a significant risk period requiring investigation."
+      "period": "2026-05-18 to 2026-05-25",
+      "description": "12 consecutive runs with failures suggest a critical risk period requiring immediate attention."
     }
   ],
   "actionItems": [
-    "Stabilize flaky tests identified in the recent runs.",
-    "Analyze failure patterns from 2026-05-11 to 2026-05-12.",
-    "Review test execution during the period of 2026-05-18 to 2026-05-21."
+    "Investigate flaky tests to improve reliability.",
+    "Analyze failure patterns from May 18 to May 25.",
+    "Review test dependencies and environment settings.",
+    "Monitor test execution closely during peak hours.",
+    "Enhance reporting on test failures for better visibility."
   ],
   "executiveSummary": [
-    "36% of runs passed fully without failures or flakiness.",
-    "12 runs experienced failures, with an average success rate of 89%.",
-    "7 runs (25%) showed flaky behaviour, indicating potential instability.",
-    "Average success rate dropped from 88% to 86% in the last 7 runs.",
-    "Three consecutive runs on 2026-05-11 to 2026-05-12 had failures.",
-    "Eight consecutive runs from 2026-05-18 to 2026-05-21 recorded failures.",
-    "UAT environment had a lower average success rate (86%) compared to TRAINING (92%).",
-    "Focus on stabilizing flaky tests and investigating recent failure clusters."
+    "28% of runs were fully passed with no failures or flakiness.",
+    "16 runs experienced failures, with an average success rate of 90%.",
+    "Recent runs showed a decline in success rate from 90% to 84%.",
+    "12 consecutive runs from May 18 to May 25 had failures, indicating a risk period.",
+    "7 tests exhibited flaky behaviour, impacting overall reliability.",
+    "UAT environment had a lower success rate (85%) compared to TRAINING (100%).",
+    "This pattern may indicate instability in the UAT environment.",
+    "Further analysis of recent failures could clarify underlying issues."
   ]
 }

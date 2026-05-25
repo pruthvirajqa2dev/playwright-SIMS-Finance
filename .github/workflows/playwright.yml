@@ -704,13 +704,26 @@ jobs:
           # Stage all tracked deletions and modifications (webm/zip strips, removed dirs).
           git add -u published-reports/
           git commit -m "Cleanup: Remove reports and history older than 30 days" || echo "No old reports/history to remove"
-          git push origin gh-pages || echo "No changes to push"
+          # Do NOT push here — push is done once in 'Commit Current Report' as a squashed force-push.
 
       - name: Commit Current Report to GitHub Pages
         run: |
           git add published-reports/$TIMESTAMP/ published-reports/index.html
-          git commit -m "Update Playwright reports with $TIMESTAMP"
-          git push origin gh-pages
+          git commit -m "Add report $TIMESTAMP"
+
+          # Squash the entire gh-pages history to a single orphan commit before pushing.
+          # With a growing branch, git must pack all accumulated commit/tree objects on
+          # every push. An orphan has no parent, so git only transmits new blob objects
+          # (unchanged files are already on the remote and are deduplicated by SHA).
+          # This keeps push payload proportional to what actually changed in this run.
+          HEAD_TREE=$(git rev-parse HEAD^{tree})
+          ORPHAN=$(git commit-tree "$HEAD_TREE" -m "Published reports snapshot: $TIMESTAMP")
+
+          for attempt in 1 2 3; do
+            git push --force origin "$ORPHAN:refs/heads/gh-pages" && break
+            echo "Push attempt $attempt failed — retrying in 20s..."
+            sleep 20
+          done
 
       - name: Set FINAL_STATUS from status.json
         run: |
@@ -840,8 +853,9 @@ jobs:
       - name: Checkout gh-pages for publishing
         run: |
           git fetch origin
-          git checkout gh-pages
-          git pull --rebase origin gh-pages || echo "No changes to pull"
+          git checkout gh-pages 2>/dev/null || git checkout -b gh-pages
+          # Use reset instead of pull --rebase so a force-pushed orphan branch is handled safely.
+          git reset --hard origin/gh-pages
         continue-on-error: true
 
       - name: Publish AI intelligence to gh-pages

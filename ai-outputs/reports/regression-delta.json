@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-05-21T08:53:03.602Z",
-  "pivotDate": "2026-05-14",
+  "generatedAt": "2026-05-25T09:01:24.955Z",
+  "pivotDate": "2026-05-18",
   "beforeWindow": {
-    "from": "2026-04-30",
-    "to": "2026-05-13",
+    "from": "2026-05-01",
+    "to": "2026-05-15",
     "runsAnalysed": 9
   },
   "afterWindow": {
-    "from": "2026-05-14",
-    "to": "2026-05-21",
-    "runsAnalysed": 8
+    "from": "2026-05-18",
+    "to": "2026-05-25",
+    "runsAnalysed": 10
   },
   "beforeEnvs": [
     "UAT",
@@ -23,10 +23,10 @@
     {
       "testTitle": "RSS310Q - Attachments @shard2",
       "beforeFailureRate": 0,
-      "afterFailureRate": 75,
+      "afterFailureRate": 100,
       "beforeFlakyRate": 11,
       "afterFlakyRate": 0,
-      "failureDelta": 75,
+      "failureDelta": 100,
       "flakyDelta": -11,
       "verdict": "Regressed",
       "riskLevel": "Critical",
@@ -40,13 +40,13 @@
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "beforeFailureRate": 44,
-      "afterFailureRate": 25,
+      "afterFailureRate": 10,
       "beforeFlakyRate": 0,
       "afterFlakyRate": 0,
-      "failureDelta": -19,
+      "failureDelta": -34,
       "flakyDelta": 0,
       "verdict": "Improved",
-      "riskLevel": "High",
+      "riskLevel": "Medium",
       "errorSamplesBefore": [
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
       ],
@@ -74,17 +74,20 @@
     }
   ],
   "actionItems": [
-    "Investigate the regression in 'RSS310Q - Attachments' with a failure rate increase to 75%.",
-    "Analyze the timing issues indicated by the error messages in 'RSS310Q'.",
-    "Review the changes made around the pivot date for potential impacts on critical tests.",
-    "Monitor the stability of the 'NML510 - Trial Balance Report' to ensure improvements are sustained.",
+    "Investigate the cause of the 100% failure rate in 'RSS310Q - Attachments' post-pivot.",
+    "Analyze the locator visibility issues reported in 'RSS310Q - Attachments'.",
+    "Review the changes made around the pivot date for potential impacts on test stability.",
+    "Monitor the performance of 'NML510 - Trial Balance Report' to ensure improvements are sustained.",
     "Assess the environment differences between UAT and TRAINING for potential confounding factors."
   ],
   "executiveSummary": [
-    "The test 'RSS310Q - Attachments' regressed from 0% to 75% failure rate after the pivot on 2026-05-14.",
-    "This regression may indicate a significant issue with visibility of elements in the user interface.",
-    "The observed pattern could reflect instability affecting critical financial reporting processes.",
-    "Improvements were noted in 'NML510 - Trial Balance Report', reducing failure rates from 44% to 25%.",
-    "The 'RSS570 - Crystal Report' resolved its failures completely, improving from 33% to 0%."
+    "The test 'RSS310Q - Attachments' failed 100% of the time after the pivot on 2026-05-18.",
+    "This regression may indicate a significant issue with the visibility of critical UI elements.",
+    "The improvement in 'NML510 - Trial Balance Report' from 44% to 10% suggests positive changes.",
+    "Four tests remained stable, indicating some areas are functioning as expected.",
+    "The observed pattern in 'RSS310Q - Attachments' could reflect a timing issue or recent code changes.",
+    "May affect the reliability of attachment functionalities for users managing documents.",
+    "Further investigation into the locator failures may clarify the underlying issues.",
+    "Comparing test results across environments could help isolate the cause of the regression."
   ]
 }
