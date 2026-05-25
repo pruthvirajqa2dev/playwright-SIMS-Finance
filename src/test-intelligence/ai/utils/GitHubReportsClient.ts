@@ -5,8 +5,8 @@
  * under published-reports/{timestamp}/test-results.json.
  *
  * Required environment variables:
- *   GITHUB_REPO_OWNER  — e.g. pruthvirajqa2dev
- *   GITHUB_REPO_NAME   — e.g. playwright-SIMS-Finance
+ *   GH_REPO_OWNER  — e.g. pruthvirajqa2dev
+ *   GH_REPO_NAME   — e.g. playwright-SIMS-Finance
  *
  * Optional:
  *   GITHUB_TOKEN       — Personal Access Token for private repos or higher
@@ -125,14 +125,14 @@ export class GitHubReportsClient {
     private readonly branch = "gh-pages";
 
     constructor() {
-        this.owner = process.env.GITHUB_REPO_OWNER ?? "";
-        this.repo = process.env.GITHUB_REPO_NAME ?? "";
+        this.owner = process.env.GH_REPO_OWNER ?? "";
+        this.repo = process.env.GH_REPO_NAME ?? "";
         this.token = process.env.GITHUB_TOKEN;
 
         if (!this.owner || !this.repo) {
             throw new Error(
-                "Set GITHUB_REPO_OWNER and GITHUB_REPO_NAME in your .env file.\n" +
-                    "Example: GITHUB_REPO_OWNER=pruthvirajqa2dev"
+                "Set GH_REPO_OWNER and GH_REPO_NAME in your .env file.\n" +
+                    "Example: GH_REPO_OWNER=pruthvirajqa2dev"
             );
         }
     }

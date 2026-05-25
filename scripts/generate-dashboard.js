@@ -14,51 +14,53 @@
  *     published-reports/index.html
  */
 
-'use strict';
+"use strict";
 
-const fs   = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // ---------------------------------------------------------------------------
 // Argument handling
 // ---------------------------------------------------------------------------
-const [,, consolidatedJsonPath, rowsJsonPath, outputHtmlPath] = process.argv;
+const [, , consolidatedJsonPath, rowsJsonPath, outputHtmlPath] = process.argv;
 
 if (!consolidatedJsonPath || !rowsJsonPath || !outputHtmlPath) {
-  console.error(
-    'Usage: node generate-dashboard.js <consolidated_json> <rows_json> <output_html>'
-  );
-  process.exit(1);
+    console.error(
+        "Usage: node generate-dashboard.js <consolidated_json> <rows_json> <output_html>"
+    );
+    process.exit(1);
 }
 
 // ---------------------------------------------------------------------------
 // Read inputs
 // ---------------------------------------------------------------------------
 function readJson(filePath, fallback) {
-  try {
-    let raw = fs.readFileSync(filePath, 'utf8').trim();
+    try {
+        let raw = fs.readFileSync(filePath, "utf8").trim();
 
-    // Bash JSON builders often append a trailing comma before the closing
-    // bracket/brace, producing invalid JSON (e.g. [{...},{...},]).  Strip it.
-    raw = raw
-      .replace(/,\s*]/g, ']')   // trailing comma before ]
-      .replace(/,\s*}/g, '}');  // trailing comma before }
+        // Bash JSON builders often append a trailing comma before the closing
+        // bracket/brace, producing invalid JSON (e.g. [{...},{...},]).  Strip it.
+        raw = raw
+            .replace(/,\s*]/g, "]") // trailing comma before ]
+            .replace(/,\s*}/g, "}"); // trailing comma before }
 
-    JSON.parse(raw); // validate — throws if still malformed
-    return raw;
-  } catch (err) {
-    console.warn(`Warning: could not read/parse ${filePath} – using fallback. (${err.message})`);
-    return JSON.stringify(fallback);
-  }
+        JSON.parse(raw); // validate — throws if still malformed
+        return raw;
+    } catch (err) {
+        console.warn(
+            `Warning: could not read/parse ${filePath} – using fallback. (${err.message})`
+        );
+        return JSON.stringify(fallback);
+    }
 }
 
 const historyJson = readJson(consolidatedJsonPath, { runs: [] });
-const rowsJson    = readJson(rowsJsonPath, []);
+const rowsJson = readJson(rowsJsonPath, []);
 
 // ---------------------------------------------------------------------------
 // HTML template — React 18 + Tailwind CSS CDN + Chart.js
 // ---------------------------------------------------------------------------
-const template = /* html */`<!DOCTYPE html>
+const template = /* html */ `<!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
   <meta charset="UTF-8" />
@@ -1069,13 +1071,13 @@ const template = /* html */`<!DOCTYPE html>
 // Inject data and write output
 // ---------------------------------------------------------------------------
 const output = template
-  .replace('__HISTORY_PLACEHOLDER__', historyJson)
-  .replace('__ROWS_PLACEHOLDER__',    rowsJson);
+    .replace("__HISTORY_PLACEHOLDER__", historyJson)
+    .replace("__ROWS_PLACEHOLDER__", rowsJson);
 
 const outputDir = path.dirname(outputHtmlPath);
 if (!fs.existsSync(outputDir)) {
-  fs.mkdirSync(outputDir, { recursive: true });
+    fs.mkdirSync(outputDir, { recursive: true });
 }
 
-fs.writeFileSync(outputHtmlPath, output, 'utf8');
+fs.writeFileSync(outputHtmlPath, output, "utf8");
 console.log(`Dashboard written to: ${outputHtmlPath}`);

@@ -256,7 +256,7 @@ npm run ai:full
        │        reads:  test-results-history/consolidated.json
        │                + test-results.json files from GitHub gh-pages
        │        writes: ai-deep-failure-report.json
-       │        fails:  if GITHUB_REPO_OWNER/NAME not set → throws at constructor
+       │        fails:  if GH_REPO_OWNER/NAME not set → throws at constructor
        │        exit 1: never (errors throw, caught by orchestrator)
        │
        ├─ [3] npm run ai:regression  (RegressionDeltaAgent.ts)
@@ -569,7 +569,7 @@ Hard-coded "All checks passed" strings are returned instead.
 | ------- | ----------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **F1**  | `timestamp` format                              | **High**   | All agents split on `_` to extract date. Any format change silently breaks pivot comparisons in RegressionDeltaAgent. No format validation exists.                                                                                                                        |
 | **F2**  | `spec.title` uniqueness                         | **High**   | `testTitle` is the Map key for profiles, co-failure pairs, and AI merge. Duplicate titles (same test name across different suites) silently merge into one profile.                                                                                                       |
-| **F3**  | `GITHUB_REPO_OWNER`/`GITHUB_REPO_NAME`          | **High**   | `GitHubReportsClient` constructor throws if either is unset. DeepFailurePatternAgent and RegressionDeltaAgent crash entirely — no graceful degradation at the constructor level.                                                                                          |
+| **F3**  | `GH_REPO_OWNER`/`GH_REPO_NAME`                  | **High**   | `GitHubReportsClient` constructor throws if either is unset. DeepFailurePatternAgent and RegressionDeltaAgent crash entirely — no graceful degradation at the constructor level.                                                                                          |
 | **F4**  | gh-pages path convention                        | **High**   | Hardcoded as `published-reports/{timestamp}/test-results.json`. Any change to how CI publishes reports breaks all GitHub fetches.                                                                                                                                         |
 | **F5**  | `filterByExcludedDays` scope                    | **Medium** | Applied in TrendPatternAgent and DeepFailurePatternAgent only. **Not** applied in RegressionDeltaAgent. If `EXCLUDE_DAYS=Saturday,Sunday`, trend/deep exclude weekends but regression includes them — window profiles are inconsistent with trend profiles.               |
 | **F6**  | Pivot date default (7 days ago)                 | **Medium** | In `ai:full`, no `--since` arg is passed. Pivot is auto-derived as today minus 7 days. If no deployment happened exactly 7 days ago, the regression report's "before/after" split is arbitrary.                                                                           |
@@ -590,8 +590,8 @@ Hard-coded "All checks passed" strings are returned instead.
 | `AZURE_OPENAI_ENDPOINT`        | All 4 agents                                   | Yes       | —                                        |
 | `AZURE_OPENAI_API_KEY`         | All 4 agents                                   | Yes       | —                                        |
 | `AZURE_OPENAI_DEPLOYMENT`      | All 4 agents                                   | No        | `"gpt-4o"`                               |
-| `GITHUB_REPO_OWNER`            | DeepFailurePatternAgent, RegressionDeltaAgent  | Yes\*     | —                                        |
-| `GITHUB_REPO_NAME`             | DeepFailurePatternAgent, RegressionDeltaAgent  | Yes\*     | —                                        |
+| `GH_REPO_OWNER`                | DeepFailurePatternAgent, RegressionDeltaAgent  | Yes\*     | —                                        |
+| `GH_REPO_NAME`                 | DeepFailurePatternAgent, RegressionDeltaAgent  | Yes\*     | —                                        |
 | `GITHUB_TOKEN`                 | DeepFailurePatternAgent, RegressionDeltaAgent  | No        | unauthenticated (60 req/hr)              |
 | `DB_SERVER`                    | DatabaseIntegrityAgent                         | Yes\*\*   | —                                        |
 | `DB_DATABASE`                  | DatabaseIntegrityAgent                         | Yes\*\*   | —                                        |

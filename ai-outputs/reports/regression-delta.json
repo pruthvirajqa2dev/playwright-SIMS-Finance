@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-05-18T06:02:41.266Z",
-  "pivotDate": "2026-05-11",
+  "generatedAt": "2026-05-21T08:53:03.602Z",
+  "pivotDate": "2026-05-14",
   "beforeWindow": {
-    "from": "2026-04-27",
-    "to": "2026-05-08",
-    "runsAnalysed": 8
+    "from": "2026-04-30",
+    "to": "2026-05-13",
+    "runsAnalysed": 9
   },
   "afterWindow": {
-    "from": "2026-05-11",
-    "to": "2026-05-15",
-    "runsAnalysed": 4
+    "from": "2026-05-14",
+    "to": "2026-05-21",
+    "runsAnalysed": 8
   },
   "beforeEnvs": [
-    "TRAINING",
-    "UAT"
+    "UAT",
+    "TRAINING"
   ],
   "afterEnvs": [
     "UAT"
@@ -21,56 +21,70 @@
   "overallVerdict": "Regressed",
   "regressions": [
     {
-      "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 13,
-      "afterFailureRate": 100,
-      "beforeFlakyRate": 0,
-      "afterFlakyRate": 0,
-      "failureDelta": 87,
-      "flakyDelta": 0,
-      "verdict": "Regressed",
-      "riskLevel": "Critical",
-      "errorSamplesBefore": [
-        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
-      ],
-      "errorSamplesAfter": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
-      ]
-    },
-    {
-      "testTitle": "RSS570 - Crystal Report @shard1",
+      "testTitle": "RSS310Q - Attachments @shard2",
       "beforeFailureRate": 0,
       "afterFailureRate": 75,
-      "beforeFlakyRate": 25,
+      "beforeFlakyRate": 11,
       "afterFlakyRate": 0,
       "failureDelta": 75,
-      "flakyDelta": -25,
+      "flakyDelta": -11,
       "verdict": "Regressed",
       "riskLevel": "Critical",
       "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('[axes=\\'DOC"
+      ]
+    }
+  ],
+  "improvements": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 44,
+      "afterFailureRate": 25,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -19,
+      "flakyDelta": 0,
+      "verdict": "Improved",
+      "riskLevel": "High",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
       "errorSamplesAfter": [
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
       ]
     }
   ],
-  "improvements": [],
   "newFailures": [],
-  "resolvedFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 33,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 22,
+      "afterFlakyRate": 0,
+      "failureDelta": -33,
+      "flakyDelta": -22,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
   "actionItems": [
-    "Investigate the cause of the 100% failure rate in 'NML510 - Trial Balance Report'.",
-    "Analyze the 75% failure rate in 'RSS570 - Crystal Report' for potential shared dependencies.",
-    "Review the environment differences between the before and after windows for potential confounds.",
-    "Examine the timing issues indicated by the pre-pivot timeout errors.",
-    "Monitor for any further regressions in the upcoming runs."
+    "Investigate the regression in 'RSS310Q - Attachments' with a failure rate increase to 75%.",
+    "Analyze the timing issues indicated by the error messages in 'RSS310Q'.",
+    "Review the changes made around the pivot date for potential impacts on critical tests.",
+    "Monitor the stability of the 'NML510 - Trial Balance Report' to ensure improvements are sustained.",
+    "Assess the environment differences between UAT and TRAINING for potential confounding factors."
   ],
   "executiveSummary": [
-    "100% failure rate observed for 'NML510 - Trial Balance Report' after the pivot date.",
-    "75% failure rate recorded for 'RSS570 - Crystal Report', indicating a significant regression.",
-    "Both tests showed critical risk, with 'NML510' failing entirely post-pivot.",
-    "The observed pattern may indicate instability introduced by recent code changes.",
-    "These issues could affect the accuracy of financial reporting for users.",
-    "Further investigation into the shared environment may clarify the regression causes.",
-    "Reviewing error logs around the pivot date may provide additional insights.",
-    "No improvements were noted, highlighting a need for immediate attention."
+    "The test 'RSS310Q - Attachments' regressed from 0% to 75% failure rate after the pivot on 2026-05-14.",
+    "This regression may indicate a significant issue with visibility of elements in the user interface.",
+    "The observed pattern could reflect instability affecting critical financial reporting processes.",
+    "Improvements were noted in 'NML510 - Trial Balance Report', reducing failure rates from 44% to 25%.",
+    "The 'RSS570 - Crystal Report' resolved its failures completely, improving from 33% to 0%."
   ]
 }

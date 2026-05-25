@@ -1,4 +1,5 @@
 node_modules/
+published-reports/node_modules
 # Secrets — never commit; fill in locally or inject via CI secrets
 src/config/.env
 /test-results/

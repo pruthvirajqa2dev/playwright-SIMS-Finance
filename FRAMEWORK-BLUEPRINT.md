@@ -118,6 +118,8 @@ playwright-SIMS-Finance/
 │   │   ├── BACSRun.spec.ts
 │   │   ├── glCodeExtractor.spec.ts
 │   │   └── IdentifyPaymentMethods.spec.ts
+│   ├── fixtures/
+│   │   └── test.ts                  # Extended test fixture with auto NetworkCapture
 │   └── utils/
 │       ├── ApiSignalCollector.ts    # Passive network signal accumulator
 │       ├── credentials.ts           # Credential resolver (env → JSON → decrypt)
@@ -127,6 +129,8 @@ playwright-SIMS-Finance/
 │       ├── FileManager.ts           # File I/O (exists, delete, move…)
 │       ├── FileUtils.ts             # Glob, unzip, latest-file lookup
 │       ├── GmailUtils.ts            # Gmail OAuth2 email verification
+│       ├── globalSetup.ts           # Playwright globalSetup — cleans trace shards
+│       ├── globalTeardown.ts        # Playwright globalTeardown — merges worker traces
 │       ├── glcodehelper.ts          # GL code extraction from SIMS data
 │       ├── InvoiceCalc.ts           # Invoice arithmetic validation helpers
 │       ├── NetworkCapture.ts        # Passive Playwright network listener → ApiTrace
@@ -145,7 +149,10 @@ playwright-SIMS-Finance/
 │   └── run-ai-full.js               # Orchestrates all AI agents sequentially
 ├── ai-outputs/
 │   ├── ai-report.html               # Final AI analysis report (self-contained React app)
-│   └── reports/                     # Agent JSON outputs (trend, deep-failure, regression…)
+│   ├── reports/                     # Agent JSON outputs (trend, deep-failure, regression…)
+│   └── traces/
+│       ├── network-traces.json      # Seed (mock) or real captured HTTP traces
+│       └── worker-{n}.json          # Per-worker trace shards (transient, gitignored)
 ├── test-results-history/
 │   └── consolidated.json            # Append-only run history fed to AI agents
 ├── playwright.config.ts
@@ -300,13 +307,25 @@ CI merge-reports job (if: always())
         └─ Publishes HTML report + dashboard to GitHub Pages
         │
         ▼
+        │  [When ENABLE_NETWORK_CAPTURE=true AND tests use src/fixtures/test.ts]
+        │   ├─ globalSetup.ts cleans ai-outputs/traces/worker-{n}.json shards
+        │   ├─ _captureWorker fixture resets NetworkTraceStore per worker
+        │   ├─ _captureActive fixture attaches NetworkCapture to each test's page
+        │   ├─ On test teardown: traces added to NetworkTraceStore (in-process)
+        │   ├─ On worker teardown: NetworkTraceStore flushes to worker-{n}.json
+        │   └─ globalTeardown.ts merges all worker-{n}.json → network-traces.json
+        │
+        ▼
 AI Analysis (triggered separately: npm run ai:full)
         │
         ├─ TrendPatternAgent     → ai-outputs/reports/trend.json
         ├─ DeepFailurePatternAgent → ai-outputs/reports/deep-failure.json
         ├─ RegressionDeltaAgent  → ai-outputs/reports/regression-delta.json
         ├─ DatabaseIntegrityAgent → ai-outputs/reports/db-integrity.json
-        ├─ ApiIntelligenceAgent  → ai-outputs/reports/api-intelligence.json
+        ├─ ApiIntelligenceAgent  reads network-traces.json
+        │     ├─ { _isMockData: true, traces: [...] }  → seed file → report._isMockData = true
+        │     └─ ApiTrace[]  (plain array)              → real file → no mock flag
+        │                     → ai-outputs/reports/api-intelligence.json
         └─ generate-ai-report.js → ai-outputs/ai-report.html  (self-contained React app)
 ```
 
@@ -329,6 +348,8 @@ AI Analysis (triggered separately: npm run ai:full)
 | `trace`          | `on-first-retry`                         | Keeps artefact size manageable; captures the retry context                            |
 | `maxFailures`    | `2` in CI                                | Stop-early — prevents running 40 min of tests after the environment is clearly broken |
 | `outputDir`      | `C:/temp/playwright-test-results`        | Avoids filling the repo root with video artefacts                                     |
+| `globalSetup`    | `src/utils/globalSetup.ts`               | Cleans stale per-worker trace shards before each run                                  |
+| `globalTeardown` | `src/utils/globalTeardown.ts`            | Merges per-worker trace shards into `network-traces.json` after all workers finish    |
 
 **Projects block pattern:**
 
@@ -481,10 +502,49 @@ Methods: `readSheet`, `writeSheet`, `readCell`, `writeCell` with safe validation
 
 - PASSIVE — never modifies requests.
 - NON-BLOCKING — capture errors never propagate to test code.
-- SAFE — OWASP-sensitive headers (Authorization, Cookie, x-csrf-token…) auto-masked.
-- MEMORY-BOUNDED — max 500 traces per test.
+- SAFE — see PII masking layers below.
+- MEMORY-BOUNDED — max 500 traces per test (configurable via `MAX_TRACES_PER_TEST`).
+
+**PII masking layers (applied to all request/response bodies):**
+
+| Layer          | What is masked                                                                                                                                       |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Auth fields    | `password`, `token`, `secret`, `apiKey`, `accessToken`, `refreshToken`, `jwt`, `bearerToken`                                                         |
+| Finance fields | `accountNumber`, `sortCode`, `bankAccount`, `iban`, `bic`, `cardNumber`, `cvv`, `niNumber`, `nationalInsurance`, `payrollNumber`, `utr`, `vatNumber` |
+| Auth patterns  | `Bearer <token>`, `Basic <credentials>`                                                                                                              |
+| UK NI numbers  | Regex: `[A-CEGHJ-PR-TW-Z][ABCEGHJ-NPR-TW-Z]\d{6}[A-D]`                                                                                               |
+| UK sort codes  | Pattern: `nn-nn-nn`                                                                                                                                  |
+| Card numbers   | Visa / Mastercard / Amex patterns                                                                                                                    |
 
 Feeds `ApiIntelligenceAgent` for API contract inference.
+
+### 7.7a `src/fixtures/test.ts` _(new)_
+
+**Role:** Extended Playwright test object that auto-attaches `NetworkCapture` to every test page with zero per-test code changes.  
+**Activation:** Set `ENABLE_NETWORK_CAPTURE=true` in `src/config/.env`. Off by default.
+
+| Fixture          | Scope         | Behaviour                                                                    |
+| ---------------- | ------------- | ---------------------------------------------------------------------------- |
+| `_captureWorker` | Worker (auto) | Resets `NetworkTraceStore` at worker start; flushes shard file at worker end |
+| `_captureActive` | Test (auto)   | Starts `NetworkCapture` on page; adds traces to store on teardown            |
+
+**Import change required in test files:**
+
+```typescript
+// Before
+import test, { expect } from "@playwright/test";
+
+// After
+import { test, expect } from "../../fixtures/test";
+```
+
+### 7.7b `src/utils/globalSetup.ts` _(new)_
+
+**Role:** Runs once before all Playwright workers. Removes stale `worker-{n}.json` trace shard files from previous runs. Creates `ai-outputs/traces/` if missing.
+
+### 7.7c `src/utils/globalTeardown.ts` _(new)_
+
+**Role:** Runs once after all Playwright workers finish. Merges all `worker-{n}.json` shard files into the consolidated `network-traces.json` using `NetworkTraceStore.mergeFiles()`. No-op when `ENABLE_NETWORK_CAPTURE` is not set.
 
 ### 7.7 `GmailUtils.ts`
 
@@ -832,12 +892,14 @@ Implement agents in this order:
 
 ### 12.5 AI Layer
 
-| Current                                     | Improvement                                                           |
-| ------------------------------------------- | --------------------------------------------------------------------- |
-| Agents run sequentially in `run-ai-full.js` | Run agents concurrently with `Promise.all()` — 5× faster              |
-| AI model hard-coded to `gpt-4o`             | Support model fallback chain: `gpt-4o` → `gpt-4o-mini` on rate limit  |
-| `consolidated.json` is unbounded            | Add rolling window (e.g. last 90 days) to prevent token limit issues  |
-| `NetworkCapture` is manually attached       | Add as a **global Playwright fixture** — zero per-test changes needed |
+| Current                                      | Status  | Improvement                                                          |
+| -------------------------------------------- | ------- | -------------------------------------------------------------------- |
+| Agents run sequentially in `run-ai-full.js`  | Open    | Run agents concurrently with `Promise.all()` — 5× faster             |
+| AI model hard-coded to `gpt-4o`              | Open    | Support model fallback chain: `gpt-4o` → `gpt-4o-mini` on rate limit |
+| `consolidated.json` is unbounded             | Open    | Add rolling window (e.g. last 90 days) to prevent token limit issues |
+| `NetworkCapture` as global fixture           | ✅ Done | `src/fixtures/test.ts` with auto-use worker + test scoped fixtures   |
+| `ai:full` doesn't run `ApiIntelligenceAgent` | ✅ Done | `run-ai-full.js` now includes `ai:api` step with mock fallback       |
+| Mock data in API Intelligence section        | ✅ Done | `_isMockData` propagated from trace file through agent to dashboard  |
 
 ### 12.6 Developer Experience
 
@@ -867,4 +929,129 @@ npm install -D @slack/webhook
 
 ---
 
-_Generated from live codebase analysis — May 2026_
+---
+
+## 13. API Intelligence — Real Capture Integration _(May 2026)_
+
+This section documents the end-to-end implementation connecting live Playwright test traffic to the API Intelligence dashboard section.
+
+### 13.1 Architecture Overview
+
+```
+[Playwright test run]
+    src/fixtures/test.ts (_captureWorker + _captureActive auto-use fixtures)
+        │
+        ├─ per test: NetworkCapture attaches to page → collects ApiTrace[]
+        └─ per worker teardown: NetworkTraceStore.flush("worker-{n}.json")
+                │
+                ▼
+    globalTeardown.ts
+        NetworkTraceStore.mergeFiles([worker-0.json, worker-1.json, …])
+            → ai-outputs/traces/network-traces.json  (plain ApiTrace[])
+                │
+                ▼
+    npm run ai:api
+        ApiIntelligenceAgent
+            ├─ Detects format: plain array = real, {_isMockData,traces} = seed
+            ├─ ApiTrafficAnalyzer (deterministic: profiles, latency, domains)
+            ├─ Azure OpenAI (workflow names, insights, executive summary)
+            └─ ai-outputs/reports/api-intelligence.json
+                │  (_isMockData: true when seed input; omitted when real)
+                ▼
+    npm run ai:report
+        generate-ai-report.js embeds api-intelligence.json into ai-report.html
+            └─ ApiIntelligenceSection renders 🧪 Mock Data banner when _isMockData
+```
+
+### 13.2 Trace File Formats
+
+| File                         | Format                                          | Written by               | Indicates                                        |
+| ---------------------------- | ----------------------------------------------- | ------------------------ | ------------------------------------------------ |
+| `network-traces.json` (seed) | `{ "_isMockData": true, "traces": ApiTrace[] }` | Committed to repo        | Seed/demo data — mock banner shows               |
+| `network-traces.json` (real) | `ApiTrace[]` (plain array)                      | `globalTeardown.ts`      | Real captured traffic — no mock banner           |
+| `worker-{n}.json`            | `ApiTrace[]`                                    | `_captureWorker` fixture | Transient shard — merged and deleted by teardown |
+
+### 13.3 Environment Variables
+
+| Variable                 | Default        | Purpose                                                                                                           |
+| ------------------------ | -------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `ENABLE_NETWORK_CAPTURE` | `false`        | Set to `"true"` to activate capture. When absent, all fixtures are no-ops and `network-traces.json` is untouched. |
+| `MAX_TRACES_PER_TEST`    | `200`          | Maximum traces stored per test. Reduce for very large suites.                                                     |
+| `CAPTURE_HOSTNAMES`      | _(from `URL`)_ | Comma-separated extra hostnames to capture beyond the primary app URL.                                            |
+
+Add to `src/config/.env`:
+
+```env
+ENABLE_NETWORK_CAPTURE=true
+MAX_TRACES_PER_TEST=200
+# CAPTURE_HOSTNAMES=api2.example.com,auth.example.com
+```
+
+### 13.4 Activation Checklist
+
+| Step | Action                            | File                                         |
+| ---- | --------------------------------- | -------------------------------------------- |
+| 1    | Set `ENABLE_NETWORK_CAPTURE=true` | `src/config/.env`                            |
+| 2    | Change test import                | `src/tests/*/YourTest.spec.ts`               |
+| 3    | Run Playwright tests              | `npm run test:uat`                           |
+| 4    | Run AI analysis                   | `npm run ai:full`                            |
+| 5    | View report                       | `npm run ai:serve` → `http://localhost:3001` |
+
+**Test import change (step 2):**
+
+```typescript
+// Before
+import test, { expect, Page, TestInfo } from "@playwright/test";
+
+// After
+import { test, expect } from "../../fixtures/test";
+import type { Page, TestInfo } from "@playwright/test";
+```
+
+### 13.5 Mock vs Real Mode
+
+| Mode            | Trigger                                                                     | Dashboard indicator                                                   |
+| --------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **Mock / Seed** | `network-traces.json` has `_isMockData: true` wrapper                       | `🧪 Mock Data — POC Demonstration` purple banner + section label pill |
+| **Real**        | `network-traces.json` is a plain `ApiTrace[]` (written by `globalTeardown`) | No banner                                                             |
+
+The `_isMockData` flag is propagated from the input trace file through `ApiIntelligenceAgent` into `api-intelligence.json`. The HTML report checks `report._isMockData === true` to conditionally render the banner — no manual intervention required.
+
+### 13.6 Fallback / Resilience
+
+`run-ai-full.js` handles three `ai:api` failure scenarios:
+
+| Scenario                           | Behaviour                                                                                                             |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `network-traces.json` missing      | `ai:api` exits 1 → pipeline preserves existing `api-intelligence.json` (if present); silently skips if neither exists |
+| Seed `network-traces.json` present | Agent runs, writes report with `_isMockData: true`; not counted as pipeline failure                                   |
+| Azure OpenAI credentials missing   | `ai:api` exits 1 → existing `api-intelligence.json` preserved; pipeline marked failed only if no fallback exists      |
+
+### 13.7 `ApiTrace` Contract
+
+All captured HTTP interactions conform to `src/test-intelligence/contracts/ApiTrace.ts`:
+
+```typescript
+interface ApiTrace {
+    seq: number; // monotonically increasing per test run
+    timestamp: string; // UTC ISO-8601
+    testTitle: string; // Playwright test title (e.g. "PRL300Q - Add Invoice @shard1")
+    method: string; // GET | POST | PUT | PATCH | DELETE
+    url: string; // sanitised URL (sensitive query params redacted)
+    pathname: string; // e.g. "/api/invoices"
+    hostname: string; // e.g. "sims-uat.capita.com"
+    queryParams: Record<string, string>; // sensitive keys → "[REDACTED]"
+    requestHeaders: Record<string, string>; // auth headers → "[REDACTED]"
+    requestBody: string | null; // truncated, PII-masked
+    responseStatus: number;
+    responseHeaders: Record<string, string>;
+    responseBody: string | null; // truncated, PII-masked
+    durationMs: number;
+    domain?: SIMSDomain; // set by ApiTrafficAnalyzer
+    category?: ApiCategory; // set by ApiTrafficAnalyzer
+}
+```
+
+---
+
+_Generated from live codebase analysis — May 2026. Updated with API Intelligence real capture integration._

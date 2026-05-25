@@ -356,7 +356,7 @@ Directly addresses:
 
 ### GitHubReportsClient
 
-- **Required env vars**: `GITHUB_REPO_OWNER`, `GITHUB_REPO_NAME`
+- **Required env vars**: `GH_REPO_OWNER`, `GH_REPO_NAME`
 - **Optional**: `GITHUB_TOKEN` (raises rate limit from 60 → 5000 req/hr)
 - Reads `test-results.json` from `gh-pages` branch under `published-reports/{timestamp}/`
 - Uses Node.js built-in `https` — no extra dependencies
@@ -381,8 +381,8 @@ otherwise                             →  result status as-is
 | `AZURE_OPENAI_ENDPOINT`   | Both agents             | Yes                    |
 | `AZURE_OPENAI_API_KEY`    | Both agents             | Yes                    |
 | `AZURE_OPENAI_DEPLOYMENT` | Both agents             | No (default: `gpt-4o`) |
-| `GITHUB_REPO_OWNER`       | DeepFailurePatternAgent | Yes                    |
-| `GITHUB_REPO_NAME`        | DeepFailurePatternAgent | Yes                    |
+| `GH_REPO_OWNER`           | DeepFailurePatternAgent | Yes                    |
+| `GH_REPO_NAME`            | DeepFailurePatternAgent | Yes                    |
 | `GITHUB_TOKEN`            | DeepFailurePatternAgent | No                     |
 | `DEEP_MAX_RUNS`           | DeepFailurePatternAgent | No (default: `15`)     |
 | `GITHUB_STEP_SUMMARY`     | Both agents (CI)        | No                     |

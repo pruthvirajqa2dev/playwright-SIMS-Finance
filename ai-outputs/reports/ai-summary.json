@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-05-20T05:28:55.665Z",
+  "runTimestamp": "",
+  "pipelineStatus": "success",
+  "healthScore": 75,
+  "trend": "Improving",
+  "topInsights": [
+    "The endpoint POST /sfdemosite130/nml510_refresh_control.xml was called 23 times in a single test, indicating potential inefficiencies.",
+    "The observed UI actions, such as logging in and navigating, correlate with specific API calls, indicating a clear relationship.",
+    "/sfdemosite130/nml510_refresh_control.xml called avg 23× per test"
+  ],
+  "api": {
+    "captureNotRun": false,
+    "totalTraces": 175,
+    "uniqueEndpoints": 43,
+    "workflowsDetected": 7,
+    "repeatedCallWarnings": 6
+  },
+  "failures": {
+    "topUnstable": [
+      "NML510 - Trial Balance Report @shard1",
+      "RSS570 - Crystal Report @shard1",
+      "RSS310Q - Attachments @shard2"
+    ],
+    "regressions": 2,
+    "resolved": 0
+  }
+}

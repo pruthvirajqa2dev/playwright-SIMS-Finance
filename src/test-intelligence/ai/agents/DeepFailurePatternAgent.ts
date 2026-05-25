@@ -9,8 +9,8 @@
  * (which SPECIFIC test is failing, how often, and what the error pattern is).
  *
  * Required env vars:
- *   GITHUB_REPO_OWNER         — e.g. pruthvirajqa2dev
- *   GITHUB_REPO_NAME          — e.g. playwright-SIMS-Finance
+ *   GH_REPO_OWNER         — e.g. pruthvirajqa2dev
+ *   GH_REPO_NAME          — e.g. playwright-SIMS-Finance
  *   AZURE_OPENAI_ENDPOINT
  *   AZURE_OPENAI_API_KEY
  *   AZURE_OPENAI_DEPLOYMENT
@@ -331,7 +331,7 @@ export async function runDeepAnalysis(
     if (reports.length === 0) {
         console.warn(
             "⚠️  Could not fetch any run reports from gh-pages.\n" +
-                "Check GITHUB_REPO_OWNER, GITHUB_REPO_NAME, and optionally GITHUB_TOKEN.\n" +
+                "Check GH_REPO_OWNER, GH_REPO_NAME, and optionally GITHUB_TOKEN.\n" +
                 "Returning partial report with no per-test analysis."
         );
         return {
@@ -344,7 +344,7 @@ export async function runDeepAnalysis(
             coFailurePatterns: [],
             topUnstableTests: [],
             actionItems: [
-                "GitHub fetch failed — per-test analysis unavailable. Check GITHUB_REPO_OWNER, GITHUB_REPO_NAME, and GITHUB_TOKEN."
+                "GitHub fetch failed — per-test analysis unavailable. Check GH_REPO_OWNER, GH_REPO_NAME, and GITHUB_TOKEN."
             ],
             executiveSummary:
                 "Per-test analysis could not be completed because test-results.json files could not be fetched from GitHub Pages. Trend and regression reports are unaffected."
@@ -365,8 +365,8 @@ export async function runDeepAnalysis(
     });
 
     const reportBaseUrl =
-        process.env.GITHUB_REPO_OWNER && process.env.GITHUB_REPO_NAME
-            ? `https://${process.env.GITHUB_REPO_OWNER}.github.io/${process.env.GITHUB_REPO_NAME}/published-reports/`
+        process.env.GH_REPO_OWNER && process.env.GH_REPO_NAME
+            ? `https://${process.env.GH_REPO_OWNER}.github.io/${process.env.GH_REPO_NAME}/published-reports/`
             : "";
 
     const profiles = buildPerTestProfiles(runOutcomes);

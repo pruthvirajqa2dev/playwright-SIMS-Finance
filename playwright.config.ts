@@ -70,17 +70,17 @@ export default defineConfig({
     globalTeardown: `src/utils/globalTeardown.ts`,
 
     // ── maxFailures: stop early once 2 tests have failed ────────────────────
-    // Applied globally; auth gate has its own retries=2 below so a transient
+    // Applied globally; auth gate has its own retries=1 below so a transient
     // login hiccup won't immediately count as a failure.
     maxFailures: process.env.CI ? 2 : 0,
 
     projects: [
         // ── 1. Authentication gate ───────────────────────────────────────────
-        // Runs ONLY auth.spec.ts.  2 retries give tolerance for transient blips.
+        // Runs ONLY auth.spec.ts.  1 retry giveslerance for transient blips.
         // The workflow blocks postchecks until this project exits 0.
         {
             name: "auth",
-            retries: process.env.CI ? 2 : 0,
+            retries: process.env.CI ? 1 : 0,
             testMatch: "**/Auth/auth.spec.ts",
             use: {
                 ...devices["Desktop Chrome"],
@@ -89,14 +89,14 @@ export default defineConfig({
         },
 
         // ── 2. Postchecks — shard 1 (@shard1 tests) ─────────────────────────
-        // retries: 2 — each test gets two retry attempts before being marked
+        // retries: 1 — each test gets one retry attemptfore being marked
         // as failed, tolerating transient UAT flakiness.
         // Each test performs its own fresh login — no shared storageState.
         // This avoids "Session Expired / Invalid Session" errors caused by
         // UAT's single-session enforcement when two shards share one session.
         {
             name: "chromium-shard1",
-            retries: process.env.CI ? 2 : 0,
+            retries: process.env.CI ? 1 : 0,
             testMatch: "**/Post-Deployment-Tests/PostChecksTests.spec.ts",
             grep: /@shard1/,
             use: {
@@ -108,7 +108,7 @@ export default defineConfig({
         // ── 3. Postchecks — shard 2 (@shard2 tests) ─────────────────────────
         {
             name: "chromium-shard2",
-            retries: process.env.CI ? 2 : 0,
+            retries: process.env.CI ? 1 : 0,
             testMatch: "**/Post-Deployment-Tests/PostChecksTests.spec.ts",
             grep: /@shard2/,
             use: {

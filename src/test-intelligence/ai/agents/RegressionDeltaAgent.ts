@@ -14,7 +14,7 @@
  *   ▸ "Issues repeated on Product" (compare UAT window vs post-deploy window)
  *
  * Required env vars:
- *   GITHUB_REPO_OWNER, GITHUB_REPO_NAME
+ *   GH_REPO_OWNER, GH_REPO_NAME
  *   AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_API_KEY, AZURE_OPENAI_DEPLOYMENT
  *
  * Optional:
