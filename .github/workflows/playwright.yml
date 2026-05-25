@@ -627,6 +627,10 @@ jobs:
             if [[ $DIR_TIMESTAMP =~ $TIMESTAMP_REGEX ]]; then
               if [ -f "published-reports/$DIR_TIMESTAMP/index.html" ]; then
                 DATE_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f1)
+                # Skip rows for reports outside the 30-day retention window.
+                REPORT_EPOCH=$(date -d "$DATE_PART" +%s 2>/dev/null || echo 0)
+                DIR_AGE=$(( ($(date +%s) - REPORT_EPOCH) / 86400 ))
+                [ "$DIR_AGE" -gt 30 ] && continue
                 TIME_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
 
                 ROW_STATUS="Unknown"; ROW_ENV=""; ROW_FAILED_STAGE=""
