@@ -552,15 +552,6 @@ jobs:
           echo "FINAL_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
         shell: bash
 
-      - name: Strip media from current run if clean pass
-        run: |
-          if [ "$FINAL_STATUS" = "Passed" ] && [ "${FLAKY_TESTS:-0}" = "0" ]; then
-            find "published-reports/$TIMESTAMP" -type f -name "*.zip"  -delete || true
-            echo "Clean pass (no flaky): stripped .zip traces. Videos (.webm) retained for 15 days."
-          else
-            echo "Failed or flaky run: retaining .webm and .zip for full debug access."
-          fi
-
       - name: Update Index Page
         run: |
           git fetch origin
@@ -674,37 +665,8 @@ jobs:
 
       - name: Cleanup old published reports and history (keep 30 days)
         run: |
-          # .zip: stripped immediately for clean passes (Passed AND flaky=0); kept for failed/flaky.
-          # .webm: retained for 15 days for ALL runs, then deleted regardless of pass/fail.
-          # Unknown-status dirs: strip .zip always; apply the same 15-day .webm rule.
-          WEBM_RETAIN_DAYS=15
-          find published-reports/ -maxdepth 1 -mindepth 1 -type d | while read pdir; do
-            DIRNAME=$(basename "$pdir")
-            DIRDATE=$(echo "$DIRNAME" | cut -d'_' -f1)
-            DIR_AGE=999
-            if [[ $DIRDATE =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
-              REPORT_EPOCH=$(date -d "$DIRDATE" +%s 2>/dev/null || echo 0)
-              DIR_AGE=$(( ($(date +%s) - REPORT_EPOCH) / 86400 ))
-            fi
-
-            STATUS_FILE="$pdir/status.json"
-            if [ -f "$STATUS_FILE" ]; then
-              DIR_STATUS=$(jq -r '.status // ""' "$STATUS_FILE")
-              DIR_FLAKY=$(jq -r '.flaky // 1' "$STATUS_FILE")
-              if [ "$DIR_STATUS" = "Passed" ] && [ "$DIR_FLAKY" = "0" ]; then
-                find "$pdir" -type f -name "*.zip" -delete || true
-              fi
-            else
-              # No status file — strip .zip to be safe.
-              find "$pdir" -type f -name "*.zip" -delete || true
-            fi
-
-            # Strip .webm once the run is older than WEBM_RETAIN_DAYS.
-            if [ "$DIR_AGE" -gt "$WEBM_RETAIN_DAYS" ]; then
-              find "$pdir" -type f -name "*.webm" -delete || true
-            fi
-          done
-
+          # All report data (webm, zip, etc.) is retained in full.
+          # Entire run directories are removed after 30 days.
           find published-reports/ -maxdepth 1 -mindepth 1 -type d | while read dir; do
             DIRNAME=$(basename "$dir")
             DIRDATE=$(echo $DIRNAME | cut -d'_' -f1)
@@ -739,8 +701,9 @@ jobs:
               '{ runs: (.runs | map(select(.timestamp | split("_")[0] >= $cutoff))) }' \
               test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
           fi
+          # Stage all tracked deletions and modifications (webm/zip strips, removed dirs).
+          git add -u published-reports/
           git commit -m "Cleanup: Remove reports and history older than 30 days" || echo "No old reports/history to remove"
-          git push origin Main || echo "No changes to push"
           git push origin gh-pages || echo "No changes to push"
 
       - name: Commit Current Report to GitHub Pages

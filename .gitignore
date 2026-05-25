@@ -25,3 +25,6 @@ scripts/.preview-tmp/
 # Real captured API network traces — may contain sanitised request/response data
 # The seed file (network-traces.json) is checked in; per-worker shards are transient
 ai-outputs/traces/worker-*.json
+src/config/.env.UAT
+src/config/.env.training
+src/config/env.js
