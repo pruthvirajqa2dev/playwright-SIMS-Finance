@@ -1,6 +1,17 @@
 {
   "runs": [
     {
+      "timestamp": "2026-06-08_11-22-03",
+      "environment": "UAT",
+      "counts": {
+        "executed": 7,
+        "passed": 6,
+        "failed": 1,
+        "flaky": 0
+      },
+      "executionTimeSec": 314
+    },
+    {
       "timestamp": "2026-05-25_12-00-12",
       "environment": "UAT",
       "counts": {
@@ -241,138 +252,6 @@
         "flaky": 0
       },
       "executionTimeSec": 449
-    },
-    {
-      "timestamp": "2026-05-08_13-48-46",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 0
-      },
-      "executionTimeSec": 71
-    },
-    {
-      "timestamp": "2026-05-08_09-39-59",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 0
-      },
-      "executionTimeSec": 82
-    },
-    {
-      "timestamp": "2026-05-07_10-59-59",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 0
-      },
-      "executionTimeSec": 68
-    },
-    {
-      "timestamp": "2026-05-06_12-38-34",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 0
-      },
-      "executionTimeSec": 61
-    },
-    {
-      "timestamp": "2026-05-06_10-32-55",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 1
-      },
-      "executionTimeSec": 187
-    },
-    {
-      "timestamp": "2026-05-05_10-14-29",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 0
-      },
-      "executionTimeSec": 80
-    },
-    {
-      "timestamp": "2026-05-04_10-26-47",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 1
-      },
-      "executionTimeSec": 191
-    },
-    {
-      "timestamp": "2026-05-03_09-35-56",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 0,
-        "passed": 0,
-        "failed": 0,
-        "flaky": 0
-      },
-      "executionTimeSec": 0
-    },
-    {
-      "timestamp": "2026-05-02_09-21-50",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 0,
-        "passed": 0,
-        "failed": 0,
-        "flaky": 0
-      },
-      "executionTimeSec": 0
-    },
-    {
-      "timestamp": "2026-05-01_17-55-11",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 1
-      },
-      "executionTimeSec": 178
-    },
-    {
-      "timestamp": "2026-05-01_14-24-17",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 1
-      },
-      "executionTimeSec": 69
-    },
-    {
-      "timestamp": "2026-05-01_09-59-15",
-      "environment": "TRAINING",
-      "counts": {
-        "executed": 7,
-        "passed": 7,
-        "failed": 0,
-        "flaky": 1
-      },
-      "executionTimeSec": 196
     }
   ]
 }
