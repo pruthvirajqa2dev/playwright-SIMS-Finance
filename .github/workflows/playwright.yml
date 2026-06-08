@@ -516,6 +516,14 @@ jobs:
         run: |
           TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
           mkdir -p published-reports/$TIMESTAMP
+          # Guard: playwright-report may be absent when merge produces no output
+          # (e.g. auth-gate failure with no shard blob reports).
+          if [ ! -d "playwright-report" ] || [ -z "$(ls -A playwright-report 2>/dev/null)" ]; then
+            echo "⚠️  playwright-report missing or empty — creating placeholder"
+            mkdir -p playwright-report
+            printf '<html><head><title>No report</title></head><body><h1>Report unavailable</h1><p>No Playwright HTML report was produced for this run.</p></body></html>' \
+              > playwright-report/index.html
+          fi
           cp -r playwright-report/* published-reports/$TIMESTAMP
           # .zip and .webm stripping is deferred to AFTER "Aggregate Shard Statuses"
           # because FINAL_STATUS is not known yet at this point.
