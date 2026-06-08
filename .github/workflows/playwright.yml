@@ -894,7 +894,9 @@ jobs:
             TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
           fi
           echo "Publishing AI intelligence for run: $TIMESTAMP"
-          node /tmp/ai-scripts/publish-ai-intelligence.js \
+          # NODE_PATH ensures require("glob") resolves from the workspace node_modules
+          # even though the script runs from /tmp (where node_modules is not present).
+          NODE_PATH="$(pwd)/node_modules" node /tmp/ai-scripts/publish-ai-intelligence.js \
             --timestamp "$TIMESTAMP" \
             --reports   ai-outputs/reports \
             --dest      published-reports
