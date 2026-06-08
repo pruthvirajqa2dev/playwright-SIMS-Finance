@@ -797,6 +797,8 @@ jobs:
       AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
       AZURE_OPENAI_DEPLOYMENT: ${{ secrets.AZURE_OPENAI_DEPLOYMENT }}
       ENABLE_NETWORK_CAPTURE: "true"
+      GH_REPO_OWNER: ${{ github.repository_owner }}
+      GH_REPO_NAME: ${{ github.event.repository.name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -862,6 +864,15 @@ jobs:
           retention-days: 1
         continue-on-error: true
 
+      - name: Stash scripts and AI reports before branch switch
+        run: |
+          mkdir -p /tmp/ai-scripts /tmp/ai-reports
+          # publish-ai-intelligence.js does require('./merge-trace-shards') so both must travel together
+          cp scripts/publish-ai-intelligence.js /tmp/ai-scripts/
+          cp scripts/merge-trace-shards.js      /tmp/ai-scripts/
+          cp -r ai-outputs/reports/. /tmp/ai-reports/
+        continue-on-error: true
+
       - name: Checkout gh-pages for publishing
         run: |
           git fetch origin
@@ -873,6 +884,9 @@ jobs:
       - name: Publish AI intelligence to gh-pages
         id: ai-publish
         run: |
+          # Restore AI reports (removed when we switched to gh-pages)
+          mkdir -p ai-outputs/reports
+          cp -r /tmp/ai-reports/. ai-outputs/reports/
           # Use the same TIMESTAMP as the Playwright run for 1:1 history correlation
           TIMESTAMP="${{ needs.merge-reports.outputs.timestamp }}"
           if [ -z "$TIMESTAMP" ]; then
@@ -880,7 +894,7 @@ jobs:
             TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
           fi
           echo "Publishing AI intelligence for run: $TIMESTAMP"
-          node scripts/publish-ai-intelligence.js \
+          node /tmp/ai-scripts/publish-ai-intelligence.js \
             --timestamp "$TIMESTAMP" \
             --reports   ai-outputs/reports \
             --dest      published-reports
