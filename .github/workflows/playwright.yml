@@ -871,6 +871,8 @@ jobs:
           cp scripts/publish-ai-intelligence.js /tmp/ai-scripts/
           cp scripts/merge-trace-shards.js      /tmp/ai-scripts/
           cp -r ai-outputs/reports/. /tmp/ai-reports/
+          # Also stash the compiled HTML report so it can be published to latest/
+          [ -f ai-outputs/ai-report.html ] && cp ai-outputs/ai-report.html /tmp/ai-reports/../ai-report.html || true
         continue-on-error: true
 
       - name: Checkout gh-pages for publishing
@@ -885,8 +887,9 @@ jobs:
         id: ai-publish
         run: |
           # Restore AI reports (removed when we switched to gh-pages)
-          mkdir -p ai-outputs/reports
+          mkdir -p ai-outputs/reports ai-outputs
           cp -r /tmp/ai-reports/. ai-outputs/reports/
+          [ -f /tmp/ai-report.html ] && cp /tmp/ai-report.html ai-outputs/ai-report.html || true
           # Use the same TIMESTAMP as the Playwright run for 1:1 history correlation
           TIMESTAMP="${{ needs.merge-reports.outputs.timestamp }}"
           if [ -z "$TIMESTAMP" ]; then

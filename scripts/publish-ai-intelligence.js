@@ -33,43 +33,50 @@
  *   Structural errors (missing dest directory) are logged and exit 0.
  */
 
-'use strict';
+"use strict";
 
-const fs   = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const { scanForSensitiveData } = require('./merge-trace-shards');
+const { scanForSensitiveData } = require("./merge-trace-shards");
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Argument parsing
 // ─────────────────────────────────────────────────────────────────────────────
 
 function parseArgs(argv) {
-  const args = {};
-  for (let i = 2; i < argv.length; i++) {
-    if (argv[i].startsWith('--') && argv[i + 1]) {
-      args[argv[i].slice(2)] = argv[++i];
+    const args = {};
+    for (let i = 2; i < argv.length; i++) {
+        if (argv[i].startsWith("--") && argv[i + 1]) {
+            args[argv[i].slice(2)] = argv[++i];
+        }
     }
-  }
-  return args;
+    return args;
 }
 
-const args      = parseArgs(process.argv);
-const TIMESTAMP = args.timestamp || process.env.TIMESTAMP || new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19).replace('T', '_');
-const REPORTS   = args.reports   || 'ai-outputs/reports';
-const DEST      = args.dest      || 'published-reports';
-const RUN_ID    = process.env.GITHUB_RUN_ID || 'local';
+const args = parseArgs(process.argv);
+const TIMESTAMP =
+    args.timestamp ||
+    process.env.TIMESTAMP ||
+    new Date()
+        .toISOString()
+        .replace(/[:.]/g, "-")
+        .slice(0, 19)
+        .replace("T", "_");
+const REPORTS = args.reports || "ai-outputs/reports";
+const DEST = args.dest || "published-reports";
+const RUN_ID = process.env.GITHUB_RUN_ID || "local";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AI output files to publish
 // ─────────────────────────────────────────────────────────────────────────────
 
 const AI_SECTIONS = [
-  { id: 'api-intelligence',  file: 'api-intelligence.json'  },
-  { id: 'trend',             file: 'trend.json'             },
-  { id: 'deep-failure',      file: 'deep-failure.json'      },
-  { id: 'regression-delta',  file: 'regression-delta.json'  },
-  { id: 'db-integrity',      file: 'db-integrity.json'      },
+    { id: "api-intelligence", file: "api-intelligence.json" },
+    { id: "trend", file: "trend.json" },
+    { id: "deep-failure", file: "deep-failure.json" },
+    { id: "regression-delta", file: "regression-delta.json" },
+    { id: "db-integrity", file: "db-integrity.json" }
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -77,16 +84,16 @@ const AI_SECTIONS = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 function safeReadJson(filePath) {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  } catch {
-    return null;
-  }
+    try {
+        return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    } catch {
+        return null;
+    }
 }
 
 function writeJson(filePath, data) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -94,141 +101,193 @@ function writeJson(filePath, data) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 (function main() {
-  console.log(`\n[publish-ai] Starting AI intelligence publish`);
-  console.log(`[publish-ai]   Timestamp : ${TIMESTAMP}`);
-  console.log(`[publish-ai]   Run ID    : ${RUN_ID}`);
-  console.log(`[publish-ai]   Reports   : ${REPORTS}`);
-  console.log(`[publish-ai]   Dest      : ${DEST}`);
+    console.log(`\n[publish-ai] Starting AI intelligence publish`);
+    console.log(`[publish-ai]   Timestamp : ${TIMESTAMP}`);
+    console.log(`[publish-ai]   Run ID    : ${RUN_ID}`);
+    console.log(`[publish-ai]   Reports   : ${REPORTS}`);
+    console.log(`[publish-ai]   Dest      : ${DEST}`);
 
-  // Verify destination exists (must be on gh-pages branch)
-  if (!fs.existsSync(DEST)) {
-    console.warn(`[publish-ai] ⚠  Destination directory not found: ${DEST}`);
-    console.warn(`[publish-ai]    Ensure gh-pages is checked out before running this script.`);
-    process.exit(0);
-  }
-
-  const latestDir  = path.join(DEST, 'ai-intelligence', 'latest');
-  const historyDir = path.join(DEST, 'ai-intelligence', 'history', TIMESTAMP);
-  const indexPath  = path.join(DEST, 'ai-intelligence', 'history', 'index.json');
-
-  fs.mkdirSync(latestDir,  { recursive: true });
-  fs.mkdirSync(historyDir, { recursive: true });
-
-  // ── Step 1: Collect available sections ─────────────────────────────────
-  const sectionsAvailable = [];
-  const sectionsSkipped   = {};
-  let   traceCount        = 0;
-  let   endpointCount     = 0;
-
-  for (const section of AI_SECTIONS) {
-    const srcPath = path.join(REPORTS, section.file);
-
-    if (!fs.existsSync(srcPath)) {
-      sectionsSkipped[section.id] = 'output file not found';
-      console.warn(`[publish-ai]   ⚠  ${section.id}: ${srcPath} not found — skipping`);
-      continue;
+    // Verify destination exists (must be on gh-pages branch)
+    if (!fs.existsSync(DEST)) {
+        console.warn(
+            `[publish-ai] ⚠  Destination directory not found: ${DEST}`
+        );
+        console.warn(
+            `[publish-ai]    Ensure gh-pages is checked out before running this script.`
+        );
+        process.exit(0);
     }
 
-    const data = safeReadJson(srcPath);
-    if (!data) {
-      sectionsSkipped[section.id] = 'JSON parse error';
-      console.warn(`[publish-ai]   ⚠  ${section.id}: parse error — skipping`);
-      continue;
+    const latestDir = path.join(DEST, "ai-intelligence", "latest");
+    const historyDir = path.join(DEST, "ai-intelligence", "history", TIMESTAMP);
+    const indexPath = path.join(
+        DEST,
+        "ai-intelligence",
+        "history",
+        "index.json"
+    );
+
+    fs.mkdirSync(latestDir, { recursive: true });
+    fs.mkdirSync(historyDir, { recursive: true });
+
+    // ── Step 1: Collect available sections ─────────────────────────────────
+    const sectionsAvailable = [];
+    const sectionsSkipped = {};
+    let traceCount = 0;
+    let endpointCount = 0;
+
+    for (const section of AI_SECTIONS) {
+        const srcPath = path.join(REPORTS, section.file);
+
+        if (!fs.existsSync(srcPath)) {
+            sectionsSkipped[section.id] = "output file not found";
+            console.warn(
+                `[publish-ai]   ⚠  ${section.id}: ${srcPath} not found — skipping`
+            );
+            continue;
+        }
+
+        const data = safeReadJson(srcPath);
+        if (!data) {
+            sectionsSkipped[section.id] = "JSON parse error";
+            console.warn(
+                `[publish-ai]   ⚠  ${section.id}: parse error — skipping`
+            );
+            continue;
+        }
+
+        // Skip seed/mock placeholder outputs — not real intelligence
+        if (data._isMockData === true) {
+            sectionsSkipped[section.id] =
+                "mock/seed placeholder — no real data captured yet";
+            console.warn(
+                `[publish-ai]   ⚠  ${section.id}: mock data — skipping publish`
+            );
+            continue;
+        }
+
+        // Skip if explicitly marked as not yet run
+        if (data._captureNotRun === true) {
+            sectionsSkipped[section.id] = "capture not run";
+            console.warn(
+                `[publish-ai]   ⚠  ${section.id}: capture not run — skipping publish`
+            );
+            continue;
+        }
+
+        // ── Governance scan ───────────────────────────────────────────────────
+        const jsonStr = JSON.stringify(data);
+        const hits = scanForSensitiveData(jsonStr);
+        if (hits.length > 0) {
+            console.warn(
+                `[publish-ai]   ⚠  Governance: sensitive patterns in ${section.file}: ${hits.join(", ")}`
+            );
+            console.warn(
+                `[publish-ai]      Proceeding with publish — review NetworkCapture PII masking.`
+            );
+        }
+
+        // ── Collect metadata for manifest ─────────────────────────────────────
+        if (section.id === "api-intelligence") {
+            traceCount = data.totalTraces || 0;
+            endpointCount = data.uniqueEndpoints || 0;
+        }
+
+        sectionsAvailable.push(section.id);
+        console.log(`[publish-ai]   ✓  ${section.id}`);
+
+        // Write to latest/ and history/
+        const srcRaw = fs.readFileSync(srcPath, "utf-8");
+        fs.writeFileSync(path.join(latestDir, section.file), srcRaw, "utf-8");
+        fs.writeFileSync(path.join(historyDir, section.file), srcRaw, "utf-8");
     }
 
-    // Skip seed/mock placeholder outputs — not real intelligence
-    if (data._isMockData === true) {
-      sectionsSkipped[section.id] = 'mock/seed placeholder — no real data captured yet';
-      console.warn(`[publish-ai]   ⚠  ${section.id}: mock data — skipping publish`);
-      continue;
+    if (sectionsAvailable.length === 0) {
+        console.warn(
+            `[publish-ai] ⚠  No sections available to publish. Check that ai:full ran successfully.`
+        );
+        process.exit(0);
     }
 
-    // Skip if explicitly marked as not yet run
-    if (data._captureNotRun === true) {
-      sectionsSkipped[section.id] = 'capture not run';
-      console.warn(`[publish-ai]   ⚠  ${section.id}: capture not run — skipping publish`);
-      continue;
+    // ── Step 1b: Copy ai-report.html if available ──────────────────────────
+    const aiReportSrc = path.join("ai-outputs", "ai-report.html");
+    if (fs.existsSync(aiReportSrc)) {
+        fs.copyFileSync(aiReportSrc, path.join(latestDir, "ai-report.html"));
+        fs.copyFileSync(aiReportSrc, path.join(historyDir, "ai-report.html"));
+        console.log(`[publish-ai]   ✓  ai-report.html`);
+    } else {
+        console.warn(
+            `[publish-ai]   ⚠  ai-report.html not found — Full Report link will 404 until next run`
+        );
     }
 
-    // ── Governance scan ───────────────────────────────────────────────────
-    const jsonStr = JSON.stringify(data);
-    const hits    = scanForSensitiveData(jsonStr);
-    if (hits.length > 0) {
-      console.warn(`[publish-ai]   ⚠  Governance: sensitive patterns in ${section.file}: ${hits.join(', ')}`);
-      console.warn(`[publish-ai]      Proceeding with publish — review NetworkCapture PII masking.`);
+    // ── Step 2: Generate manifest.json ────────────────────────────────────
+    const manifest = {
+        generatedAt: new Date().toISOString(),
+        workflowRunId: RUN_ID,
+        timestamp: TIMESTAMP,
+        sectionsAvailable,
+        sectionsSkipped,
+        traceCount,
+        endpointCount
+    };
+
+    const manifestJson = JSON.stringify(manifest, null, 2);
+    fs.writeFileSync(
+        path.join(latestDir, "manifest.json"),
+        manifestJson,
+        "utf-8"
+    );
+    fs.writeFileSync(
+        path.join(historyDir, "manifest.json"),
+        manifestJson,
+        "utf-8"
+    );
+    console.log(
+        `[publish-ai] ✓  manifest.json — ${sectionsAvailable.length} section(s) available`
+    );
+
+    // ── Step 3: Append to history/index.json (append-only) ────────────────
+    let historyIndex = { entries: [] };
+    if (fs.existsSync(indexPath)) {
+        try {
+            historyIndex = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+            if (!Array.isArray(historyIndex.entries)) historyIndex.entries = [];
+        } catch {
+            historyIndex = { entries: [] };
+        }
     }
 
-    // ── Collect metadata for manifest ─────────────────────────────────────
-    if (section.id === 'api-intelligence') {
-      traceCount    = data.totalTraces   || 0;
-      endpointCount = data.uniqueEndpoints || 0;
+    // Deduplicate: replace existing entry for the same timestamp (idempotent re-runs)
+    historyIndex.entries = historyIndex.entries.filter(
+        (e) => e.timestamp !== TIMESTAMP
+    );
+    historyIndex.entries.unshift({
+        timestamp: TIMESTAMP,
+        runId: RUN_ID,
+        generatedAt: manifest.generatedAt,
+        sectionsAvailable,
+        traceCount,
+        endpointCount
+    });
+
+    // Keep max 90 entries in the index (well within gh-pages size limits)
+    if (historyIndex.entries.length > 90) {
+        historyIndex.entries = historyIndex.entries.slice(0, 90);
     }
 
-    sectionsAvailable.push(section.id);
-    console.log(`[publish-ai]   ✓  ${section.id}`);
+    writeJson(indexPath, historyIndex);
+    console.log(
+        `[publish-ai] ✓  history/index.json — ${historyIndex.entries.length} total entries`
+    );
 
-    // Write to latest/ and history/
-    const srcRaw = fs.readFileSync(srcPath, 'utf-8');
-    fs.writeFileSync(path.join(latestDir,  section.file), srcRaw, 'utf-8');
-    fs.writeFileSync(path.join(historyDir, section.file), srcRaw, 'utf-8');
-  }
-
-  if (sectionsAvailable.length === 0) {
-    console.warn(`[publish-ai] ⚠  No sections available to publish. Check that ai:full ran successfully.`);
-    process.exit(0);
-  }
-
-  // ── Step 2: Generate manifest.json ────────────────────────────────────
-  const manifest = {
-    generatedAt:       new Date().toISOString(),
-    workflowRunId:     RUN_ID,
-    timestamp:         TIMESTAMP,
-    sectionsAvailable,
-    sectionsSkipped,
-    traceCount,
-    endpointCount,
-  };
-
-  const manifestJson = JSON.stringify(manifest, null, 2);
-  fs.writeFileSync(path.join(latestDir,  'manifest.json'), manifestJson, 'utf-8');
-  fs.writeFileSync(path.join(historyDir, 'manifest.json'), manifestJson, 'utf-8');
-  console.log(`[publish-ai] ✓  manifest.json — ${sectionsAvailable.length} section(s) available`);
-
-  // ── Step 3: Append to history/index.json (append-only) ────────────────
-  let historyIndex = { entries: [] };
-  if (fs.existsSync(indexPath)) {
-    try {
-      historyIndex = JSON.parse(fs.readFileSync(indexPath, 'utf-8'));
-      if (!Array.isArray(historyIndex.entries)) historyIndex.entries = [];
-    } catch {
-      historyIndex = { entries: [] };
+    // ── Summary ───────────────────────────────────────────────────────────
+    console.log(`\n[publish-ai] ✅ Publish complete`);
+    console.log(`[publish-ai]   latest/  → ${latestDir}`);
+    console.log(`[publish-ai]   history/ → ${historyDir}`);
+    if (Object.keys(sectionsSkipped).length > 0) {
+        console.warn(
+            `[publish-ai]   Skipped sections: ${Object.keys(sectionsSkipped).join(", ")}`
+        );
     }
-  }
-
-  // Deduplicate: replace existing entry for the same timestamp (idempotent re-runs)
-  historyIndex.entries = historyIndex.entries.filter(e => e.timestamp !== TIMESTAMP);
-  historyIndex.entries.unshift({
-    timestamp:         TIMESTAMP,
-    runId:             RUN_ID,
-    generatedAt:       manifest.generatedAt,
-    sectionsAvailable,
-    traceCount,
-    endpointCount,
-  });
-
-  // Keep max 90 entries in the index (well within gh-pages size limits)
-  if (historyIndex.entries.length > 90) {
-    historyIndex.entries = historyIndex.entries.slice(0, 90);
-  }
-
-  writeJson(indexPath, historyIndex);
-  console.log(`[publish-ai] ✓  history/index.json — ${historyIndex.entries.length} total entries`);
-
-  // ── Summary ───────────────────────────────────────────────────────────
-  console.log(`\n[publish-ai] ✅ Publish complete`);
-  console.log(`[publish-ai]   latest/  → ${latestDir}`);
-  console.log(`[publish-ai]   history/ → ${historyDir}`);
-  if (Object.keys(sectionsSkipped).length > 0) {
-    console.warn(`[publish-ai]   Skipped sections: ${Object.keys(sectionsSkipped).join(', ')}`);
-  }
 })();

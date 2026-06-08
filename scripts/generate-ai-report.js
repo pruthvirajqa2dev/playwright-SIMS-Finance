@@ -15,36 +15,42 @@
  *     ai-outputs/ai-report.html
  */
 
-'use strict';
+"use strict";
 
-const fs   = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const trendPath      = process.argv[2] ?? 'ai-outputs/reports/trend.json';
-const deepPath       = process.argv[3] ?? 'ai-outputs/reports/deep-failure.json';
-const outPath        = process.argv[4] ?? 'ai-outputs/ai-report.html';
-const regressionPath = process.argv[5] ?? 'ai-outputs/reports/regression-delta.json';
-const dbIntegPath    = process.argv[6] ?? 'ai-outputs/reports/db-integrity.json';
-const apiIntelPath   = process.argv[7] ?? 'ai-outputs/reports/api-intelligence.json';
+const trendPath = process.argv[2] ?? "ai-outputs/reports/trend.json";
+const deepPath = process.argv[3] ?? "ai-outputs/reports/deep-failure.json";
+const outPath = process.argv[4] ?? "ai-outputs/ai-report.html";
+const regressionPath =
+    process.argv[5] ?? "ai-outputs/reports/regression-delta.json";
+const dbIntegPath = process.argv[6] ?? "ai-outputs/reports/db-integrity.json";
+const apiIntelPath =
+    process.argv[7] ?? "ai-outputs/reports/api-intelligence.json";
 
 function readJson(p, fallback) {
-  try { return JSON.parse(fs.readFileSync(p, 'utf8')); }
-  catch { console.warn(`Warning: could not read ${p} – using empty fallback.`); return fallback; }
+    try {
+        return JSON.parse(fs.readFileSync(p, "utf8"));
+    } catch {
+        console.warn(`Warning: could not read ${p} – using empty fallback.`);
+        return fallback;
+    }
 }
 
-const trend      = readJson(trendPath, {});
-const deep       = readJson(deepPath,  {});
+const trend = readJson(trendPath, {});
+const deep = readJson(deepPath, {});
 const regression = readJson(regressionPath, null);
-const dbInteg    = readJson(dbIntegPath, null);
-const apiIntel   = readJson(apiIntelPath, null);
+const dbInteg = readJson(dbIntegPath, null);
+const apiIntel = readJson(apiIntelPath, null);
 
 // ── Escape helper (also strips ANSI codes from error samples) ────────────────
 function escJson(obj) {
-  return JSON.stringify(obj)
-    .replace(/\x1b\[[0-9;]*m/g, '')   // strip ANSI
-    .replace(/</g, '\\u003c')          // safe for inline <script>
-    .replace(/>/g, '\\u003e')
-    .replace(/&/g, '\\u0026');
+    return JSON.stringify(obj)
+        .replace(/\x1b\[[0-9;]*m/g, "") // strip ANSI
+        .replace(/</g, "\\u003c") // safe for inline <script>
+        .replace(/>/g, "\\u003e")
+        .replace(/&/g, "\\u0026");
 }
 
 // ── HTML ─────────────────────────────────────────────────────────────────────
@@ -3528,7 +3534,7 @@ const html = `<!DOCTYPE html>
               </div>
               <div className="dash-header-right">
                 {trendBadge(trendDir)}
-                <AnalyseButton />
+                {window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? <AnalyseButton /> : null}
                 <span className="dash-meta">Generated {generatedAt}</span>
               </div>
             </div>
@@ -4128,6 +4134,5 @@ const html = `<!DOCTYPE html>
 </html>`;
 
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
-fs.writeFileSync(outPath, html, 'utf8');
+fs.writeFileSync(outPath, html, "utf8");
 console.log(`✅ AI report written to ${outPath}`);
-

@@ -643,6 +643,9 @@ const template = /* html */ `<!DOCTYPE html>
             {/* ---- Weekend Monitoring Activity ---- */}
             <WeekendMonitoringSection />
 
+            {/* ---- AI Intelligence Strip (lazy, manifest-driven, fault-isolated) ---- */}
+            <AiIntelligenceStrip />
+
             {/* ---- Filters ---- */}
             <section className="bg-white rounded-xl shadow-md px-6 py-4 mb-5 flex flex-wrap gap-5 items-end">
               <div className="flex flex-col gap-1">
@@ -803,9 +806,6 @@ const template = /* html */ `<!DOCTYPE html>
                 <ExecutionTimeChart runs={filteredRuns} />
               </div>
             </div>
-
-            {/* ---- AI Intelligence Strip (lazy, manifest-driven, fault-isolated) ---- */}
-            <AiIntelligenceStrip />
 
           </main>
 
@@ -999,32 +999,38 @@ const template = /* html */ `<!DOCTYPE html>
       var manifestState = useManifest();
       var mStatus  = manifestState.status;
       var manifest = manifestState.manifest;
-      var [expanded, setExpanded] = useState(false);
+      var [expanded, setExpanded] = useState(true);
       var registry = window.__AI_PLUGIN_REGISTRY__ || [];
 
       return (
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-5">
 
-          {/* Toggle header — always visible */}
-          <button
-            className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-slate-50 transition-colors group"
-            onClick={function() { setExpanded(function(e) { return !e; }); }}
-            aria-expanded={expanded}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-lg" aria-hidden="true">🤖</span>
-              <div>
-                <h2 className="text-sm font-semibold text-slate-700">AI Intelligence</h2>
-                <p className="text-xs text-slate-400 mt-0.5">Automated analysis from the last CI run</p>
+          {/* Toggle header + Full Report link — always visible */}
+          <div className="flex items-center border-b border-slate-100">
+            <button
+              className="flex-1 flex items-center justify-between px-6 py-4 text-left hover:bg-slate-50 transition-colors group"
+              onClick={function() { setExpanded(function(e) { return !e; }); }}
+              aria-expanded={expanded}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-lg" aria-hidden="true">🤖</span>
+                <div>
+                  <h2 className="text-sm font-semibold text-slate-700">AI Intelligence</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">Automated analysis · trend · failures · API coverage</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center gap-3">
-              {registry[0] && (
-                <AvailabilityBadge mStatus={mStatus} manifest={manifest} id={registry[0].id} />
-              )}
-              <span className="text-slate-400 text-xs select-none">{expanded ? '▲' : '▼'}</span>
-            </div>
-          </button>
+              <div className="flex items-center gap-3">
+                {registry[0] && (
+                  <AvailabilityBadge mStatus={mStatus} manifest={manifest} id={registry[0].id} />
+                )}
+                <span className="text-slate-400 text-xs select-none">{expanded ? '▲' : '▼'}</span>
+              </div>
+            </button>
+            <a href="./ai-intelligence/latest/ai-report.html" target="_blank" rel="noreferrer"
+               className="flex-shrink-0 flex items-center gap-1.5 px-5 py-4 text-xs font-semibold text-emerald-600 hover:text-emerald-800 border-l border-slate-100 hover:bg-emerald-50 transition-colors whitespace-nowrap">
+              Full AI Report ↗
+            </a>
+          </div>
 
           {/* Expanded content — sections are mounted (and fetched) only here */}
           {expanded && (
