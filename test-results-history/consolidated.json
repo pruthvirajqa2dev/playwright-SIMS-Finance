@@ -1,6 +1,17 @@
 {
   "runs": [
     {
+      "timestamp": "2026-06-10_11-52-30",
+      "environment": "UAT",
+      "counts": {
+        "executed": 6,
+        "passed": 4,
+        "failed": 2,
+        "flaky": 0
+      },
+      "executionTimeSec": 546
+    },
+    {
       "timestamp": "2026-06-09_11-27-21",
       "environment": "UAT",
       "counts": {
