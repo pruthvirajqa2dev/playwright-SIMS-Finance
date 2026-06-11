@@ -1,35 +1,26 @@
 import { defineConfig, devices } from "@playwright/test";
-import logger from "./src/logging/logger";
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
 const dotenv = require("dotenv");
 dotenv.config({
     path: `${__dirname}//src//config//.env`
 });
-// const defaultEnv = "uat";
-logger.info(`Test environment: ${process.env.TEST_ENV}`);
 const ENV = process.env.TEST_ENV || "uat";
 process.env.TEST_ENV = ENV;
 
-// ✅ Logging after resolution
-logger.info(`Test environment: ${ENV}`);
-
-// ✅ Always load env-specific file (no if-else)
 dotenv.config({
     path: `${__dirname}//src//config//.env.${ENV}`,
     override: true
 });
 if (!process.env.URL) {
-    throw new Error(`❌ URL not loaded. Check .env.${process.env.TEST_ENV}`);
+    throw new Error(`URL not loaded. Check .env.${process.env.TEST_ENV}`);
 }
-logger.info(`Test environment: ${process.env.TEST_ENV || "development"}`);
-logger.info(`Browser: ${process.env.BROWSER || "chromium"}`);
+console.log(
+    `[config] TEST_ENV=${ENV}  BROWSER=${process.env.BROWSER || "chromium"}`
+);
 
 // if (!process.env.NODE_ENV) {
 //     require("dotenv").config({ path: `${__dirname}//src//config//.env` });
@@ -115,8 +106,38 @@ export default defineConfig({
                 ...devices["Desktop Chrome"],
                 viewport: { width: 1266, height: 586 }
             }
+        },
+        {
+            name: "chromium-shard2",
+            retries: process.env.CI ? 1 : 0,
+            testMatch: "**/Purchase Order/**",
+            grep: /@shard2/,
+            use: {
+                ...devices["Desktop Chrome"],
+                viewport: { width: 1266, height: 586 }
+            }
+        },
+        {
+            name: "chromium-shard2",
+            retries: process.env.CI ? 1 : 0,
+            testMatch: "**/Purchase Order/**",
+            grep: /@shard2/,
+            use: {
+                ...devices["Desktop Chrome"],
+                viewport: { width: 1266, height: 586 }
+            }
+        },
+        {
+            name: "chromium-shard2",
+            retries: process.env.CI ? 1 : 0,
+            testMatch: "**/glCodeExtractor.spec.ts",
+            grep: /@shard2/,
+            use: {
+                ...devices["Desktop Chrome"],
+                viewport: { width: 1266, height: 586 }
+            }
         }
-
+        //src\tests\glCodeExtractor.spec.ts
         // {
         //     name: "firefox",
         //     use: {

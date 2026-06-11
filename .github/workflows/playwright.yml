@@ -422,6 +422,26 @@ jobs:
           echo "Flaky Tests:    ${{ env.FLAKY_TESTS }}"
           echo "Failed Stage:   $FAILED_STAGE"
 
+      # Back up generated artefacts to /tmp BEFORE the stash wipes them.
+      # playwright-report/ is produced by `npx playwright merge-reports --reporter html`
+      # (an untracked directory).  git stash --include-untracked removes it from
+      # the working tree, so without this backup the "Add Current Report" step
+      # always sees an empty workspace and writes the "Report unavailable" placeholder.
+      # test-results/ is also backed up so execution-time calculation survives the
+      # branch switch to gh-pages.
+      - name: Back up report artefacts before stash
+        run: |
+          if [ -d playwright-report ] && [ -n "$(ls -A playwright-report 2>/dev/null)" ]; then
+            cp -r playwright-report /tmp/playwright-report-backup
+            echo "✅ playwright-report backed up ($(find playwright-report -type f | wc -l) files)"
+          else
+            echo "⚠️  playwright-report is absent or empty — nothing to back up"
+          fi
+          if [ -d test-results ] && [ -n "$(ls -A test-results 2>/dev/null)" ]; then
+            cp -r test-results /tmp/test-results-backup
+            echo "✅ test-results backed up"
+          fi
+
       - name: Stash untracked files
         run: git stash push -m "Stashing untracked report files" --include-untracked
 
@@ -437,6 +457,22 @@ jobs:
           git fetch origin
           git checkout gh-pages
           git pull --rebase origin gh-pages || echo "No changes to pull"
+
+      # Restore the report artefacts that the stash removed.
+      # After `git checkout gh-pages` the working tree reflects gh-pages content,
+      # so we restore from the /tmp backups taken before the stash.
+      - name: Restore report artefacts after branch switch
+        run: |
+          if [ -d /tmp/playwright-report-backup ]; then
+            cp -r /tmp/playwright-report-backup playwright-report
+            echo "✅ playwright-report restored ($(find playwright-report -type f | wc -l) files)"
+          else
+            echo "⚠️  No playwright-report backup found in /tmp"
+          fi
+          if [ -d /tmp/test-results-backup ]; then
+            cp -r /tmp/test-results-backup test-results
+            echo "✅ test-results restored"
+          fi
 
       - name: Generate Human-Readable Execution Time
         run: |
