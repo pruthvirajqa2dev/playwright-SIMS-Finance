@@ -98,17 +98,33 @@ jobs:
           path: /tmp/storageState.json
           retention-days: 1
 
+      - name: Rename auth blob report to unique filename
+        if: always()
+        run: |
+          # Playwright always writes blob-report/report.zip (hardcoded filename).
+          # When download-artifact merges multiple blob-report-* artifacts with
+          # merge-multiple: true, all report.zip files land in the same directory
+          # and overwrite each other — only the last one survives.
+          # Fix: rename before upload so each artifact carries a unique filename.
+          if [ -f blob-report/report.zip ]; then
+            mv blob-report/report.zip blob-report/report-auth.zip
+            echo "✅ Renamed blob-report/report.zip → blob-report/report-auth.zip"
+          else
+            echo "⚠️  blob-report/report.zip not found — nothing to rename"
+          fi
+
       - name: Diagnose blob-report before upload (auth)
         if: always()
         run: |
           echo "── auth blob-report diagnostics ────────────────────────────────────"
           if [ -d blob-report ]; then
             ZIP_COUNT=$(find blob-report -name "*.zip" | wc -l | tr -d ' ')
-            echo "blob-report ZIP files: $ZIP_COUNT"
-            find blob-report -type f | head -10 || echo "  (empty)"
+            TOTAL_SIZE=$(du -sh blob-report | cut -f1)
+            echo "blob-report ZIP files  : $ZIP_COUNT  (dir size: ${TOTAL_SIZE})"
+            find blob-report -type f -printf "%s bytes  %p\n" || find blob-report -type f | xargs ls -lh
           else
-            echo "⚠️  blob-report directory does not exist — reporter never wrote output"
-            echo "    Likely cause: test run crashed before any test started (OOM, config error, etc.)"
+            echo "::error::blob-report directory does not exist — blob reporter never wrote output"
+            echo "   Likely cause: test crashed before any test started (OOM, config error, etc.)"
           fi
 
       - name: Upload auth blob report
@@ -244,16 +260,30 @@ jobs:
           name: shard-${{ matrix.shardIndex }}-status
           path: shard-${{ matrix.shardIndex }}-status.txt
 
+      - name: Rename shard blob report to unique filename
+        if: always()
+        run: |
+          # Playwright always writes blob-report/report.zip (hardcoded filename).
+          # Rename before upload so each artifact carries a collision-free filename
+          # and download-artifact merge-multiple cannot overwrite shard blobs.
+          if [ -f blob-report/report.zip ]; then
+            mv blob-report/report.zip blob-report/report-shard-${{ matrix.shardIndex }}.zip
+            echo "✅ Renamed blob-report/report.zip → blob-report/report-shard-${{ matrix.shardIndex }}.zip"
+          else
+            echo "⚠️  blob-report/report.zip not found — nothing to rename"
+          fi
+
       - name: Diagnose blob-report before upload (shard ${{ matrix.shardIndex }})
         if: always()
         run: |
           echo "── shard ${{ matrix.shardIndex }} blob-report diagnostics ─────────────────────────────────"
           if [ -d blob-report ]; then
             ZIP_COUNT=$(find blob-report -name "*.zip" | wc -l | tr -d ' ')
-            echo "blob-report ZIP files: $ZIP_COUNT"
-            find blob-report -type f | head -10 || echo "  (empty)"
+            TOTAL_SIZE=$(du -sh blob-report | cut -f1)
+            echo "blob-report ZIP files  : $ZIP_COUNT  (dir size: ${TOTAL_SIZE})"
+            find blob-report -type f -printf "%s bytes  %p\n" || find blob-report -type f | xargs ls -lh
           else
-            echo "⚠️  blob-report directory does not exist for shard ${{ matrix.shardIndex }}"
+            echo "::error::blob-report directory does not exist for shard ${{ matrix.shardIndex }}"
           fi
 
       - name: Upload blob report
@@ -349,17 +379,48 @@ jobs:
       - name: Determine which stage failed
         run: |
           FAILED_STAGE="None"
-          for f in all-stage-statuses/*.json; do
+          echo "── Stage status files found ─────────────────────────────────────────────────────────"
+          # Use 'find' with recursive search — the glob all-stage-statuses/*.json only
+          # matches files directly in the root of that directory. When download-artifact
+          # places files in subdirectories (which can happen with certain action versions),
+          # the glob silently matches nothing and FAILED_STAGE stays "None" even when a
+          # shard actually failed.  'find' is depth-agnostic and catches all layouts.
+          ALL_STATUS_FILES=$(find all-stage-statuses -name "*.json" 2>/dev/null | sort)
+          if [ -z "$ALL_STATUS_FILES" ]; then
+            echo "::warning::No stage-status JSON files found in all-stage-statuses — cannot determine failed stage"
+          else
+            echo "$ALL_STATUS_FILES" | while read f; do
+              STATUS=$(jq -r '.status' "$f" 2>/dev/null || echo "unknown")
+              STAGE=$(jq  -r '.stage'  "$f" 2>/dev/null || echo "unknown")
+              SHARD=$(jq  -r '.shard // "n/a"' "$f" 2>/dev/null)
+              echo "  $f  →  stage=$STAGE  shard=$SHARD  status=$STATUS"
+            done
+          fi
+          # Find first failure (auth failure takes priority because postchecks can't run without it)
+          for f in $(echo "$ALL_STATUS_FILES"); do
             [ -f "$f" ] || continue
             STATUS=$(jq -r '.status' "$f" 2>/dev/null)
-            STAGE=$(jq -r '.stage'  "$f" 2>/dev/null)
-            if [ "$STATUS" = "Failed" ]; then
-              FAILED_STAGE="$STAGE"
+            STAGE=$(jq  -r '.stage'  "$f" 2>/dev/null)
+            if [ "$STATUS" = "Failed" ] && [ "$STAGE" = "auth" ]; then
+              FAILED_STAGE="auth"
               break
             fi
           done
+          # If auth passed, check postchecks
+          if [ "$FAILED_STAGE" = "None" ]; then
+            for f in $(echo "$ALL_STATUS_FILES"); do
+              [ -f "$f" ] || continue
+              STATUS=$(jq -r '.status' "$f" 2>/dev/null)
+              STAGE=$(jq  -r '.stage'  "$f" 2>/dev/null)
+              if [ "$STATUS" = "Failed" ]; then
+                FAILED_STAGE="$STAGE"
+                break
+              fi
+            done
+          fi
+          echo "───────────────────────────────────────────────────────────────────────────────────────"
+          echo "Resolved FAILED_STAGE: $FAILED_STAGE"
           echo "FAILED_STAGE=$FAILED_STAGE" >> $GITHUB_ENV
-          echo "Failed stage: $FAILED_STAGE"
 
       - name: Load TEST_ENV from .env file
         run: |
@@ -387,42 +448,100 @@ jobs:
 
       - name: Validate blob reports before merge
         run: |
+          echo "── Blob report inventory ──────────────────────────────────────────────────────────────"
+          if [ -d all-blob-reports ]; then
+            echo "Directory contents:"
+            find all-blob-reports -type f | sort | while read f; do
+              SIZE=$(du -sh "$f" | cut -f1)
+              echo "  ${SIZE}  $f"
+            done
+          else
+            echo "::error::all-blob-reports directory does not exist"
+          fi
           BLOB_ZIP_COUNT=$(find all-blob-reports -name "*.zip" 2>/dev/null | wc -l | tr -d ' ')
           TOTAL_SIZE=$(du -sh all-blob-reports 2>/dev/null | awk '{print $1}' || echo '0')
-          echo "── Blob report diagnostics ─────────────────────────────────────────"
-          echo "Blob ZIP files found : $BLOB_ZIP_COUNT  (dir total: ${TOTAL_SIZE})"
-          find all-blob-reports -type f | head -30 || echo "  (no files)"
-          echo "────────────────────────────────────────────────────────────────────"
+          echo "───────────────────────────────────────────────────────────────────────────────────────"
+          echo "Blob ZIP total: ${BLOB_ZIP_COUNT}  |  dir size: ${TOTAL_SIZE}"
           echo "BLOB_ZIP_COUNT=$BLOB_ZIP_COUNT" >> $GITHUB_ENV
           if [ "$BLOB_ZIP_COUNT" -eq 0 ]; then
-            echo "::warning::No blob ZIP files found — HTML report will be unavailable for this run"
+            echo "::error::No blob ZIP files found in all-blob-reports — merge-reports will produce no HTML report"
+          fi
+          # Verify uniqueness — duplicate basenames indicate a collision was not prevented
+          DUP_COUNT=$(find all-blob-reports -name "*.zip" | xargs -I{} basename {} | sort | uniq -d | wc -l)
+          if [ "$DUP_COUNT" -gt 0 ]; then
+            echo "::error::Duplicate blob filenames detected ($DUP_COUNT collisions) — some shards will be overwritten:"
+            find all-blob-reports -name "*.zip" | xargs -I{} basename {} | sort | uniq -d | while read n; do echo "  collision: $n"; done
+          else
+            echo "✅ All blob filenames are unique — no collisions detected"
           fi
 
       - name: Merge Playwright HTML reports
+        id: merge-html
         run: |
+          echo "── Running npx playwright merge-reports ───────────────────────────────────────────────"
+          # Capture stdout + stderr together so all output is visible in CI logs.
           set +e
-          npx playwright merge-reports --reporter html ./all-blob-reports
+          MERGE_OUTPUT=$(npx playwright merge-reports --reporter html ./all-blob-reports 2>&1)
           MERGE_EXIT=$?
+          echo "$MERGE_OUTPUT"
           echo "MERGE_EXIT_CODE=$MERGE_EXIT" >> $GITHUB_ENV
-          if [ "$MERGE_EXIT" -ne 0 ]; then
-            echo "::warning::playwright merge-reports exited $MERGE_EXIT — HTML report may be absent"
-          fi
-          echo "── Post-merge playwright-report state ──────────────────────────────"
-          if [ -d playwright-report ] && [ -n "$(ls -A playwright-report 2>/dev/null)" ]; then
-            echo "✅ playwright-report present ($(find playwright-report -type f | wc -l) files)"
+
+          echo "── Post-merge validation ──────────────────────────────────────────────────────────────"
+          REPORT_VALID=false
+          if [ -f playwright-report/index.html ]; then
+            FILE_COUNT=$(find playwright-report -type f | wc -l)
+            REPORT_SIZE=$(du -sh playwright-report | cut -f1)
+            echo "✅ playwright-report/index.html   EXISTS"
+            echo "   files: ${FILE_COUNT}  |  size: ${REPORT_SIZE}"
+            if [ -d playwright-report/data ]; then
+              DATA_FILES=$(find playwright-report/data -type f | wc -l)
+              echo "✅ playwright-report/data         EXISTS (${DATA_FILES} files)"
+            else
+              echo "::warning::playwright-report/data directory is missing — report may be partial"
+            fi
+            # Confirm the index.html is NOT the placeholder we inject ourselves
+            if grep -q 'Report unavailable' playwright-report/index.html 2>/dev/null; then
+              echo "::error::playwright-report/index.html contains the placeholder text — merge did not produce a real report"
+            else
+              REPORT_VALID=true
+              echo "✅ playwright-report/index.html is a real Playwright report"
+            fi
           else
-            echo "⚠️  playwright-report absent or empty after merge-reports (exit $MERGE_EXIT)"
+            if [ "$MERGE_EXIT" -ne 0 ]; then
+              echo "::error::merge-reports exited $MERGE_EXIT AND playwright-report/index.html is missing"
+            else
+              echo "::error::merge-reports exited 0 but playwright-report/index.html was NOT created"
+              echo "   This usually means all-blob-reports contained only incompatible or auth-only blobs."
+              echo "   Merge output was: $MERGE_OUTPUT"
+            fi
+          fi
+          echo "REPORT_VALID=$REPORT_VALID" >> $GITHUB_ENV
+
+      - name: Verify report with verify-report.js
+        if: always()
+        run: |
+          echo "── verify-report.js ────────────────────────────────────────────────────────────────"
+          set +e
+          node scripts/verify-report.js playwright-report
+          VERIFY_EXIT=$?
+          echo "verify-report.js exit code: $VERIFY_EXIT"
+          if [ "$VERIFY_EXIT" -eq 0 ]; then
+            echo "REPORT_VALID=true" >> $GITHUB_ENV
+            echo "✅ verify-report.js: report is valid"
+          else
+            echo "REPORT_VALID=false" >> $GITHUB_ENV
+            echo "::warning::verify-report.js: report validation failed (exit $VERIFY_EXIT)"
           fi
 
       - name: Preserve playwright-report to /tmp
         run: |
-          if [ -d playwright-report ] && [ -n "$(ls -A playwright-report 2>/dev/null)" ]; then
+          if [ "$REPORT_VALID" = "true" ]; then
             cp -r playwright-report /tmp/playwright-report-backup
             echo "PLAYWRIGHT_REPORT_SAVED=true" >> $GITHUB_ENV
-            echo "✅ playwright-report saved to /tmp ($(find playwright-report -type f | wc -l) files)"
+            echo "✅ playwright-report backed up to /tmp ($(find playwright-report -type f | wc -l) files)"
           else
             echo "PLAYWRIGHT_REPORT_SAVED=false" >> $GITHUB_ENV
-            echo "⚠️  playwright-report absent — nothing to save; placeholder will be used"
+            echo "⚠️  REPORT_VALID=false — not backing up; placeholder will be used"
           fi
 
       - name: Configure Git User
@@ -505,17 +624,17 @@ jobs:
       - name: Restore playwright-report from /tmp if needed
         run: |
           REPORT_PRESENT=false
-          if [ -d playwright-report ] && [ -n "$(ls -A playwright-report 2>/dev/null)" ]; then
+          if [ -f playwright-report/index.html ]; then
             REPORT_PRESENT=true
           fi
           if [ "$PLAYWRIGHT_REPORT_SAVED" = "true" ] && [ "$REPORT_PRESENT" = "false" ]; then
-            echo "playwright-report was absent after branch switch — restoring from /tmp"
+            echo "playwright-report was absent after branch switch — restoring from /tmp backup"
             cp -r /tmp/playwright-report-backup playwright-report
             echo "✅ playwright-report restored ($(find playwright-report -type f | wc -l) files)"
           elif [ "$PLAYWRIGHT_REPORT_SAVED" = "false" ]; then
-            echo "⚠️  No playwright-report backup exists — placeholder will be used"
+            echo "⚠️  No valid playwright-report backup exists (REPORT_VALID was false) — placeholder will be used"
           else
-            echo "✅ playwright-report still present after branch switch"
+            echo "✅ playwright-report still present after branch switch ($(find playwright-report -type f | wc -l) files)"
           fi
 
       - name: Generate Human-Readable Execution Time
@@ -596,17 +715,22 @@ jobs:
         run: |
           TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
           mkdir -p published-reports/$TIMESTAMP
+
           # Guard: playwright-report may be absent when merge produces no output
-          # (e.g. auth-gate failure with no shard blob reports).
-          if [ ! -d "playwright-report" ] || [ -z "$(ls -A playwright-report 2>/dev/null)" ]; then
-            echo "⚠️  playwright-report missing or empty — creating placeholder"
+          # (e.g. auth-gate failure with no shard blob reports, or merge crash).
+          # REPORT_VALID is set by the "Merge Playwright HTML reports" step.
+          if [ "$REPORT_VALID" = "true" ] && [ -f "playwright-report/index.html" ]; then
+            cp -r playwright-report/* published-reports/$TIMESTAMP
+            echo "✅ Real Playwright report copied to published-reports/$TIMESTAMP"
+          else
+            echo "⚠️  playwright-report is absent, empty, or invalid — creating placeholder"
+            echo "   REPORT_VALID=$REPORT_VALID  MERGE_EXIT_CODE=$MERGE_EXIT_CODE  BLOB_ZIP_COUNT=$BLOB_ZIP_COUNT"
             mkdir -p playwright-report
             printf '<html><head><title>No report</title></head><body><h1>Report unavailable</h1><p>No Playwright HTML report was produced for this run.</p></body></html>' \
               > playwright-report/index.html
+            cp playwright-report/index.html published-reports/$TIMESTAMP/index.html
           fi
-          cp -r playwright-report/* published-reports/$TIMESTAMP
-          # .zip and .webm stripping is deferred to AFTER "Aggregate Shard Statuses"
-          # because FINAL_STATUS is not known yet at this point.
+
           [ -f execution-time.txt ] && cp execution-time.txt published-reports/$TIMESTAMP/
           [ -f shard-times.json ]   && cp shard-times.json   published-reports/$TIMESTAMP/
           [ -f test-results.json ]  && cp test-results.json  published-reports/$TIMESTAMP/
@@ -614,6 +738,49 @@ jobs:
           echo "$FAILED_STAGE" > published-reports/$TIMESTAMP/failed-stage.txt
           echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
           echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+
+      - name: Validate published report directory
+        if: always()
+        run: |
+          echo "── Published report validation ─────────────────────────────────────────────────────"
+          TARGET="published-reports/$TIMESTAMP"
+          if [ -d "$TARGET" ]; then
+            FILE_COUNT=$(find "$TARGET" -type f | wc -l)
+            DIR_SIZE=$(du -sh "$TARGET" | cut -f1)
+            echo "Directory   : $TARGET"
+            echo "Files       : $FILE_COUNT"
+            echo "Size        : $DIR_SIZE"
+            echo ""
+            echo "Key files:"
+            for f in index.html status.json test-results.json execution-time.txt workflow-time.txt; do
+              if [ -f "$TARGET/$f" ]; then
+                echo "  ✅ $f ($(du -sh "$TARGET/$f" | cut -f1))"
+              else
+                echo "  ⚠️  $f  MISSING"
+              fi
+            done
+            echo ""
+            if [ -f "$TARGET/index.html" ]; then
+              if grep -q 'Report unavailable' "$TARGET/index.html" 2>/dev/null; then
+                echo "  ⚠️  index.html is the PLACEHOLDER — report was not generated"
+              else
+                echo "  ✅ index.html is a real Playwright report"
+                if [ -d "$TARGET/data" ]; then
+                  echo "  ✅ data/ directory present ($(find "$TARGET/data" -type f | wc -l) files)"
+                else
+                  echo "  ⚠️  data/ directory missing from report"
+                fi
+              fi
+            fi
+            if [ -f "$TARGET/status.json" ]; then
+              echo ""
+              echo "  status.json contents:"
+              cat "$TARGET/status.json"
+            fi
+          else
+            echo "::error::published-reports/$TIMESTAMP directory does not exist"
+          fi
+          echo "───────────────────────────────────────────────────────────────────────────────────"
 
       - name: Download Shard Statuses
         uses: actions/download-artifact@v4
@@ -635,12 +802,18 @@ jobs:
             done
           fi
           echo "Final test status: $FINAL_STATUS  (failed stage: $FAILED_STAGE)"
+
+          # REPORT_AVAILABLE is true only when:
+          #   (a) REPORT_VALID was set to "true" by the merge step (real report produced), AND
+          #   (b) the deployed index.html does NOT contain the placeholder text.
+          # We do NOT default to 'true' — an absent or unknown field means unavailable.
           REPORT_AVAILABLE=false
-          if [ -f "published-reports/$TIMESTAMP/data/test-results.json" ] || \
-             ([ -f "published-reports/$TIMESTAMP/index.html" ] && \
-              ! grep -q 'Report unavailable' "published-reports/$TIMESTAMP/index.html" 2>/dev/null); then
+          if [ "$REPORT_VALID" = "true" ] && \
+             [ -f "published-reports/$TIMESTAMP/index.html" ] && \
+             ! grep -q 'Report unavailable' "published-reports/$TIMESTAMP/index.html" 2>/dev/null; then
             REPORT_AVAILABLE=true
           fi
+          echo "reportAvailable: $REPORT_AVAILABLE  (REPORT_VALID=$REPORT_VALID)"
           echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\", \"environment\": \"$TEST_ENV\", \"failedStage\": \"$FAILED_STAGE\", \"flaky\": $FLAKY_TESTS, \"reportAvailable\": $REPORT_AVAILABLE }" \
             > "published-reports/$TIMESTAMP/status.json"
           echo "FINAL_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
@@ -733,8 +906,9 @@ jobs:
                   ROW_STATUS=$(jq -r '.status'                    "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
                   ROW_ENV=$(jq    -r '.environment // ""'         "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
                   ROW_FAILED_STAGE=$(jq -r '.failedStage // ""'   "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
-                  # reportAvailable defaults to true for runs that predate this field
-                  ROW_REPORT_AVAILABLE=$(jq -r '.reportAvailable // true' "published-reports/$DIR_TIMESTAMP/status.json")
+                  # reportAvailable: old runs that predate this field default to FALSE
+                  # (unknown = unavailable) rather than TRUE to avoid showing a broken link.
+                  ROW_REPORT_AVAILABLE=$(jq -r '.reportAvailable // false' "published-reports/$DIR_TIMESTAMP/status.json")
                   echo "FINAL_STATUS=$ROW_STATUS" >> $GITHUB_ENV
                 fi
 

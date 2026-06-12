@@ -164,8 +164,10 @@ const template = /* html */ `<!DOCTYPE html>
       failedStage:     (r.failedStage  || '').trim(),
       shardTimes:      Array.isArray(r.shardTimes) ? r.shardTimes : [],
       // reportAvailable is written by the workflow into status.json.
-      // Older entries lack the field and default to true (assume real report).
-      reportAvailable: r.reportAvailable !== false,
+      // Old runs that pre-date this field are treated as UNAVAILABLE (false)
+      // rather than defaulting to true, so we never show a broken link.
+      // A run must have explicitly set reportAvailable: true to show the link.
+      reportAvailable: r.reportAvailable === true,
     }));
 
     // -----------------------------------------------------------------------
@@ -721,7 +723,7 @@ const template = /* html */ `<!DOCTYPE html>
                                   ↗ View
                                 </a>
                               : <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"
-                                      title="Playwright HTML report was not produced for this run — blob reporter may not have flushed before process exit">
+                                      title="Playwright HTML report was not produced for this run. This can happen when: blob reports contained only auth-gate data, merge-reports failed, or the run was interrupted.">
                                   ⚠ No report
                                 </span>
                             }
