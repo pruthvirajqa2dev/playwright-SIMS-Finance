@@ -98,12 +98,26 @@ jobs:
           path: /tmp/storageState.json
           retention-days: 1
 
+      - name: Diagnose blob-report before upload (auth)
+        if: always()
+        run: |
+          echo "── auth blob-report diagnostics ────────────────────────────────────"
+          if [ -d blob-report ]; then
+            ZIP_COUNT=$(find blob-report -name "*.zip" | wc -l | tr -d ' ')
+            echo "blob-report ZIP files: $ZIP_COUNT"
+            find blob-report -type f | head -10 || echo "  (empty)"
+          else
+            echo "⚠️  blob-report directory does not exist — reporter never wrote output"
+            echo "    Likely cause: test run crashed before any test started (OOM, config error, etc.)"
+          fi
+
       - name: Upload auth blob report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: blob-report-auth
           path: blob-report
+          if-no-files-found: warn
           retention-days: 30
 
       - name: Upload auth test results JSON
@@ -230,12 +244,25 @@ jobs:
           name: shard-${{ matrix.shardIndex }}-status
           path: shard-${{ matrix.shardIndex }}-status.txt
 
+      - name: Diagnose blob-report before upload (shard ${{ matrix.shardIndex }})
+        if: always()
+        run: |
+          echo "── shard ${{ matrix.shardIndex }} blob-report diagnostics ─────────────────────────────────"
+          if [ -d blob-report ]; then
+            ZIP_COUNT=$(find blob-report -name "*.zip" | wc -l | tr -d ' ')
+            echo "blob-report ZIP files: $ZIP_COUNT"
+            find blob-report -type f | head -10 || echo "  (empty)"
+          else
+            echo "⚠️  blob-report directory does not exist for shard ${{ matrix.shardIndex }}"
+          fi
+
       - name: Upload blob report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: blob-report-${{ matrix.shardIndex }}
           path: blob-report
+          if-no-files-found: warn
           retention-days: 30
 
       - name: Write stage status
@@ -358,8 +385,45 @@ jobs:
         run: |
           echo "test-results/:"; ls -la test-results/ 2>/dev/null || echo "(empty)"
 
+      - name: Validate blob reports before merge
+        run: |
+          BLOB_ZIP_COUNT=$(find all-blob-reports -name "*.zip" 2>/dev/null | wc -l | tr -d ' ')
+          TOTAL_SIZE=$(du -sh all-blob-reports 2>/dev/null | awk '{print $1}' || echo '0')
+          echo "── Blob report diagnostics ─────────────────────────────────────────"
+          echo "Blob ZIP files found : $BLOB_ZIP_COUNT  (dir total: ${TOTAL_SIZE})"
+          find all-blob-reports -type f | head -30 || echo "  (no files)"
+          echo "────────────────────────────────────────────────────────────────────"
+          echo "BLOB_ZIP_COUNT=$BLOB_ZIP_COUNT" >> $GITHUB_ENV
+          if [ "$BLOB_ZIP_COUNT" -eq 0 ]; then
+            echo "::warning::No blob ZIP files found — HTML report will be unavailable for this run"
+          fi
+
       - name: Merge Playwright HTML reports
-        run: npx playwright merge-reports --reporter html ./all-blob-reports
+        run: |
+          set +e
+          npx playwright merge-reports --reporter html ./all-blob-reports
+          MERGE_EXIT=$?
+          echo "MERGE_EXIT_CODE=$MERGE_EXIT" >> $GITHUB_ENV
+          if [ "$MERGE_EXIT" -ne 0 ]; then
+            echo "::warning::playwright merge-reports exited $MERGE_EXIT — HTML report may be absent"
+          fi
+          echo "── Post-merge playwright-report state ──────────────────────────────"
+          if [ -d playwright-report ] && [ -n "$(ls -A playwright-report 2>/dev/null)" ]; then
+            echo "✅ playwright-report present ($(find playwright-report -type f | wc -l) files)"
+          else
+            echo "⚠️  playwright-report absent or empty after merge-reports (exit $MERGE_EXIT)"
+          fi
+
+      - name: Preserve playwright-report to /tmp
+        run: |
+          if [ -d playwright-report ] && [ -n "$(ls -A playwright-report 2>/dev/null)" ]; then
+            cp -r playwright-report /tmp/playwright-report-backup
+            echo "PLAYWRIGHT_REPORT_SAVED=true" >> $GITHUB_ENV
+            echo "✅ playwright-report saved to /tmp ($(find playwright-report -type f | wc -l) files)"
+          else
+            echo "PLAYWRIGHT_REPORT_SAVED=false" >> $GITHUB_ENV
+            echo "⚠️  playwright-report absent — nothing to save; placeholder will be used"
+          fi
 
       - name: Configure Git User
         run: |
@@ -422,26 +486,6 @@ jobs:
           echo "Flaky Tests:    ${{ env.FLAKY_TESTS }}"
           echo "Failed Stage:   $FAILED_STAGE"
 
-      # Back up generated artefacts to /tmp BEFORE the stash wipes them.
-      # playwright-report/ is produced by `npx playwright merge-reports --reporter html`
-      # (an untracked directory).  git stash --include-untracked removes it from
-      # the working tree, so without this backup the "Add Current Report" step
-      # always sees an empty workspace and writes the "Report unavailable" placeholder.
-      # test-results/ is also backed up so execution-time calculation survives the
-      # branch switch to gh-pages.
-      - name: Back up report artefacts before stash
-        run: |
-          if [ -d playwright-report ] && [ -n "$(ls -A playwright-report 2>/dev/null)" ]; then
-            cp -r playwright-report /tmp/playwright-report-backup
-            echo "✅ playwright-report backed up ($(find playwright-report -type f | wc -l) files)"
-          else
-            echo "⚠️  playwright-report is absent or empty — nothing to back up"
-          fi
-          if [ -d test-results ] && [ -n "$(ls -A test-results 2>/dev/null)" ]; then
-            cp -r test-results /tmp/test-results-backup
-            echo "✅ test-results backed up"
-          fi
-
       - name: Stash untracked files
         run: git stash push -m "Stashing untracked report files" --include-untracked
 
@@ -458,20 +502,20 @@ jobs:
           git checkout gh-pages
           git pull --rebase origin gh-pages || echo "No changes to pull"
 
-      # Restore the report artefacts that the stash removed.
-      # After `git checkout gh-pages` the working tree reflects gh-pages content,
-      # so we restore from the /tmp backups taken before the stash.
-      - name: Restore report artefacts after branch switch
+      - name: Restore playwright-report from /tmp if needed
         run: |
-          if [ -d /tmp/playwright-report-backup ]; then
+          REPORT_PRESENT=false
+          if [ -d playwright-report ] && [ -n "$(ls -A playwright-report 2>/dev/null)" ]; then
+            REPORT_PRESENT=true
+          fi
+          if [ "$PLAYWRIGHT_REPORT_SAVED" = "true" ] && [ "$REPORT_PRESENT" = "false" ]; then
+            echo "playwright-report was absent after branch switch — restoring from /tmp"
             cp -r /tmp/playwright-report-backup playwright-report
             echo "✅ playwright-report restored ($(find playwright-report -type f | wc -l) files)"
+          elif [ "$PLAYWRIGHT_REPORT_SAVED" = "false" ]; then
+            echo "⚠️  No playwright-report backup exists — placeholder will be used"
           else
-            echo "⚠️  No playwright-report backup found in /tmp"
-          fi
-          if [ -d /tmp/test-results-backup ]; then
-            cp -r /tmp/test-results-backup test-results
-            echo "✅ test-results restored"
+            echo "✅ playwright-report still present after branch switch"
           fi
 
       - name: Generate Human-Readable Execution Time
@@ -591,9 +635,16 @@ jobs:
             done
           fi
           echo "Final test status: $FINAL_STATUS  (failed stage: $FAILED_STAGE)"
-          echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\", \"environment\": \"$TEST_ENV\", \"failedStage\": \"$FAILED_STAGE\", \"flaky\": $FLAKY_TESTS }" \
+          REPORT_AVAILABLE=false
+          if [ -f "published-reports/$TIMESTAMP/data/test-results.json" ] || \
+             ([ -f "published-reports/$TIMESTAMP/index.html" ] && \
+              ! grep -q 'Report unavailable' "published-reports/$TIMESTAMP/index.html" 2>/dev/null); then
+            REPORT_AVAILABLE=true
+          fi
+          echo "{ \"timestamp\": \"$TIMESTAMP\", \"status\": \"$FINAL_STATUS\", \"environment\": \"$TEST_ENV\", \"failedStage\": \"$FAILED_STAGE\", \"flaky\": $FLAKY_TESTS, \"reportAvailable\": $REPORT_AVAILABLE }" \
             > "published-reports/$TIMESTAMP/status.json"
           echo "FINAL_STATUS=$FINAL_STATUS" >> $GITHUB_ENV
+          echo "REPORT_AVAILABLE=$REPORT_AVAILABLE" >> $GITHUB_ENV
         shell: bash
 
       - name: Update Index Page
@@ -677,11 +728,13 @@ jobs:
                 [ "$DIR_AGE" -gt 30 ] && continue
                 TIME_PART=$(echo $DIR_TIMESTAMP | cut -d'_' -f2 | sed 's/-/:/g')
 
-                ROW_STATUS="Unknown"; ROW_ENV=""; ROW_FAILED_STAGE=""
+                ROW_STATUS="Unknown"; ROW_ENV=""; ROW_FAILED_STAGE=""; ROW_REPORT_AVAILABLE=true
                 if [ -f "published-reports/$DIR_TIMESTAMP/status.json" ]; then
-                  ROW_STATUS=$(jq -r '.status'               "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
-                  ROW_ENV=$(jq    -r '.environment // ""'    "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
-                  ROW_FAILED_STAGE=$(jq -r '.failedStage // ""' "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                  ROW_STATUS=$(jq -r '.status'                    "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                  ROW_ENV=$(jq    -r '.environment // ""'         "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                  ROW_FAILED_STAGE=$(jq -r '.failedStage // ""'   "published-reports/$DIR_TIMESTAMP/status.json" | xargs)
+                  # reportAvailable defaults to true for runs that predate this field
+                  ROW_REPORT_AVAILABLE=$(jq -r '.reportAvailable // true' "published-reports/$DIR_TIMESTAMP/status.json")
                   echo "FINAL_STATUS=$ROW_STATUS" >> $GITHUB_ENV
                 fi
 
@@ -697,7 +750,7 @@ jobs:
                 [ -f "published-reports/$DIR_TIMESTAMP/workflow-time.txt" ] && \
                   WORKFLOW_TIME=$(cat "published-reports/$DIR_TIMESTAMP/workflow-time.txt")
 
-          ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"failedStage\":\"$ROW_FAILED_STAGE\",\"execTime\":\"$EXEC_TIME\",\"workflowTime\":\"$WORKFLOW_TIME\",\"shardTimes\":$SHARD_TIMES},"
+          ROWS_JSON+="{\"date\":\"$DATE_PART\",\"time\":\"$TIME_PART\",\"link\":\"./$DIR_TIMESTAMP/index.html\",\"status\":\"$ROW_STATUS\",\"environment\":\"$ROW_ENV\",\"failedStage\":\"$ROW_FAILED_STAGE\",\"execTime\":\"$EXEC_TIME\",\"workflowTime\":\"$WORKFLOW_TIME\",\"shardTimes\":$SHARD_TIMES,\"reportAvailable\":$ROW_REPORT_AVAILABLE},"
               fi
             fi
           done

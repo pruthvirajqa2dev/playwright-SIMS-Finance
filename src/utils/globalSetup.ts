@@ -20,25 +20,28 @@ import path from "path";
 export default async function globalSetup(): Promise<void> {
     const tracesDir = path.join(process.cwd(), "ai-outputs", "traces");
 
-    // Ensure directory exists (async, non-blocking)
-    await fs.promises.mkdir(tracesDir, { recursive: true });
+    if (!fs.existsSync(tracesDir)) {
+        fs.mkdirSync(tracesDir, { recursive: true });
+        console.log("[globalSetup] Created ai-outputs/traces/ directory.");
+        return;
+    }
 
-    // Find stale per-worker shard files — network-traces.json is preserved
-    const entries = await fs.promises.readdir(tracesDir);
-    const staleFiles = entries.filter((f) => /^worker-\d+\.json$/.test(f));
+    // Remove stale per-worker shard files only — network-traces.json is preserved
+    const staleFiles = fs
+        .readdirSync(tracesDir)
+        .filter((f) => /^worker-\d+\.json$/.test(f));
 
-    if (staleFiles.length === 0) return;
+    for (const f of staleFiles) {
+        try {
+            fs.unlinkSync(path.join(tracesDir, f));
+        } catch {
+            // Non-fatal — file may have been cleaned up already
+        }
+    }
 
-    // Delete all stale files in parallel
-    await Promise.all(
-        staleFiles.map((f) =>
-            fs.promises.unlink(path.join(tracesDir, f)).catch(() => {
-                // Non-fatal — file may have been cleaned up already
-            })
-        )
-    );
-
-    console.log(
-        `[globalSetup] Removed ${staleFiles.length} stale worker trace shard file(s).`
-    );
+    if (staleFiles.length > 0) {
+        console.log(
+            `[globalSetup] Removed ${staleFiles.length} stale worker trace shard file(s).`
+        );
+    }
 }

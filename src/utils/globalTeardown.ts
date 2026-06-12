@@ -31,15 +31,17 @@ export default async function globalTeardown(): Promise<void> {
     const tracesDir = path.join(process.cwd(), "ai-outputs", "traces");
     const outputPath = path.join(tracesDir, "network-traces.json");
 
-    if (!fs.existsSync(tracesDir)) {
+    try {
+        await fs.promises.access(tracesDir);
+    } catch {
         console.log(
             "[globalTeardown] Traces directory not found — no traces to merge."
         );
         return;
     }
 
-    const workerFiles = fs
-        .readdirSync(tracesDir)
+    const entries = await fs.promises.readdir(tracesDir);
+    const workerFiles = entries
         .filter((f) => /^worker-\d+\.json$/.test(f))
         .sort() // stable ordering: worker-0.json, worker-1.json, …
         .map((f) => path.join(tracesDir, f));
@@ -62,13 +64,9 @@ export default async function globalTeardown(): Promise<void> {
     NetworkTraceStore.mergeFiles(workerFiles, outputPath);
 
     // Clean up shard files after successful merge
-    for (const f of workerFiles) {
-        try {
-            fs.unlinkSync(f);
-        } catch {
-            // Non-fatal — leave the shard file if deletion fails
-        }
-    }
+    await Promise.all(
+        workerFiles.map((f) => fs.promises.unlink(f).catch(() => {}))
+    );
 
     console.log("[globalTeardown] Trace merge complete.");
 }

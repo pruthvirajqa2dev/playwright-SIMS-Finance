@@ -154,15 +154,18 @@ const template = /* html */ `<!DOCTYPE html>
     // against bash xargs leaving stray whitespace on string values.
     // -----------------------------------------------------------------------
     const normalisedData = (Array.isArray(reportsData) ? reportsData : []).map(r => ({
-      date:         (r.date         || '').trim(),
-      time:         (r.time         || '').trim(),
-      link:         (r.link         || '#').trim(),
-      status:       (r.status       || 'Unknown').trim(),
-      environment:  (r.environment  || '').trim(),
-      execTime:     (r.execTime     || 'N/A').trim(),
-      workflowTime: (r.workflowTime || 'N/A').trim(),
-      failedStage:  (r.failedStage  || '').trim(),
-      shardTimes:   Array.isArray(r.shardTimes) ? r.shardTimes : [],
+      date:            (r.date         || '').trim(),
+      time:            (r.time         || '').trim(),
+      link:            (r.link         || '#').trim(),
+      status:          (r.status       || 'Unknown').trim(),
+      environment:     (r.environment  || '').trim(),
+      execTime:        (r.execTime     || 'N/A').trim(),
+      workflowTime:    (r.workflowTime || 'N/A').trim(),
+      failedStage:     (r.failedStage  || '').trim(),
+      shardTimes:      Array.isArray(r.shardTimes) ? r.shardTimes : [],
+      // reportAvailable is written by the workflow into status.json.
+      // Older entries lack the field and default to true (assume real report).
+      reportAvailable: r.reportAvailable !== false,
     }));
 
     // -----------------------------------------------------------------------
@@ -712,10 +715,16 @@ const template = /* html */ `<!DOCTYPE html>
                           </td>
                           <td className="px-4 py-3 font-mono text-xs text-slate-500 whitespace-nowrap">{r.time}</td>
                           <td className="px-4 py-3">
-                            <a href={r.link} target="_blank" rel="noreferrer"
-                               className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800 font-medium text-xs transition">
-                              ↗ View
-                            </a>
+                            {r.reportAvailable
+                              ? <a href={r.link} target="_blank" rel="noreferrer"
+                                   className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800 font-medium text-xs transition">
+                                  ↗ View
+                                </a>
+                              : <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"
+                                      title="Playwright HTML report was not produced for this run — blob reporter may not have flushed before process exit">
+                                  ⚠ No report
+                                </span>
+                            }
                           </td>
                           <td className="px-4 py-3">
                             {isWkndAuth
