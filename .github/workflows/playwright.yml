@@ -353,7 +353,14 @@ jobs:
         with:
           path: all-blob-reports
           pattern: blob-report-*
-          merge-multiple: true
+          # merge-multiple: false so each artifact gets its own subdirectory.
+          # With merge-multiple: true, download-artifact preserves the internal
+          # artifact path structure, which can place ZIPs one level deeper than
+          # expected (e.g. all-blob-reports/blob-report/report-shard-1.zip).
+          # Playwright's merge-reports scans only the TOP-LEVEL of the input dir
+          # (fs.readdirSync, not recursive), so ZIPs in subdirs are silently
+          # ignored.  We use false here and do the flattening ourselves below.
+          merge-multiple: false
 
       - name: Download workflow start time
         uses: actions/download-artifact@v4
@@ -461,7 +468,7 @@ jobs:
           BLOB_ZIP_COUNT=$(find all-blob-reports -name "*.zip" 2>/dev/null | wc -l | tr -d ' ')
           TOTAL_SIZE=$(du -sh all-blob-reports 2>/dev/null | awk '{print $1}' || echo '0')
           echo "───────────────────────────────────────────────────────────────────────────────────────"
-          echo "Blob ZIP total: ${BLOB_ZIP_COUNT}  |  dir size: ${TOTAL_SIZE}"
+          echo "Blob ZIP total (all depths): ${BLOB_ZIP_COUNT}  |  dir size: ${TOTAL_SIZE}"
           echo "BLOB_ZIP_COUNT=$BLOB_ZIP_COUNT" >> $GITHUB_ENV
           if [ "$BLOB_ZIP_COUNT" -eq 0 ]; then
             echo "::error::No blob ZIP files found in all-blob-reports — merge-reports will produce no HTML report"
@@ -475,13 +482,47 @@ jobs:
             echo "✅ All blob filenames are unique — no collisions detected"
           fi
 
+      - name: Flatten blob reports into merge directory
+        run: |
+          # Playwright's merge-reports uses fs.readdirSync (non-recursive) to
+          # discover blob ZIPs, so ALL ZIPs must be at the top level of the
+          # input directory.  When download-artifact uses merge-multiple: false,
+          # each artifact lands in its own subdir (all-blob-reports/<name>/).
+          # This step collects every *.zip from all subdirs into all-merge-blobs/.
+          # The rename steps in auth-gate and postchecks ensure each ZIP has a
+          # unique filename (report-auth.zip, report-shard-1.zip, etc.) so
+          # there are no collisions in the flat directory.
+          mkdir -p all-merge-blobs
+          echo "── Collecting ZIPs into all-merge-blobs/ ──────────────────────────────────────────────"
+          find all-blob-reports -name "*.zip" | sort | while read f; do
+            BASENAME=$(basename "$f")
+            DEST="all-merge-blobs/$BASENAME"
+            if [ -f "$DEST" ]; then
+              echo "  ⚠️  COLLISION: $BASENAME already exists — skipping $f"
+            else
+              cp "$f" "$DEST"
+              SIZE=$(du -sh "$DEST" | cut -f1)
+              echo "  ✅ $BASENAME  (${SIZE})"
+            fi
+          done
+          echo "── all-merge-blobs/ contents ──────────────────────────────────────────────────────────"
+          find all-merge-blobs -type f | sort | while read f; do
+            echo "  $(du -sh "$f" | cut -f1)  $f"
+          done
+          MERGE_BLOB_COUNT=$(find all-merge-blobs -name "*.zip" | wc -l | tr -d ' ')
+          echo "MERGE_BLOB_COUNT=$MERGE_BLOB_COUNT" >> $GITHUB_ENV
+          echo "Merge blob count: $MERGE_BLOB_COUNT"
+          if [ "$MERGE_BLOB_COUNT" -eq 0 ]; then
+            echo "::error::all-merge-blobs is empty — no ZIPs to merge"
+          fi
+
       - name: Merge Playwright HTML reports
         id: merge-html
         run: |
           echo "── Running npx playwright merge-reports ───────────────────────────────────────────────"
           # Capture stdout + stderr together so all output is visible in CI logs.
           set +e
-          MERGE_OUTPUT=$(npx playwright merge-reports --reporter html ./all-blob-reports 2>&1)
+          MERGE_OUTPUT=$(npx playwright merge-reports --reporter html ./all-merge-blobs 2>&1)
           MERGE_EXIT=$?
           echo "$MERGE_OUTPUT"
           echo "MERGE_EXIT_CODE=$MERGE_EXIT" >> $GITHUB_ENV
