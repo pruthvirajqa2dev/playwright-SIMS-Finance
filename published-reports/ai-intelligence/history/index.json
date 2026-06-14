@@ -1,0 +1,173 @@
+{
+  "entries": [
+    {
+      "timestamp": "2026-06-13_10-39-28",
+      "runId": "27464248930",
+      "generatedAt": "2026-06-13T10:41:03.160Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 175,
+      "endpointCount": 43
+    },
+    {
+      "timestamp": "2026-06-12_11-52-24",
+      "runId": "27413575358",
+      "generatedAt": "2026-06-12T11:54:11.655Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 215,
+      "endpointCount": 42
+    },
+    {
+      "timestamp": "2026-06-12_10-15-03",
+      "runId": "27408809616",
+      "generatedAt": "2026-06-12T10:16:46.190Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 221,
+      "endpointCount": 39
+    },
+    {
+      "timestamp": "2026-06-12_09-13-53",
+      "runId": "27405990076",
+      "generatedAt": "2026-06-12T09:15:31.035Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 279,
+      "endpointCount": 41
+    },
+    {
+      "timestamp": "2026-06-12_09-07-18",
+      "runId": "27405753328",
+      "generatedAt": "2026-06-12T09:09:08.382Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 215,
+      "endpointCount": 42
+    },
+    {
+      "timestamp": "2026-06-12_07-56-17",
+      "runId": "27402304139",
+      "generatedAt": "2026-06-12T07:57:50.580Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 243,
+      "endpointCount": 41
+    },
+    {
+      "timestamp": "2026-06-11_12-19-09",
+      "runId": "27345817922",
+      "generatedAt": "2026-06-11T12:20:55.648Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 177,
+      "endpointCount": 42
+    },
+    {
+      "timestamp": "2026-06-11_06-18-20",
+      "runId": "27327542519",
+      "generatedAt": "2026-06-11T06:20:09.838Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 167,
+      "endpointCount": 42
+    },
+    {
+      "timestamp": "2026-06-10_11-52-30",
+      "runId": "27273645420",
+      "generatedAt": "2026-06-10T11:54:25.146Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 199,
+      "endpointCount": 42
+    },
+    {
+      "timestamp": "2026-06-09_11-27-21",
+      "runId": "27202529054",
+      "generatedAt": "2026-06-09T11:29:12.315Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 194,
+      "endpointCount": 42
+    },
+    {
+      "timestamp": "2026-06-08_12-45-56",
+      "runId": "27138134903",
+      "generatedAt": "2026-06-08T12:47:41.322Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 187,
+      "endpointCount": 42
+    },
+    {
+      "timestamp": "2026-06-08_12-44-30",
+      "runId": "27138005436",
+      "generatedAt": "2026-06-08T12:46:16.063Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 173,
+      "endpointCount": 42
+    },
+    {
+      "timestamp": "2026-06-08_12-13-09",
+      "runId": "27136376950",
+      "generatedAt": "2026-06-08T12:14:59.986Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 190,
+      "endpointCount": 42
+    }
+  ]
+}

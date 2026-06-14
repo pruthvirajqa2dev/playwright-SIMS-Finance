@@ -1,0 +1,41 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e5]:
+      - img "Integra Centros Logo" [ref=e6]
+      - text:  
+      - generic [ref=e7]:
+        - generic [ref=e8]: Login
+        - generic [ref=e9]:
+          - generic [ref=e10]: Username
+          - generic [ref=e11]: 
+          - textbox "Please enter a valid username" [active] [ref=e12]
+        - generic [ref=e13]:
+          - generic [ref=e14]: Password
+          - generic [ref=e15]: 
+          - textbox "Please enter a valid password for the specified user account" [ref=e16]
+        - button "Login" [ref=e19] [cursor=pointer]
+      - generic [ref=e20]:
+        - link "Click here to change your password" [ref=e21] [cursor=pointer]:
+          - /url: javascript:showchangepwd();
+          - generic [ref=e22]: 
+          - text: Change Password
+        - link "Click here to read cookie policy" [ref=e23] [cursor=pointer]:
+          - /url: javascript:showCookieDisclaimer();
+          - generic [ref=e24]: 
+          - text: Cookie Usage
+        - link " Privacy" [ref=e25] [cursor=pointer]:
+          - /url: javascript:showGDPR();
+          - generic [ref=e26]: 
+          - text: Privacy
+    - generic [ref=e28]: © 2026 AdvT Limited
+  - generic [ref=e29]:
+    - heading "System Messages" [level=1] [ref=e30]
+    - generic [ref=e31]:
+      - heading " UAT" [level=1] [ref=e32]:
+        - generic [ref=e33]: 
+        - text: UAT
+      - heading "Version 3.10.0" [level=2] [ref=e34]
+```

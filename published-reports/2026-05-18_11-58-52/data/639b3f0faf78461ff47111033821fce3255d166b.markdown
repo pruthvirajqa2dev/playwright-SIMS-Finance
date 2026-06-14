@@ -1,0 +1,109 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic "Click here to show the navigation panel" [ref=e7] [cursor=pointer]: 
+        - generic "Click here to navigate to your homepage" [ref=e8] [cursor=pointer]
+      - heading "XQUERY - SIMS Trial Balance School" [level=2] [ref=e10]
+      - text: 
+      - generic [ref=e12]:
+        - heading "SIMS Finance Demo Site 130" [level=3] [ref=e13]
+        - generic [ref=e14] [cursor=pointer]: 
+        - text: 
+        - generic [ref=e15] [cursor=pointer]:
+          - generic [ref=e16]:  
+          - text: Finance Director
+          - generic [ref=e17]: 
+    - text:   
+  - text: 
+  - generic [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e23]:
+        - button "Quick Launch" [ref=e30] [cursor=pointer]:
+          - generic [ref=e32]: 
+        - text: 
+        - button "Spaces" [ref=e39] [cursor=pointer]:
+          - generic [ref=e41]: 
+        - text: 
+        - button "Recent History" [ref=e48] [cursor=pointer]:
+          - generic [ref=e50]: 
+        - text:     
+        - button "Favourites" [ref=e57] [cursor=pointer]:
+          - generic [ref=e59]: 
+        - text:    
+        - generic: 
+      - generic [ref=e61] [cursor=pointer]:
+        - generic [ref=e62]: 
+        - generic [ref=e63]: 
+    - generic [ref=e69]:
+      - generic [ref=e70]:
+        - heading "Parameters" [level=1] [ref=e71]
+        - table [ref=e73]:
+          - rowgroup [ref=e74]:
+            - row "Select School 000001 Show Lookup Mandatory Green Abbey School" [ref=e75]:
+              - cell "Select School" [ref=e76]:
+                - generic [ref=e77]: Select School
+              - cell "000001 Show Lookup Mandatory Green Abbey School" [ref=e78]:
+                - generic [ref=e80]:
+                  - textbox "Select School" [ref=e81]:
+                    - /placeholder: ""
+                    - text: "000001"
+                  - button "Show Lookup" [ref=e82] [cursor=pointer]: 
+                  - generic "Mandatory" [ref=e84]: 
+                - text: Green Abbey School
+            - row "Select Year 2324 - 2023/2024 Fiscal Year Mandatory" [ref=e85]:
+              - cell "Select Year" [ref=e86]:
+                - generic [ref=e87]: Select Year
+              - cell "2324 - 2023/2024 Fiscal Year Mandatory" [ref=e88]:
+                - generic [ref=e90]:
+                  - combobox "Select Year" [ref=e91]:
+                    - option
+                    - option "2021 - 2020/2021 Fiscal Year"
+                    - option "2122 - 2021/2022 Fiscal year"
+                    - option "2223 - 2022/2023 Fiscal year"
+                    - option "2324 - 2023/2024 Fiscal Year" [selected]
+                    - option "2425 - 2024/2025 Fiscal Year"
+                    - option "2526 - 2025/2026 Fiscal Year"
+                  - generic "Mandatory" [ref=e93]: 
+            - row "Select Period 12 - August Mandatory" [ref=e94]:
+              - cell "Select Period" [ref=e95]:
+                - generic [ref=e96]: Select Period
+              - cell "12 - August Mandatory" [ref=e97]:
+                - generic [ref=e99]:
+                  - combobox "Select Period" [ref=e100]:
+                    - option
+                    - option "01 - September"
+                    - option "02 - October"
+                    - option "03 - November"
+                    - option "04 - December"
+                    - option "05 - January"
+                    - option "06 - February"
+                    - option "07 - March"
+                    - option "08 - April"
+                    - option "09 - May"
+                    - option "10 - June"
+                    - option "11 - July"
+                    - option "12 - August" [selected]
+                  - generic "Mandatory" [ref=e102]: 
+            - row "Output Format HTML - Hypertext Markup Language Mandatory" [ref=e103]:
+              - cell "Output Format" [ref=e104]:
+                - generic [ref=e105]: Output Format
+              - cell "HTML - Hypertext Markup Language Mandatory" [ref=e106]:
+                - generic [ref=e108]:
+                  - combobox "Output Format" [ref=e109]:
+                    - option "HTML - Hypertext Markup Language" [selected]
+                    - option "XLSX - Excel"
+                    - option "PDF - Portable Document Format"
+                  - generic "Mandatory" [ref=e111]: 
+      - table [ref=e113]:
+        - rowgroup [ref=e114]:
+          - row "Execute Submit Distribute" [ref=e115]:
+            - cell "Execute Submit Distribute" [ref=e116]:
+              - button "Execute" [ref=e118] [cursor=pointer]
+              - button "Submit" [ref=e120] [cursor=pointer]
+              - button "Distribute" [ref=e122] [cursor=pointer]
+  - status [ref=e123]
+```

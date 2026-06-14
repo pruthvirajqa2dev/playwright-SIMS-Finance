@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-06-13T10:40:48.032Z",
+  "pivotDate": "2026-06-06",
+  "beforeWindow": {
+    "from": "2026-05-13",
+    "to": "2026-05-25",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-06-08",
+    "to": "2026-06-12",
+    "runsAnalysed": 10
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 20,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 20,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 20,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 0,
+      "failureDelta": 20,
+      "flakyDelta": -10,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 20,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 10,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [],
+  "actionItems": [
+    "Investigate timeout issues in 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "Analyze the impact of the recent code changes on report generation processes.",
+    "Review the environment setup for potential discrepancies affecting test stability.",
+    "Examine the locator failures in 'NML510 - Trial Balance Report' for underlying issues.",
+    "Monitor for any additional regressions in upcoming test runs."
+  ],
+  "executiveSummary": [
+    "30% of tests regressed after the pivot date on 2026-06-06.",
+    "Tests 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report' both showed a 20% failure rate.",
+    "The 'NML510 - Trial Balance Report' increased from 10% to 20% failure rate.",
+    "Timeout errors may indicate performance issues in report generation.",
+    "These regressions could affect the reliability of financial reporting for staff.",
+    "Further investigation into the timeout patterns may provide insights.",
+    "Environment consistency should be reviewed to rule out external factors.",
+    "Monitoring future test runs is essential to catch any further issues."
+  ]
+}

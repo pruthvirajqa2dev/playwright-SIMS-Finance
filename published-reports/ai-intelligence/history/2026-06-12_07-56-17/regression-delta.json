@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-06-12T07:57:34.708Z",
+  "pivotDate": "2026-06-05",
+  "beforeWindow": {
+    "from": "2026-05-12",
+    "to": "2026-05-25",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-06-08",
+    "to": "2026-06-11",
+    "runsAnalysed": 9
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 11,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 11,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 11,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 11,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 11,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 0,
+      "failureDelta": 11,
+      "flakyDelta": -10,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate timeout issues in 'RSS570 - Crystal Report', 'File upload using SPC420', and 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "Analyze the impact of the recent code changes on test execution times.",
+    "Review the environment setup for potential discrepancies affecting test stability.",
+    "Monitor for any patterns in test failures across different runs.",
+    "Assess the configuration of shared resources that may be causing delays."
+  ],
+  "executiveSummary": [
+    "11% failure rates observed in three tests post-pivot: 'RSS570 - Crystal Report', 'File upload using SPC420', and 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "This pattern may indicate timing issues affecting test execution, as all tests exceeded the timeout threshold.",
+    "May impact the reliability of financial reporting and data uploads for users.",
+    "Further analysis of timeout occurrences could clarify the underlying issues.",
+    "Comparison of test performance before and after the pivot date is recommended."
+  ]
+}

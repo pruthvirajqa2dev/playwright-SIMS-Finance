@@ -1,0 +1,261 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic "Click here to show the navigation panel" [ref=e7] [cursor=pointer]: 
+        - generic "Click here to navigate to your homepage" [ref=e8] [cursor=pointer]
+      - heading "NML510 - Trial Balance Report" [level=2] [ref=e10]
+      - text: 
+      - generic [ref=e12]:
+        - heading "SIMS Finance Demo Site 130" [level=3] [ref=e13]
+        - generic [ref=e14] [cursor=pointer]: 
+        - text: 
+        - generic [ref=e15] [cursor=pointer]:
+          - generic [ref=e16]:  
+          - text: Finance Director
+          - generic [ref=e17]: 
+    - text:   
+  - text: 
+  - generic [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e23]:
+        - button "Quick Launch" [ref=e30] [cursor=pointer]:
+          - generic [ref=e32]: 
+        - text: 
+        - button "Spaces" [ref=e39] [cursor=pointer]:
+          - generic [ref=e41]: 
+        - text: 
+        - button "Recent History" [ref=e48] [cursor=pointer]:
+          - generic [ref=e50]: 
+        - text:     
+        - button "Favourites" [ref=e57] [cursor=pointer]:
+          - generic [ref=e59]: 
+        - text:    
+        - generic: 
+      - generic [ref=e61] [cursor=pointer]:
+        - generic [ref=e62]: 
+        - generic [ref=e63]: 
+    - generic [ref=e67]:
+      - button "Options" [ref=e76] [cursor=pointer]:
+        - generic [ref=e78]: 
+        - text: Options
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - heading "Submission Parameters" [level=1] [ref=e83]
+            - table [ref=e85]:
+              - rowgroup [ref=e86]:
+                - row "School ID 000001 Show Lookup Select Green Abbey School" [ref=e87]:
+                  - cell "School ID" [ref=e88]:
+                    - generic [ref=e89]: School ID
+                  - cell "000001 Show Lookup Select Green Abbey School" [ref=e90]:
+                    - generic [ref=e91]:
+                      - generic [ref=e92]:
+                        - textbox "School ID" [ref=e93]:
+                          - /placeholder: ""
+                          - text: "000001"
+                        - button "Show Lookup" [ref=e94] [cursor=pointer]: 
+                        - text: 
+                      - button "Select" [ref=e97] [cursor=pointer]
+                    - text: Green Abbey School
+          - table [ref=e100]:
+            - rowgroup [ref=e101]:
+              - row "Trial Balance Year 2425 Show Lookup Mandatory" [ref=e102]:
+                - cell "Trial Balance Year" [ref=e103]:
+                  - generic [ref=e104]: Trial Balance Year
+                - cell "2425 Show Lookup Mandatory" [ref=e105]:
+                  - generic [ref=e107]:
+                    - textbox "Trial Balance Year" [ref=e108]:
+                      - /placeholder: ""
+                      - text: "2425"
+                    - button "Show Lookup" [ref=e109] [cursor=pointer]: 
+                    - generic "Mandatory" [ref=e111]: 
+              - row "Up to Which Period 01 Show Lookup Mandatory" [ref=e112]:
+                - cell "Up to Which Period" [ref=e113]:
+                  - generic [ref=e114]: Up to Which Period
+                - cell "01 Show Lookup Mandatory" [ref=e115]:
+                  - generic [ref=e117]:
+                    - textbox "Up to Which Period" [ref=e118]:
+                      - /placeholder: ""
+                      - text: "01"
+                    - button "Show Lookup" [ref=e119] [cursor=pointer]: 
+                    - generic "Mandatory" [ref=e121]: 
+          - generic [ref=e122]:
+            - heading "Sequence" [level=1] [ref=e123]
+            - table [ref=e125]:
+              - rowgroup [ref=e126]:
+                - row "Sequence (Cost Centre/Ledger) School ID/Cost Centre" [ref=e127]:
+                  - cell "Sequence (Cost Centre/Ledger)" [ref=e128]:
+                    - generic [ref=e129]: Sequence (Cost Centre/Ledger)
+                  - cell "School ID/Cost Centre" [ref=e130]:
+                    - generic [ref=e132]:
+                      - combobox "Sequence (Cost Centre/Ledger)" [ref=e133]:
+                        - option "School ID/Cost Centre" [selected]
+                        - option "School ID/Ledger"
+                      - text: 
+          - generic [ref=e136]:
+            - generic [ref=e138]:
+              - heading "Account Codes" [level=1] [ref=e139]
+              - table [ref=e141]:
+                - rowgroup [ref=e142]:
+                  - row "From GL Code Show Lookup" [ref=e143]:
+                    - cell "From GL Code" [ref=e144]:
+                      - generic [ref=e145]: From GL Code
+                    - cell "Show Lookup" [ref=e146]:
+                      - generic [ref=e148]:
+                        - textbox "From GL Code" [ref=e149]
+                        - button "Show Lookup" [ref=e150] [cursor=pointer]: 
+                        - text: 
+                  - row "To GL Code ZZZZZ/999999-99 Show Lookup" [ref=e151]:
+                    - cell "To GL Code" [ref=e152]:
+                      - generic [ref=e153]: To GL Code
+                    - cell "ZZZZZ/999999-99 Show Lookup" [ref=e154]:
+                      - generic [ref=e156]:
+                        - textbox "To GL Code" [ref=e157]:
+                          - /placeholder: ""
+                          - text: ZZZZZ/999999-99
+                        - button "Show Lookup" [ref=e158] [cursor=pointer]: 
+                        - text: 
+                  - row "Cash /Accrual Data Sets Accrual" [ref=e159]:
+                    - cell "Cash /Accrual Data Sets" [ref=e160]:
+                      - generic [ref=e161]: Cash /Accrual Data Sets
+                    - cell "Accrual" [ref=e162]:
+                      - generic [ref=e164]:
+                        - combobox "Cash /Accrual Data Sets" [disabled] [ref=e165]:
+                          - option "Accrual" [selected]
+                        - text: 
+                  - row "Currency ALL" [ref=e166]:
+                    - cell "Currency" [ref=e167]:
+                      - generic [ref=e168]: Currency
+                    - cell "ALL" [ref=e169]:
+                      - generic [ref=e171]:
+                        - combobox "Currency" [disabled] [ref=e172]:
+                          - option "ALL" [selected]
+                        - text: 
+            - generic:
+              - table:
+                - rowgroup:
+                  - row:
+                    - cell:
+                      - generic:
+                        - generic:
+                          - table:
+                            - rowgroup:    
+                    - cell:
+                      - generic:
+                        - generic:
+                          - table:
+                            - rowgroup:    
+        - table [ref=e174]:
+          - rowgroup [ref=e175]:
+            - row "Submit" [ref=e176]:
+              - cell "Submit" [ref=e177]:
+                - button "Submit" [ref=e179] [cursor=pointer]
+  - status [ref=e180]
+  - dialog "Job Processing" [ref=e181]:
+    - generic [ref=e182]:
+      - generic [ref=e183]: Job Processing
+      - button " Close" [ref=e184] [cursor=pointer]:
+        - generic [ref=e185]: 
+        - text: Close
+    - generic [ref=e187]:
+      - generic [ref=e190]:
+        - table [ref=e193]:
+          - rowgroup [ref=e194]:
+            - row "NML510 - Trial Balance Report" [ref=e195]:
+              - cell "NML510 - Trial Balance Report" [ref=e196]:
+                - generic [ref=e198]: NML510 - Trial Balance Report 
+        - tablist [ref=e199]:
+          - generic [ref=e200]:
+            - tab "Submit" [ref=e201] [cursor=pointer]
+            - tabpanel [ref=e202]:
+              - generic [ref=e203]:
+                - heading "Details" [level=1] [ref=e204]
+                - table [ref=e206]:
+                  - rowgroup [ref=e207]:
+                    - row "Queue Default Concurrent Queue Mandatory" [ref=e208]:
+                      - cell "Queue" [ref=e209]:
+                        - generic [ref=e210]: Queue
+                      - cell "Default Concurrent Queue Mandatory" [ref=e211]:
+                        - generic [ref=e213]:
+                          - combobox "Queue" [ref=e214]:
+                            - option "Default Concurrent Queue" [selected]
+                            - option "ICE Queue"
+                            - option "Real Time Updates Sequential Queue"
+                            - option "RSS Migrations Queue"
+                            - option "SLS Allocations Queue"
+                          - generic "Mandatory" [ref=e216]: 
+                    - row "Date 22/05/2026 Date Picker Mandatory" [ref=e217]:
+                      - cell "Date" [ref=e218]:
+                        - generic [ref=e219]: Date
+                      - cell "22/05/2026 Date Picker Mandatory" [ref=e220]:
+                        - generic [ref=e222]:
+                          - textbox "Date" [ref=e223]: 22/05/2026
+                          - button "Date Picker" [ref=e224] [cursor=pointer]: 
+                          - generic "Mandatory" [ref=e226]: 
+                    - row "Time 11:59 Mandatory" [ref=e227]:
+                      - cell "Time" [ref=e228]:
+                        - generic [ref=e229]: Time
+                      - cell "11:59 Mandatory" [ref=e230]:
+                        - generic [ref=e232]:
+                          - textbox "Time" [ref=e233]: 11:59
+                          - generic "Mandatory" [ref=e235]: 
+              - generic [ref=e236]:
+                - heading "Email On Completion" [level=1] [ref=e237]
+                - table [ref=e239]:
+                  - rowgroup [ref=e240]:
+                    - row "Send Email" [ref=e241]:
+                      - cell "Send Email" [ref=e242]:
+                        - generic [ref=e243]: Send Email
+                      - cell "Send Email" [ref=e244]:
+                        - generic [ref=e246]:
+                          - checkbox "Send Email" [ref=e247] [cursor=pointer]: 
+                          - text: 
+                    - row "To Address Pruthviraj.Pardeshi@parentpay.com" [ref=e248]:
+                      - cell "To Address" [ref=e249]:
+                        - generic [ref=e250]: To Address
+                      - cell "Pruthviraj.Pardeshi@parentpay.com" [ref=e251]:
+                        - generic [ref=e253]:
+                          - textbox "To Address" [ref=e254]: Pruthviraj.Pardeshi@parentpay.com
+                          - text: 
+            - tab "Schedule" [ref=e255] [cursor=pointer]
+            - tab "Add To Batch" [ref=e256] [cursor=pointer]
+        - table [ref=e258]:
+          - rowgroup [ref=e259]:
+            - row "OK Close" [ref=e260]:
+              - cell "OK Close" [ref=e261]:
+                - button "OK" [ref=e263] [cursor=pointer]
+                - button "Close" [ref=e265] [cursor=pointer]
+      - generic [ref=e266] [cursor=pointer]: 
+  - alertdialog "Duplicate job found" [ref=e268]:
+    - generic [ref=e269]:
+      - generic [ref=e270]: Duplicate job found
+      - button " Close" [ref=e271] [cursor=pointer]:
+        - generic [ref=e272]: 
+        - text: Close
+    - generic [ref=e275]:
+      - table [ref=e278]:
+        - rowgroup [ref=e279]:
+          - row "An identical job is already submitted. Program ID 'NML510' Job key 'NML510000001' Would you like to continue to submit this job?" [ref=e280]:
+            - cell [ref=e281]:
+              - generic [ref=e283]:
+                - generic [ref=e285]: 
+                - text: 
+            - cell "An identical job is already submitted. Program ID 'NML510' Job key 'NML510000001' Would you like to continue to submit this job?" [ref=e286]:
+              - generic [ref=e288]:
+                - generic [ref=e291]:
+                  - text: An identical job is already submitted.
+                  - text: Program ID 'NML510'
+                  - text: Job key 'NML510000001'
+                  - text: Would you like to continue to submit this job?
+                - text: 
+      - table [ref=e293]:
+        - rowgroup [ref=e294]:
+          - row "Yes No" [ref=e295]:
+            - cell "Yes No" [ref=e296]:
+              - button "Yes" [active] [ref=e298] [cursor=pointer]
+              - button "No" [ref=e300] [cursor=pointer]
+```

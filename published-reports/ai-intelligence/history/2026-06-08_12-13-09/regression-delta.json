@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-06-08T12:14:41.703Z",
+  "pivotDate": "2026-06-01",
+  "beforeWindow": {
+    "from": "2026-05-11",
+    "to": "2026-05-25",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-06-08",
+    "to": "2026-06-08",
+    "runsAnalysed": 2
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 50,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 50,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "High",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate the timeout issue in 'File upload using SPC420' test.",
+    "Review the test environment configuration for potential discrepancies.",
+    "Analyze the impact of recent code changes on file upload functionality.",
+    "Monitor for any patterns in test failures during peak usage times.",
+    "Assess the stability of the UAT environment to rule out external factors."
+  ],
+  "executiveSummary": [
+    "50% failure rate observed in 'File upload using SPC420' test after 2026-06-01.",
+    "One regression and one improvement noted across the testing windows.",
+    "The timeout error may indicate performance issues with file uploads.",
+    "This regression could affect the reliability of file uploads for users.",
+    "Further investigation into the test environment may clarify the issue."
+  ]
+}

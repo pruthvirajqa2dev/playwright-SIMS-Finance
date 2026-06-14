@@ -1,0 +1,87 @@
+{
+  "generatedAt": "2026-06-12T09:08:50.482Z",
+  "pivotDate": "2026-06-05",
+  "beforeWindow": {
+    "from": "2026-05-13",
+    "to": "2026-05-25",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-06-08",
+    "to": "2026-06-12",
+    "runsAnalysed": 10
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 10,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 10,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 10,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 10,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 10,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 0,
+      "failureDelta": 10,
+      "flakyDelta": -10,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [],
+  "actionItems": [
+    "Investigate timeout issues in Crystal Reports and file uploads.",
+    "Analyze XQuery report execution patterns for potential timing issues.",
+    "Review shared dependencies in UAT environment affecting test stability.",
+    "Monitor for further regressions in financial tests post-pivot.",
+    "Conduct a detailed analysis of error logs for insights."
+  ],
+  "executiveSummary": [
+    "30% of tests regressed after the pivot on 2026-06-05, with three tests failing.",
+    "All regressed tests showed a failure rate increase to 10%, indicating potential timing issues.",
+    "This pattern may indicate instability in the UAT environment affecting report generation.",
+    "Could lead to inconsistent results in financial reporting for staff.",
+    "Further analysis of timeout errors may provide insight into underlying issues.",
+    "Monitoring for additional regressions in financial tests is recommended.",
+    "Reviewing shared dependencies in the UAT environment could clarify the observed patterns."
+  ]
+}

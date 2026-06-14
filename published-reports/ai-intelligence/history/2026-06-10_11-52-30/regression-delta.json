@@ -1,0 +1,89 @@
+{
+  "generatedAt": "2026-06-10T11:54:08.414Z",
+  "pivotDate": "2026-06-03",
+  "beforeWindow": {
+    "from": "2026-05-11",
+    "to": "2026-05-25",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-06-08",
+    "to": "2026-06-09",
+    "runsAnalysed": 6
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 17,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 17,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 17,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 17,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate timeout issues in 'RSS570 - Crystal Report' and 'File upload using SPC420'.",
+    "Analyze test environment consistency between before and after pivot dates.",
+    "Review dependencies that may affect Crystal Reports and file uploads.",
+    "Monitor for any additional regressions in upcoming test runs.",
+    "Assess the impact of recent code changes on test performance."
+  ],
+  "executiveSummary": [
+    "17% failure rate observed in 'RSS570 - Crystal Report' after the pivot date.",
+    "17% failure rate also recorded for 'File upload using SPC420' post-pivot.",
+    "One test, 'NML510 - Trial Balance Report', improved from 10% to 0% failure rate.",
+    "The observed timeouts may indicate underlying performance issues in the system.",
+    "These regressions could affect the reliability of financial reporting and uploads.",
+    "Further investigation into the test environment may clarify the observed patterns.",
+    "Monitoring future runs is essential to identify any additional instability.",
+    "Reviewing recent code changes could provide insights into the regressions."
+  ]
+}

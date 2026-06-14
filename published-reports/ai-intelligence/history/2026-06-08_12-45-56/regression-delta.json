@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-06-08T12:47:25.743Z",
+  "pivotDate": "2026-06-01",
+  "beforeWindow": {
+    "from": "2026-05-11",
+    "to": "2026-05-25",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-06-08",
+    "to": "2026-06-08",
+    "runsAnalysed": 3
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 33,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 33,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "High",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate the timeout issue in 'File upload using SPC420' test.",
+    "Analyze the impact of the code change on file upload functionality.",
+    "Review the environment configuration for potential discrepancies.",
+    "Monitor for any patterns in test failures during peak usage times."
+  ],
+  "executiveSummary": [
+    "33% failure rate observed in 'File upload using SPC420' after the pivot date.",
+    "One regression and one improvement noted in the test results.",
+    "The timeout error may indicate performance issues with file uploads.",
+    "This pattern could reflect instability in the file upload process.",
+    "May affect the reliability of file uploads for finance operations.",
+    "Further analysis of the test environment may clarify the issue.",
+    "Monitoring test performance during peak hours may provide insights.",
+    "Comparing results across different environments could help isolate causes."
+  ]
+}

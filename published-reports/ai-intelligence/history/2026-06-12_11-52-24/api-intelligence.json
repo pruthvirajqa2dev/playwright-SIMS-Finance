@@ -1,0 +1,3103 @@
+{
+  "generatedAt": "2026-06-12T11:54:08.374Z",
+  "sessionId": "traces",
+  "totalTraces": 215,
+  "filteredTraces": 215,
+  "uniqueEndpoints": 42,
+  "endpointProfiles": [
+    {
+      "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+      "method": "POST",
+      "domain": "BudgetManagement",
+      "category": "DataMutation",
+      "callCount": 49,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 49
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 186,
+        "max": 398,
+        "avg": 211,
+        "p95": 340
+      },
+      "isRepeatedCall": true,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><page xmlns:i18n=\"http://apache.org/cocoon/i18n/2.1\">\r\n<div class=\"faicon\">\r\n<i aria-hidden=\"true\" class=\"fas fa-cog  fa-spin fa-margin fa-fw\" style=\"font-size:4em;padding:0.2em 0em ;margin:0em 0.2em 0em 0em ;\"></i>\r\n</div> \r\n<span for=\"image_status\" type=\"descr\" aria-live=\"polite\"> </span>\r\n</page>\r\n",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "SID",
+        "CONTROL_NAME",
+        "page_name",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:46.669Z",
+      "lastSeen": "2026-06-12T11:49:23.707Z"
+    },
+    {
+      "normalizedPath": "/auth",
+      "method": "GET",
+      "domain": "Unknown",
+      "category": "Authentication",
+      "callCount": 16,
+      "testCount": 7,
+      "statusCodes": {
+        "302": 16
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 110,
+        "max": 350,
+        "avg": 152,
+        "p95": 350
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:46:47.308Z",
+      "lastSeen": "2026-06-12T11:47:27.541Z"
+    },
+    {
+      "normalizedPath": "/auth/esr.elogin",
+      "method": "GET",
+      "domain": "Authentication",
+      "category": "Authentication",
+      "callCount": 9,
+      "testCount": 7,
+      "statusCodes": {
+        "200": 9
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 134,
+        "max": 226,
+        "avg": 176,
+        "p95": 226
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<html lang=\"en-GB\">\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"no-cache\" http-equiv=\"Pragma\">\r\n<meta content=\"-1\" http-equiv=\"Expires\">\r\n<meta content=\"no-cache\" http-equiv=\"cache-control\">\r\n<meta content=\"width=device-width, initial-scale=1\" name=\"viewport\">\r\n<title>Integra Centros - 25.01.00/132</title>\r\n<link href=\"/staticcontent/css/fontawesome/css/all.min.css\" rel=\"stylesheet\" type=\"text/css\">\r\n<link type=\"text/css\" href=\"/staticcontent/css/tippy/tippy.css\" rel=\"stylesheet\">\r\n<link type=\"image/x-icon\" rel=\"icon\" href=\"/staticcontent/images/favicon.ico\">\r\n<link rel=\"stylesheet\" type=\"text/css\" href=\"/staticcontent/css/core/login_MN1781226670524.css\">\r\n<link rel=\"stylesheet\" type=\"text/css\" href=\"/staticcontent/css/core/copyright_MN1781226670524.css\">\r\n<link href=\"/staticcontent/css/jquery/jquery-ui.css\" rel=\"stylesheet\" type=\"text/css\">\r\n<script src=\"/staticcontent/scripts/jquery/jquery.min.js\" type=\"text/javascript\"> </script><script src=\"/staticcontent/scripts/jquery/jquery-ui.min.js\" type=\"text/javascript\"> </script><script src=\"/staticcontent/scripts/pollyfills.js\" type=\"text/javascript\"> </script><script type=\"text/javascript\" src=\"/staticcontent/scripts/tippy/popper.js\"> </script><script type=\"text/javascript\" src=\"/staticcontent/scripts/tippy/tippy.js\"> </script><script type=\"text/javascript\" src=\"/staticcontent/scripts/global/eseries_MN1781226670524.js\"></script><script type=\"text/javascript\" src=\"/staticcontent/scripts/global/framework_MN1781226670524.js\"></script><script type=\"text/javascript\" src=\"/staticcontent/scripts/global/masking_MN1781226670524.js\"></script><script type=\"text/javascript\" src=\"/staticcontent/scripts/core/login_standard_MN1781226670524.js\"></script><script type=\"text/javascript\" src=\"scripts/core/i18n_translations_MN1781226670524.js?esr-auth-locale=en-GB\"></script><script type=\"text/javascript\" src=\"scripts/eseries_logon_settings_MN1781226670524.js\"></script><script type=\"text/java",
+      "observedQueryParams": [
+        "cmd"
+      ],
+      "firstSeen": "2026-06-12T11:46:47.574Z",
+      "lastSeen": "2026-06-12T11:47:27.724Z"
+    },
+    {
+      "normalizedPath": "",
+      "method": "GET",
+      "domain": "Unknown",
+      "category": "DataFetch",
+      "callCount": 8,
+      "testCount": 7,
+      "statusCodes": {
+        "302": 8
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 122,
+        "max": 743,
+        "avg": 373,
+        "p95": 743
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:46:46.941Z",
+      "lastSeen": "2026-06-12T11:47:26.576Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/logon.consume",
+      "method": "POST",
+      "domain": "Unknown",
+      "category": "DataMutation",
+      "callCount": 8,
+      "testCount": 7,
+      "statusCodes": {
+        "302": 8
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 240,
+        "max": 643,
+        "avg": 320,
+        "p95": 643
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "esr_windowname=esr_fa59b923-daae-4186-bbfc-b2fb6802da7a&esr_referrer=https%3A%2F%2Fuat-v2.pecuniam-online.co.uk%2Fauth%2Fesr.elogin&auth_token=[REDACTED]&logon.username=FINDIR99D130&logon.password=[REDACTED]&locale=en_GB&cmd=2&esr_target=",
+      "sampleResponseBody": null,
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:46:48.761Z",
+      "lastSeen": "2026-06-12T11:47:29.081Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/user_default.home",
+      "method": "GET",
+      "domain": "Unknown",
+      "category": "DataFetch",
+      "callCount": 8,
+      "testCount": 7,
+      "statusCodes": {
+        "302": 8
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 133,
+        "max": 295,
+        "avg": 175,
+        "p95": 295
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:46:49.114Z",
+      "lastSeen": "2026-06-12T11:47:29.384Z"
+    },
+    {
+      "normalizedPath": "/auth/esr.elogin",
+      "method": "POST",
+      "domain": "Authentication",
+      "category": "Authentication",
+      "callCount": 8,
+      "testCount": 7,
+      "statusCodes": {
+        "200": 8
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 214,
+        "max": 356,
+        "avg": 260,
+        "p95": 356
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "logon.username=FINDIR99D130&logon.password=[REDACTED]&locale=en_GB&cmd=2&esr_target=",
+      "sampleResponseBody": null,
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:46:48.514Z",
+      "lastSeen": "2026-06-12T11:47:28.779Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/simsfinance.home",
+      "method": "GET",
+      "domain": "Unknown",
+      "category": "DataFetch",
+      "callCount": 8,
+      "testCount": 7,
+      "statusCodes": {
+        "200": 8
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 127,
+        "max": 260,
+        "avg": 182,
+        "p95": 260
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><html>\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"IE=Edge\" http-equiv=\"X-UA-Compatible\">\r\n<meta charset=\"UTF-8\">\r\n<meta content=\"width=device-width,minimal-ui,initial-scale=1\" name=\"viewport\">\r\n<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">\r\n<meta content=\"yes\" name=\"mobile-web-app-capable\">\r\n</head>\r\n<body>\r\n<form onsubmit=\"return false;\" action=\"\" name=\"bounce\" method=\"post\">\r\n<input name=\"esr_windowname\" type=\"hidden\"><input name=\"esr_drill_url\" type=\"hidden\"><input name=\"esr_drill_env\" type=\"hidden\"><input name=\"esr_referrer\" type=\"hidden\"><script>\r\n                        if (window.top.name == \"\" || window.top.name == \"esr_CENTROS_HELP\") {\r\n                            window.top.name = \"esr_\" + \"0907190e-b7fb-4a79-a8b0-9fa1854f03b2\";\r\n                        }\r\n                        document.forms['bounce'].elements['esr_windowname'].value = window.top.name;\r\n\r\n                        \r\n                        document.forms['bounce'].elements['esr_referrer'].value = \"https:\\/\\/uat-v2.pecuniam-online.co.uk\\/auth\\/esr.elogin\";\r\n                        document.forms['bounce'].action = \"simsfinance.home\";\r\n                        document.forms['bounce'].submit();\r\n                    </script>\r\n</form>\r\n</body>\r\n</html>\r\n",
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:46:49.290Z",
+      "lastSeen": "2026-06-12T11:47:29.585Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/simsfinance.home",
+      "method": "POST",
+      "domain": "Unknown",
+      "category": "DataMutation",
+      "callCount": 8,
+      "testCount": 7,
+      "statusCodes": {
+        "200": 8
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 1175,
+        "max": 2525,
+        "avg": 1466,
+        "p95": 2525
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "esr_windowname=esr_fa59b923-daae-4186-bbfc-b2fb6802da7a&esr_drill_url=&esr_drill_env=&esr_referrer=https%3A%2F%2Fuat-v2.pecuniam-online.co.uk%2Fauth%2Fesr.elogin",
+      "sampleResponseBody": "<!DOCTYPE html><html lang=\"en-GB\">\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"IE=Edge\" http-equiv=\"X-UA-Compatible\">\r\n<title>SIMS Finance</title>\r\n<meta charset=\"UTF-8\">\r\n<meta content=\"width=device-width,minimal-ui,initial-scale=1\" name=\"viewport\">\r\n<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">\r\n<meta content=\"yes\" name=\"mobile-web-app-capable\">\r\n<meta value=\"notranslate\" name=\"google\">\r\n<noscript>\r\n<meta content=\"0; url=no_javascript.xsp\" http-equiv=\"refresh\">\r\n</noscript>\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"dhtmlxGrid/dhtmlx_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/dhtmlx/vault/vault.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/fontawesome/css/all.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/jquery/jquery-ui_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/tippy/tippy_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/core/eseries2_template_MN1781264808997.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/core/ui/homepage_MN1781264808997.css\">\r\n<script src=\"dhtmlxGrid/dhtmlx_MN1781250536165.js\"></script><script src=\"dhtmlxMenu/dhtmlxmenu_MN1781250536165.js\"></script><script src=\"scripts/dhtmlx/vault/vault.bespoke_MN1781250536165.js\"></script><script src=\"scripts/pollyfills_MN1781250536165.js\"></script><script src=\"scripts/pace/pace_MN1781250536165.js\"></script><script src=\"scripts/i18n_translations_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-migrate-3.5.0.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-ui.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.caret_MN1781250536165.js\"></script><script src=\"scripts/help/RoboHelp_CSH_MN1781250536165.js\"></script><script src=\"scripts/global/framework_MN1781250536165.js\"></script><script ",
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:46:49.560Z",
+      "lastSeen": "2026-06-12T11:47:29.803Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/simsfinance_dynamic.xml",
+      "method": "POST",
+      "domain": "Unknown",
+      "category": "DataMutation",
+      "callCount": 8,
+      "testCount": 7,
+      "statusCodes": {
+        "200": 8
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 124,
+        "max": 210,
+        "avg": 145,
+        "p95": 210
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><div id=\"sid4575_home_PROJECT_TOOLBAR_DYNAMIC_CONTENT\" class=\"esr_dynamic_container \" pflow=\"VERTICAL\" style=\"display:block;\">\r\n<div id=\"sid4575_home_PROJECT_TOOLBAR_DYNAMIC_CONTENT_CONTENT\" style=\"display:block;\" valign=\"top\">\r\n<div class=\"esr_container_spacer\" id=\"sid4575_home_ESR_PROJECT_TOOLBAR\" style=\"display:block\">\r\n<div align=\"right\"></div>\r\n</div>\r\n</div>\r\n</div>\r\n",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "program_id",
+        "esr_t",
+        "SID",
+        "containerId",
+        "pageName",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:46:52.716Z",
+      "lastSeen": "2026-06-12T11:47:32.525Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/sysnav_dialog.xml",
+      "method": "POST",
+      "domain": "Unknown",
+      "category": "DataMutation",
+      "callCount": 8,
+      "testCount": 6,
+      "statusCodes": {
+        "200": 8
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 356,
+        "max": 797,
+        "avg": 556,
+        "p95": 797
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><form onsubmit=\"return false;\" name=\"sid7982_esr_profile\" id=\"sid7982_esr_profile\" form=\"sid7982_esr_profile\" data-esr-clean-page=\"esr_profile\" data-esr-sid=\"sid7982\" data-esr-programid=\"sysnav\" autocomplete=\"off\">\r\n<div id=\"sid7982_esr_profile_body\" style=\"display:block;\">\r\n<div class=\"esr_container_spacer esr_container esr_container_spacer_end\">\r\n<div class=\"oDataElementContainer esr_tree_outter_container\" id=\"sid7982_esr_profile_esr_cn_0\" style=\";display:block\">\r\n<div class=\"divtable\">\r\n<div class=\"tablebody\">\r\n<div class=\"oDataFormElement esr_div_controls_row tablerow esr_hover\" style=\"clear:both;\" id=\"esr_control_div_odd\" onkeydown=\"esr_ClickOnEnterKeyDown($(this).find(&quot;div[name='accessibility']&quot;)[0], event);\" onclick=\"esr_ControlClick($(this).find(&quot;div[name='accessibility']&quot;)[0], event);\">\r\n<div class=\"tablecell tablecell_bullet\">\r\n<div class=\"faicon\">\r\n<i aria-hidden=\"true\" class=\"fas fa-universal-access fa-fw\" style=\"font-size:1.5em;padding:0.2em 0em ;margin:0em 0.2em 0em 0em ;\"></i>\r\n</div>\r\n</div>\r\n<div class=\"tablecell esr_control_div_control  esr_hover\" onclick=\"esr_ControlClickBreak($(&quot;form#sid7982_esr_profile div[name=accessibility]&quot;)[0], event);\">\r\n<div onkeypress=\"HandleSpaceAndEnterPressd(this,event);\" hasChanged=\"\" data-originalvalue=\"\" data-text=\"\" data-colour_style=\"null\" class=\" esr_hover\" name=\"accessibility\" id=\"accessibility\" tabindex=\"0\" form=\"sid7982_esr_profile\" data-control_owner=\"PAGE\" data-control_owner_id=\"esr_profile\" data-page_name=\"esr_profile\" onclick=\"esr_ControlClick(this, event);\" ondblclick=\"esr_ControlDblClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onblur=\"esr_ControlBlur(this, event);\" onchange=\"esr_ControlChange(this, event);\" aria-label=\"Access Accessibility Options\">Accessibility</div>\r\n</div>\r\n</div>\r\n<div class=\"oDataFormElement esr_div_controls_row tablerow esr_hover\" style=\"clear:both;\" id=\"esr_control_div_even\" onkeydown=\"esr_ClickOnEnterKeyDown($(this).fin",
+      "observedQueryParams": [
+        "SID",
+        "pageName",
+        "dialogName",
+        "esr_windowname",
+        "mode",
+        "name"
+      ],
+      "firstSeen": "2026-06-12T11:46:53.033Z",
+      "lastSeen": "2026-06-12T11:47:32.807Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 8,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 8
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 149,
+        "max": 834,
+        "avg": 362,
+        "p95": 834
+      },
+      "isRepeatedCall": true,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><form onsubmit=\"return false;\" name=\"sid5771_lookupresults\" id=\"sid5771_lookupresults\" form=\"sid5771_lookupresults\" data-esr-clean-page=\"lookupresults\" data-esr-sid=\"sid5771\" data-esr-programid=\"rss310q\" autocomplete=\"off\">\r\n<div id=\"sid5771_lookupresults_body\" style=\"display:block;\">\r\n<div id=\"sid5771_lookupresults_LOOKUP_DYNAMIC_88800\" class=\"esr_dynamic_container \" pflow=\"VERTICAL\" style=\"display:block;\">\r\n<div id=\"sid5771_lookupresults_LOOKUP_DYNAMIC_88800_CONTENT\" style=\"display:block;\">\r\n<div onkeydown=\"esr_GridHandleKeyPress('sid5771', 'sid5771_lookupresults_LOOKUP_GRID_88800', 'lookupresults', 'RSS310Q', event);\" id=\"sid5771_lookupresults_esr_cn_2\" class=\"esr_grid_prevent_default_event esr_container esr_tree_outter_container\" aria-labelledby=\"sid5771_lookupresults_LOOKUP_GRID_88800_results_table\" style=\"display:block\">\r\n<div id=\"sid5771_lookupresults_LOOKUP_GRID_88800\">\r\n<div>\r\n<input id=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_current_page\" name=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_current_page\" type=\"hidden\" value=\"1\"><input id=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_page_size_rows\" name=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_page_size_rows\" type=\"hidden\" value=\"15\"><input id=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_page_size_cols\" name=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_page_size_cols\" type=\"hidden\" value=\"3\"><input id=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_total_rows\" name=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_total_rows\" type=\"hidden\" value=\"4\"><input id=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_total_cols\" name=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_total_cols\" type=\"hidden\" value=\"3\"><input id=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_visible_cols\" name=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_visible_cols\" type=\"hidden\" value=\"3\"><input id=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_current_col\" name=\"sid5771_lookupresults_LOOKUP_GRID_88800_grid_current_col",
+      "observedQueryParams": [
+        "SID",
+        "name",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:29.285Z",
+      "lastSeen": "2026-06-12T11:48:39.080Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/sysnav_dynamic.xml",
+      "method": "POST",
+      "domain": "Unknown",
+      "category": "DataMutation",
+      "callCount": 6,
+      "testCount": 5,
+      "statusCodes": {
+        "200": 6
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 128,
+        "max": 419,
+        "avg": 201,
+        "p95": 419
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><div id=\"sid4627_esr_nav_ESR_DYNAMIC_SECTIONS\" class=\"esr_nav_pane_section_content\" pflow=\"HORIZONTAL\" style=\"display:block;\">\r\n<div id=\"sid4627_esr_nav_ESR_DYNAMIC_SECTIONS_CONTENT\" style=\"display:block;\">\r\n<div id=\"sid4627_esr_nav_ESR_REC_HIS_DYNAMIC\" class=\"esr_dynamic_container \" pflow=\"VERTICAL\" style=\"display:block;\">\r\n<div id=\"sid4627_esr_nav_ESR_REC_HIS_DYNAMIC_CONTENT\" style=\"display:block;\" class=\"esr_nav_pane_menus  esr_tree_outter_container\">\r\n<div class=\"none\">\r\n<div class=\"oDataElementContainer esr_tree_outter_container\" id=\"sid4627_esr_nav_ESR_RECENT_HISTORY_CONTROLS\" style=\";display:block\">\r\n<div class=\"divtable\">\r\n<div class=\"tablebody\">\r\n<div class=\"oDataFormElement esr_div_controls_row tablerow esr_hover\" style=\"clear:both;\" id=\"esr_control_div_odd\" onkeydown=\"esr_ClickOnEnterKeyDown($(this).find(&quot;div[name='history_link_1']&quot;)[0], event);\" onclick=\"esr_ControlClick($(this).find(&quot;div[name='history_link_1']&quot;)[0], event);\">\r\n<div class=\"tablecell tablecell_bullet\">\r\n<div class=\"faicon\">\r\n<i aria-hidden=\"true\" class=\"far fa-edit fa-fw\" style=\"font-size:1.0em;padding:0.2em 0em ;margin:0em 0.2em 0em 0em ;\"></i>\r\n</div>\r\n</div>\r\n<div class=\"tablecell esr_control_div_control  esr_hover\" style=\"width:100%\" onclick=\"esr_ControlClickBreak($(&quot;form#sid4627_esr_nav div[name=history_link_1]&quot;)[0], event);\">\r\n<div onkeypress=\"HandleSpaceAndEnterPressd(this,event);\" hasChanged=\"\" data-originalvalue=\"\" data-text=\"\" data-colour_style=\"null\" class=\" esr_hover\" name=\"history_link_1\" id=\"history_link_1\" tabindex=\"0\" form=\"sid4627_esr_nav\" data-control_owner=\"PAGE\" data-control_owner_id=\"esr_nav\" data-page_name=\"esr_nav\" onclick=\"esr_ControlClick(this, event);\" ondblclick=\"esr_ControlDblClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onblur=\"esr_ControlBlur(this, event);\" onchange=\"esr_ControlChange(this, event);\">RSS310Q - Purchase Orders</div>\r\n</div>\r\n</div>\r\n<div class=\"oDataFormElement esr_div_controls_row ta",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "program_id",
+        "esr_t",
+        "SID",
+        "containerId",
+        "pageName",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:03.156Z",
+      "lastSeen": "2026-06-12T11:47:34.208Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q_grid.xml",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 6,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 6
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 156,
+        "max": 1225,
+        "avg": 563,
+        "p95": 1225
+      },
+      "isRepeatedCall": true,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><div>\r\n<input id=\"sid5771_header_results_RESULTS_GRID_grid_current_page\" name=\"sid5771_header_results_RESULTS_GRID_grid_current_page\" type=\"hidden\" value=\"1\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_page_size_rows\" name=\"sid5771_header_results_RESULTS_GRID_grid_page_size_rows\" type=\"hidden\" value=\"15\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_page_size_cols\" name=\"sid5771_header_results_RESULTS_GRID_grid_page_size_cols\" type=\"hidden\" value=\"12\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_total_rows\" name=\"sid5771_header_results_RESULTS_GRID_grid_total_rows\" type=\"hidden\" value=\"26\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_total_cols\" name=\"sid5771_header_results_RESULTS_GRID_grid_total_cols\" type=\"hidden\" value=\"24\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_visible_cols\" name=\"sid5771_header_results_RESULTS_GRID_grid_visible_cols\" type=\"hidden\" value=\"11\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_current_col\" name=\"sid5771_header_results_RESULTS_GRID_grid_current_col\" type=\"hidden\" value=\"0\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_current_row\" name=\"sid5771_header_results_RESULTS_GRID_grid_current_row\" type=\"hidden\" value=\"0\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_fixed_cols\" name=\"sid5771_header_results_RESULTS_GRID_grid_fixed_cols\" type=\"hidden\" value=\"0\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_action_cols\" name=\"sid5771_header_results_RESULTS_GRID_grid_action_cols\" type=\"hidden\" value=\"1\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_sortable_cols\" name=\"sid5771_header_results_RESULTS_GRID_grid_sortable_cols\" type=\"hidden\" value=\"false\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_parent_page\" name=\"sid5771_header_results_RESULTS_GRID_grid_parent_page\" type=\"hidden\" value=\"header_results\"><input id=\"sid5771_header_results_RESULTS_GRID_grid_screen_id\" name=\"sid5771_header_results_RESULTS_GRID_grid_screen_id\" type=\"hidden\" value=\"sid5771\"><in",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "action",
+        "gridid",
+        "SID",
+        "parent_page",
+        "row",
+        "col",
+        "program_id",
+        "sort_column",
+        "esr_windowname",
+        "location",
+        "esr_t",
+        "currentcol",
+        "selected_row"
+      ],
+      "firstSeen": "2026-06-12T11:47:32.017Z",
+      "lastSeen": "2026-06-12T11:48:40.702Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss570_refresh_control.xml",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 5,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 5
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 179,
+        "max": 185,
+        "avg": 182,
+        "p95": 185
+      },
+      "isRepeatedCall": true,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><page xmlns:i18n=\"http://apache.org/cocoon/i18n/2.1\">\r\n<div class=\"faicon\">\r\n<i aria-hidden=\"true\" class=\"fas fa-cog  fa-spin fa-margin fa-fw\" style=\"font-size:4em;padding:0.2em 0em ;margin:0em 0.2em 0em 0em ;\"></i>\r\n</div> \r\n<span for=\"image_status\" type=\"descr\" aria-live=\"polite\"> </span>\r\n</page>\r\n",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "SID",
+        "CONTROL_NAME",
+        "page_name",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:15.728Z",
+      "lastSeen": "2026-06-12T11:47:24.655Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/nml510_dynamic.xml",
+      "method": "POST",
+      "domain": "BudgetManagement",
+      "category": "DataMutation",
+      "callCount": 5,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 5
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 193,
+        "max": 442,
+        "avg": 289,
+        "p95": 442
+      },
+      "isRepeatedCall": true,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><div id=\"sid6932_main_PROJECT_TOOLBAR_DYNAMIC_CONTENT\" class=\"esr_dynamic_container \" pflow=\"VERTICAL\" style=\"display:block;\">\r\n<div id=\"sid6932_main_PROJECT_TOOLBAR_DYNAMIC_CONTENT_CONTENT\" style=\"display:block;\" valign=\"top\">\r\n<div class=\"esr_container_spacer\" id=\"sid6932_main_ESR_PROJECT_TOOLBAR\" style=\"display:block\">\r\n<div align=\"right\">\r\n<span id=\"control_span_esr_project_options\" style=\"visibility:visible;\"><button onkeydown=\"esr_ControlKeyDown(this, event);\" data-alias=\"ESR_PROJECT_OPTIONS\" data-changecase=\"\" data-datatype=\"\" data-field=\"esr_project_options\" data-format=\"\" data-lookup=\"\" data-minval=\"0.0\" data-maxval=\"0.0\" data-maskPad=\"\" data-referential=\"\" data-spellchecker=\"false\" data-spellcheck=\"false\" data-security=\"ESR_PROJECT_OPTIONS\" data-securitytype=\"\" data-wildcards=\"true\" data-extendedchars=\"false\" data-defaultvalue=\"\" hasChanged=\"\" data-originalvalue=\"Options\" data-text=\"\" data-colour_style=\"null\" class=\" esr_button_minor\" name=\"esr_project_options\" id=\"esr_project_options\" tabindex=\"0\" value=\"Options\" form=\"sid6932_main\" data-control_owner=\"PAGE\" data-control_owner_id=\"main\" data-page_name=\"main\" onclick=\"esr_ControlClick(this, event);\" ondblclick=\"esr_ControlDblClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onblur=\"esr_ControlBlur(this, event);\" onchange=\"esr_ControlChange(this, event);\" orig_button_class=\" esr_button_minor\" type=\"button\" disable_when_clicked=\"false\" style=\"cursor:pointer;text-align:center;\">\r\n<div class=\"faicon\">\r\n<i tabindex=\"-1\" aria-hidden=\"true\" class=\"fas fa-bars fa-fw\" style=\"font-size:1em;padding:0.2em 0em ;margin:0em 0.2em 0em 0em ;\"></i>\r\n</div>Options</button><span for=\"esr_project_options\"></span></span>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "program_id",
+        "esr_t",
+        "SID",
+        "containerId",
+        "pageName",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:39.225Z",
+      "lastSeen": "2026-06-12T11:49:23.911Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/spc420_dialog.xml",
+      "method": "POST",
+      "domain": "Requisitioning",
+      "category": "DataMutation",
+      "callCount": 4,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 4
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 146,
+        "max": 400,
+        "avg": 250,
+        "p95": 400
+      },
+      "isRepeatedCall": true,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><form onsubmit=\"return false;\" name=\"sid7201_upload\" id=\"sid7201_upload\" form=\"sid7201_upload\" data-esr-clean-page=\"upload\" data-esr-sid=\"sid7201\" data-esr-programid=\"spc420\" autocomplete=\"off\">\r\n<div id=\"sid7201_upload_body\" style=\"display:block;\">\r\n<div id_banner=\"\" class=\"esr_container_spacer esr_container esr_tree_outter_container\" id=\"sid7201_upload_UPLOAD_CONTROLS\" style=\"display:block\">\r\n<div>\r\n<table cellspacing=\"1\" width=\"100%\">\r\n<tr id=\"container_row_id_physical_file\" class=\"esr_control_div_odd\" style=\"visibility:visible\">\r\n<td width=\"25%\" rowspan=\"1\" valign=\"top\" class=\"esr_control_label\"><span class=\"esr_control_label_span\" id=\"caption_span_physical_file\" style=\"visibility:visible\"><label for=\"physical_file\" type=\"label\">File</label></span><span class=\"esr_control_nothing\" id=\"control_vimage_physical_file\"> </span></td><td width=\"73%\" valign=\"top\" colspan=\"1\"><span id=\"control_span_physical_file\"><span style=\"visibility:visible;\" class=\"esr_control_body mandatory\" data-readonly=\"true\" data-locked=\"\"><input autocomplete=\"off\" class=\"readonly\" type=\"text\" data-type=\"text\" size=\"30\" onkeydown=\"esr_ControlKeyDown(this, event);\" hasChanged=\"\" data-originalvalue=\"\" data-text=\"\" data-colour_style=\"null\" data-valid=\"false\" name=\"physical_file\" id=\"physical_file\" tabindex=\"-1\" value=\"\" form=\"sid7201_upload\" data-control_owner=\"PAGE\" data-control_owner_id=\"upload\" data-page_name=\"upload\" ondblclick=\"esr_ControlDblClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onblur=\"esr_ControlBlur(this, event);\" onchange=\"esr_ControlChange(this, event);\" server_change_enabled=\"true\" data-alias=\"PHYSICAL_FILE\" data-attrib=\"mandatory\" data-changecase=\"\" data-datatype=\"\" data-field=\"physical_file\" data-format=\"\" data-lookup=\"\" data-minval=\"0.0\" data-maxval=\"0.0\" data-maskPad=\"\" data-referential=\"\" data-spellchecker=\"false\" data-spellcheck=\"false\" data-security=\"PHYSICAL_FILE\" data-securitytype=\"\" data-wildcards=\"true\" data-extendedchars=\"false\" data-de",
+      "observedQueryParams": [
+        "SID",
+        "name",
+        "esr_windowname",
+        "mode"
+      ],
+      "firstSeen": "2026-06-12T11:47:05.770Z",
+      "lastSeen": "2026-06-12T11:47:10.744Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q_dynamic.xml",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 4,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 4
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 122,
+        "max": 237,
+        "avg": 173,
+        "p95": 237
+      },
+      "isRepeatedCall": true,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><div id=\"sid5771_main_PROJECT_TOOLBAR_DYNAMIC_CONTENT\" class=\"esr_dynamic_container \" pflow=\"VERTICAL\" style=\"display:block;\">\r\n<div id=\"sid5771_main_PROJECT_TOOLBAR_DYNAMIC_CONTENT_CONTENT\" style=\"display:block;\" valign=\"top\">\r\n<div class=\"esr_container_spacer\" id=\"sid5771_main_ESR_PROJECT_TOOLBAR\" style=\"display:block\">\r\n<div align=\"right\">\r\n<span id=\"control_span_esr_project_options\" style=\"visibility:visible;\"><button onkeydown=\"esr_ControlKeyDown(this, event);\" data-alias=\"ESR_PROJECT_OPTIONS\" data-changecase=\"\" data-datatype=\"\" data-field=\"esr_project_options\" data-format=\"\" data-lookup=\"\" data-minval=\"0.0\" data-maxval=\"0.0\" data-maskPad=\"\" data-referential=\"\" data-spellchecker=\"false\" data-spellcheck=\"false\" data-security=\"ESR_PROJECT_OPTIONS\" data-securitytype=\"\" data-wildcards=\"true\" data-extendedchars=\"false\" data-defaultvalue=\"\" hasChanged=\"\" data-originalvalue=\"Options\" data-text=\"\" data-colour_style=\"null\" class=\" esr_button_minor\" name=\"esr_project_options\" id=\"esr_project_options\" tabindex=\"0\" value=\"Options\" form=\"sid5771_main\" data-control_owner=\"PAGE\" data-control_owner_id=\"main\" data-page_name=\"main\" onclick=\"esr_ControlClick(this, event);\" ondblclick=\"esr_ControlDblClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onblur=\"esr_ControlBlur(this, event);\" onchange=\"esr_ControlChange(this, event);\" orig_button_class=\" esr_button_minor\" type=\"button\" disable_when_clicked=\"false\" style=\"cursor:pointer;text-align:center;\">\r\n<div class=\"faicon\">\r\n<i tabindex=\"-1\" aria-hidden=\"true\" class=\"fas fa-bars fa-fw\" style=\"font-size:1em;padding:0.2em 0em ;margin:0em 0.2em 0em 0em ;\"></i>\r\n</div>Options</button><span for=\"esr_project_options\"></span></span>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "program_id",
+        "esr_t",
+        "SID",
+        "containerId",
+        "pageName",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:30.237Z",
+      "lastSeen": "2026-06-12T11:48:29.242Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss570_dynamic.xml",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 4,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 4
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 179,
+        "max": 187,
+        "avg": 182,
+        "p95": 187
+      },
+      "isRepeatedCall": true,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><div id=\"sid8378_main_PROJECT_TOOLBAR_DYNAMIC_CONTENT\" class=\"esr_dynamic_container \" pflow=\"VERTICAL\" style=\"display:block;\">\r\n<div id=\"sid8378_main_PROJECT_TOOLBAR_DYNAMIC_CONTENT_CONTENT\" style=\"display:block;\" valign=\"top\">\r\n<div class=\"esr_container_spacer\" id=\"sid8378_main_ESR_PROJECT_TOOLBAR\" style=\"display:block\">\r\n<div align=\"right\">\r\n<span id=\"control_span_esr_project_options\" style=\"visibility:visible;\"><button onkeydown=\"esr_ControlKeyDown(this, event);\" data-alias=\"ESR_PROJECT_OPTIONS\" data-changecase=\"\" data-datatype=\"\" data-field=\"esr_project_options\" data-format=\"\" data-lookup=\"\" data-minval=\"0.0\" data-maxval=\"0.0\" data-maskPad=\"\" data-referential=\"\" data-spellchecker=\"false\" data-spellcheck=\"false\" data-security=\"ESR_PROJECT_OPTIONS\" data-securitytype=\"\" data-wildcards=\"true\" data-extendedchars=\"false\" data-defaultvalue=\"\" hasChanged=\"\" data-originalvalue=\"Options\" data-text=\"\" data-colour_style=\"null\" class=\" esr_button_minor\" name=\"esr_project_options\" id=\"esr_project_options\" tabindex=\"0\" value=\"Options\" form=\"sid8378_main\" data-control_owner=\"PAGE\" data-control_owner_id=\"main\" data-page_name=\"main\" onclick=\"esr_ControlClick(this, event);\" ondblclick=\"esr_ControlDblClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onblur=\"esr_ControlBlur(this, event);\" onchange=\"esr_ControlChange(this, event);\" orig_button_class=\" esr_button_minor\" type=\"button\" disable_when_clicked=\"false\" style=\"cursor:pointer;text-align:center;\">\r\n<div class=\"faicon\">\r\n<i tabindex=\"-1\" aria-hidden=\"true\" class=\"fas fa-bars fa-fw\" style=\"font-size:1em;padding:0.2em 0em ;margin:0em 0.2em 0em 0em ;\"></i>\r\n</div>Options</button><span for=\"esr_project_options\"></span></span>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "program_id",
+        "esr_t",
+        "SID",
+        "containerId",
+        "pageName",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:10.962Z",
+      "lastSeen": "2026-06-12T11:47:24.841Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss570_dialog.xml",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 3,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 3
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 205,
+        "max": 639,
+        "avg": 394,
+        "p95": 639
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><form onsubmit=\"return false;\" name=\"sid8378_lookupresults\" id=\"sid8378_lookupresults\" form=\"sid8378_lookupresults\" data-esr-clean-page=\"lookupresults\" data-esr-sid=\"sid8378\" data-esr-programid=\"rss570\" autocomplete=\"off\">\r\n<div id=\"sid8378_lookupresults_body\" style=\"display:block;\">\r\n<div id=\"sid8378_lookupresults_LOOKUP_DYNAMIC_88800\" class=\"esr_dynamic_container \" pflow=\"VERTICAL\" style=\"display:block;\">\r\n<div id=\"sid8378_lookupresults_LOOKUP_DYNAMIC_88800_CONTENT\" style=\"display:block;\">\r\n<div onkeydown=\"esr_GridHandleKeyPress('sid8378', 'sid8378_lookupresults_LOOKUP_GRID_88800', 'lookupresults', 'RSS570', event);\" id=\"sid8378_lookupresults_esr_cn_1\" class=\"esr_grid_prevent_default_event esr_container esr_tree_outter_container\" aria-labelledby=\"sid8378_lookupresults_LOOKUP_GRID_88800_results_table\" style=\"display:block\">\r\n<div id=\"sid8378_lookupresults_LOOKUP_GRID_88800\">\r\n<div>\r\n<input id=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_current_page\" name=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_current_page\" type=\"hidden\" value=\"1\"><input id=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_page_size_rows\" name=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_page_size_rows\" type=\"hidden\" value=\"15\"><input id=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_page_size_cols\" name=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_page_size_cols\" type=\"hidden\" value=\"3\"><input id=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_total_rows\" name=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_total_rows\" type=\"hidden\" value=\"4\"><input id=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_total_cols\" name=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_total_cols\" type=\"hidden\" value=\"3\"><input id=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_visible_cols\" name=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_visible_cols\" type=\"hidden\" value=\"3\"><input id=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_current_col\" name=\"sid8378_lookupresults_LOOKUP_GRID_88800_grid_current_col\" ",
+      "observedQueryParams": [
+        "SID",
+        "name",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:09.829Z",
+      "lastSeen": "2026-06-12T11:47:12.983Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/nml510_dialog.xml",
+      "method": "POST",
+      "domain": "BudgetManagement",
+      "category": "DataMutation",
+      "callCount": 3,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 3
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 214,
+        "max": 481,
+        "avg": 359,
+        "p95": 481
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><form onsubmit=\"return false;\" name=\"sid6932_lookupresults\" id=\"sid6932_lookupresults\" form=\"sid6932_lookupresults\" data-esr-clean-page=\"lookupresults\" data-esr-sid=\"sid6932\" data-esr-programid=\"nml510\" autocomplete=\"off\">\r\n<div id=\"sid6932_lookupresults_body\" style=\"display:block;\">\r\n<div id=\"sid6932_lookupresults_LOOKUP_DYNAMIC_89132\" class=\"esr_dynamic_container \" pflow=\"VERTICAL\" style=\"display:block;\">\r\n<div id=\"sid6932_lookupresults_LOOKUP_DYNAMIC_89132_CONTENT\" style=\"display:block;\">\r\n<div onkeydown=\"esr_GridHandleKeyPress('sid6932', 'sid6932_lookupresults_LOOKUP_GRID_89132', 'lookupresults', 'NML510', event);\" id=\"sid6932_lookupresults_esr_cn_6\" class=\"esr_grid_prevent_default_event esr_container esr_tree_outter_container\" aria-labelledby=\"sid6932_lookupresults_LOOKUP_GRID_89132_results_table\" style=\"display:block\">\r\n<div id=\"sid6932_lookupresults_LOOKUP_GRID_89132\">\r\n<div>\r\n<input id=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_current_page\" name=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_current_page\" type=\"hidden\" value=\"1\"><input id=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_page_size_rows\" name=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_page_size_rows\" type=\"hidden\" value=\"15\"><input id=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_page_size_cols\" name=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_page_size_cols\" type=\"hidden\" value=\"3\"><input id=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_total_rows\" name=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_total_rows\" type=\"hidden\" value=\"4\"><input id=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_total_cols\" name=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_total_cols\" type=\"hidden\" value=\"3\"><input id=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_visible_cols\" name=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_visible_cols\" type=\"hidden\" value=\"3\"><input id=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_current_col\" name=\"sid6932_lookupresults_LOOKUP_GRID_89132_grid_current_col\" ",
+      "observedQueryParams": [
+        "SID",
+        "name",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:37.947Z",
+      "lastSeen": "2026-06-12T11:47:41.866Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/spc420_dynamic.xml",
+      "method": "POST",
+      "domain": "Requisitioning",
+      "category": "DataMutation",
+      "callCount": 2,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 2
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 257,
+        "max": 367,
+        "avg": 312,
+        "p95": 367
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><div id=\"sid7201_main_DIRECTORY_DETAILS_CONTAINER\" class=\"esr_dynamic_container \" pflow=\"HORIZONTAL\" style=\"display:block;\">\r\n<div id=\"sid7201_main_DIRECTORY_DETAILS_CONTAINER_CONTENT\" style=\"display:block;\">\r\n<div id_banner=\"\" class=\"esr_container_spacer esr_container esr_tree_outter_container\" id=\"sid7201_main_SERVER_DIR_CONTAINER\" style=\"display:block\">\r\n<h1 class=\"esr_cont_l esr_container_label\" id=\"sid7201_main_SERVER_DIR_CONTAINER_el\">Directory Details</h1>\r\n<div>\r\n<table cellspacing=\"1\" width=\"100%\">\r\n<tr id=\"container_row_id_company_mode\" class=\"esr_control_div_odd\" style=\"visibility:visible\">\r\n<td width=\"25%\" rowspan=\"1\" valign=\"top\" class=\"esr_control_label\"><span class=\"esr_control_label_span\" id=\"caption_span_company_mode\" style=\"visibility:visible\"><label for=\"company_mode\" type=\"label\">Company Mode</label></span><span class=\"esr_control_nothing\" id=\"control_vimage_company_mode\"> </span></td><td width=\"73%\" valign=\"top\" colspan=\"1\"><span id=\"control_span_company_mode\"><span style=\"visibility:visible;\" class=\"esr_control_label\"><label type=\"value\" onkeydown=\"esr_ControlKeyDown(this, event);\" tabindex=\"-1\" data-alias=\"COMPANY_MODE\" data-changecase=\"\" data-datatype=\"\" data-field=\"company_mode\" data-format=\"\" data-lookup=\"\" data-minval=\"0.0\" data-maxval=\"0.0\" data-maskPad=\"\" data-referential=\"\" data-spellchecker=\"false\" data-spellcheck=\"false\" data-security=\"COMPANY_MODE\" data-securitytype=\"\" data-wildcards=\"true\" data-extendedchars=\"false\" data-defaultvalue=\"\" name=\"company_mode\" id=\"company_mode\" form=\"sid7201_main\" data-control_owner=\"PAGE\" data-control_owner_id=\"main\" data-page_name=\"main\">Multi Mandatory</label><span name=\"esr_asterisk_company_mode\" id=\"esr_asterisk_company_mode\" show_asterisk=\"false\" class=\"esr_mandatory_asterisk_hidden\"><i class=\"fas fa-asterisk fa-fw\" aria-label=\"Mandatory\"></i></span></span></span> <span for=\"company_mode\" type=\"descr\" aria-live=\"polite\"> </span></td>\r\n</tr>\r\n<tr id=\"container_row_id_company_id\" clas",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "program_id",
+        "esr_t",
+        "SID",
+        "containerId",
+        "pageName",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:05.283Z",
+      "lastSeen": "2026-06-12T11:47:09.322Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/spc420_tree.xml",
+      "method": "POST",
+      "domain": "Requisitioning",
+      "category": "DataMutation",
+      "callCount": 2,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 2
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 141,
+        "max": 385,
+        "avg": 263,
+        "p95": 385
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><nodes>\r\n<ul xmlns:i18n=\"http://apache.org/cocoon/i18n/2.1\" role=\"group\" aria-multiselectable=\"\" data-node_id=\"ADM\">\r\n<li>\r\n<div data-node_id=\"ADM_IMPORT\" style=\"padding-left:20px;\" role=\"treeitem\" tabindex=\"-1\" aria-hidden=\"false\" aria-selected=\"false\" aria-setsize=\"3\" aria-posinset=\"0\" aria-level=\"2\" item-type=\"node_item\" class=\"esr_clickable\">\r\n<div class=\"esr_node_icons\">\r\n<i class=\"esr_clickable esr_tree_clickable fas fa-blank fa-fw\" data-node_id=\"ADM_IMPORT\" item-type=\"node_expand\"></i>\r\n<div style=\"position:relative;\" class=\"faicon\">\r\n<i aria-hidden=\"true\" data-node_id=\"ADM_IMPORT\" class=\"fad fa-folder fa-fw\" style=\"font-size:1.0em;padding:0.2em 0em ;margin:0em 0.2em 0em 0em ;\"></i>\r\n</div>\r\n</div>\r\n<div data-node_id=\"ADM_IMPORT\" class=\"esr_node_text\">IMPORT</div>\r\n</div>\r\n</li>\r\n<li>\r\n<div data-node_id=\"ADM_LOGS\" style=\"padding-left:20px;\" role=\"treeitem\" tabindex=\"-1\" aria-hidden=\"false\" aria-selected=\"true\" aria-setsize=\"3\" aria-posinset=\"1\" aria-level=\"2\" item-type=\"node_item\" class=\"esr_clickable\">\r\n<div class=\"esr_node_icons\">\r\n<i class=\"esr_clickable esr_tree_clickable fas fa-blank fa-fw\" data-node_id=\"ADM_LOGS\" item-type=\"node_expand\"></i>\r\n<div style=\"position:relative;\" class=\"faicon\">\r\n<i aria-hidden=\"true\" data-node_id=\"ADM_LOGS\" class=\"fad fa-folder fa-fw\" style=\"font-size:1.0em;padding:0.2em 0em ;margin:0em 0.2em 0em 0em ;\"></i>\r\n</div>\r\n</div>\r\n<div data-node_id=\"ADM_LOGS\" class=\"esr_node_text\">LOGS</div>\r\n</div>\r\n</li>\r\n<li>\r\n<div data-node_id=\"ADM_REPORTS\" style=\"padding-left:20px;\" role=\"treeitem\" tabindex=\"-1\" aria-hidden=\"false\" aria-selected=\"false\" aria-setsize=\"3\" aria-posinset=\"2\" aria-level=\"2\" item-type=\"node_item\" class=\"esr_clickable\">\r\n<div class=\"esr_node_icons\">\r\n<i class=\"esr_clickable esr_tree_clickable fas fa-blank fa-fw\" data-node_id=\"ADM_REPORTS\" item-type=\"node_expand\"></i>\r\n<div style=\"position:relative;\" class=\"faicon\">\r\n<i aria-hidden=\"true\" data-node_id=\"ADM_REPORTS\" class=\"fad fa-folder fa-fw\" style=\"fo",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "mode",
+        "program_id",
+        "esr_t",
+        "SID",
+        "treeid",
+        "owner_page",
+        "node",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:09.180Z",
+      "lastSeen": "2026-06-12T11:47:09.705Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/spc420_grid.xml",
+      "method": "POST",
+      "domain": "Requisitioning",
+      "category": "DataMutation",
+      "callCount": 2,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 2
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 327,
+        "max": 347,
+        "avg": 337,
+        "p95": 347
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><div>\r\n<input id=\"sid7201_main_DIR_FILES_GRID_grid_current_page\" name=\"sid7201_main_DIR_FILES_GRID_grid_current_page\" type=\"hidden\" value=\"1\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_page_size_rows\" name=\"sid7201_main_DIR_FILES_GRID_grid_page_size_rows\" type=\"hidden\" value=\"10\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_page_size_cols\" name=\"sid7201_main_DIR_FILES_GRID_grid_page_size_cols\" type=\"hidden\" value=\"7\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_total_rows\" name=\"sid7201_main_DIR_FILES_GRID_grid_total_rows\" type=\"hidden\" value=\"3\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_total_cols\" name=\"sid7201_main_DIR_FILES_GRID_grid_total_cols\" type=\"hidden\" value=\"13\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_visible_cols\" name=\"sid7201_main_DIR_FILES_GRID_grid_visible_cols\" type=\"hidden\" value=\"10\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_current_col\" name=\"sid7201_main_DIR_FILES_GRID_grid_current_col\" type=\"hidden\" value=\"0\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_current_row\" name=\"sid7201_main_DIR_FILES_GRID_grid_current_row\" type=\"hidden\" value=\"0\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_fixed_cols\" name=\"sid7201_main_DIR_FILES_GRID_grid_fixed_cols\" type=\"hidden\" value=\"0\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_action_cols\" name=\"sid7201_main_DIR_FILES_GRID_grid_action_cols\" type=\"hidden\" value=\"1\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_sortable_cols\" name=\"sid7201_main_DIR_FILES_GRID_grid_sortable_cols\" type=\"hidden\" value=\"false\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_parent_page\" name=\"sid7201_main_DIR_FILES_GRID_grid_parent_page\" type=\"hidden\" value=\"main\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_screen_id\" name=\"sid7201_main_DIR_FILES_GRID_grid_screen_id\" type=\"hidden\" value=\"sid7201\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_multiple_filter\" name=\"sid7201_main_DIR_FILES_GRID_grid_multiple_filter\" type=\"hidden\" value=\"true\"><input id=\"sid7201_main_DIR_FILES_GRID_grid_row_selection_enabled\" name=\"sid720",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "action",
+        "gridid",
+        "SID",
+        "parent_page",
+        "location",
+        "program_id",
+        "esr_t",
+        "currentcol",
+        "selected_row",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:09.705Z",
+      "lastSeen": "2026-06-12T11:47:11.538Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q.xsp",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "DataFetch",
+      "callCount": 2,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 2
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 135,
+        "max": 144,
+        "avg": 140,
+        "p95": 144
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:47:27.794Z",
+      "lastSeen": "2026-06-12T11:48:26.925Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q.xsp",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 2,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 2
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 685,
+        "max": 871,
+        "avg": 778,
+        "p95": 871
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "esr_windowname=esr_98caf478-3e90-4ed5-86c1-7e84c9c64337&esr_drill_url=&esr_drill_env=&esr_referrer=https%3A%2F%2Fuat-v2.pecuniam-online.co.uk%2Fsfdemosite130%2Fsimsfinance.home",
+      "sampleResponseBody": "<!DOCTYPE html><html lang=\"en-GB\">\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"IE=Edge\" http-equiv=\"X-UA-Compatible\">\r\n<title>RSS310Q - Purchase Orders 25.01.00/087</title>\r\n<meta charset=\"UTF-8\">\r\n<meta content=\"width=device-width,minimal-ui,initial-scale=1\" name=\"viewport\">\r\n<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">\r\n<meta content=\"yes\" name=\"mobile-web-app-capable\">\r\n<meta value=\"notranslate\" name=\"google\">\r\n<noscript>\r\n<meta content=\"0; url=no_javascript.xsp\" http-equiv=\"refresh\">\r\n</noscript>\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"dhtmlxGrid/dhtmlx_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/dhtmlx/vault/vault.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/fontawesome/css/all.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/jquery/jquery-ui_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/tippy/tippy_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/core/eseries2_template_MN1781264843624.css\">\r\n<script src=\"dhtmlxGrid/dhtmlx_MN1781250536165.js\"></script><script src=\"dhtmlxMenu/dhtmlxmenu_MN1781250536165.js\"></script><script src=\"scripts/dhtmlx/vault/vault.bespoke_MN1781250536165.js\"></script><script src=\"scripts/pollyfills_MN1781250536165.js\"></script><script src=\"scripts/pace/pace_MN1781250536165.js\"></script><script src=\"scripts/i18n_translations_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-migrate-3.5.0.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-ui.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.caret_MN1781250536165.js\"></script><script src=\"scripts/help/RoboHelp_CSH_MN1781250536165.js\"></script><script src=\"scripts/global/framework_MN1781250536165.js\"></script><script src=\"scripts/global/eseries_MN1781250536165.js\"></script><scrip",
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:47:27.945Z",
+      "lastSeen": "2026-06-12T11:48:27.089Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q_header_results.xsp",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "DataFetch",
+      "callCount": 2,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 2
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 983,
+        "max": 1110,
+        "avg": 1047,
+        "p95": 1110
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><html lang=\"en-GB\">\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"IE=Edge\" http-equiv=\"X-UA-Compatible\">\r\n<title>RSS310Q - Purchase Orders 25.01.00/087</title>\r\n<meta charset=\"UTF-8\">\r\n<meta content=\"width=device-width,minimal-ui,initial-scale=1\" name=\"viewport\">\r\n<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">\r\n<meta content=\"yes\" name=\"mobile-web-app-capable\">\r\n<meta value=\"notranslate\" name=\"google\">\r\n<noscript>\r\n<meta content=\"0; url=no_javascript.xsp\" http-equiv=\"refresh\">\r\n</noscript>\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"dhtmlxGrid/dhtmlx_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/dhtmlx/vault/vault.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/fontawesome/css/all.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/jquery/jquery-ui_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/tippy/tippy_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/core/eseries2_template_MN1781264843624.css\">\r\n<script src=\"dhtmlxGrid/dhtmlx_MN1781250536165.js\"></script><script src=\"dhtmlxMenu/dhtmlxmenu_MN1781250536165.js\"></script><script src=\"scripts/dhtmlx/vault/vault.bespoke_MN1781250536165.js\"></script><script src=\"scripts/pollyfills_MN1781250536165.js\"></script><script src=\"scripts/pace/pace_MN1781250536165.js\"></script><script src=\"scripts/i18n_translations_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-migrate-3.5.0.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-ui.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.caret_MN1781250536165.js\"></script><script src=\"scripts/help/RoboHelp_CSH_MN1781250536165.js\"></script><script src=\"scripts/global/framework_MN1781250536165.js\"></script><script src=\"scripts/global/eseries_MN1781250536165.js\"></script><scrip",
+      "observedQueryParams": [
+        "SID"
+      ],
+      "firstSeen": "2026-06-12T11:47:30.766Z",
+      "lastSeen": "2026-06-12T11:48:29.751Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q_header_details.xsp",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "DataFetch",
+      "callCount": 2,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 2
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 594,
+        "max": 853,
+        "avg": 724,
+        "p95": 853
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><html lang=\"en-GB\">\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"IE=Edge\" http-equiv=\"X-UA-Compatible\">\r\n<title>RSS310Q - Purchase Orders 25.01.00/087</title>\r\n<meta charset=\"UTF-8\">\r\n<meta content=\"width=device-width,minimal-ui,initial-scale=1\" name=\"viewport\">\r\n<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">\r\n<meta content=\"yes\" name=\"mobile-web-app-capable\">\r\n<meta value=\"notranslate\" name=\"google\">\r\n<noscript>\r\n<meta content=\"0; url=no_javascript.xsp\" http-equiv=\"refresh\">\r\n</noscript>\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"dhtmlxGrid/dhtmlx_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/dhtmlx/vault/vault.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/fontawesome/css/all.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/jquery/jquery-ui_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/tippy/tippy_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/core/eseries2_template_MN1781264843624.css\">\r\n<script src=\"dhtmlxGrid/dhtmlx_MN1781250536165.js\"></script><script src=\"dhtmlxMenu/dhtmlxmenu_MN1781250536165.js\"></script><script src=\"scripts/dhtmlx/vault/vault.bespoke_MN1781250536165.js\"></script><script src=\"scripts/pollyfills_MN1781250536165.js\"></script><script src=\"scripts/pace/pace_MN1781250536165.js\"></script><script src=\"scripts/i18n_translations_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-migrate-3.5.0.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-ui.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.caret_MN1781250536165.js\"></script><script src=\"scripts/help/RoboHelp_CSH_MN1781250536165.js\"></script><script src=\"scripts/global/framework_MN1781250536165.js\"></script><script src=\"scripts/global/eseries_MN1781250536165.js\"></script><scrip",
+      "observedQueryParams": [
+        "SID"
+      ],
+      "firstSeen": "2026-06-12T11:47:36.164Z",
+      "lastSeen": "2026-06-12T11:48:35.183Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/nml510_refresh_select.xml",
+      "method": "POST",
+      "domain": "BudgetManagement",
+      "category": "DataMutation",
+      "callCount": 2,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 2
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 187,
+        "max": 197,
+        "avg": 192,
+        "p95": 197
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><span xmlns:i18n=\"http://apache.org/cocoon/i18n/2.1\" class=\"esr_control_body \" style=\"visibility:visible\" data-readonly=\"\"><select class=\"standard\" type=\"select-one\" data-type=\"select-one\" onkeypress=\"HandleSpaceAndEnterPressd(this,event);\" i18n:attr=\"title\" data-alias=\"SEQUENCE_SELECT\" data-changecase=\"\" data-datatype=\"\" data-field=\"sequence_select\" data-format=\"\" data-lookup=\"\" data-minval=\"0.0\" data-maxval=\"0.0\" data-maskPad=\"\" data-referential=\"\" data-spellchecker=\"false\" data-spellcheck=\"false\" data-security=\"SEQUENCE_SELECT\" data-securitytype=\"\" data-wildcards=\"true\" data-extendedchars=\"false\" data-defaultvalue=\"\" hasChanged=\"\" data-originalvalue=\"\" data-text=\"C\" data-colour_style=\"null\" name=\"sequence_select\" id=\"sequence_select\" tabindex=\"0\" form=\"sid6932_main\" data-control_owner=\"PAGE\" data-control_owner_id=\"main\" data-page_name=\"main\" onclick=\"esr_ControlClick(this, event);\" ondblclick=\"esr_ControlDblClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onblur=\"esr_ControlBlur(this, event);\" onchange=\"esr_ControlChange(this, event);\" server_change_enabled=\"true\" onkeydown=\"esr_ControlKeyDown(this, event);\"><option value=\"C\" onkeypress=\"HandleSpaceAndEnterPressd(this,event);\" Selected>School ID/Cost Centre</option><option value=\"E\" onkeypress=\"HandleSpaceAndEnterPressd(this,event);\">School ID/Ledger</option></select><span name=\"esr_asterisk_\" id=\"esr_asterisk_\" class=\"esr_mandatory_asterisk_hidden\"><i i18n:attr=\"aria-label\" class=\"fas fa-asterisk fa-fw\" aria-label=\"Mandatory\"></i></span></span><span class=\"esr_control_context\"></span>\r\n",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "SID",
+        "CONTROL_NAME",
+        "page_name",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:39.801Z",
+      "lastSeen": "2026-06-12T11:47:40.449Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/esr.elogin",
+      "method": "GET",
+      "domain": "Unknown",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "302": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 196,
+        "max": 196,
+        "avg": 196,
+        "p95": 196
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [
+        "cmd"
+      ],
+      "firstSeen": "2026-06-12T11:46:54.917Z",
+      "lastSeen": "2026-06-12T11:46:54.917Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/spc420.xsp",
+      "method": "GET",
+      "domain": "Requisitioning",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 151,
+        "max": 151,
+        "avg": 151,
+        "p95": 151
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:47:03.797Z",
+      "lastSeen": "2026-06-12T11:47:03.797Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/spc420.xsp",
+      "method": "POST",
+      "domain": "Requisitioning",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 712,
+        "max": 712,
+        "avg": 712,
+        "p95": 712
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "esr_windowname=esr_a1d7bc5f-9073-482c-bd6d-8006909bd911&esr_drill_url=&esr_drill_env=&esr_referrer=https%3A%2F%2Fuat-v2.pecuniam-online.co.uk%2Fsfdemosite130%2Fsimsfinance.home",
+      "sampleResponseBody": "<!DOCTYPE html><html lang=\"en-GB\">\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"IE=Edge\" http-equiv=\"X-UA-Compatible\">\r\n<title>SPC420 - File Manager 25.01.00/020</title>\r\n<meta charset=\"UTF-8\">\r\n<meta content=\"width=device-width,minimal-ui,initial-scale=1\" name=\"viewport\">\r\n<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">\r\n<meta content=\"yes\" name=\"mobile-web-app-capable\">\r\n<meta value=\"notranslate\" name=\"google\">\r\n<noscript>\r\n<meta content=\"0; url=no_javascript.xsp\" http-equiv=\"refresh\">\r\n</noscript>\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"dhtmlxGrid/dhtmlx_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/dhtmlx/vault/vault.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/fontawesome/css/all.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/jquery/jquery-ui_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/tippy/tippy_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/core/eseries2_template_MN1781264817884.css\">\r\n<script src=\"dhtmlxGrid/dhtmlx_MN1781250536165.js\"></script><script src=\"dhtmlxMenu/dhtmlxmenu_MN1781250536165.js\"></script><script src=\"scripts/dhtmlx/vault/vault.bespoke_MN1781250536165.js\"></script><script src=\"scripts/pollyfills_MN1781250536165.js\"></script><script src=\"scripts/pace/pace_MN1781250536165.js\"></script><script src=\"scripts/i18n_translations_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-migrate-3.5.0.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-ui.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.caret_MN1781250536165.js\"></script><script src=\"scripts/help/RoboHelp_CSH_MN1781250536165.js\"></script><script src=\"scripts/global/framework_MN1781250536165.js\"></script><script src=\"scripts/global/eseries_MN1781250536165.js\"></script><script sr",
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:47:03.961Z",
+      "lastSeen": "2026-06-12T11:47:03.961Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/spc420_popmenu.xml",
+      "method": "POST",
+      "domain": "Requisitioning",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 139,
+        "max": 139,
+        "avg": 139,
+        "p95": 139
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><ul class=\"esr_popup_menu\" parent_id=\"esr_grid_row_action_sid7201_main_dir_files_grid_0\" tabindex=\"0\">\r\n<li>\r\n<a xmlns:i18n=\"http://apache.org/cocoon/i18n/2.1\" draggable=\"false\" href=\"#\" onclick=\"esr_ControlClick(this, event);\" hasChanged=\"\" data-originalvalue=\"\" data-text=\"\" data-multibutton_ownerid=\"esr_grid_row_action_sid7201_main_dir_files_grid_0\" name=\"view_sid7201_main_dir_files_grid_0\" id=\"view_sid7201_main_dir_files_grid_0\" tabindex=\"0\" data-tag=\"esr_multi_button_esr_grid_row_action_sid7201_main_dir_files_grid_0\" form=\"sid7201_main\" data-control_owner=\"GRID\" data-control_owner_id=\"sid7201_main_DIR_FILES_GRID\" data-page_name=\"main\" data-grid_name=\"sid7201_main_DIR_FILES_GRID\" data-grid_row_no=\"0\" ondblclick=\"esr_ControlDblClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onblur=\"esr_ControlBlur(this, event);\" onchange=\"esr_ControlChange(this, event);\" i18n:attr=\"title\">View</a>\r\n</li>\r\n<li>\r\n<a draggable=\"false\" href=\"#\" onclick=\"esr_ControlClick(this, event);\" hasChanged=\"\" data-originalvalue=\"\" data-text=\"\" data-multibutton_ownerid=\"esr_grid_row_action_sid7201_main_dir_files_grid_0\" name=\"save_sid7201_main_dir_files_grid_0\" id=\"save_sid7201_main_dir_files_grid_0\" tabindex=\"0\" data-tag=\"esr_multi_button_esr_grid_row_action_sid7201_main_dir_files_grid_0\" form=\"sid7201_main\" data-control_owner=\"GRID\" data-control_owner_id=\"sid7201_main_DIR_FILES_GRID\" data-page_name=\"main\" data-grid_name=\"sid7201_main_DIR_FILES_GRID\" data-grid_row_no=\"0\" ondblclick=\"esr_ControlDblClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onblur=\"esr_ControlBlur(this, event);\" onchange=\"esr_ControlChange(this, event);\" i18n:attr=\"title\">Save As...</a>\r\n</li>\r\n<li>\r\n<a draggable=\"false\" href=\"#\" onclick=\"esr_ControlClick(this, event);\" hasChanged=\"\" data-originalvalue=\"\" data-text=\"\" data-multibutton_ownerid=\"esr_grid_row_action_sid7201_main_dir_files_grid_0\" name=\"save_convert_sid7201_main_dir_files_grid_0\" id=\"save_convert_sid7201_main_dir_files_g",
+      "observedQueryParams": [
+        "esr_widget_id",
+        "SID",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:10.356Z",
+      "lastSeen": "2026-06-12T11:47:10.356Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/xquery.xsp",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 136,
+        "max": 136,
+        "avg": 136,
+        "p95": 136
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [
+        "project",
+        "name"
+      ],
+      "firstSeen": "2026-06-12T11:47:18.177Z",
+      "lastSeen": "2026-06-12T11:47:18.177Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/xquery.xsp",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 414,
+        "max": 414,
+        "avg": 414,
+        "p95": 414
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "esr_windowname=esr_31fff61d-e880-4cec-a4b1-fa5c52bef633&esr_drill_url=&esr_drill_env=&esr_referrer=https%3A%2F%2Fuat-v2.pecuniam-online.co.uk%2Fsfdemosite130%2Fsimsfinance.home",
+      "sampleResponseBody": "<!DOCTYPE html><html lang=\"en-GB\">\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"IE=Edge\" http-equiv=\"X-UA-Compatible\">\r\n<title>XQUERY -  25.01.00/132</title>\r\n<meta charset=\"UTF-8\">\r\n<meta content=\"width=device-width,minimal-ui,initial-scale=1\" name=\"viewport\">\r\n<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">\r\n<meta content=\"yes\" name=\"mobile-web-app-capable\">\r\n<meta value=\"notranslate\" name=\"google\">\r\n<noscript>\r\n<meta content=\"0; url=no_javascript.xsp\" http-equiv=\"refresh\">\r\n</noscript>\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"dhtmlxGrid/dhtmlx_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/dhtmlx/vault/vault.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/fontawesome/css/all.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/jquery/jquery-ui_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/tippy/tippy_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/core/eseries2_template_MN1781264833975.css\">\r\n<script src=\"dhtmlxGrid/dhtmlx_MN1781250536165.js\"></script><script src=\"dhtmlxMenu/dhtmlxmenu_MN1781250536165.js\"></script><script src=\"scripts/dhtmlx/vault/vault.bespoke_MN1781250536165.js\"></script><script src=\"scripts/pollyfills_MN1781250536165.js\"></script><script src=\"scripts/pace/pace_MN1781250536165.js\"></script><script src=\"scripts/i18n_translations_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-migrate-3.5.0.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-ui.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.caret_MN1781250536165.js\"></script><script src=\"scripts/help/RoboHelp_CSH_MN1781250536165.js\"></script><script src=\"scripts/global/framework_MN1781250536165.js\"></script><script src=\"scripts/global/eseries_MN1781250536165.js\"></script><script src=\"scripts/g",
+      "observedQueryParams": [
+        "project",
+        "name"
+      ],
+      "firstSeen": "2026-06-12T11:47:18.330Z",
+      "lastSeen": "2026-06-12T11:47:18.330Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/xquery_dialog.xml",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 325,
+        "max": 325,
+        "avg": 325,
+        "p95": 325
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": "<!DOCTYPE html><form onsubmit=\"return false;\" name=\"sid5653_lookupresults\" id=\"sid5653_lookupresults\" form=\"sid5653_lookupresults\" data-esr-clean-page=\"lookupresults\" data-esr-sid=\"sid5653\" data-esr-programid=\"xquery\" autocomplete=\"off\">\r\n<div id=\"sid5653_lookupresults_body\" style=\"display:block;\">\r\n<div id=\"sid5653_lookupresults_LOOKUP_DYNAMIC_88800\" class=\"esr_dynamic_container \" pflow=\"VERTICAL\" style=\"display:block;\">\r\n<div id=\"sid5653_lookupresults_LOOKUP_DYNAMIC_88800_CONTENT\" style=\"display:block;\">\r\n<div onkeydown=\"esr_GridHandleKeyPress('sid5653', 'sid5653_lookupresults_LOOKUP_GRID_88800', 'lookupresults', 'XQUERY', event);\" id=\"sid5653_lookupresults_esr_cn_1\" class=\"esr_grid_prevent_default_event esr_container esr_tree_outter_container\" aria-labelledby=\"sid5653_lookupresults_LOOKUP_GRID_88800_results_table\" style=\"display:block\">\r\n<div id=\"sid5653_lookupresults_LOOKUP_GRID_88800\">\r\n<div>\r\n<input id=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_current_page\" name=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_current_page\" type=\"hidden\" value=\"1\"><input id=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_page_size_rows\" name=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_page_size_rows\" type=\"hidden\" value=\"15\"><input id=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_page_size_cols\" name=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_page_size_cols\" type=\"hidden\" value=\"3\"><input id=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_total_rows\" name=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_total_rows\" type=\"hidden\" value=\"4\"><input id=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_total_cols\" name=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_total_cols\" type=\"hidden\" value=\"3\"><input id=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_visible_cols\" name=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_visible_cols\" type=\"hidden\" value=\"3\"><input id=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_current_col\" name=\"sid5653_lookupresults_LOOKUP_GRID_88800_grid_current_col\" ",
+      "observedQueryParams": [
+        "SID",
+        "name",
+        "esr_windowname"
+      ],
+      "firstSeen": "2026-06-12T11:47:19.434Z",
+      "lastSeen": "2026-06-12T11:47:19.434Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss570.xsp",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 203,
+        "max": 203,
+        "avg": 203,
+        "p95": 203
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:47:08.319Z",
+      "lastSeen": "2026-06-12T11:47:08.319Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss570.xsp",
+      "method": "POST",
+      "domain": "Reporting",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 618,
+        "max": 618,
+        "avg": 618,
+        "p95": 618
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "esr_windowname=esr_390399f2-4e9a-44fb-b461-12ea3dfcb5f6&esr_drill_url=&esr_drill_env=&esr_referrer=https%3A%2F%2Fuat-v2.pecuniam-online.co.uk%2Fsfdemosite130%2Fsimsfinance.home",
+      "sampleResponseBody": "<!DOCTYPE html><html lang=\"en-GB\">\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"IE=Edge\" http-equiv=\"X-UA-Compatible\">\r\n<title>RSS570 - Outstanding Accruals 25.01.00/087</title>\r\n<meta charset=\"UTF-8\">\r\n<meta content=\"width=device-width,minimal-ui,initial-scale=1\" name=\"viewport\">\r\n<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">\r\n<meta content=\"yes\" name=\"mobile-web-app-capable\">\r\n<meta value=\"notranslate\" name=\"google\">\r\n<noscript>\r\n<meta content=\"0; url=no_javascript.xsp\" http-equiv=\"refresh\">\r\n</noscript>\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"dhtmlxGrid/dhtmlx_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/dhtmlx/vault/vault.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/fontawesome/css/all.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/jquery/jquery-ui_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/tippy/tippy_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/core/eseries2_template_MN1781264822712.css\">\r\n<script src=\"dhtmlxGrid/dhtmlx_MN1781250536165.js\"></script><script src=\"dhtmlxMenu/dhtmlxmenu_MN1781250536165.js\"></script><script src=\"scripts/dhtmlx/vault/vault.bespoke_MN1781250536165.js\"></script><script src=\"scripts/pollyfills_MN1781250536165.js\"></script><script src=\"scripts/pace/pace_MN1781250536165.js\"></script><script src=\"scripts/i18n_translations_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-migrate-3.5.0.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-ui.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.caret_MN1781250536165.js\"></script><script src=\"scripts/help/RoboHelp_CSH_MN1781250536165.js\"></script><script src=\"scripts/global/framework_MN1781250536165.js\"></script><script src=\"scripts/global/eseries_MN1781250536165.js\"></script><s",
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:47:08.540Z",
+      "lastSeen": "2026-06-12T11:47:08.540Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss570.fileopen",
+      "method": "GET",
+      "domain": "Reporting",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 298,
+        "max": 298,
+        "avg": 298,
+        "p95": 298
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [
+        "mode",
+        "file",
+        "name",
+        "SID"
+      ],
+      "firstSeen": "2026-06-12T11:47:25.857Z",
+      "lastSeen": "2026-06-12T11:47:25.857Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/nml510.xsp",
+      "method": "GET",
+      "domain": "BudgetManagement",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 205,
+        "max": 205,
+        "avg": 205,
+        "p95": 205
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:47:35.648Z",
+      "lastSeen": "2026-06-12T11:47:35.648Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/nml510.xsp",
+      "method": "POST",
+      "domain": "BudgetManagement",
+      "category": "DataMutation",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 1405,
+        "max": 1405,
+        "avg": 1405,
+        "p95": 1405
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": "esr_windowname=esr_1ce01da7-31e7-4ae2-84b5-f699c5962171&esr_drill_url=&esr_drill_env=&esr_referrer=https%3A%2F%2Fuat-v2.pecuniam-online.co.uk%2Fsfdemosite130%2Fsimsfinance.home",
+      "sampleResponseBody": "<!DOCTYPE html><html lang=\"en-GB\">\r\n<head>\r\n<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n<meta content=\"IE=Edge\" http-equiv=\"X-UA-Compatible\">\r\n<title>NML510 - Trial Balance Report 25.01.00/137</title>\r\n<meta charset=\"UTF-8\">\r\n<meta content=\"width=device-width,minimal-ui,initial-scale=1\" name=\"viewport\">\r\n<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">\r\n<meta content=\"yes\" name=\"mobile-web-app-capable\">\r\n<meta value=\"notranslate\" name=\"google\">\r\n<noscript>\r\n<meta content=\"0; url=no_javascript.xsp\" http-equiv=\"refresh\">\r\n</noscript>\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"dhtmlxGrid/dhtmlx_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/dhtmlx/vault/vault.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/fontawesome/css/all.min_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/jquery/jquery-ui_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/tippy/tippy_MN1781250536165.css\">\r\n<link type=\"text/css\" rel=\"stylesheet\" href=\"css/core/eseries2_template_MN1781264849276.css\">\r\n<script src=\"dhtmlxGrid/dhtmlx_MN1781250536165.js\"></script><script src=\"dhtmlxMenu/dhtmlxmenu_MN1781250536165.js\"></script><script src=\"scripts/dhtmlx/vault/vault.bespoke_MN1781250536165.js\"></script><script src=\"scripts/pollyfills_MN1781250536165.js\"></script><script src=\"scripts/pace/pace_MN1781250536165.js\"></script><script src=\"scripts/i18n_translations_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-migrate-3.5.0.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery-ui.min_MN1781250536165.js\"></script><script src=\"scripts/jquery/jquery.caret_MN1781250536165.js\"></script><script src=\"scripts/help/RoboHelp_CSH_MN1781250536165.js\"></script><script src=\"scripts/global/framework_MN1781250536165.js\"></script><script src=\"scripts/global/eseries_MN1781250536165.js\"></script><s",
+      "observedQueryParams": [],
+      "firstSeen": "2026-06-12T11:47:35.868Z",
+      "lastSeen": "2026-06-12T11:47:35.868Z"
+    },
+    {
+      "normalizedPath": "/sfdemosite130/nml510.fileopen",
+      "method": "GET",
+      "domain": "BudgetManagement",
+      "category": "DataFetch",
+      "callCount": 1,
+      "testCount": 1,
+      "statusCodes": {
+        "200": 1
+      },
+      "errorCount": 0,
+      "latency": {
+        "min": 367,
+        "max": 367,
+        "avg": 367,
+        "p95": 367
+      },
+      "isRepeatedCall": false,
+      "sampleRequestBody": null,
+      "sampleResponseBody": null,
+      "observedQueryParams": [
+        "mode",
+        "file",
+        "name",
+        "SID"
+      ],
+      "firstSeen": "2026-06-12T11:49:25.122Z",
+      "lastSeen": "2026-06-12T11:49:25.122Z"
+    }
+  ],
+  "workflowSequences": [
+    {
+      "name": "User Authentication Workflow",
+      "testTitle": "Login and Logout @shard2",
+      "steps": [
+        {
+          "seq": 1,
+          "method": "GET",
+          "normalizedPath": "",
+          "responseStatus": 302,
+          "durationMs": 366,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 2,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 133,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 3,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 131,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 4,
+          "method": "GET",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 226,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 5,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/logon.consume",
+          "responseStatus": 302,
+          "durationMs": 352,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 6,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/user_default.home",
+          "responseStatus": 302,
+          "durationMs": 176,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 7,
+          "method": "POST",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 238,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 8,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 260,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 9,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 2525,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 10,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 127,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 11,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 465,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 12,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 356,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 13,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/esr.elogin",
+          "responseStatus": 302,
+          "durationMs": 196,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 14,
+          "method": "GET",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 207,
+          "domain": "Authentication"
+        }
+      ],
+      "totalDurationMs": 5758,
+      "allSucceeded": true,
+      "description": "This sequence represents the process of logging in and out of the SIMS Finance system, including user authentication and home page access."
+    },
+    {
+      "name": "SPC420 File Upload Workflow",
+      "testTitle": "File upload using SPC420 @shard2",
+      "steps": [
+        {
+          "seq": 15,
+          "method": "GET",
+          "normalizedPath": "",
+          "responseStatus": 302,
+          "durationMs": 131,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 16,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 143,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 17,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 122,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 18,
+          "method": "GET",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 176,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 19,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/logon.consume",
+          "responseStatus": 302,
+          "durationMs": 643,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 20,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/user_default.home",
+          "responseStatus": 302,
+          "durationMs": 295,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 21,
+          "method": "POST",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 356,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 22,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 189,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 23,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 1489,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 24,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 131,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 25,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 797,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 26,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 133,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 27,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/spc420.xsp",
+          "responseStatus": 200,
+          "durationMs": 151,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 28,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420.xsp",
+          "responseStatus": 200,
+          "durationMs": 712,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 29,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 257,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 30,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 289,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 31,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 163,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 32,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 400,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 33,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_tree.xml",
+          "responseStatus": 200,
+          "durationMs": 141,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 34,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 367,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 35,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_grid.xml",
+          "responseStatus": 200,
+          "durationMs": 327,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 36,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_tree.xml",
+          "responseStatus": 200,
+          "durationMs": 385,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 37,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_popmenu.xml",
+          "responseStatus": 200,
+          "durationMs": 139,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 38,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 146,
+          "domain": "Requisitioning"
+        },
+        {
+          "seq": 39,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/spc420_grid.xml",
+          "responseStatus": 200,
+          "durationMs": 347,
+          "domain": "Requisitioning"
+        }
+      ],
+      "totalDurationMs": 8429,
+      "allSucceeded": true,
+      "description": "This workflow illustrates the steps involved in uploading files using the SPC420 interface within the SIMS Finance application."
+    },
+    {
+      "name": "XQuery Report Execution Workflow",
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "steps": [
+        {
+          "seq": 40,
+          "method": "GET",
+          "normalizedPath": "",
+          "responseStatus": 302,
+          "durationMs": 307,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 41,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 126,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 42,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 126,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 43,
+          "method": "GET",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 145,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 44,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/logon.consume",
+          "responseStatus": 302,
+          "durationMs": 240,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 45,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/user_default.home",
+          "responseStatus": 302,
+          "durationMs": 135,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 46,
+          "method": "POST",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 225,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 47,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 132,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 48,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 1175,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 49,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 124,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 50,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 564,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 51,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 129,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 52,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/xquery.xsp",
+          "responseStatus": 200,
+          "durationMs": 136,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 53,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/xquery.xsp",
+          "responseStatus": 200,
+          "durationMs": 414,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 54,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/xquery_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 325,
+          "domain": "Reporting"
+        }
+      ],
+      "totalDurationMs": 4303,
+      "allSucceeded": true,
+      "description": "This sequence details the execution of an XQuery report, including user authentication and report generation steps."
+    },
+    {
+      "name": "RSS310Q Attachments Workflow",
+      "testTitle": "RSS310Q - Attachments @shard2",
+      "steps": [
+        {
+          "seq": 55,
+          "method": "GET",
+          "normalizedPath": "",
+          "responseStatus": 302,
+          "durationMs": 122,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 56,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 112,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 57,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 110,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 58,
+          "method": "GET",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 134,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 59,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/logon.consume",
+          "responseStatus": 302,
+          "durationMs": 254,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 60,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/user_default.home",
+          "responseStatus": 302,
+          "durationMs": 137,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 61,
+          "method": "POST",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 234,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 62,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 130,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 63,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 1176,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 64,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 125,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 65,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 526,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 66,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 128,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 67,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/rss310q.xsp",
+          "responseStatus": 200,
+          "durationMs": 135,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 68,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q.xsp",
+          "responseStatus": 200,
+          "durationMs": 871,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 69,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 326,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 70,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 122,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 71,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 206,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 72,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/rss310q_header_results.xsp",
+          "responseStatus": 200,
+          "durationMs": 983,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 73,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_grid.xml",
+          "responseStatus": 200,
+          "durationMs": 1225,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 74,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/rss310q_header_details.xsp",
+          "responseStatus": 200,
+          "durationMs": 853,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 75,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 834,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 76,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 149,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 77,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 254,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 78,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_grid.xml",
+          "responseStatus": 200,
+          "durationMs": 407,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 79,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_grid.xml",
+          "responseStatus": 200,
+          "durationMs": 156,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 80,
+          "method": "GET",
+          "normalizedPath": "",
+          "responseStatus": 302,
+          "durationMs": 240,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 81,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 116,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 82,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 115,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 83,
+          "method": "GET",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 139,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 84,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/logon.consume",
+          "responseStatus": 302,
+          "durationMs": 253,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 85,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/user_default.home",
+          "responseStatus": 302,
+          "durationMs": 134,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 86,
+          "method": "POST",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 235,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 87,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 127,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 88,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 1263,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 89,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 125,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 90,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 569,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 91,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 205,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 92,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/rss310q.xsp",
+          "responseStatus": 200,
+          "durationMs": 144,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 93,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q.xsp",
+          "responseStatus": 200,
+          "durationMs": 685,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 94,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 305,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 95,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 125,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 96,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 237,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 97,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/rss310q_header_results.xsp",
+          "responseStatus": 200,
+          "durationMs": 1110,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 98,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_grid.xml",
+          "responseStatus": 200,
+          "durationMs": 973,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 99,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/rss310q_header_details.xsp",
+          "responseStatus": 200,
+          "durationMs": 594,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 100,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 724,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 101,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 151,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 102,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 149,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 103,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_grid.xml",
+          "responseStatus": 200,
+          "durationMs": 397,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 104,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss310q_grid.xml",
+          "responseStatus": 200,
+          "durationMs": 221,
+          "domain": "Reporting"
+        }
+      ],
+      "totalDurationMs": 19045,
+      "allSucceeded": true,
+      "description": "This workflow captures the process of handling attachments within the RSS310Q report, including user authentication and report access."
+    },
+    {
+      "name": "Help Screen Access Workflow",
+      "testTitle": "Help screen @shard2",
+      "steps": [
+        {
+          "seq": 105,
+          "method": "GET",
+          "normalizedPath": "",
+          "responseStatus": 302,
+          "durationMs": 419,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 106,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 350,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 107,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 117,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 108,
+          "method": "GET",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 142,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 109,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/logon.consume",
+          "responseStatus": 302,
+          "durationMs": 241,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 110,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/user_default.home",
+          "responseStatus": 302,
+          "durationMs": 133,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 111,
+          "method": "POST",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 214,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 112,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 230,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 113,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 1181,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 114,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 125,
+          "domain": "Unknown"
+        }
+      ],
+      "totalDurationMs": 3152,
+      "allSucceeded": true,
+      "description": "This sequence represents the steps taken to access the help screen in the SIMS Finance application, including user authentication."
+    },
+    {
+      "name": "Crystal Report Generation Workflow",
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "steps": [
+        {
+          "seq": 1,
+          "method": "GET",
+          "normalizedPath": "",
+          "responseStatus": 302,
+          "durationMs": 659,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 2,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 165,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 3,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 165,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 4,
+          "method": "GET",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 200,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 5,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/logon.consume",
+          "responseStatus": 302,
+          "durationMs": 278,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 6,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/user_default.home",
+          "responseStatus": 302,
+          "durationMs": 192,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 7,
+          "method": "POST",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 286,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 8,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 181,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 9,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 1452,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 10,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 190,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 11,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 658,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 12,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 194,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 13,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/rss570.xsp",
+          "responseStatus": 200,
+          "durationMs": 203,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 14,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570.xsp",
+          "responseStatus": 200,
+          "durationMs": 618,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 15,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 639,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 16,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 179,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 17,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 182,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 18,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 338,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 19,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 205,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 20,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 182,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 21,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 181,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 22,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 185,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 23,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 179,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 24,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 187,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 25,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 185,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 26,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/rss570_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 179,
+          "domain": "Reporting"
+        },
+        {
+          "seq": 27,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/rss570.fileopen",
+          "responseStatus": 200,
+          "durationMs": 298,
+          "domain": "Reporting"
+        }
+      ],
+      "totalDurationMs": 8560,
+      "allSucceeded": true,
+      "description": "This workflow illustrates the generation of a Crystal Report, detailing the necessary authentication and report processing steps."
+    },
+    {
+      "name": "Trial Balance Report Workflow",
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "steps": [
+        {
+          "seq": 28,
+          "method": "GET",
+          "normalizedPath": "",
+          "responseStatus": 302,
+          "durationMs": 743,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 29,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 221,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 30,
+          "method": "GET",
+          "normalizedPath": "/auth",
+          "responseStatus": 302,
+          "durationMs": 182,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 31,
+          "method": "GET",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 212,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 32,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/logon.consume",
+          "responseStatus": 302,
+          "durationMs": 302,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 33,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/user_default.home",
+          "responseStatus": 302,
+          "durationMs": 201,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 34,
+          "method": "POST",
+          "normalizedPath": "/auth/esr.elogin",
+          "responseStatus": 200,
+          "durationMs": 295,
+          "domain": "Authentication"
+        },
+        {
+          "seq": 35,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 209,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 36,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance.home",
+          "responseStatus": 200,
+          "durationMs": 1469,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 37,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/simsfinance_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 210,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 38,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 512,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 39,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/sysnav_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 419,
+          "domain": "Unknown"
+        },
+        {
+          "seq": 40,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/nml510.xsp",
+          "responseStatus": 200,
+          "durationMs": 205,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 41,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510.xsp",
+          "responseStatus": 200,
+          "durationMs": 1405,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 42,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 481,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 43,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 231,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 44,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 328,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 45,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_select.xml",
+          "responseStatus": 200,
+          "durationMs": 197,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 46,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 442,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 47,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_select.xml",
+          "responseStatus": 200,
+          "durationMs": 187,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 48,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 381,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 49,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_dialog.xml",
+          "responseStatus": 200,
+          "durationMs": 214,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 50,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 187,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 51,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 203,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 52,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 188,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 53,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 190,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 54,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 189,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 55,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 189,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 56,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 197,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 57,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 222,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 58,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 357,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 59,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 188,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 60,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 189,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 61,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 193,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 62,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 194,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 63,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 189,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 64,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 191,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 65,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 189,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 66,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 188,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 67,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 187,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 68,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 206,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 69,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 264,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 70,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 274,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 71,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 202,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 72,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 189,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 73,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 190,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 74,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 222,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 75,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 188,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 76,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 207,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 77,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 195,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 78,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 187,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 79,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 206,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 80,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 262,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 81,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 189,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 82,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 205,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 83,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 186,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 84,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 241,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 85,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 200,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 86,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 191,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 87,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 186,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 88,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 197,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 89,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 226,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 90,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 203,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 91,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 190,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 92,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 198,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 93,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 398,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 94,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 340,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 95,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 189,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 96,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 193,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 97,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 186,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 98,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 193,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 99,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+          "responseStatus": 200,
+          "durationMs": 203,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 100,
+          "method": "POST",
+          "normalizedPath": "/sfdemosite130/nml510_dynamic.xml",
+          "responseStatus": 200,
+          "durationMs": 251,
+          "domain": "BudgetManagement"
+        },
+        {
+          "seq": 101,
+          "method": "GET",
+          "normalizedPath": "/sfdemosite130/nml510.fileopen",
+          "responseStatus": 200,
+          "durationMs": 367,
+          "domain": "BudgetManagement"
+        }
+      ],
+      "totalDurationMs": 20200,
+      "allSucceeded": true,
+      "description": "This sequence outlines the process for generating a Trial Balance report, including user authentication and multiple data retrieval steps."
+    }
+  ],
+  "byDomain": {
+    "AccountsPayable": [],
+    "PurchaseLedger": [],
+    "SalesLedger": [],
+    "Requisitioning": [
+      "POST /sfdemosite130/spc420_dialog.xml",
+      "POST /sfdemosite130/spc420_dynamic.xml",
+      "POST /sfdemosite130/spc420_tree.xml",
+      "POST /sfdemosite130/spc420_grid.xml",
+      "GET /sfdemosite130/spc420.xsp",
+      "POST /sfdemosite130/spc420.xsp",
+      "POST /sfdemosite130/spc420_popmenu.xml"
+    ],
+    "VATHandling": [],
+    "FinancialPeriods": [],
+    "SupplierWorkflow": [],
+    "BudgetManagement": [
+      "POST /sfdemosite130/nml510_refresh_control.xml",
+      "POST /sfdemosite130/nml510_dynamic.xml",
+      "POST /sfdemosite130/nml510_dialog.xml",
+      "POST /sfdemosite130/nml510_refresh_select.xml",
+      "GET /sfdemosite130/nml510.xsp",
+      "POST /sfdemosite130/nml510.xsp",
+      "GET /sfdemosite130/nml510.fileopen"
+    ],
+    "Reporting": [
+      "POST /sfdemosite130/rss310q_dialog.xml",
+      "POST /sfdemosite130/rss310q_grid.xml",
+      "POST /sfdemosite130/rss570_refresh_control.xml",
+      "POST /sfdemosite130/rss310q_dynamic.xml",
+      "POST /sfdemosite130/rss570_dynamic.xml",
+      "POST /sfdemosite130/rss570_dialog.xml",
+      "GET /sfdemosite130/rss310q.xsp",
+      "POST /sfdemosite130/rss310q.xsp",
+      "GET /sfdemosite130/rss310q_header_results.xsp",
+      "GET /sfdemosite130/rss310q_header_details.xsp",
+      "GET /sfdemosite130/xquery.xsp",
+      "POST /sfdemosite130/xquery.xsp",
+      "POST /sfdemosite130/xquery_dialog.xml",
+      "GET /sfdemosite130/rss570.xsp",
+      "POST /sfdemosite130/rss570.xsp",
+      "GET /sfdemosite130/rss570.fileopen"
+    ],
+    "Authentication": [
+      "GET /auth/esr.elogin",
+      "POST /auth/esr.elogin"
+    ],
+    "FileOperations": [],
+    "EmailDistribution": [],
+    "ReferenceData": [],
+    "SystemAdmin": [],
+    "Unknown": [
+      "GET /auth",
+      "GET ",
+      "POST /sfdemosite130/logon.consume",
+      "GET /sfdemosite130/user_default.home",
+      "GET /sfdemosite130/simsfinance.home",
+      "POST /sfdemosite130/simsfinance.home",
+      "POST /sfdemosite130/simsfinance_dynamic.xml",
+      "POST /sfdemosite130/sysnav_dialog.xml",
+      "POST /sfdemosite130/sysnav_dynamic.xml",
+      "GET /sfdemosite130/esr.elogin"
+    ]
+  },
+  "failedEndpoints": [],
+  "repeatedCallEndpoints": [
+    {
+      "normalizedPath": "/sfdemosite130/nml510_refresh_control.xml",
+      "callCount": 49,
+      "testCount": 1,
+      "avgCallsPerTest": 49
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q_dialog.xml",
+      "callCount": 8,
+      "testCount": 1,
+      "avgCallsPerTest": 8
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q_grid.xml",
+      "callCount": 6,
+      "testCount": 1,
+      "avgCallsPerTest": 6
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss570_refresh_control.xml",
+      "callCount": 5,
+      "testCount": 1,
+      "avgCallsPerTest": 5
+    },
+    {
+      "normalizedPath": "/sfdemosite130/nml510_dynamic.xml",
+      "callCount": 5,
+      "testCount": 1,
+      "avgCallsPerTest": 5
+    },
+    {
+      "normalizedPath": "/sfdemosite130/spc420_dialog.xml",
+      "callCount": 4,
+      "testCount": 1,
+      "avgCallsPerTest": 4
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss310q_dynamic.xml",
+      "callCount": 4,
+      "testCount": 1,
+      "avgCallsPerTest": 4
+    },
+    {
+      "normalizedPath": "/sfdemosite130/rss570_dynamic.xml",
+      "callCount": 4,
+      "testCount": 1,
+      "avgCallsPerTest": 4
+    }
+  ],
+  "latencyOutliers": [],
+  "insights": [
+    {
+      "type": "RepeatedCallWarning",
+      "severity": "Medium",
+      "title": "High Frequency of Refresh Control Calls",
+      "description": "The endpoint POST /sfdemosite130/nml510_refresh_control.xml was called 49 times in a single test, indicating potential inefficiencies.",
+      "endpoints": [
+        "/sfdemosite130/nml510_refresh_control.xml"
+      ],
+      "recommendation": "Investigate the necessity of multiple calls to this endpoint and consider implementing caching or optimization strategies."
+    },
+    {
+      "type": "UIAPIRelationship",
+      "severity": "Info",
+      "title": "UI Actions Correlate with API Calls",
+      "description": "User actions such as logging in and generating reports directly correlate with specific API calls, indicating a clear relationship.",
+      "endpoints": [
+        "/auth/esr.elogin",
+        "/sfdemosite130/simsfinance.home"
+      ],
+      "recommendation": "Document these relationships for better understanding of user interactions with the API."
+    }
+  ],
+  "executiveSummary": "• The testing captured 215 API calls across various workflows, with no failures reported.\n• User authentication processes were consistently followed across multiple tests.\n• The NML510 refresh control endpoint showed a high call frequency, suggesting potential inefficiencies.\n• All workflows successfully executed, indicating stable application performance during tests.\n• The observed patterns may indicate areas for optimization, particularly in repeated API calls.\n• Understanding the UI and API relationship can enhance user experience and system efficiency.\n• Further investigation into the refresh control calls is recommended to improve performance.",
+  "postmanCollection": null,
+  "openApiPaths": null
+}

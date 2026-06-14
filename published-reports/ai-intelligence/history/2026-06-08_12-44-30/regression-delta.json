@@ -1,0 +1,74 @@
+{
+  "generatedAt": "2026-06-08T12:46:00.477Z",
+  "pivotDate": "2026-06-01",
+  "beforeWindow": {
+    "from": "2026-05-11",
+    "to": "2026-05-25",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-06-08",
+    "to": "2026-06-08",
+    "runsAnalysed": 3
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 33,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 33,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "High",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate the timeout issue in 'File upload using SPC420' test.",
+    "Analyze the impact of recent code changes on file upload functionality.",
+    "Review test environment stability during the regression period.",
+    "Monitor for any recurring patterns in test failures.",
+    "Ensure adequate resources are allocated for file upload tests."
+  ],
+  "executiveSummary": [
+    "33% failure rate observed in 'File upload using SPC420' test after June 1.",
+    "One new failure detected, while one test improved from 10% to 0% failure rate.",
+    "The timeout error may indicate performance issues with file uploads.",
+    "This pattern could reflect instability in the file upload process.",
+    "May affect the reliability of file uploads for finance operations.",
+    "Further investigation into the timeout errors is recommended.",
+    "Comparing test execution times may provide additional insights.",
+    "Reviewing resource allocation during test runs could clarify the issue."
+  ]
+}

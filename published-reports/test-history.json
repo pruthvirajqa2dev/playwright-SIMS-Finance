@@ -1,0 +1,25 @@
+{
+  "runs": [
+    {
+      "timestamp": "2024-12-10_11-23-58",
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "flaky": 0
+    },
+    {
+      "timestamp": "2024-12-10_12-07-39",
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "flaky": 0
+    },
+    {
+      "timestamp": "2024-12-10_12-21-02",
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "flaky": 0
+    }
+  ]
+}

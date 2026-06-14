@@ -1,0 +1,74 @@
+{
+  "generatedAt": "2026-06-09T11:28:55.157Z",
+  "pivotDate": "2026-06-02",
+  "beforeWindow": {
+    "from": "2026-05-11",
+    "to": "2026-05-25",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-06-08",
+    "to": "2026-06-08",
+    "runsAnalysed": 5
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 20,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 20,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate the timeout issue in 'File upload using SPC420' test.",
+    "Review the environment configuration for UAT around the pivot date.",
+    "Analyze the impact of the recent code changes on file upload functionality.",
+    "Monitor the stability of tests in the UAT environment for future runs.",
+    "Ensure that the resolution of 'NML510 - Trial Balance Report' is maintained."
+  ],
+  "executiveSummary": [
+    "The 'File upload using SPC420' test failure rate increased from 0% to 20% after June 2.",
+    "One new failure was observed post-pivot, while one test was resolved.",
+    "This pattern may indicate a timing issue affecting file uploads.",
+    "Increased failures could reflect instability in the file upload process.",
+    "May affect the reliability of file uploads for finance operations.",
+    "Further investigation into UAT environment settings is recommended.",
+    "Monitoring future runs will help assess the persistence of these issues.",
+    "Maintaining the resolution of the 'NML510 - Trial Balance Report' is crucial."
+  ]
+}

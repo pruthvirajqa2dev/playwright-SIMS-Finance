@@ -1,0 +1,283 @@
+{
+  "generatedAt": "2026-06-13T10:40:38.650Z",
+  "runsAnalysed": 15,
+  "runsWithIssues": 15,
+  "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
+  "perTestProfiles": [
+    {
+      "testTitle": "RSS310Q - Attachments @shard2",
+      "totalRuns": 15,
+      "failureCount": 15,
+      "flakyCount": 0,
+      "passCount": 0,
+      "failureRate": 100,
+      "flakyRate": 0,
+      "avgDurationMs": 127813,
+      "lastSeen": "2026-06-12_11-52-24",
+      "errorSamples": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('[axes=\\'DOCUMENT_TITLE\\']').filter({ hasT",
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ],
+      "failuresByEnv": {
+        "UAT": 15
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-06-12_11-52-24"
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "totalRuns": 15,
+      "failureCount": 2,
+      "flakyCount": 1,
+      "passCount": 12,
+      "failureRate": 13,
+      "flakyRate": 7,
+      "avgDurationMs": 36154,
+      "lastSeen": "2026-06-12_11-52-24",
+      "errorSamples": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ],
+      "failuresByEnv": {
+        "UAT": 2
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-06-12_10-15-03"
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "totalRuns": 15,
+      "failureCount": 2,
+      "flakyCount": 0,
+      "passCount": 13,
+      "failureRate": 13,
+      "flakyRate": 0,
+      "avgDurationMs": 47459,
+      "lastSeen": "2026-06-12_11-52-24",
+      "errorSamples": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ],
+      "failuresByEnv": {
+        "UAT": 2
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-06-12_10-15-03"
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "totalRuns": 15,
+      "failureCount": 2,
+      "flakyCount": 0,
+      "passCount": 13,
+      "failureRate": 13,
+      "flakyRate": 0,
+      "avgDurationMs": 94292,
+      "lastSeen": "2026-06-12_11-52-24",
+      "errorSamples": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background "
+      ],
+      "failuresByEnv": {
+        "UAT": 2
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-06-12_09-13-53"
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "totalRuns": 15,
+      "failureCount": 1,
+      "flakyCount": 0,
+      "passCount": 14,
+      "failureRate": 7,
+      "flakyRate": 0,
+      "avgDurationMs": 25163,
+      "lastSeen": "2026-06-12_11-52-24",
+      "errorSamples": [
+        "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+      ],
+      "failuresByEnv": {
+        "UAT": 1
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-06-08_11-47-39"
+    },
+    {
+      "testTitle": "Login and Logout @shard2",
+      "totalRuns": 15,
+      "failureCount": 0,
+      "flakyCount": 0,
+      "passCount": 15,
+      "failureRate": 0,
+      "flakyRate": 0,
+      "avgDurationMs": 8285,
+      "lastSeen": "2026-06-12_11-52-24",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 15
+      }
+    },
+    {
+      "testTitle": "Help screen @shard2",
+      "totalRuns": 12,
+      "failureCount": 0,
+      "flakyCount": 0,
+      "passCount": 12,
+      "failureRate": 0,
+      "flakyRate": 0,
+      "avgDurationMs": 7898,
+      "lastSeen": "2026-06-12_11-52-24",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 12
+      }
+    }
+  ],
+  "perTestAnalyses": [
+    {
+      "testTitle": "RSS310Q - Attachments @shard2",
+      "stabilityLabel": "Unstable",
+      "priority": "High",
+      "failureRate": 100,
+      "flakyRate": 0,
+      "mostFrequentError": "Test timeout of 120000ms exceeded.",
+      "timeoutSuspected": true,
+      "environmentSpecific": false,
+      "failureHypothesis": "Timing issue may cause the test to exceed the timeout limit.",
+      "recommendation": "Investigate the execution time and optimize the test logic."
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "stabilityLabel": "Flaky",
+      "priority": "Medium",
+      "failureRate": 13,
+      "flakyRate": 7,
+      "mostFrequentError": "Test timeout of 120000ms exceeded.",
+      "timeoutSuspected": true,
+      "environmentSpecific": false,
+      "failureHypothesis": "May indicate a slow response from the XQuery execution.",
+      "recommendation": "Analyze the performance of the XQuery execution."
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "stabilityLabel": "Flaky",
+      "priority": "Medium",
+      "failureRate": 13,
+      "flakyRate": 0,
+      "mostFrequentError": "Test timeout of 120000ms exceeded.",
+      "timeoutSuspected": true,
+      "environmentSpecific": false,
+      "failureHypothesis": "Slow report generation may lead to timeout errors.",
+      "recommendation": "Review the Crystal Report generation process for performance issues."
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "stabilityLabel": "Flaky",
+      "priority": "Medium",
+      "failureRate": 13,
+      "flakyRate": 0,
+      "mostFrequentError": "Test timeout of 120000ms exceeded.",
+      "timeoutSuspected": true,
+      "environmentSpecific": false,
+      "failureHypothesis": "Timing issues during report generation could lead to timeouts.",
+      "recommendation": "Investigate the execution time of the Trial Balance Report."
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "stabilityLabel": "Flaky",
+      "priority": "Medium",
+      "failureRate": 7,
+      "flakyRate": 0,
+      "mostFrequentError": "Test timeout of 120000ms exceeded.",
+      "timeoutSuspected": true,
+      "environmentSpecific": false,
+      "failureHypothesis": "File upload process may be slower than expected, causing timeouts.",
+      "recommendation": "Examine the file upload process for potential delays."
+    },
+    {
+      "testTitle": "Login and Logout @shard2",
+      "stabilityLabel": "Stable",
+      "priority": "Low",
+      "failureRate": 0,
+      "flakyRate": 0,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "No failures observed across profiled runs.",
+      "recommendation": "Continue monitoring for any future issues."
+    },
+    {
+      "testTitle": "Help screen @shard2",
+      "stabilityLabel": "Stable",
+      "priority": "Low",
+      "failureRate": 0,
+      "flakyRate": 0,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "No failures observed across profiled runs.",
+      "recommendation": "Continue monitoring for any future issues."
+    }
+  ],
+  "coFailurePatterns": [
+    {
+      "tests": [
+        "RSS310Q - Attachments @shard2",
+        "RSS570 - Crystal Report @shard1"
+      ],
+      "occurrences": 2,
+      "possibleCause": ""
+    },
+    {
+      "tests": [
+        "RSS310Q - Attachments @shard2",
+        "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2"
+      ],
+      "occurrences": 2,
+      "possibleCause": ""
+    },
+    {
+      "tests": [
+        "NML510 - Trial Balance Report @shard1",
+        "RSS310Q - Attachments @shard2"
+      ],
+      "occurrences": 2,
+      "possibleCause": ""
+    }
+  ],
+  "topUnstableTests": [
+    "RSS310Q - Attachments @shard2",
+    "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+    "RSS570 - Crystal Report @shard1",
+    "NML510 - Trial Balance Report @shard1",
+    "File upload using SPC420 @shard2"
+  ],
+  "actionItems": [
+    "Investigate timing issues in the RSS310Q test.",
+    "Analyze performance of XQuery execution in SIMS_TB_SCHOOL.",
+    "Review Crystal Report generation for potential delays.",
+    "Examine file upload process for speed improvements.",
+    "Monitor stable tests for any emerging issues."
+  ],
+  "executiveSummary": [
+    "• 100% failure rate observed for RSS310Q - Attachments across all runs.",
+    "• 13% failure rate noted for SIMS_TB_SCHOOL, RSS570, and NML510 tests.",
+    "• Co-failure patterns suggest shared timing issues among tests.",
+    "• Flaky behaviour in multiple reports may indicate performance concerns.",
+    "• Stable tests showed no failures, indicating reliability in those areas.",
+    "• Focus on optimizing execution times for unstable tests.",
+    "• Further analysis of co-failure patterns could clarify dependencies.",
+    "• Monitoring is essential to maintain confidence in automated checks."
+  ]
+}
