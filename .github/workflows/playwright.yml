@@ -98,6 +98,13 @@ jobs:
           path: /tmp/storageState.json
           retention-days: 1
 
+      - name: Rename auth blob report to unique filename
+        if: always()
+        run: |
+          if [ -f blob-report/report.zip ]; then
+            mv blob-report/report.zip blob-report/report-auth.zip
+          fi
+
       - name: Upload auth blob report
         if: always()
         uses: actions/upload-artifact@v4
@@ -230,6 +237,13 @@ jobs:
           name: shard-${{ matrix.shardIndex }}-status
           path: shard-${{ matrix.shardIndex }}-status.txt
 
+      - name: Rename shard blob report to unique filename
+        if: always()
+        run: |
+          if [ -f blob-report/report.zip ]; then
+            mv blob-report/report.zip blob-report/report-shard-${{ matrix.shardIndex }}.zip
+          fi
+
       - name: Upload blob report
         if: always()
         uses: actions/upload-artifact@v4
@@ -296,7 +310,7 @@ jobs:
         with:
           path: all-blob-reports
           pattern: blob-report-*
-          merge-multiple: true
+          merge-multiple: false
 
       - name: Download workflow start time
         uses: actions/download-artifact@v4
@@ -389,13 +403,33 @@ jobs:
         run: |
           echo "test-results/:"; ls -la test-results/ 2>/dev/null || echo "(empty)"
 
+      - name: Flatten blob reports into merge directory
+        run: |
+          mkdir -p all-merge-blobs
+          find all-blob-reports -name "*.zip" | sort | while read f; do
+            BASENAME=$(basename "$f")
+            DEST="all-merge-blobs/$BASENAME"
+            if [ -f "$DEST" ]; then
+              echo "⚠️  COLLISION: $BASENAME already exists — skipping $f"
+            else
+              cp "$f" "$DEST"
+              echo "✅ $BASENAME"
+            fi
+          done
+          echo "Blobs to merge: $(find all-merge-blobs -name '*.zip' | wc -l)"
+
       - name: Merge Playwright HTML reports
-        run: npx playwright merge-reports --reporter html ./all-blob-reports
+        run: npx playwright merge-reports --reporter html ./all-merge-blobs
 
       - name: Preserve playwright-report to /tmp
         run: |
-          cp -r playwright-report /tmp/playwright-report-backup
-          echo "✅ playwright-report preserved to /tmp ($(find playwright-report -type f | wc -l) files)"
+          if [ -d playwright-report ]; then
+            cp -r playwright-report /tmp/playwright-report-backup
+            echo "✅ playwright-report preserved to /tmp ($(find playwright-report -type f | wc -l) files)"
+          else
+            echo "⚠️  playwright-report not found after merge — no blob ZIPs or incompatible blobs"
+            mkdir -p /tmp/playwright-report-backup
+          fi
 
       - name: Configure Git User
         run: |
@@ -558,7 +592,13 @@ jobs:
         run: |
           TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
           mkdir -p published-reports/$TIMESTAMP
-          cp -r playwright-report/* published-reports/$TIMESTAMP
+          if [ -f playwright-report/index.html ]; then
+            cp -r playwright-report/* published-reports/$TIMESTAMP
+          else
+            echo "⚠️  No playwright-report/index.html — auth-gate failed before producing blob data"
+            printf '<html><head><title>No report</title></head><body><h1>Report unavailable</h1><p>No Playwright HTML report was produced for this run.</p></body></html>' \
+              > published-reports/$TIMESTAMP/index.html
+          fi
           [ -f execution-time.txt ] && cp execution-time.txt published-reports/$TIMESTAMP/
           [ -f shard-times.json ]   && cp shard-times.json   published-reports/$TIMESTAMP/
           [ -f test-results.json ]  && cp test-results.json  published-reports/$TIMESTAMP/
