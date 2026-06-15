@@ -392,6 +392,11 @@ jobs:
       - name: Merge Playwright HTML reports
         run: npx playwright merge-reports --reporter html ./all-blob-reports
 
+      - name: Preserve playwright-report to /tmp
+        run: |
+          cp -r playwright-report /tmp/playwright-report-backup
+          echo "✅ playwright-report preserved to /tmp ($(find playwright-report -type f | wc -l) files)"
+
       - name: Configure Git User
         run: |
           git config --global user.email "154661815+pruthvirajqa2dev@users.noreply.github.com"
@@ -468,6 +473,12 @@ jobs:
           git fetch origin
           git checkout gh-pages
           git pull --rebase origin gh-pages || echo "No changes to pull"
+
+      - name: Restore playwright-report from /tmp
+        run: |
+          rm -rf playwright-report
+          cp -r /tmp/playwright-report-backup playwright-report
+          echo "✅ playwright-report restored from /tmp ($(find playwright-report -type f | wc -l) files)"
 
       - name: Generate Human-Readable Execution Time
         run: |
