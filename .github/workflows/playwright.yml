@@ -315,6 +315,16 @@ jobs:
       contents: write
       pages: write
       id-token: write
+    # Declare runtime env vars so the YAML linter recognises them as valid.
+    # Actual values are set via $GITHUB_ENV in individual steps below.
+    env:
+      EXECUTED_TESTS: ""
+      PASSED_TESTS: ""
+      FAILED_TESTS: ""
+      FLAKY_TESTS: ""
+      FINAL_STATUS: ""
+      FAILED_STAGE: ""
+      TIMESTAMP: ""
 
     steps:
       - uses: actions/checkout@v4
@@ -442,71 +452,47 @@ jobs:
 
       - name: Merge Playwright HTML reports
         run: |
-          # Use --reporter html directly with NO --config flag.
-          # merge-reports does NOT auto-load playwright.config.ts unless --config
-          # is explicitly passed, so this bypasses the config's reporter:[blob,json]
-          # array entirely. --reporter html always writes to ./playwright-report/.
-          echo "── Blob zip contents ────────────────────────────────────────────"
+          # ROOT CAUSE: Playwright 1.58 auto-loads playwright.config.ts for
+          # merge-reports even without --config. The project config throws
+          #   "❌ URL not loaded. Check .env.uat"
+          # because .env files are gitignored and URL is never set in this job.
+          # Playwright catches the throw silently, initialises ZERO reporters,
+          # extracts blobs, writes nothing, exits 0.
+          #
+          # FIX: pass --config pointing to a minimal CWD file written with
+          # defineConfig(). Playwright 1.58 silently ignores plain module.exports={}
+          # objects (previous attempts) — defineConfig() is required for the config
+          # to be recognised as valid and bypass playwright.config.ts entirely.
+          # CWD placement ensures playwright-report/ resolves to ./playwright-report/.
+
+          cat > playwright.merge.config.cjs << 'EOF'
+          const { defineConfig } = require('@playwright/test');
+          module.exports = defineConfig({ reporter: [['html', { open: 'never' }]] });
+          EOF
+
+          echo "── Blob JSONL headers (shard / totalShards metadata) ────────────"
           for f in all-merge-blobs/*.zip; do
             echo "=== $f ==="
-            unzip -l "$f" 2>&1 | head -20 || echo "  (cannot list — invalid zip)"
+            unzip -p "$f" report.jsonl 2>/dev/null | head -1 | cut -c1-400 \
+              || echo "  (could not read report.jsonl)"
           done
           echo "─────────────────────────────────────────────────────────────────"
-          echo "CWD before merge: $(pwd)"
 
           set +e
-          npx playwright merge-reports --reporter html ./all-merge-blobs
+          npx playwright merge-reports --config playwright.merge.config.cjs ./all-merge-blobs
           MERGE_EXIT=$?
           set -e
 
           echo "merge-reports exit code: $MERGE_EXIT"
+          echo "── playwright-report/ contents ──────────────────────────────────"
+          find playwright-report -type f 2>/dev/null | head -30 \
+            || echo "  playwright-report/ not present at CWD"
+          echo "─────────────────────────────────────────────────────────────────"
+
           if [ $MERGE_EXIT -ne 0 ]; then
             echo "::error::merge-reports failed with exit code $MERGE_EXIT"
             exit $MERGE_EXIT
           fi
-
-      - name: Post-merge diagnostics
-        if: always()
-        run: |
-          echo "=================================================="
-          echo "POST MERGE DIAGNOSTICS"
-          echo "=================================================="
-
-          echo ""
-          echo "Working directory:"
-          pwd
-
-          echo ""
-          echo "Searching for playwright-report directories"
-          find . -type d -name "playwright-report" 2>/dev/null
-
-          echo ""
-          echo "Searching for all report directories"
-          find . -type d | grep report || true
-
-          echo ""
-          echo "Searching for index.html files"
-          find . -name "index.html" 2>/dev/null
-
-          echo ""
-          echo "Searching entire runner workspace"
-          find /home/runner/work -name "index.html" 2>/dev/null
-
-          echo ""
-          echo "Searching for Playwright report output"
-          find /home/runner/work -type d -name "playwright-report" 2>/dev/null
-
-          echo ""
-          echo "Searching for blob-report output (fallback reporter)"
-          find /home/runner/work -type d -name "blob-report" 2>/dev/null
-
-          echo ""
-          echo "Top-level directory tree"
-          ls -la
-
-          echo ""
-          echo "Disk usage"
-          du -sh .
 
       - name: Preserve playwright-report to /tmp
         if: always()
