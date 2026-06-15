@@ -442,11 +442,13 @@ jobs:
 
       - name: Merge Playwright HTML reports
         run: |
-          # Use a minimal standalone config so playwright.config.ts is NOT loaded.
-          # playwright.config.ts specifies reporter:[blob,json] which silently
-          # overrides --reporter html in Playwright 1.50+, preventing playwright-report/
-          # from ever being written. This config also avoids the URL env-var throw.
-          cat > /tmp/playwright.merge.config.js << 'EOF'
+          # Write the merge config to CWD (not /tmp) so that Playwright 1.58
+          # resolves the HTML reporter output path relative to CWD.
+          # When --config points to /tmp/playwright.merge.config.js, Playwright
+          # resolves `playwright-report/` relative to the config's own directory
+          # (/tmp/), writing the report to /tmp/playwright-report/ — invisible
+          # to subsequent steps that look in CWD.
+          cat > playwright.merge.config.js << 'EOF'
           module.exports = { reporter: [['html', { open: 'never' }]] };
           EOF
 
@@ -458,7 +460,7 @@ jobs:
           echo "─────────────────────────────────────────────────────────────────"
 
           set +e
-          npx playwright merge-reports --config /tmp/playwright.merge.config.js ./all-merge-blobs
+          npx playwright merge-reports --config playwright.merge.config.js ./all-merge-blobs
           MERGE_EXIT=$?
           set -e
 
