@@ -448,7 +448,7 @@ jobs:
             unzip -l "$f" 2>&1 | head -20 || echo "  (cannot list — invalid zip)"
           done
           echo "─────────────────────────────────────────────────────────────────"
-          npx playwright merge-reports --reporter html --output playwright-report ./all-merge-blobs
+          npx playwright merge-reports --reporter html ./all-merge-blobs
 
       - name: Preserve playwright-report to /tmp
         run: |
