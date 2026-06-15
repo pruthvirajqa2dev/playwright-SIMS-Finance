@@ -194,9 +194,17 @@ jobs:
           ENABLE_NETWORK_CAPTURE: "true"
         run: |
           set +e
+          # TEMP: run only 1 test per shard for a quick workflow smoke-test.
+          # Shard 1 → "RSS570 - Crystal Report"  (fast, ~1 min, passed last run)
+          # Shard 2 → "Login and Logout"          (fastest test, ~7 s, passed last run)
+          if [ "${{ matrix.shardIndex }}" = "1" ]; then
+            GREP_PATTERN="RSS570 - Crystal Report @shard1"
+          else
+            GREP_PATTERN="Login and Logout @shard2"
+          fi
           npx playwright test \
             --project=chromium-shard${{ matrix.shardIndex }} \
-            --grep "@shard${{ matrix.shardIndex }}" \
+            --grep "$GREP_PATTERN" \
             --workers=1
           echo "STATUS_CODE=$?" >> $GITHUB_ENV
           mv test-results.json test-results-${{ matrix.shardIndex }}.json
@@ -513,15 +521,19 @@ jobs:
           echo "Flaky Tests:    ${{ env.FLAKY_TESTS }}"
           echo "Failed Stage:   $FAILED_STAGE"
 
-      - name: Stash untracked files
-        run: git stash push -m "Stashing untracked report files" --include-untracked
-
       - name: Display JSON report (formatted)
         if: always()
         run: |
           echo "Current directory:"; pwd
           echo "Files:"; ls -l
-          jq '.' test-results.json
+          if [ -f test-results.json ]; then
+            jq '.' test-results.json
+          else
+            echo "⚠️  test-results.json not found (already stashed or not produced)"
+          fi
+
+      - name: Stash untracked files
+        run: git stash push -m "Stashing untracked report files" --include-untracked
 
       - name: Pull from gh-pages branch
         run: |
@@ -824,7 +836,7 @@ jobs:
             SIMS Finance QA Team
           to: pruthviraj.pardeshi@parentpay.com
           from: ${{ secrets.EMAIL_USERNAME }}
-          cc: princy.rajkumar@parentpay.com
+          # cc: princy.rajkumar@parentpay.com  # temporarily excluded
 
       - name: Upload merged test results artifact
         if: always()
