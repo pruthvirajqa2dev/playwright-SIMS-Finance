@@ -452,25 +452,20 @@ jobs:
 
       - name: Merge Playwright HTML reports
         run: |
-          # ROOT CAUSE: Playwright 1.58 auto-loads playwright.config.ts for
-          # merge-reports even without --config. The project config throws
-          #   "❌ URL not loaded. Check .env.uat"
-          # because .env files are gitignored and URL is never set in this job.
-          # Playwright catches the throw silently, initialises ZERO reporters,
-          # extracts blobs, writes nothing, exits 0.
+          # CONFIRMED ROOT CAUSE (run 27545622587):
+          # Playwright 1.58 does not recognise .cjs as a valid config extension.
+          # When --config fails to load, Playwright falls back to auto-discovering
+          # playwright.config.ts, which throws "URL not loaded" (gitignored .env).
+          # The throw aborts after extracting the first blob — exit 0, no report.
+          # Evidence: playwright.merge.config.cjs was created (130 bytes, listed in
+          # ls -l) but only report-auth.zip was extracted (identical to all prior
+          # --config attempts).
           #
-          # FIX: pass --config pointing to a minimal CWD file written with
-          # defineConfig(). Playwright 1.58 silently ignores plain module.exports={}
-          # objects (previous attempts) — defineConfig() is required for the config
-          # to be recognised as valid and bypass playwright.config.ts entirely.
-          # CWD placement ensures playwright-report/ resolves to ./playwright-report/.
+          # FIX: Rename playwright.config.ts away for the duration of merge-reports
+          # so auto-discovery finds nothing, then restore it. Use --reporter html
+          # with no --config so the reporter is set directly on the CLI.
 
-          cat > playwright.merge.config.cjs << 'EOF'
-          const { defineConfig } = require('@playwright/test');
-          module.exports = defineConfig({ reporter: [['html', { open: 'never' }]] });
-          EOF
-
-          echo "── Blob JSONL headers (shard / totalShards metadata) ────────────"
+          echo "── Blob JSONL headers ───────────────────────────────────────────"
           for f in all-merge-blobs/*.zip; do
             echo "=== $f ==="
             unzip -p "$f" report.jsonl 2>/dev/null | head -1 | cut -c1-400 \
@@ -478,10 +473,16 @@ jobs:
           done
           echo "─────────────────────────────────────────────────────────────────"
 
+          mv playwright.config.ts playwright.config.ts.bak
+          echo "playwright.config.ts renamed away — auto-discovery disabled"
+
           set +e
-          npx playwright merge-reports --config playwright.merge.config.cjs ./all-merge-blobs
+          npx playwright merge-reports --reporter html ./all-merge-blobs
           MERGE_EXIT=$?
           set -e
+
+          mv playwright.config.ts.bak playwright.config.ts
+          echo "playwright.config.ts restored"
 
           echo "merge-reports exit code: $MERGE_EXIT"
           echo "── playwright-report/ contents ──────────────────────────────────"
