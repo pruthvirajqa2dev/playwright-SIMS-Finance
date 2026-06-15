@@ -9,6 +9,12 @@ on:
   schedule:
     - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
 
+# Node.js 24 opt-in: required from 2026-06-16 when GitHub Forces all
+# Node.js 20 actions to Node.js 24. Remove once action authors publish
+# Node.js 24 native versions (actions/checkout, setup-node, etc.).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 # ─────────────────────────────────────────────────────────────────────────────
 # PIPELINE OVERVIEW  (5 jobs)
 #
@@ -240,8 +246,16 @@ jobs:
       - name: Rename shard blob report to unique filename
         if: always()
         run: |
-          if [ -f blob-report/report.zip ]; then
-            mv blob-report/report.zip blob-report/report-shard-${{ matrix.shardIndex }}.zip
+          # Playwright 1.50+ names blobs report-{projectName}-{hash}.zip when
+          # multiple projects are configured; the old report.zip path is only
+          # created for single-project runs (like auth). Find whatever blob
+          # zip exists and normalise it to the name merge-reports expects.
+          BLOB_ZIP=$(find blob-report -maxdepth 1 -name "*.zip" | head -1)
+          if [ -n "$BLOB_ZIP" ]; then
+            mv "$BLOB_ZIP" blob-report/report-shard-${{ matrix.shardIndex }}.zip
+            echo "✅ Renamed $(basename $BLOB_ZIP) → report-shard-${{ matrix.shardIndex }}.zip"
+          else
+            echo "⚠️  No blob zip found in blob-report/ for shard ${{ matrix.shardIndex }}"
           fi
 
       - name: Upload blob report
@@ -419,7 +433,14 @@ jobs:
           echo "Blobs to merge: $(find all-merge-blobs -name '*.zip' | wc -l)"
 
       - name: Merge Playwright HTML reports
-        run: npx playwright merge-reports --reporter html ./all-merge-blobs
+        run: |
+          echo "── Blob zip contents ────────────────────────────────────────────"
+          for f in all-merge-blobs/*.zip; do
+            echo "=== $f ==="
+            unzip -l "$f" 2>&1 | head -20 || echo "  (cannot list — invalid zip)"
+          done
+          echo "─────────────────────────────────────────────────────────────────"
+          npx playwright merge-reports --reporter html --output playwright-report ./all-merge-blobs
 
       - name: Preserve playwright-report to /tmp
         run: |
