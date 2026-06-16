@@ -452,18 +452,19 @@ jobs:
 
       - name: Merge Playwright HTML reports
         run: |
-          # CONFIRMED ROOT CAUSE (run 27545622587):
-          # Playwright 1.58 does not recognise .cjs as a valid config extension.
-          # When --config fails to load, Playwright falls back to auto-discovering
-          # playwright.config.ts, which throws "URL not loaded" (gitignored .env).
-          # The throw aborts after extracting the first blob — exit 0, no report.
-          # Evidence: playwright.merge.config.cjs was created (130 bytes, listed in
-          # ls -l) but only report-auth.zip was extracted (identical to all prior
-          # --config attempts).
+          # ROOT CAUSE HISTORY:
+          # (run 27545622587) --config playwright.merge.config.cjs: Playwright 1.58
+          #   rejects .cjs extension, falls back to auto-discovering playwright.config.ts,
+          #   which throws "URL not loaded" on gitignored .env → aborts after first blob,
+          #   exit 0, no report.
+          # ATTEMPTED FIX: rename playwright.config.ts away + --reporter html CLI flag.
+          #   STILL FAILS: --reporter html without --config does not properly initialise
+          #   the HTML reporter in Playwright 1.58 (only first blob extracted, no output).
           #
-          # FIX: Rename playwright.config.ts away for the duration of merge-reports
-          # so auto-discovery finds nothing, then restore it. Use --reporter html
-          # with no --config so the reporter is set directly on the CLI.
+          # DEFINITIVE FIX: create a minimal playwright.merge.config.ts (no .env import,
+          # no globalSetup/teardown) and use --config to point at it explicitly. This
+          # bypasses auto-discovery of playwright.config.ts entirely and correctly wires
+          # up the HTML reporter with an explicit outputFolder. .ts is recognised by 1.58.
 
           echo "── Blob JSONL headers ───────────────────────────────────────────"
           for f in all-merge-blobs/*.zip; do
@@ -473,16 +474,22 @@ jobs:
           done
           echo "─────────────────────────────────────────────────────────────────"
 
-          mv playwright.config.ts playwright.config.ts.bak
-          echo "playwright.config.ts renamed away — auto-discovery disabled"
+          # Write a minimal merge config — only the HTML reporter, nothing else.
+          cat > playwright.merge.config.ts << 'MERGE_CONFIG_EOF'
+          import { defineConfig } from '@playwright/test';
+          export default defineConfig({
+          reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
+          });
+          MERGE_CONFIG_EOF
+          echo "playwright.merge.config.ts created"
 
           set +e
-          npx playwright merge-reports --reporter html ./all-merge-blobs
+          npx playwright merge-reports --config playwright.merge.config.ts ./all-merge-blobs 2>&1
           MERGE_EXIT=$?
           set -e
 
-          mv playwright.config.ts.bak playwright.config.ts
-          echo "playwright.config.ts restored"
+          rm -f playwright.merge.config.ts
+          echo "playwright.merge.config.ts removed"
 
           echo "merge-reports exit code: $MERGE_EXIT"
           echo "── playwright-report/ contents ──────────────────────────────────"
