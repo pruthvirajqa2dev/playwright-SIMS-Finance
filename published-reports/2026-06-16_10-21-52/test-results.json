@@ -1,0 +1,717 @@
+{
+  "config": {
+    "configFile": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/playwright.config.ts",
+    "rootDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/utils/globalSetup.ts",
+    "globalTeardown": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/utils/globalTeardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 2,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/d67a58a49a3ce800f31d63f6239039c218cef50a",
+        "commitHash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+        "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/27610401858"
+      },
+      "gitCommit": {
+        "shortHash": "d67a58a",
+        "hash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+        "subject": "fix: implement definitive solution for Playwright report merging by creating a minimal config",
+        "body": "fix: implement definitive solution for Playwright report merging by creating a minimal config\n",
+        "author": {
+          "name": "pruthvirajqa2dev",
+          "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+          "time": 1781604779000
+        },
+        "committer": {
+          "name": "pruthvirajqa2dev",
+          "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+          "time": 1781604779000
+        },
+        "branch": "Main"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "commitHash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/27610401858"
+          },
+          "gitCommit": {
+            "shortHash": "d67a58a",
+            "hash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "subject": "fix: implement definitive solution for Playwright report merging by creating a minimal config",
+            "body": "fix: implement definitive solution for Playwright report merging by creating a minimal config\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "auth",
+        "name": "auth",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Auth/auth.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "commitHash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/27610401858"
+          },
+          "gitCommit": {
+            "shortHash": "d67a58a",
+            "hash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "subject": "fix: implement definitive solution for Playwright report merging by creating a minimal config",
+            "body": "fix: implement definitive solution for Playwright report merging by creating a minimal config\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium-shard1",
+        "name": "chromium-shard1",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Post-Deployment-Tests/PostChecksTests.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "commitHash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/27610401858"
+          },
+          "gitCommit": {
+            "shortHash": "d67a58a",
+            "hash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "subject": "fix: implement definitive solution for Playwright report merging by creating a minimal config",
+            "body": "fix: implement definitive solution for Playwright report merging by creating a minimal config\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium-shard2",
+        "name": "chromium-shard2",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Post-Deployment-Tests/PostChecksTests.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "commitHash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/27610401858"
+          },
+          "gitCommit": {
+            "shortHash": "d67a58a",
+            "hash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "subject": "fix: implement definitive solution for Playwright report merging by creating a minimal config",
+            "body": "fix: implement definitive solution for Playwright report merging by creating a minimal config\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium-shard21",
+        "name": "chromium-shard2",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Purchase Order/**"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "commitHash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/27610401858"
+          },
+          "gitCommit": {
+            "shortHash": "d67a58a",
+            "hash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "subject": "fix: implement definitive solution for Playwright report merging by creating a minimal config",
+            "body": "fix: implement definitive solution for Playwright report merging by creating a minimal config\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium-shard22",
+        "name": "chromium-shard2",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Purchase Order/**"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "commitHash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/27610401858"
+          },
+          "gitCommit": {
+            "shortHash": "d67a58a",
+            "hash": "d67a58a49a3ce800f31d63f6239039c218cef50a",
+            "subject": "fix: implement definitive solution for Playwright report merging by creating a minimal config",
+            "body": "fix: implement definitive solution for Playwright report merging by creating a minimal config\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1781604779000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium-shard23",
+        "name": "chromium-shard2",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/glCodeExtractor.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "blob",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Postchecks on environment:UAT",
+          "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+          "line": 101,
+          "column": 6,
+          "specs": [
+            {
+              "title": "RSS570 - Crystal Report @shard1",
+              "ok": false,
+              "tags": [
+                "shard1"
+              ],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "RSS570 - Crystal Report",
+                      "description": "This test is for checking if RSS570 Crystal Report is generated for given criteria"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard1",
+                  "projectName": "chromium-shard1",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 120104,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                            "column": 15,
+                            "line": 540
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeInViewport\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.faicon > i[style*=\"color:green\"]')\nExpected: in viewport\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeInViewport\" with timeout 240000ms\u001b[22m\n\u001b[2m  - waiting for locator('.faicon > i[style*=\"color:green\"]')\u001b[22m\n\n\n   at ../pages/BasePage.ts:540\n\n  538 |             await expect(\n  539 |                 this.page.locator(this.greenIconLocator)\n> 540 |             ).toBeInViewport({ timeout: TIMEOUT_MS });\n      |               ^\n  541 |         } finally {\n  542 |             clearTimeout(warnTimer);\n  543 |         }\n    at RSS570.expectGreenIconToBeVisible (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:540:15)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:287:30\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:283:13"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-0 | ENABLE_NETWORK_CAPTURE=true | capture=true\n"
+                        },
+                        {
+                          "text": "[NetworkCapture] Started for: \"RSS570 - Crystal Report @shard1\" | hostnames: [uat-v2.pecuniam-online.co.uk]\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "[NetworkCapture] Stopped for: \"RSS570 - Crystal Report @shard1\" | traces captured: 19\n"
+                        },
+                        {
+                          "text": "[NetworkCapture fixture] \"RSS570 - Crystal Report @shard1\" → added 19 traces to store (store total: 0)\n"
+                        },
+                        {
+                          "text": "[NetworkCapture fixture] worker-0 teardown — store size: 19 traces\n"
+                        },
+                        {
+                          "text": "[NetworkTraceStore] Flushed 19 traces to /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/ai-outputs/traces/worker-0.json\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1515
+                        },
+                        {
+                          "title": "Go to the screen RSS570",
+                          "duration": 5590
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 885
+                        },
+                        {
+                          "title": "Enter school Id, sort option and check currency checkbox",
+                          "duration": 1803
+                        },
+                        {
+                          "title": "Click on submit button",
+                          "duration": 611
+                        },
+                        {
+                          "title": "Submit job on job processing dialog and wait for green icon on Background processing dialog",
+                          "duration": 554
+                        },
+                        {
+                          "title": "Wait for green icon on Background processing dialog",
+                          "duration": 108755,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeInViewport\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.faicon > i[style*=\"color:green\"]')\nExpected: in viewport\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeInViewport\" with timeout 240000ms\u001b[22m\n\u001b[2m  - waiting for locator('.faicon > i[style*=\"color:green\"]')\u001b[22m\n",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeInViewport\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.faicon > i[style*=\"color:green\"]')\nExpected: in viewport\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeInViewport\" with timeout 240000ms\u001b[22m\n\u001b[2m  - waiting for locator('.faicon > i[style*=\"color:green\"]')\u001b[22m\n\n    at RSS570.expectGreenIconToBeVisible (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:540:15)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:287:30\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:283:13",
+                            "location": {
+                              "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                              "column": 15,
+                              "line": 540
+                            },
+                            "snippet": "   at ../pages/BasePage.ts:540\n\n\u001b[0m \u001b[90m 538 |\u001b[39m             \u001b[36mawait\u001b[39m expect(\n \u001b[90m 539 |\u001b[39m                 \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mgreenIconLocator)\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 540 |\u001b[39m             )\u001b[33m.\u001b[39mtoBeInViewport({ timeout\u001b[33m:\u001b[39m \u001b[33mTIMEOUT_MS\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 541 |\u001b[39m         } \u001b[36mfinally\u001b[39m {\n \u001b[90m 542 |\u001b[39m             clearTimeout(warnTimer)\u001b[33m;\u001b[39m\n \u001b[90m 543 |\u001b[39m         }\u001b[0m"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-06-16T10:16:05.708Z",
+                      "annotations": [
+                        {
+                          "type": "RSS570 - Crystal Report",
+                          "description": "This test is for checking if RSS570 Crystal Report is generated for given criteria"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1/error-context.md"
+                        }
+                      ]
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 46653,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\nExpected: visible\nTimeout: 35000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\nExpected: visible\nTimeout: 35000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\u001b[22m\n\n    at RSS570.expectElementToBeVisibleUsingLocator (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:317:62)\n    at RSS570.checkIfDialogExistsWithTitle (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:475:20)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:284:30\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:283:24",
+                        "location": {
+                          "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                          "column": 62,
+                          "line": 317
+                        },
+                        "snippet": "   at ../pages/BasePage.ts:317\n\n\u001b[0m \u001b[90m 315 |\u001b[39m             \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(locator)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible(p0)\u001b[33m;\u001b[39m\n \u001b[90m 316 |\u001b[39m         } \u001b[36melse\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 317 |\u001b[39m             \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(locator)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 318 |\u001b[39m         }\n \u001b[90m 319 |\u001b[39m     }\n \u001b[90m 320 |\u001b[39m     \u001b[90m/**\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                            "column": 62,
+                            "line": 317
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\nExpected: visible\nTimeout: 35000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\u001b[22m\n\n\n   at ../pages/BasePage.ts:317\n\n  315 |             await expect(this.page.locator(locator).first()).toBeVisible(p0);\n  316 |         } else {\n> 317 |             await expect(this.page.locator(locator).first()).toBeVisible();\n      |                                                              ^\n  318 |         }\n  319 |     }\n  320 |     /**\n    at RSS570.expectElementToBeVisibleUsingLocator (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:317:62)\n    at RSS570.checkIfDialogExistsWithTitle (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:475:20)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:284:30\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:283:24"
+                        },
+                        {
+                          "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-1 | ENABLE_NETWORK_CAPTURE=true | capture=true\n"
+                        },
+                        {
+                          "text": "[NetworkCapture] Started for: \"RSS570 - Crystal Report @shard1\" | hostnames: [uat-v2.pecuniam-online.co.uk]\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "[NetworkCapture] Stopped for: \"RSS570 - Crystal Report @shard1\" | traces captured: 19\n"
+                        },
+                        {
+                          "text": "[NetworkCapture fixture] \"RSS570 - Crystal Report @shard1\" → added 19 traces to store (store total: 0)\n"
+                        },
+                        {
+                          "text": "[NetworkCapture fixture] worker-1 teardown — store size: 19 traces\n"
+                        },
+                        {
+                          "text": "[NetworkTraceStore] Flushed 19 traces to /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/ai-outputs/traces/worker-1.json\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1220
+                        },
+                        {
+                          "title": "Go to the screen RSS570",
+                          "duration": 6352
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 315
+                        },
+                        {
+                          "title": "Enter school Id, sort option and check currency checkbox",
+                          "duration": 1774
+                        },
+                        {
+                          "title": "Click on submit button",
+                          "duration": 603
+                        },
+                        {
+                          "title": "Submit job on job processing dialog and wait for green icon on Background processing dialog",
+                          "duration": 188
+                        },
+                        {
+                          "title": "Wait for green icon on Background processing dialog",
+                          "duration": 35008,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\nExpected: visible\nTimeout: 35000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\u001b[22m\n",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\nExpected: visible\nTimeout: 35000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('*[id^=ui-id]').locator('text=\"Background Processing\"').first()\u001b[22m\n\n    at RSS570.expectElementToBeVisibleUsingLocator (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:317:62)\n    at RSS570.checkIfDialogExistsWithTitle (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:475:20)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:284:30\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:283:24",
+                            "location": {
+                              "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                              "column": 62,
+                              "line": 317
+                            },
+                            "snippet": "   at ../pages/BasePage.ts:317\n\n\u001b[0m \u001b[90m 315 |\u001b[39m             \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(locator)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible(p0)\u001b[33m;\u001b[39m\n \u001b[90m 316 |\u001b[39m         } \u001b[36melse\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 317 |\u001b[39m             \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(locator)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 318 |\u001b[39m         }\n \u001b[90m 319 |\u001b[39m     }\n \u001b[90m 320 |\u001b[39m     \u001b[90m/**\u001b[39m\u001b[0m"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-06-16T10:18:07.923Z",
+                      "annotations": [
+                        {
+                          "type": "RSS570 - Crystal Report",
+                          "description": "This test is for checking if RSS570 Crystal Report is generated for given criteria"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1-retry1/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                        "column": 62,
+                        "line": 317
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-59530c6179447b2eb31f",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 237,
+              "column": 13
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Postchecks on environment:UAT",
+          "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+          "line": 101,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Login and Logout @shard2",
+              "ok": true,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "Login and Logout",
+                      "description": "This test is for performing login to SIMS Finance and then for user FINDIR99D130"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7983,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-0 | ENABLE_NETWORK_CAPTURE=true | capture=true\n"
+                        },
+                        {
+                          "text": "[NetworkCapture] Started for: \"Login and Logout @shard2\" | hostnames: [uat-v2.pecuniam-online.co.uk]\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "[NetworkCapture] Stopped for: \"Login and Logout @shard2\" | traces captured: 14\n"
+                        },
+                        {
+                          "text": "[NetworkCapture fixture] \"Login and Logout @shard2\" → added 14 traces to store (store total: 0)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 2537
+                        },
+                        {
+                          "title": "Expect home page elements visible on Load",
+                          "duration": 3043
+                        },
+                        {
+                          "title": "Click on profile and logout button",
+                          "duration": 1036
+                        },
+                        {
+                          "title": "Assert logout dialog is displayed, verify its content and logout",
+                          "duration": 1065
+                        }
+                      ],
+                      "startTime": "2026-06-16T10:15:35.193Z",
+                      "annotations": [
+                        {
+                          "type": "Login and Logout",
+                          "description": "This test is for performing login to SIMS Finance and then for user FINDIR99D130"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results/Post-Deployment-Tests-Post-5df68-UAT-Login-and-Logout-shard2-chromium-shard2/test-results/Postchecks/RunOn16062026/Hour 10/Homepage.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results/Post-Deployment-Tests-Post-5df68-UAT-Login-and-Logout-shard2-chromium-shard2/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/C:/temp/playwright-test-results/Post-Deployment-Tests-Post-5df68-UAT-Login-and-Logout-shard2-chromium-shard2/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-1c54fd3b103d89a9b9e1",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 105,
+              "column": 13
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-06-16T10:15:32.276Z",
+    "duration": 304168.536,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
