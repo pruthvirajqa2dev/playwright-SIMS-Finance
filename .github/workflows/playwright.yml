@@ -342,7 +342,7 @@ jobs:
         with:
           path: all-blob-reports
           pattern: blob-report-*
-          merge-multiple: false
+          merge-multiple: true
 
       - name: Download workflow start time
         uses: actions/download-artifact@v4
@@ -435,20 +435,10 @@ jobs:
         run: |
           echo "test-results/:"; ls -la test-results/ 2>/dev/null || echo "(empty)"
 
-      - name: Flatten blob reports into merge directory
+      - name: List blob reports to merge
         run: |
-          mkdir -p all-merge-blobs
-          find all-blob-reports -name "*.zip" | sort | while read f; do
-            BASENAME=$(basename "$f")
-            DEST="all-merge-blobs/$BASENAME"
-            if [ -f "$DEST" ]; then
-              echo "⚠️  COLLISION: $BASENAME already exists — skipping $f"
-            else
-              cp "$f" "$DEST"
-              echo "✅ $BASENAME"
-            fi
-          done
-          echo "Blobs to merge: $(find all-merge-blobs -name '*.zip' | wc -l)"
+          echo "Blobs to merge: $(find all-blob-reports -name '*.zip' | wc -l)"
+          find all-blob-reports -name '*.zip' | sort | while read f; do echo "  $f"; done
 
       - name: Merge Playwright HTML reports
         run: |
@@ -467,24 +457,27 @@ jobs:
           # up the HTML reporter with an explicit outputFolder. .ts is recognised by 1.58.
 
           echo "── Blob JSONL headers ───────────────────────────────────────────"
-          for f in all-merge-blobs/*.zip; do
+          for f in all-blob-reports/*.zip; do
             echo "=== $f ==="
             unzip -p "$f" report.jsonl 2>/dev/null | head -1 | cut -c1-400 \
               || echo "  (could not read report.jsonl)"
           done
           echo "─────────────────────────────────────────────────────────────────"
 
-          # Write a minimal merge config — only the HTML reporter, nothing else.
+          # --config bypasses auto-discovery of playwright.config.ts, which throws
+          # when loading gitignored .env in this job. Official docs use --reporter html;
+          # we use --config because our playwright.config.ts imports dotenv and fails
+          # without .env present. A .ts extension is fully supported by Playwright 1.58.
           cat > playwright.merge.config.ts << 'MERGE_CONFIG_EOF'
           import { defineConfig } from '@playwright/test';
           export default defineConfig({
-          reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
+            reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
           });
           MERGE_CONFIG_EOF
           echo "playwright.merge.config.ts created"
 
           set +e
-          npx playwright merge-reports --config playwright.merge.config.ts ./all-merge-blobs 2>&1
+          npx playwright merge-reports --config playwright.merge.config.ts ./all-blob-reports 2>&1
           MERGE_EXIT=$?
           set -e
 
