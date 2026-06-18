@@ -214,25 +214,19 @@ jobs:
       - #Step 9: Merge reports
         name: Merge reports
         run: |
-          set +e
+          rm -rf playwright-report
+          rm -rf merge-output
+          npx playwright merge-reports \
+             --reporter=html \
+             all-blob-reports
+          echo "=== CURRENT DIRECTORY ==="
+          pwd
+          echo "=== ROOT FILES ==="
+          ls -la
 
-          mkdir merge-output  
-          PLAYWRIGHT_HTML_OUTPUT_DIR=merge-output \
-          DEBUG=pw:* npx playwright merge-reports \
-          --config playwright.merge.config.ts \
-          --reporter html ./all-blob-reports
-          echo "===== SEARCHING ====="
+          echo "=== REPORT SEARCH ==="
+          find . -name "*.html"
           find . -type d | grep report || true
-          find . -name "*.html" || true
-          EXIT_CODE=$?
-
-          echo "merge exit code: $EXIT_CODE"
-
-          set -e
-
-          if [ $EXIT_CODE -ne 0 ]; then
-            exit $EXIT_CODE
-          fi
 
       - #Step 10: Inspect playwright-report folder
         name: Upload HTML report
