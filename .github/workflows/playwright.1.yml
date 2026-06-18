@@ -198,8 +198,20 @@ jobs:
 
             unzip -p "$f" report.jsonl 2>/dev/null | head -5 || true
           done
+      - #Step 8: Deep blob inspection
+        name: Deep blob inspection
+        run: |
+          echo "===== ALL FILES ====="
+          find all-blob-reports -type f        
 
-      - #Step 8: Merge reports
+          echo ""
+          echo "===== ZIP COUNT ====="
+          find all-blob-reports -name "*.zip" | wc -l        
+
+          echo ""
+          echo "===== ZIP NAMES ====="
+          find all-blob-reports -name "*.zip"
+      - #Step 9: Merge reports
         name: Merge reports
         run: |
           set +e
@@ -216,14 +228,14 @@ jobs:
             exit $EXIT_CODE
           fi
 
-      - #Step 9: Inspect playwright-report folder
+      - #Step 10: Inspect playwright-report folder
         name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
           name: html-report--attempt-${{ github.run_attempt }}
           path: playwright-report
           retention-days: 14
-      - #Step 10: Post merge diagnostics
+      - #Step 11: Post merge diagnostics
         name: Post merge diagnostics
         run: |
           echo "========== PLAYWRIGHT REPORT DIR =========="
@@ -237,7 +249,7 @@ jobs:
           echo "========== REPORT CONTENTS =========="
           find playwright-report -type f 2>/dev/null || true
 
-      - #Step 11: Validate report
+      - #Step 12: Validate report
         name: Validate report
         run: |
           if [ ! -f playwright-report/index.html ]; then
@@ -247,7 +259,7 @@ jobs:
 
           echo "✅ playwright-report/index.html exists"
 
-      - #Step 12: Upload merged report
+      - #Step 13: Upload merged report
         name: Upload merged report
         uses: actions/upload-artifact@v4
         with:
