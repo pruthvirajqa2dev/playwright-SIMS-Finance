@@ -1,99 +1,290 @@
 name: Playwright Merge Proof
 
 on:
+    #Execute workflow on workflow_dispatch event to allow manual triggering of the workflow
     workflow_dispatch:
 
+env:
+    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
-    test:
-        name: Shard ${{ matrix.shard }}
+    auth-gate:
+        #JOB: Authentication Gate for Fail Fast
+        name: Authentication Gate for Fail Fast
         runs-on: ubuntu-latest
-        strategy:
-            fail-fast: false
-            matrix:
-                shard: [1, 2]
+        timeout-minutes: 15
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - #Step 1: Checkout the repository
+              uses: actions/checkout@v4
+            - #Step 2: Setup Node.js environment
+              uses: actions/setup-node@v4
               with:
                   node-version: lts/*
-            - run: npm ci
+            - #Step 3: Install project dependencies
+              name: Install dependencies
+              run: npm ci
+            - #Step 4: Cache Playwright browsers
+              id: playwright-cache
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+                  restore-keys: |
+                      playwright-${{ runner.os }}-
+            - #Step 5: Install Playwright Browsers if cache is not hit
+              name: Install Playwright Browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: npx playwright install --with-deps
+            - #Step 6: Install Playwright system dependencies if cache is hit
+              name: Install Playwright system dependencies
+              if: steps.playwright-cache.outputs.cache-hit == 'true'
+              run: npx playwright install-deps
 
-            - name: Show Playwright Version
-              run: npx playwright --version
-
-            - name: Run Shard
+            - #Step 7: Run Auth Gate tests
+              name: Run Auth Gate
               run: |
-                  npx playwright test \
-                    --shard=${{ matrix.shard }}/2
-
-            - name: Rename Blob Report
+                  STORAGE_STATE_PATH=/tmp/storageState.json \
+                  npx playwright test --project=auth --workers=1
+            - #Step 8: Upload storageState
+              name: Upload storageState
+              if: success()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: storage-state
+                  path: /tmp/storageState.json
+            - #Step 9: Rename auth blob
+              name: Rename auth blob
               if: always()
               run: |
-                  mkdir -p blob-report
-                      
                   if [ -f blob-report/report.zip ]; then
-                    mv blob-report/report.zip \
-                       blob-report/report-shard-${{ matrix.shard }}.zip
+                    mv blob-report/report.zip blob-report/report-auth.zip
                   fi
-                      
-                  find blob-report -type f
 
-            - name: Upload Blob
+            - #Step 10: Upload auth blob
+              name: Upload auth blob
               if: always()
               uses: actions/upload-artifact@v4
               with:
-                  name: blob-report-${{ matrix.shard }}
+                  name: blob-report-auth
                   path: blob-report
 
-    merge:
+    postchecks:
+        #JOB: Postchecks with Shards
+        name: 🧪 Postchecks Shard ${{ matrix.shardIndex }}
+        needs: auth-gate
         runs-on: ubuntu-latest
-        needs:
-            - test
-        if: always()
+
+        strategy:
+            fail-fast: false
+            matrix:
+                shardIndex: [1, 2]
+
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - #Step 1: Checkout the repository
+              uses: actions/checkout@v4
+
+            - #Step 2: Setup Node.js environment
+              uses: actions/setup-node@v4
               with:
                   node-version: lts/*
-            - run: npm ci
-            - name: Show Playwright Version
-              run: npx playwright --version
-            - name: Download Blobs
+
+            - #Step 3: Install project dependencies
+              name: Install dependencies
+              run: npm ci
+
+            - #Step 4: Download storageState
+              name: Download storageState
               uses: actions/download-artifact@v4
               with:
-                  pattern: blob-report-*
+                  name: storage-state
+                  path: /tmp
+
+            - #Step 5: Cache Playwright browsers
+              name: Cache Playwright browsers
+              id: playwright-cache
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+                  restore-keys: |
+                      playwright-${{ runner.os }}-
+
+            - #Step 6: Install Playwright Browsers
+              name: Install Playwright Browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: npx playwright install --with-deps
+
+            - #Step 7: Install Playwright system dependencies
+              name: Install Playwright system dependencies
+              if: steps.playwright-cache.outputs.cache-hit == 'true'
+              run: npx playwright install-deps
+
+            - #Step 8: Run shard
+              name: Run shard
+              run: |
+                  if [ "${{ matrix.shardIndex }}" = "1" ]; then
+                    GREP_PATTERN="RSS570 - Crystal Report @shard1"
+                  else
+                    GREP_PATTERN="Login and Logout @shard2"
+                  fi
+                    
+                  npx playwright test \
+                    --project=chromium-shard${{ matrix.shardIndex }} \
+                    --grep "$GREP_PATTERN" \
+                    --workers=1
+
+            - #Step 9: Inspect blob-report folder
+              name: Inspect blob-report folder
+              if: always()
+              run: |
+                  echo "========== BLOB REPORT =========="
+                  find blob-report -type f
+
+            - #Step 10: Rename shard blob
+              name: Rename shard blob
+              if: always()
+              run: |
+                  BLOB_ZIP=$(find blob-report -maxdepth 1 -name "*.zip" | head -1)
+                    
+                  if [ -n "$BLOB_ZIP" ]; then
+                    mv "$BLOB_ZIP" blob-report/report-shard-${{ matrix.shardIndex }}.zip
+                  fi
+                    
+                  echo "After rename:"
+                  find blob-report -type f
+
+            - #Step 11: Upload blob
+              name: Upload blob
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: blob-report-${{ matrix.shardIndex }}
+                  path: blob-report
+
+    merge-reports:
+        #JOB: Merge Reports Proof
+        name: 📊 Merge Reports Proof
+        needs:
+            - auth-gate
+            - postchecks
+        if: always()
+        runs-on: ubuntu-latest
+
+        steps:
+            - #Step 1: Checkout the repository
+              uses: actions/checkout@v4
+
+            - #Step 2: Setup Node.js environment
+              uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+
+            - #Step 3: Install dependencies
+              name: Install dependencies
+              run: npm ci
+
+            - #Step 4: Playwright version
+              name: Playwright version
+              run: |
+                  npx playwright --version
+                  npm ls @playwright/test
+
+            - #Step 5: Download blobs
+              name: Download blobs
+              uses: actions/download-artifact@v4
+              with:
                   path: all-blob-reports
-                  merge-multiple: false
-            - name: Inspect Downloaded Files
+                  pattern: blob-report-*
+                  merge-multiple: true
+
+            - #Step 6: Inspect downloaded blobs
+              name: Inspect downloaded blobs
               run: |
                   echo "========== DOWNLOADED FILES =========="
                   find all-blob-reports -type f
-            - name: Flatten Blob Reports
-              run: |
-                  mkdir -p merge-input
-                  find all-blob-reports -name "*.zip" | while read f
-                     do
-                         cp "$f" merge-input/
-                     done          
-                     echo "========== MERGE INPUT =========="
-                     find merge-input -type f
 
-            - name: Merge Reports
+            - #Step 7: Inspect zip contents
+              name: Inspect zip contents
               run: |
+                  for f in all-blob-reports/*.zip
+                  do
+                    echo ""
+                    echo "=============================="
+                    echo "$f"
+                    echo "=============================="
+
+                    unzip -l "$f" | head -30
+
+                    echo ""
+                    echo "report.jsonl preview"
+
+                    unzip -p "$f" report.jsonl 2>/dev/null | head -5 || true
+                  done
+
+            - #Step 8: Create merge config
+              name: Create merge config
+              run: |
+                  cat > playwright.merge.config.ts << 'EOF'
+                  import { defineConfig } from '@playwright/test';
+
+                  export default defineConfig({
+                    reporter: [
+                      ['html', {
+                        outputFolder: 'playwright-report',
+                        open: 'never'
+                      }]
+                    ]
+                  });
+                  EOF
+
+                  echo "===== merge config ====="
+                  cat playwright.merge.config.ts
+
+            - #Step 9: Merge reports
+              name: Merge reports
+              run: |
+                  set +e
+
                   npx playwright merge-reports \
-                  --reporter html \
-                  merge-input
-            - name: Verify HTML Report
+                    --config playwright.merge.config.ts \
+                    ./all-blob-reports
+
+                  EXIT_CODE=$?
+
+                  echo "merge exit code: $EXIT_CODE"
+
+                  set -e
+
+                  if [ $EXIT_CODE -ne 0 ]; then
+                    exit $EXIT_CODE
+                  fi
+
+            - #Step 10: Post merge diagnostics
+              name: Post merge diagnostics
               run: |
-                  echo "========== REPORT OUTPUT =========="
+                  echo "========== PLAYWRIGHT REPORT DIR =========="
                   find . -name "playwright-report"
+
+                  echo ""
+                  echo "========== INDEX FILES =========="
                   find . -name "index.html"
+
+                  echo ""
+                  echo "========== REPORT CONTENTS =========="
+                  find playwright-report -type f 2>/dev/null || true
+
+            - #Step 11: Validate report
+              name: Validate report
+              run: |
                   if [ ! -f playwright-report/index.html ]; then
-                     echo "playwright-report/index.html NOT FOUND"
-                     exit 1
-                   fi
-                   echo "SUCCESS"
-            - name: Upload HTML Report
+                    echo "❌ playwright-report/index.html not found"
+                    exit 1
+                  fi
+
+                  echo "✅ playwright-report/index.html exists"
+
+            - #Step 12: Upload merged report
+              name: Upload merged report
               uses: actions/upload-artifact@v4
               with:
                   name: merged-playwright-report
