@@ -59,7 +59,7 @@ jobs:
                   name: storage-state
                   path: |
                       /tmp/storageState.json
-                      playwright/.auth/user.json
+                  #   playwright/.auth/user.json
                   if-no-files-found: error
             - #Step 9: Rename auth blob
               name: Rename auth blob
