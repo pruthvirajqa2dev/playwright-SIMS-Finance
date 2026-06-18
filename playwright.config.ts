@@ -51,7 +51,7 @@ export default defineConfig({
     },
     timeout: 120 * 1000,
     testDir: "./src/tests",
-    outputDir: "C:/temp/playwright-test-results",
+    outputDir: "./temp/playwright-test-results",
     // Per-project fullyParallel is overridden below; keep false at root so
     // auth gate and postchecks don't inadvertently run in parallel globally.
     fullyParallel: false,
