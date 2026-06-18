@@ -45,8 +45,12 @@ jobs:
             - #Step 7: Run Auth Gate tests
               name: Run Auth Gate
               run: |
+                  set +e
                   STORAGE_STATE_PATH=/tmp/storageState.json \
                   npx playwright test --project=auth --workers=1
+                  AUTH_EXIT=$?
+                  echo "AUTH_EXIT_CODE=$AUTH_EXIT" >> $GITHUB_ENV
+                  exit $AUTH_EXIT
             - #Step 8: Upload storageState
               name: Upload storageState
               if: always()
