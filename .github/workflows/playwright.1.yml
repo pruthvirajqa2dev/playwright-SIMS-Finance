@@ -46,22 +46,11 @@ jobs:
               name: Run Auth Gate
               run: |
                   set +e
-                  STORAGE_STATE_PATH=/tmp/storageState.json \
                   npx playwright test --project=auth --workers=1
                   AUTH_EXIT=$?
                   echo "AUTH_EXIT_CODE=$AUTH_EXIT" >> $GITHUB_ENV
                   exit $AUTH_EXIT
-            - #Step 8: Upload storageState
-              name: Upload storageState
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: storage-state
-                  path: |
-                      /tmp/storageState.json
-                  #   playwright/.auth/user.json
-                  if-no-files-found: error
-            - #Step 9: Rename auth blob
+            - #Step 8: Rename auth blob
               name: Rename auth blob
               if: always()
               run: |
@@ -69,7 +58,7 @@ jobs:
                     mv blob-report/report.zip blob-report/report-auth.zip
                   fi
 
-            - #Step 10: Upload auth blob
+            - #Step 9: Upload auth blob
               name: Upload auth blob
               if: always()
               uses: actions/upload-artifact@v4
