@@ -212,32 +212,12 @@ jobs:
                     unzip -p "$f" report.jsonl 2>/dev/null | head -5 || true
                   done
 
-            - #Step 8: Create merge config
-              name: Create merge config
-              run: |
-                  cat > playwright.merge.config.ts << 'EOF'
-                  import { defineConfig } from '@playwright/test';
-
-                  export default defineConfig({
-                    reporter: [
-                      ['html', {
-                        outputFolder: 'playwright-report',
-                        open: 'never'
-                      }]
-                    ]
-                  });
-                  EOF
-
-                  echo "===== merge config ====="
-                  cat playwright.merge.config.ts
-
-            - #Step 9: Merge reports
+            - #Step 8: Merge reports
               name: Merge reports
               run: |
                   set +e
 
                   npx playwright merge-reports \
-                    --config playwright.merge.config.ts \
                     ./all-blob-reports
 
                   EXIT_CODE=$?
@@ -250,7 +230,7 @@ jobs:
                     exit $EXIT_CODE
                   fi
 
-            - #Step 10: Post merge diagnostics
+            - #Step 9: Post merge diagnostics
               name: Post merge diagnostics
               run: |
                   echo "========== PLAYWRIGHT REPORT DIR =========="
@@ -264,7 +244,7 @@ jobs:
                   echo "========== REPORT CONTENTS =========="
                   find playwright-report -type f 2>/dev/null || true
 
-            - #Step 11: Validate report
+            - #Step 10: Validate report
               name: Validate report
               run: |
                   if [ ! -f playwright-report/index.html ]; then
@@ -274,7 +254,7 @@ jobs:
 
                   echo "✅ playwright-report/index.html exists"
 
-            - #Step 12: Upload merged report
+            - #Step 11: Upload merged report
               name: Upload merged report
               uses: actions/upload-artifact@v4
               with:
