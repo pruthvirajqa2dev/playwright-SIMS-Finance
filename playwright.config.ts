@@ -65,7 +65,7 @@ export default defineConfig({
     // --------------------------------------------------------
     // Reporting
     // --------------------------------------------------------
-    reporter: isCI ? [["blob"]] : [["html", { open: "never" }]],
+    reporter: [["blob"], ["json", { outputFile: "test-results.json" }]],
 
     // --------------------------------------------------------
     // Global Hooks
