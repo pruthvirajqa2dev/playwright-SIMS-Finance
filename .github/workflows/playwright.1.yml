@@ -49,11 +49,14 @@ jobs:
                   npx playwright test --project=auth --workers=1
             - #Step 8: Upload storageState
               name: Upload storageState
-              if: success()
+              if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: storage-state
-                  path: /tmp/storageState.json
+                  path: |
+                      /tmp/storageState.json
+                      playwright/.auth/user.json
+                  if-no-files-found: error
             - #Step 9: Rename auth blob
               name: Rename auth blob
               if: always()

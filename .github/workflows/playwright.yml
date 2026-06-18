@@ -2,12 +2,12 @@ name: Playwright Tests
 
 on:
   workflow_dispatch:
-  push:
-    branches: [Main]
-  pull_request:
-    branches: [Main]
-  schedule:
-    - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
+  # push:
+  #   branches: [Main]
+  # pull_request:
+  #   branches: [Main]
+  # schedule:
+  #   - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
 
 # Node.js 24 opt-in: required from 2026-06-16 when GitHub Forces all
 # Node.js 20 actions to Node.js 24. Remove once action authors publish
@@ -468,13 +468,22 @@ jobs:
           # when loading gitignored .env in this job. Official docs use --reporter html;
           # we use --config because our playwright.config.ts imports dotenv and fails
           # without .env present. A .ts extension is fully supported by Playwright 1.58.
-          cat > playwright.merge.config.ts << 'MERGE_CONFIG_EOF'
-          import { defineConfig } from '@playwright/test';
-          export default defineConfig({
-            reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
-          });
-          MERGE_CONFIG_EOF
-          echo "playwright.merge.config.ts created"
+          #
+          # NOTE: heredoc (<<EOF) must NOT be used here — YAML formatters indent the
+          # terminator, which prevents bash from closing the heredoc and produces an
+          # empty file.  Use node -e / printf instead, which formatters cannot break.
+          node -e "
+            const fs = require('fs');
+            fs.writeFileSync('playwright.merge.config.ts', [
+              \"import { defineConfig } from '@playwright/test';\",
+              'export default defineConfig({',
+              \"  reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],\",
+              '});',
+              ''
+            ].join('\n'));
+          "
+          echo "playwright.merge.config.ts created ($(wc -c < playwright.merge.config.ts) bytes)"
+          cat playwright.merge.config.ts
 
           set +e
           npx playwright merge-reports --config playwright.merge.config.ts ./all-blob-reports 2>&1
