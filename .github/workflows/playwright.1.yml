@@ -217,8 +217,10 @@ jobs:
           set +e
 
           mkdir merge-output  
-          PLAYWRIGHT_HTML_OUTPUT_DIR=merge-output \ 
-          npx playwright merge-reports --config playwright.merge.config.ts --reporter html ./all-blob-reports
+          PLAYWRIGHT_HTML_OUTPUT_DIR=merge-output \
+          DEBUG=pw:* npx playwright merge-reports \
+          --config playwright.merge.config.ts \
+          --reporter html ./all-blob-reports
           echo "===== SEARCHING ====="
           find . -type d | grep report || true
           find . -name "*.html" || true

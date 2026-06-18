@@ -4,6 +4,7 @@
     "main": "index.js",
     "scripts": {
         "start": "set NODE_ENV=uat && echo %NODE_ENV%",
+        "test:local": "cross-env SKIP_GLOBAL_SETUP=1",
         "test:training": "cross-env TEST_ENV=training npx playwright test src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts",
         "test:uat": "cross-env TEST_ENV=uat npx playwright test src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts",
         "ai:analyse": "node src/test-intelligence/ai/extract-failures.js test-results.json failures.json && npx ts-node src/test-intelligence/ai/agents/FailureAnalystAgent.ts failures.json ai-failure-report.json",
@@ -29,7 +30,7 @@
     "description": "",
     "devDependencies": {
         "@azure/openai": "^2.0.0",
-        "@playwright/test": "^1.58.0",
+        "@playwright/test": "1.58.0",
         "@types/mssql": "^12.3.0",
         "@types/node": "^22.19.17",
         "@types/prompt-sync": "^4.2.3",
