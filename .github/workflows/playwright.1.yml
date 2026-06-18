@@ -11,7 +11,7 @@ jobs:
   auth-gate:
     #JOB: Authentication Gate for Fail Fast
     name: Authentication Gate for Fail Fast
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 15
     steps:
       - #Step 1: Checkout the repository
