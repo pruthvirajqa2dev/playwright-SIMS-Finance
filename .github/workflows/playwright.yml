@@ -2,12 +2,12 @@ name: Playwright Tests
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [Main]
-  # pull_request:
-  #   branches: [Main]
-  # schedule:
-  #   - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
+  push:
+    branches: [Main]
+  pull_request:
+    branches: [Main]
+  schedule:
+    - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
 
 # Node.js 24 opt-in: required from 2026-06-16 when GitHub Forces all
 # Node.js 20 actions to Node.js 24. Remove once action authors publish
@@ -95,22 +95,6 @@ jobs:
           echo "AUTH_EXIT_CODE=$AUTH_EXIT" >> $GITHUB_ENV
           exit $AUTH_EXIT
 
-      # Upload storageState so postchecks shards can reuse the session
-      - name: Upload storageState
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: storage-state
-          path: /tmp/storageState.json
-          retention-days: 1
-
-      - name: Rename auth blob report to unique filename
-        if: always()
-        run: |
-          if [ -f blob-report/report.zip ]; then
-            mv blob-report/report.zip blob-report/report-auth.zip
-          fi
-
       - name: Upload auth blob report
         if: always()
         uses: actions/upload-artifact@v4
@@ -194,17 +178,8 @@ jobs:
           ENABLE_NETWORK_CAPTURE: "true"
         run: |
           set +e
-          # TEMP: run only 1 test per shard for a quick workflow smoke-test.
-          # Shard 1 → "RSS570 - Crystal Report"  (fast, ~1 min, passed last run)
-          # Shard 2 → "Login and Logout"          (fastest test, ~7 s, passed last run)
-          if [ "${{ matrix.shardIndex }}" = "1" ]; then
-            GREP_PATTERN="RSS570 - Crystal Report @shard1"
-          else
-            GREP_PATTERN="Login and Logout @shard2"
-          fi
           npx playwright test \
             --project=chromium-shard${{ matrix.shardIndex }} \
-            --grep "$GREP_PATTERN" \
             --workers=1
           echo "STATUS_CODE=$?" >> $GITHUB_ENV
           mv test-results.json test-results-${{ matrix.shardIndex }}.json
@@ -250,21 +225,6 @@ jobs:
         with:
           name: shard-${{ matrix.shardIndex }}-status
           path: shard-${{ matrix.shardIndex }}-status.txt
-
-      - name: Rename shard blob report to unique filename
-        if: always()
-        run: |
-          # Playwright 1.50+ names blobs report-{projectName}-{hash}.zip when
-          # multiple projects are configured; the old report.zip path is only
-          # created for single-project runs (like auth). Find whatever blob
-          # zip exists and normalise it to the name merge-reports expects.
-          BLOB_ZIP=$(find blob-report -maxdepth 1 -name "*.zip" | head -1)
-          if [ -n "$BLOB_ZIP" ]; then
-            mv "$BLOB_ZIP" blob-report/report-shard-${{ matrix.shardIndex }}.zip
-            echo "✅ Renamed $(basename $BLOB_ZIP) → report-shard-${{ matrix.shardIndex }}.zip"
-          else
-            echo "⚠️  No blob zip found in blob-report/ for shard ${{ matrix.shardIndex }}"
-          fi
 
       - name: Upload blob report
         if: always()
@@ -442,56 +402,13 @@ jobs:
 
       - name: Merge Playwright HTML reports
         run: |
-          # ROOT CAUSE HISTORY:
-          # (run 27545622587) --config playwright.merge.config.cjs: Playwright 1.58
-          #   rejects .cjs extension, falls back to auto-discovering playwright.config.ts,
-          #   which throws "URL not loaded" on gitignored .env → aborts after first blob,
-          #   exit 0, no report.
-          # ATTEMPTED FIX: rename playwright.config.ts away + --reporter html CLI flag.
-          #   STILL FAILS: --reporter html without --config does not properly initialise
-          #   the HTML reporter in Playwright 1.58 (only first blob extracted, no output).
-          #
-          # DEFINITIVE FIX: create a minimal playwright.merge.config.ts (no .env import,
-          # no globalSetup/teardown) and use --config to point at it explicitly. This
-          # bypasses auto-discovery of playwright.config.ts entirely and correctly wires
-          # up the HTML reporter with an explicit outputFolder. .ts is recognised by 1.58.
-
-          echo "── Blob JSONL headers ───────────────────────────────────────────"
-          for f in all-blob-reports/*.zip; do
-            echo "=== $f ==="
-            unzip -p "$f" report.jsonl 2>/dev/null | head -1 | cut -c1-400 \
-              || echo "  (could not read report.jsonl)"
-          done
-          echo "─────────────────────────────────────────────────────────────────"
-
-          # --config bypasses auto-discovery of playwright.config.ts, which throws
-          # when loading gitignored .env in this job. Official docs use --reporter html;
-          # we use --config because our playwright.config.ts imports dotenv and fails
-          # without .env present. A .ts extension is fully supported by Playwright 1.58.
-          #
-          # NOTE: heredoc (<<EOF) must NOT be used here — YAML formatters indent the
-          # terminator, which prevents bash from closing the heredoc and produces an
-          # empty file.  Use node -e / printf instead, which formatters cannot break.
-          node -e "
-            const fs = require('fs');
-            fs.writeFileSync('playwright.merge.config.ts', [
-              \"import { defineConfig } from '@playwright/test';\",
-              'export default defineConfig({',
-              \"  reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],\",
-              '});',
-              ''
-            ].join('\n'));
-          "
-          echo "playwright.merge.config.ts created ($(wc -c < playwright.merge.config.ts) bytes)"
-          cat playwright.merge.config.ts
-
           set +e
-          npx playwright merge-reports --config playwright.merge.config.ts ./all-blob-reports 2>&1
+          npx playwright merge-reports \
+          --reporter=html \
+          all-blob-reports
+
           MERGE_EXIT=$?
           set -e
-
-          rm -f playwright.merge.config.ts
-          echo "playwright.merge.config.ts removed"
 
           echo "merge-reports exit code: $MERGE_EXIT"
           echo "── playwright-report/ contents ──────────────────────────────────"
