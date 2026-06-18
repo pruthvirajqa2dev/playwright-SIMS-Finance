@@ -59,7 +59,7 @@ export default defineConfig({
     // Retries are intentionally set per-project (see below).
     retries: 0,
     workers: process.env.CI ? 1 : undefined,
-    reporter: [["blob"], ["json", { outputFile: "test-results.json" }]],
+    reporter: process.env.CI ? "blob" : "html",
     use: {
         baseURL: `${process.env.URL}`,
         video: "on",
@@ -127,10 +127,10 @@ export default defineConfig({
             }
         },
         {
-            name: "chromium-shard2",
+            name: "chromium-shard3",
             retries: process.env.CI ? 1 : 0,
-            testMatch: "**/Purchase Order/**",
-            grep: /@shard2/,
+            testMatch: "**/PRL300QInvoicesCreditNote/**",
+            grep: /@shard3/,
             use: {
                 ...devices["Desktop Chrome"],
                 viewport: { width: 1266, height: 586 }
