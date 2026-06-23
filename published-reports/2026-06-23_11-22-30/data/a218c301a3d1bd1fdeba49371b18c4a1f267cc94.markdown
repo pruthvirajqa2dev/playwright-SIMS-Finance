@@ -1,0 +1,449 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Post-Deployment-Tests/PostChecksTests.spec.ts >> Postchecks on environment:UAT >> RSS310Q - Attachments @shard2
+- Location: src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:445:13
+
+# Error details
+
+```
+Test timeout of 120000ms exceeded.
+```
+
+```
+Error: locator.getAttribute: Test timeout of 120000ms exceeded.
+Call log:
+  - waiting for locator('span.esr_grid_sort_span.fa').first()
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic "Click here to show the navigation panel" [ref=e7] [cursor=pointer]: 
+        - generic "Click here to navigate to your homepage" [ref=e8] [cursor=pointer]
+      - heading "RSS310Q - Purchase Orders" [level=2] [ref=e10]
+      - text: 
+      - generic [ref=e12]:
+        - heading "SIMS Finance Demo Site 130" [level=3] [ref=e13]
+        - generic [ref=e14] [cursor=pointer]: 
+        - text: 
+        - generic [ref=e15] [cursor=pointer]:
+          - generic [ref=e16]:  
+          - text: Finance Director
+          - generic [ref=e17]: 
+    - text:   
+  - text: 
+  - generic [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e23]:
+        - button "Quick Launch" [ref=e30] [cursor=pointer]:
+          - generic [ref=e32]: 
+        - text: 
+        - button "Spaces" [ref=e39] [cursor=pointer]:
+          - generic [ref=e41]: 
+        - text: 
+        - button "Recent History" [ref=e48] [cursor=pointer]:
+          - generic [ref=e50]: 
+        - text:     
+        - button "Favourites" [ref=e57] [cursor=pointer]:
+          - generic [ref=e59]: 
+        - text:    
+        - generic: 
+      - generic [ref=e61] [cursor=pointer]:
+        - generic [ref=e62]: 
+        - generic [ref=e63]: 
+    - generic [ref=e67]:
+      - button "Options" [ref=e76] [cursor=pointer]:
+        - generic [ref=e78]: 
+        - text: Options
+      - generic [ref=e80]:
+        - generic [ref=e82]: Search Criteria
+        - table [ref=e85]:
+          - rowgroup [ref=e86]:
+            - row "School 000001 Show Lookup Mandatory Green Abbey School" [ref=e87]:
+              - cell "School" [ref=e88]:
+                - generic [ref=e89]: School ID
+              - cell "000001 Show Lookup Mandatory Green Abbey School" [ref=e90]:
+                - generic [ref=e92]:
+                  - textbox "School" [ref=e93]:
+                    - /placeholder: ""
+                    - text: "000001"
+                  - button "Show Lookup" [ref=e94] [cursor=pointer]: 
+                  - generic "Mandatory" [ref=e96]: 
+                - text: Green Abbey School
+        - generic [ref=e98]:
+          - generic [ref=e99]:
+            - heading "Header Restrictions" [level=1] [ref=e100]
+            - table [ref=e101]:
+              - rowgroup [ref=e102]:
+                - row "Order Number Show Lookup Supplier Show Lookup Buyer Show Lookup Delivery Location Show Lookup Order Date Date Picker Order Date Date Picker Order Status Awaiting Intervention Awaiting Technical Appraisal Entered Part Received Fully Received Part Received / Part Invoiced Fully Received / Part Invoiced Fully Invoiced / Fully Received Rejected" [ref=e103]:
+                  - cell "Order Number Show Lookup Supplier Show Lookup Buyer Show Lookup Delivery Location Show Lookup Order Date Date Picker Order Date Date Picker Order Status Awaiting Intervention Awaiting Technical Appraisal Entered Part Received Fully Received Part Received / Part Invoiced Fully Received / Part Invoiced Fully Invoiced / Fully Received Rejected" [ref=e104]:
+                    - table [ref=e107]:
+                      - rowgroup [ref=e108]:
+                        - row "Order Number Show Lookup" [ref=e109]:
+                          - cell "Order Number" [ref=e110]:
+                            - generic [ref=e111]: Order Number
+                          - cell "Show Lookup" [ref=e112]:
+                            - generic [ref=e114]:
+                              - textbox "Order Number" [ref=e115]
+                              - button "Show Lookup" [ref=e116] [cursor=pointer]: 
+                              - text: 
+                        - row "Supplier Show Lookup" [ref=e117]:
+                          - cell "Supplier" [ref=e118]:
+                            - generic [ref=e119]: Supplier
+                          - cell "Show Lookup" [ref=e120]:
+                            - generic [ref=e122]:
+                              - textbox "Supplier" [ref=e123]
+                              - button "Show Lookup" [ref=e124] [cursor=pointer]: 
+                              - text: 
+                        - row "Buyer Show Lookup" [ref=e125]:
+                          - cell "Buyer" [ref=e126]:
+                            - generic [ref=e127]: Buyer
+                          - cell "Show Lookup" [ref=e128]:
+                            - generic [ref=e130]:
+                              - textbox "Buyer" [ref=e131]
+                              - button "Show Lookup" [ref=e132] [cursor=pointer]: 
+                              - text: 
+                        - row "Delivery Location Show Lookup" [ref=e133]:
+                          - cell "Delivery Location" [ref=e134]:
+                            - generic [ref=e135]: Delivery Location
+                          - cell "Show Lookup" [ref=e136]:
+                            - generic [ref=e138]:
+                              - textbox "Delivery Location" [ref=e139]
+                              - button "Show Lookup" [ref=e140] [cursor=pointer]: 
+                              - text: 
+                        - row "Order Date Date Picker Order Date Date Picker" [ref=e141]:
+                          - cell "Order Date" [ref=e142]:
+                            - generic [ref=e143]: Order Date
+                          - cell "Date Picker Order Date Date Picker" [ref=e144]:
+                            - generic [ref=e145]:
+                              - generic [ref=e146]:
+                                - textbox "Order Date" [ref=e147]
+                                - button "Date Picker" [ref=e148] [cursor=pointer]: 
+                                - text: 
+                              - generic [ref=e150]:
+                                - text: To
+                                - generic [ref=e151]:
+                                  - textbox "Order Date" [ref=e152]
+                                  - button "Date Picker" [ref=e153] [cursor=pointer]: 
+                                  - text: 
+                        - row "Order Status Awaiting Intervention Awaiting Technical Appraisal Entered Part Received Fully Received Part Received / Part Invoiced Fully Received / Part Invoiced Fully Invoiced / Fully Received Rejected" [ref=e154]:
+                          - cell "Order Status" [ref=e155]:
+                            - generic [ref=e156]: Order Status
+                          - cell "Awaiting Intervention Awaiting Technical Appraisal Entered Part Received Fully Received Part Received / Part Invoiced Fully Received / Part Invoiced Fully Invoiced / Fully Received Rejected" [ref=e157]:
+                            - generic [ref=e159]:
+                              - generic [ref=e161]:
+                                - generic [ref=e162]:
+                                  - checkbox "Awaiting Intervention" [checked] [ref=e163] [cursor=pointer]: 
+                                  - text: Awaiting Intervention
+                                - generic [ref=e164]:
+                                  - checkbox "Awaiting Technical Appraisal" [checked] [ref=e165] [cursor=pointer]: 
+                                  - text: Awaiting Technical Appraisal
+                                - generic [ref=e166]:
+                                  - checkbox "Entered" [checked] [ref=e167] [cursor=pointer]: 
+                                  - text: Entered
+                                - generic [ref=e168]:
+                                  - checkbox "Part Received" [checked] [ref=e169] [cursor=pointer]: 
+                                  - text: Part Received
+                                - generic [ref=e170]:
+                                  - checkbox "Fully Received" [checked] [ref=e171] [cursor=pointer]: 
+                                  - text: Fully Received
+                                - generic [ref=e172]:
+                                  - checkbox "Part Received / Part Invoiced" [checked] [ref=e173] [cursor=pointer]: 
+                                  - text: Part Received / Part Invoiced
+                                - generic [ref=e174]:
+                                  - checkbox "Fully Received / Part Invoiced" [checked] [ref=e175] [cursor=pointer]: 
+                                  - text: Fully Received / Part Invoiced
+                                - generic [ref=e176]:
+                                  - checkbox "Fully Invoiced / Fully Received" [checked] [ref=e177] [cursor=pointer]: 
+                                  - text: Fully Invoiced / Fully Received
+                                - generic [ref=e178]:
+                                  - checkbox "Rejected" [checked] [ref=e179] [cursor=pointer]: 
+                                  - text: Rejected
+                              - text: 
+          - generic [ref=e180]:
+            - heading "Display Options" [level=1] [ref=e181]
+            - table [ref=e183]:
+              - rowgroup [ref=e184]:
+                - row "Page Size 15" [ref=e185]:
+                  - cell "Page Size" [ref=e186]:
+                    - generic [ref=e187]: Page Size
+                  - cell "15" [ref=e188]:
+                    - generic [ref=e190]:
+                      - combobox "Page Size" [ref=e191]:
+                        - option "15" [selected]
+                        - option "25"
+                        - option "50"
+                        - option "100"
+                        - option "250"
+                      - text: 
+                - row "Order By Order Number" [ref=e192]:
+                  - cell "Order By" [ref=e193]:
+                    - generic [ref=e194]: Order By
+                  - cell "Order Number" [ref=e195]:
+                    - generic [ref=e197]:
+                      - combobox "Order By" [ref=e198]:
+                        - option "Order Number" [selected]
+                        - option "Supplier"
+                        - option "Buyer"
+                        - option "Delivery Location"
+                        - option "Order Date"
+                        - option "Order Status"
+                      - text: 
+                - row "Order Direction Descending" [ref=e199]:
+                  - cell "Order Direction" [ref=e200]:
+                    - generic [ref=e201]: Order Direction
+                  - cell "Descending" [ref=e202]:
+                    - generic [ref=e204]:
+                      - combobox "Order Direction" [ref=e205]:
+                        - option "Ascending"
+                        - option "Descending" [selected]
+                      - text: 
+        - table [ref=e208]:
+          - rowgroup [ref=e209]:
+            - row "Clear Search" [ref=e210]:
+              - cell "Clear Search" [ref=e211]:
+                - button "Clear" [ref=e213] [cursor=pointer]
+                - button "Search" [ref=e215] [cursor=pointer]
+  - status [ref=e216]
+  - alertdialog "All Periods Closed" [ref=e217]:
+    - generic [ref=e218]:
+      - generic [ref=e219]: All Periods Closed
+      - button " Close" [ref=e220] [cursor=pointer]:
+        - generic [ref=e221]: 
+        - text: Close
+    - generic [ref=e224]:
+      - table [ref=e227]:
+        - rowgroup [ref=e228]:
+          - row "As all periods have been closed for this School ID, only View options will be available." [ref=e229]:
+            - cell [ref=e230]:
+              - generic [ref=e232]:
+                - generic [ref=e234]: 
+                - text: 
+            - cell "As all periods have been closed for this School ID, only View options will be available." [ref=e235]:
+              - generic [ref=e237]:
+                - generic [ref=e240]: As all periods have been closed for this School ID, only View options will be available.
+                - text: 
+      - table [ref=e242]:
+        - rowgroup [ref=e243]:
+          - row "OK" [ref=e244]:
+            - cell "OK" [ref=e245]:
+              - button "OK" [active] [ref=e247] [cursor=pointer]
+```
+
+# Test source
+
+```ts
+  45  |  * await rss310QPage.clickOkOnAttachementDetails();
+  46  |  * await rss310QPage.verifyUploadedAttachmentsOnAttachmentsDialog(uploadedFileName);
+  47  |  * await rss310QPage.clickCloseBtn();
+  48  |  * ```
+  49  |  *
+  50  |  * @author Pruthviraj Pardeshi
+  51  |  */
+  52  | export default class RSS310Q extends BasePage {
+  53  |     //Locators and Texts
+  54  |     private readonly pageHeadingText = "RSS310Q - Purchase Orders";
+  55  |     private readonly orderNoColumnHeaderLocator = "th[id=ORD_NO]";
+  56  |     private readonly orderNoColumnValuesLocator = "td[axes*='ORD_NO']";
+  57  |     private readonly upSortIconLocator = "fa-sort-amount-up";
+  58  |     private readonly downSortIconLocator = "fa-sort-amount-down";
+  59  | 
+  60  |     _okBtnLocator: string = "#ok";
+  61  |     private readonly fileTitleLocator = "#file_title";
+  62  |     private readonly fileNameLocator = "#filename";
+  63  |     private readonly uploadAttachmentBtnLocator = "#esr_attach_button";
+  64  |     private readonly documentTitleColoumn = "[axes='DOCUMENT_TITLE']";
+  65  |     private readonly fileExtColoumn = "[axes='FILE_EXT']";
+  66  |     private readonly savedDateColoumn = "[axes='SAVED_DATE']";
+  67  |     _closeBtnLocator = "#esr_close_button";
+  68  |     private readonly costCentreLookupIconLocator = "img#c1_part_code_lookup";
+  69  |     private readonly costCentreCodeColumnLocator = "[axes='C1_PART_CODE']";
+  70  |     private readonly selectButtonLocator = "button[aria-label='Select code']";
+  71  |     private readonly _descrColumnLocator = "[axes='DESCR']";
+  72  |     public get descrColumnLocator() {
+  73  |         return this._descrColumnLocator;
+  74  |     }
+  75  | 
+  76  |     private readonly _fundCodeColumnLocator = "[axes='E2_PART_CODE']";
+  77  |     public get fundCodeColumnLocator() {
+  78  |         return this._fundCodeColumnLocator;
+  79  |     }
+  80  |     private readonly _ledgerCodeColumnLocator = "[axes='E1_PART_CODE']";
+  81  |     public get ledgerCodeColumnLocator() {
+  82  |         return this._ledgerCodeColumnLocator;
+  83  |     }
+  84  |     private readonly nextPageButtonLocator =
+  85  |         "*[data-uid$=glcodepartlookup_GL_CODE_PART_GRID_next]";
+  86  |     private readonly _costCentreInputLocator = "#c1_part_code";
+  87  |     public get costCentreInputLocator() {
+  88  |         return this._costCentreInputLocator;
+  89  |     }
+  90  |     private readonly _ledgerCodeInputLocator = "#e1_part_code";
+  91  |     public get ledgerCodeInputLocator() {
+  92  |         return this._ledgerCodeInputLocator;
+  93  |     }
+  94  |     private readonly _ledgerCodeDescriptionInputLocator =
+  95  |         "[for='e1_part_code'][type='descr']";
+  96  |     public get ledgerCodeDescriptionInputLocator() {
+  97  |         return this._ledgerCodeDescriptionInputLocator;
+  98  |     }
+  99  |     private readonly _fundCodeInputLocator = "#e2_part_code";
+  100 |     public get fundCodeInputLocator() {
+  101 |         return this._fundCodeInputLocator;
+  102 |     }
+  103 |     private readonly _fundCodeDescriptionInputLocator =
+  104 |         "[for='e2_part_code'][type='descr']";
+  105 |     public get fundCodeDescriptionInputLocator() {
+  106 |         return this._fundCodeDescriptionInputLocator;
+  107 |     }
+  108 |     private readonly _ledgerCodeLookupIconLocator = "#e1_part_code_lookup";
+  109 |     public get ledgerCodeLookupIconLocator() {
+  110 |         return this._ledgerCodeLookupIconLocator;
+  111 |     }
+  112 |     private readonly _fundCodeLookupIconLocator = "#e2_part_code_lookup";
+  113 |     public get fundCodeLookupIconLocator() {
+  114 |         return this._fundCodeLookupIconLocator;
+  115 |     }
+  116 | 
+  117 |     private readonly purchaseOrderNumberLocator =
+  118 |         "label[data-alias='ORDER_NO_0']";
+  119 |     private readonly closeBtnOnDialogLocator = "button[title='Close']";
+  120 |     private readonly vatCodeLocator = "#vat_code";
+  121 |     // private readonly costCentreCodeLocator =""
+  122 | 
+  123 |     //Actions
+  124 |     /**
+  125 |      * @author: @pruthvirajqa2dev
+  126 |      * This methods verifies key page elements are visible after loading
+  127 |      */
+  128 |     async expectPageElementsVisibilityOnLoad() {
+  129 |         //Page Heading
+  130 |         expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
+  131 |     }
+  132 | 
+  133 |     /**
+  134 |      *
+  135 |      * @returns
+  136 |      */
+  137 |     async clickRandomViewButton(): Promise<[string[], number]> {
+  138 |         var orderNoColumnHeader = this.page.locator(
+  139 |             this.orderNoColumnHeaderLocator
+  140 |         );
+  141 |         // Function to check if the column is sorted in ascending order
+  142 |         var isAscending = async (): Promise<boolean> => {
+  143 |             var sortIcon = this.page.locator(this.sortIconLocator).first();
+  144 |             const iconClass =
+> 145 |                 (await sortIcon.getAttribute(elementAttr.classAttr))?.trim() ||
+      |                                 ^ Error: locator.getAttribute: Test timeout of 120000ms exceeded.
+  146 |                 "";
+  147 |             return iconClass?.includes(this.upSortIconLocator) ?? false;
+  148 |         };
+  149 |         // Function to check if the column is sorted in descending order
+  150 |         var isDescending = async (): Promise<boolean> => {
+  151 |             var sortIcon = this.page.locator(this.sortIconLocator).first();
+  152 |             const iconClass =
+  153 |                 (await sortIcon.getAttribute(elementAttr.classAttr))?.trim() ||
+  154 |                 "";
+  155 |             return iconClass?.includes(this.downSortIconLocator) ?? false;
+  156 |         };
+  157 |         // Ensure the column is sorted in ascending order
+  158 |         if (!(await isAscending())) {
+  159 |             await orderNoColumnHeader.click({ force: true }); // First click
+  160 |             await this.page.waitForTimeout(3000);
+  161 |             if (await isDescending()) {
+  162 |                 await orderNoColumnHeader.click({ force: true }); // Second click if initially sorted descending
+  163 |                 await this.page.waitForTimeout(3000);
+  164 |             }
+  165 |         }
+  166 |         // Verify the column is now sorted in ascending order
+  167 |         expect(await isAscending()).toBeTruthy();
+  168 |         // Perform your next action
+  169 |         console.log(
+  170 |             "Column is sorted in ascending order. Proceeding with next steps..."
+  171 |         );
+  172 |         const random = Math.floor(Math.random() * 9);
+  173 |         console.log("Random index is: " + random);
+  174 |         const orderNumberValue: string[] = await this.page
+  175 |             .locator(this.orderNoColumnValuesLocator)
+  176 |             .allTextContents();
+  177 |         await this.page
+  178 |             .locator(this.btnElementListLocator)
+  179 |             .filter({ hasText: labels.viewLbl })
+  180 |             .nth(random)
+  181 |             .click();
+  182 |         return [orderNumberValue, random];
+  183 |     }
+  184 |     /**
+  185 |      *
+  186 |      * @param random
+  187 |      */
+  188 |     async verifyBreadcrumbs(random: [string[], number]) {
+  189 |         const paddedString = random[0][random[1]].toString().padStart(9, "0");
+  190 |         console.log("paddedString:" + paddedString.trim());
+  191 |         await this.page.waitForLoadState("networkidle");
+  192 |         const breadcrumbs = await this.page
+  193 |             .locator(this.breadcrumbLocator)
+  194 |             .allTextContents();
+  195 | 
+  196 |         expect(breadcrumbs).toContainEqual(
+  197 |             expectedTexts.expectedSearchCriteriaText
+  198 |         );
+  199 |         expect(breadcrumbs).toContainEqual(
+  200 |             expectedTexts.expectedHeaderResultsText
+  201 |         );
+  202 |         expect(breadcrumbs).toContainEqual(
+  203 |             expectedTexts.expectedHeaderDetailsText +
+  204 |                 " (" +
+  205 |                 paddedString.trim() +
+  206 |                 ")"
+  207 |         );
+  208 |     }
+  209 |     /**
+  210 |      *
+  211 |      * @returns
+  212 |      */
+  213 |     async uploadAttachment(): Promise<string> {
+  214 |         //CLick attachments icon
+  215 |         await this.click(this.attachmentBtnLocator);
+  216 |         //Verify dialog
+  217 |         await this.checkIfDialogExistsWithTitle(
+  218 |             expectedTexts.exepctedAttachmentsDialogText
+  219 |         );
+  220 |         //Click add file
+  221 |         await this.page
+  222 |             .locator(this.multiBtnLocator)
+  223 |             .filter({ hasText: expectedTexts.addFileText })
+  224 |             .click();
+  225 |         const ext = ".DOCX";
+  226 |         const dirAndFileNameWithExt: string | null =
+  227 |             await FileUtils.fsWriteFile(ext);
+  228 | 
+  229 |         // Start waiting for file chooser before clicking. Note no await.
+  230 |         const fileChooserPromise = this.page.waitForEvent("filechooser");
+  231 |         //await this.clickButtonUsingRole(this.browseForFileLocator);
+  232 |         await this.page
+  233 |             .locator(this.commonDhxBtnLocator)
+  234 |             .filter({ hasText: labels.browseForAFileLbl })
+  235 |             .dblclick();
+  236 |         const fileChooser = await fileChooserPromise;
+  237 |         await fileChooser.setFiles(
+  238 |             path.join(process.cwd() + "/" + dirAndFileNameWithExt!)
+  239 |         );
+  240 |         console.log("dirAndFileNameWithExt=" + dirAndFileNameWithExt);
+  241 |         var fileNameWithExt: string = dirAndFileNameWithExt!.split("/")[1];
+  242 |         console.log("fileNameWithExt=" + fileNameWithExt);
+  243 |         await expect(
+  244 |             this.page.locator(this.fileNameAfterUploadLocator)
+  245 |         ).toContainText(fileNameWithExt);
+```
