@@ -1,0 +1,307 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Post-Deployment-Tests/PostChecksTests.spec.ts >> Postchecks on environment:UAT >> SIMS_TB_SCHOOL - XQuery Report - Execute @shard2
+- Location: src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:395:13
+
+# Error details
+
+```
+Error: locator.click: Target page, context or browser has been closed
+Call log:
+  - waiting for locator('.esr_mainbutton[value=\'Close\']')
+    - locator resolved to <input type="button" value="Close" class="esr_mainbutton" onclick="window.close()"/>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - performing click action
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic "Click here to show the navigation panel" [ref=e7] [cursor=pointer]: 
+        - generic "Click here to navigate to your homepage" [ref=e8] [cursor=pointer]
+      - heading "XQUERY - SIMS Trial Balance School" [level=2] [ref=e10]
+      - text: 
+      - generic [ref=e12]:
+        - heading "SIMS Finance Demo Site 130" [level=3] [ref=e13]
+        - generic [ref=e14] [cursor=pointer]: 
+        - text: 
+        - generic [ref=e15] [cursor=pointer]:
+          - generic [ref=e16]:  
+          - text: Finance Director
+          - generic [ref=e17]: 
+    - text:   
+  - text: 
+  - generic [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e23]:
+        - button "Quick Launch" [ref=e30] [cursor=pointer]:
+          - generic [ref=e32]: 
+        - text: 
+        - button "Spaces" [ref=e39] [cursor=pointer]:
+          - generic [ref=e41]: 
+        - text: 
+        - button "Recent History" [ref=e48] [cursor=pointer]:
+          - generic [ref=e50]: 
+        - text:     
+        - button "Favourites" [ref=e57] [cursor=pointer]:
+          - generic [ref=e59]: 
+        - text:    
+        - generic: 
+      - generic [ref=e61] [cursor=pointer]:
+        - generic [ref=e62]: 
+        - generic [ref=e63]: 
+    - generic [ref=e69]:
+      - generic [ref=e70]:
+        - heading "Parameters" [level=1] [ref=e71]
+        - table [ref=e73]:
+          - rowgroup [ref=e74]:
+            - row "Select School 000001 Show Lookup Mandatory Green Abbey School" [ref=e75]:
+              - cell "Select School" [ref=e76]:
+                - generic [ref=e77]: Select School
+              - cell "000001 Show Lookup Mandatory Green Abbey School" [ref=e78]:
+                - generic [ref=e80]:
+                  - textbox "Select School" [ref=e81]:
+                    - /placeholder: ""
+                    - text: "000001"
+                  - button "Show Lookup" [ref=e82] [cursor=pointer]: 
+                  - generic "Mandatory" [ref=e84]: 
+                - text: Green Abbey School
+            - row "Select Year 2324 - 2023/2024 Fiscal Year Mandatory" [ref=e85]:
+              - cell "Select Year" [ref=e86]:
+                - generic [ref=e87]: Select Year
+              - cell "2324 - 2023/2024 Fiscal Year Mandatory" [ref=e88]:
+                - generic [ref=e90]:
+                  - combobox "Select Year" [ref=e91]:
+                    - option
+                    - option "2021 - 2020/2021 Fiscal Year"
+                    - option "2122 - 2021/2022 Fiscal year"
+                    - option "2223 - 2022/2023 Fiscal year"
+                    - option "2324 - 2023/2024 Fiscal Year" [selected]
+                    - option "2425 - 2024/2025 Fiscal Year"
+                    - option "2526 - 2025/2026 Fiscal Year"
+                  - generic "Mandatory" [ref=e93]: 
+            - row "Select Period 12 - August Mandatory" [ref=e94]:
+              - cell "Select Period" [ref=e95]:
+                - generic [ref=e96]: Select Period
+              - cell "12 - August Mandatory" [ref=e97]:
+                - generic [ref=e99]:
+                  - combobox "Select Period" [ref=e100]:
+                    - option
+                    - option "01 - September"
+                    - option "02 - October"
+                    - option "03 - November"
+                    - option "04 - December"
+                    - option "05 - January"
+                    - option "06 - February"
+                    - option "07 - March"
+                    - option "08 - April"
+                    - option "09 - May"
+                    - option "10 - June"
+                    - option "11 - July"
+                    - option "12 - August" [selected]
+                  - generic "Mandatory" [ref=e102]: 
+            - row "Output Format HTML - Hypertext Markup Language Mandatory" [ref=e103]:
+              - cell "Output Format" [ref=e104]:
+                - generic [ref=e105]: Output Format
+              - cell "HTML - Hypertext Markup Language Mandatory" [ref=e106]:
+                - generic [ref=e108]:
+                  - combobox "Output Format" [ref=e109]:
+                    - option "HTML - Hypertext Markup Language" [selected]
+                    - option "XLSX - Excel"
+                    - option "PDF - Portable Document Format"
+                  - generic "Mandatory" [ref=e111]: 
+      - table [ref=e113]:
+        - rowgroup [ref=e114]:
+          - row "Execute Submit Distribute" [ref=e115]:
+            - cell "Execute Submit Distribute" [ref=e116]:
+              - button "Execute" [ref=e118] [cursor=pointer]
+              - button "Submit" [ref=e120] [cursor=pointer]
+              - button "Distribute" [ref=e122] [cursor=pointer]
+  - status [ref=e123]
+```
+
+# Test source
+
+```ts
+  50  |     public get prominentText(): string {
+  51  |         return this._prominentText;
+  52  |     }
+  53  |     private readonly yearDropdownLocator = "#p_ye_ar";
+  54  |     private readonly periodDropdownLocator = "#p_period";
+  55  |     private readonly executeBtnLocator = "#execute_in_eseries";
+  56  |     _submitBtnLocator = "#submit_button";
+  57  |     _submitBtnLocatorDistribute = "#distribute_via_workflow";
+  58  | 
+  59  |     public get submitBtnLocator(): string {
+  60  |         return this._submitBtnLocator;
+  61  |     }
+  62  |     public set submitBtnLocator(value) {
+  63  |         this._submitBtnLocator = value;
+  64  |     }
+  65  |     private readonly _xqueryTitleLocator = ".TITLE_XQ";
+  66  |     public get xqueryTitleLocator(): string {
+  67  |         return this._xqueryTitleLocator;
+  68  |     }
+  69  |     private readonly xquerySchoolIdIconLocator = "#p_comp_icon";
+  70  |     private readonly xquerySchoolIdLocator = "input#p_comp";
+  71  |     _closeBtnLocator = ".esr_mainbutton[value='Close']";
+  72  |     private readonly emailInputLocator = "#email_address";
+  73  |     _okBtnLocator = "#ok_button";
+  74  |     private readonly subjectInputLocator = "#subject";
+  75  |     private readonly timeInputLocator = "#time";
+  76  | 
+  77  |     //Actions
+  78  |     /**
+  79  |      * @author: @pruthvirajqa2dev
+  80  |      * This methods verifies key page elements are visible after loading
+  81  |      */
+  82  |     async expectPageElementsVisibilityOnLoad() {
+  83  |         //Page Heading
+  84  |         expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
+  85  |         await expect(
+  86  |             this.page.getByRole("heading", {
+  87  |                 name: this.prominentText,
+  88  |                 exact: true
+  89  |             })
+  90  |         ).toBeVisible();
+  91  |     }
+  92  | 
+  93  |     /**
+  94  |      * Click on Submit button
+  95  |      */
+  96  |     async clickSubmitBtn() {
+  97  |         await this.page.locator(this.submitBtnLocator).click();
+  98  |     }
+  99  |     /**
+  100 |      *
+  101 |      * @param year
+  102 |      * @param period
+  103 |      */
+  104 |     async selectYearAndPeriod(year: string, period: string) {
+  105 |         await this.selectOption(this.yearDropdownLocator, year);
+  106 |         await this.selectOption(this.periodDropdownLocator, period);
+  107 |     }
+  108 |     /**
+  109 |      *
+  110 |      */
+  111 |     async clickExecuteBtn() {
+  112 |         await this.click(this.executeBtnLocator);
+  113 |     }
+  114 |     /**
+  115 |      *
+  116 |      */
+  117 |     async expectTitleToBeVisible() {
+  118 |         await this.expectElementToBeVisibleUsingLocator(
+  119 |             this.xqueryTitleLocator
+  120 |         );
+  121 |     }
+  122 |     /**
+  123 |      * This function selects school id provided
+  124 |      * @param schoolId
+  125 |      */
+  126 |     override async selectSchoolId(schoolId: string) {
+  127 |         //Click
+  128 |         await this.click(this.xquerySchoolIdIconLocator);
+  129 | 
+  130 |         //School ID Dialog check
+  131 |         await this.checkIfDialogExistsWithTitle(
+  132 |             expectedTexts.expectedSelectSchoolDialogTitle
+  133 |         );
+  134 | 
+  135 |         //Click select button for school id
+  136 |         const schoolDescrEle = this.page.locator(
+  137 |             this.selectBtnForSchoolLocator.replace("%", schoolId!)
+  138 |         );
+  139 |         await schoolDescrEle.first().click();
+  140 |         await this.expectElementToHaveValue(
+  141 |             this.xquerySchoolIdLocator,
+  142 |             expectedTexts.expectedSchoolID
+  143 |         );
+  144 |     }
+  145 |     /**
+  146 |      *
+  147 |      * @param newTab
+  148 |      */
+  149 |     async clickCloseBtnOnNewTab(newTab: Page) {
+> 150 |         await newTab.locator(this.closeBtnLocator).click();
+      |                                                    ^ Error: locator.click: Target page, context or browser has been closed
+  151 |     }
+  152 |     /**
+  153 |      *
+  154 |      * @param newTab
+  155 |      */
+  156 |     async assertionsOnNewTab(newTab: Page) {
+  157 |         const newTabTitleElement = newTab.locator(this.xqueryTitleLocator);
+  158 |         await expect(newTabTitleElement).toBeVisible();
+  159 |         await expect(newTabTitleElement).toContainText(
+  160 |             expectedTexts.expectedSchoolID
+  161 |         );
+  162 |         await expect(newTabTitleElement).toContainText(
+  163 |             expectedTexts.expectedNameTBReport
+  164 |         );
+  165 |         await expect(newTabTitleElement).toContainText(
+  166 |             expectedTexts.expectedPeriod
+  167 |         );
+  168 |         await expect(newTabTitleElement).toContainText(
+  169 |             expectedTexts.expectedYear
+  170 |         );
+  171 |     }
+  172 |     /**
+  173 |      *
+  174 |      */
+  175 |     async clickSubmitBtnDistribute() {
+  176 |         this.click(this._submitBtnLocatorDistribute);
+  177 |     }
+  178 |     /**
+  179 |      *
+  180 |      */
+  181 |     async fillEmailAddress() {
+  182 |         await this.fill(this.emailInputLocator, expectedTexts.expectedEmailId);
+  183 |     }
+  184 |     /**
+  185 |      *
+  186 |      */
+  187 |     async assertSubjectAndTime() {
+  188 |         await this.expectElementToHaveAttributeWithValue(
+  189 |             this.subjectInputLocator,
+  190 |             "value",
+  191 |             new RegExp(expectedTexts.expectedYearTB)
+  192 |         );
+  193 |         await this.expectElementToHaveAttributeWithValue(
+  194 |             this.subjectInputLocator,
+  195 |             "value",
+  196 |             new RegExp(expectedTexts.expectedPeriod)
+  197 |         );
+  198 |         await this.expectElementToHaveAttributeWithValue(
+  199 |             this.subjectInputLocator,
+  200 |             "value",
+  201 |             new RegExp(expectedTexts.expectedSchoolID)
+  202 |         );
+  203 |         await this.expectElementToHaveAttributeWithValue(
+  204 |             this.timeInputLocator,
+  205 |             "value",
+  206 |             new RegExp(new Date().toLocaleDateString("en-GB"))
+  207 |         );
+  208 |     }
+  209 |     async getSubjectInputValue(): Promise<string> {
+  210 |         const input = this.page.locator(this.subjectInputLocator);
+  211 |         return await input.inputValue();
+  212 |     }
+  213 | }
+  214 | 
+```
