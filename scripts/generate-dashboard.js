@@ -154,20 +154,15 @@ const template = /* html */ `<!DOCTYPE html>
     // against bash xargs leaving stray whitespace on string values.
     // -----------------------------------------------------------------------
     const normalisedData = (Array.isArray(reportsData) ? reportsData : []).map(r => ({
-      date:            (r.date         || '').trim(),
-      time:            (r.time         || '').trim(),
-      link:            (r.link         || '#').trim(),
-      status:          (r.status       || 'Unknown').trim(),
-      environment:     (r.environment  || '').trim(),
-      execTime:        (r.execTime     || 'N/A').trim(),
-      workflowTime:    (r.workflowTime || 'N/A').trim(),
-      failedStage:     (r.failedStage  || '').trim(),
-      shardTimes:      Array.isArray(r.shardTimes) ? r.shardTimes : [],
-      // reportAvailable is written by the workflow into status.json.
-      // Old runs that pre-date this field are treated as UNAVAILABLE (false)
-      // rather than defaulting to true, so we never show a broken link.
-      // A run must have explicitly set reportAvailable: true to show the link.
-      reportAvailable: r.reportAvailable === true,
+      date:         (r.date         || '').trim(),
+      time:         (r.time         || '').trim(),
+      link:         (r.link         || '#').trim(),
+      status:       (r.status       || 'Unknown').trim(),
+      environment:  (r.environment  || '').trim(),
+      execTime:     (r.execTime     || 'N/A').trim(),
+      workflowTime: (r.workflowTime || 'N/A').trim(),
+      failedStage:  (r.failedStage  || '').trim(),
+      shardTimes:   Array.isArray(r.shardTimes) ? r.shardTimes : [],
     }));
 
     // -----------------------------------------------------------------------
@@ -717,16 +712,10 @@ const template = /* html */ `<!DOCTYPE html>
                           </td>
                           <td className="px-4 py-3 font-mono text-xs text-slate-500 whitespace-nowrap">{r.time}</td>
                           <td className="px-4 py-3">
-                            {r.reportAvailable
-                              ? <a href={r.link} target="_blank" rel="noreferrer"
-                                   className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800 font-medium text-xs transition">
-                                  ↗ View
-                                </a>
-                              : <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"
-                                      title="Playwright HTML report was not produced for this run. This can happen when: blob reports contained only auth-gate data, merge-reports failed, or the run was interrupted.">
-                                  ⚠ No report
-                                </span>
-                            }
+                            <a href={r.link} target="_blank" rel="noreferrer"
+                               className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800 font-medium text-xs transition">
+                              ↗ View
+                            </a>
                           </td>
                           <td className="px-4 py-3">
                             {isWkndAuth
