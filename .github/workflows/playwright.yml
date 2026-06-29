@@ -9,32 +9,17 @@ on:
   schedule:
     - cron: "0 8 * * *" # Runs at 8:00 AM UTC daily (UK time during winter)
 
-# Node.js 24 opt-in: required from 2026-06-16 when GitHub Forces all
-# Node.js 20 actions to Node.js 24. Remove once action authors publish
-# Node.js 24 native versions (actions/checkout, setup-node, etc.).
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 # ─────────────────────────────────────────────────────────────────────────────
-# PIPELINE OVERVIEW  (5 jobs)
+# PIPELINE OVERVIEW
 #
-#   auth-gate  ──►  postchecks (shard1 ‖ shard2, fail-fast)
-#              ──►  merge-reports  ──►  ai-intelligence (non-blocking)
-#                                  └──►  Deploy-to-GitHub-Pages
+#   auth-gate  ──►  postchecks (shard1 ‖ shard2, fail-fast)  ──►  merge-reports  ──►  deploy
 #
-#   • auth-gate validates login with up to 1 retry (configured in playwright.config.ts).
+#   • auth-gate validates login with up to 2 retries (configured in playwright.config.ts).
 #     If it fails the pipeline stops here — no wasted 20 min running postchecks.
 #   • postchecks runs two shards in parallel with fail-fast: true.
 #     If one shard fails the other is cancelled immediately.
-#     Network traces are captured per shard and uploaded as artifacts.
-#   • merge-reports runs with if: always() so the dashboard is updated even on
+# • merge-reports runs withif: always() so the dashboard is updated even on
 #     auth failure, clearly indicating WHICH stage broke.
-#     Exposes TIMESTAMP as a job output for downstream correlation.
-#   • ai-intelligence runs after merge-reports (continue-on-error: true at job level).
-#     Downloads shard traces, runs the AI pipeline, publishes to gh-pages.
-#     A failure here NEVER blocks the Pages deploy.
-#   • Deploy-to-GitHub-Pages waits for both merge-reports AND ai-intelligence
-#     (always()) so the full gh-pages branch (dashboard + AI artifacts) deploys together.
 # ─────────────────────────────────────────────────────────────────────────────
 
 jobs:
@@ -85,7 +70,7 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps
 
-      # retries: 1 is configured in the "auth" project in playwright.config.ts
+      # retries: 2 is configured in the "auth" project in playwright.config.ts
       - name: Run Auth Gate
         run: |
           set +e
@@ -94,6 +79,15 @@ jobs:
           AUTH_EXIT=$?
           echo "AUTH_EXIT_CODE=$AUTH_EXIT" >> $GITHUB_ENV
           exit $AUTH_EXIT
+
+      # Upload storageState so postchecks shards can reuse the session
+      - name: Upload storageState
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storage-state
+          path: /tmp/storageState.json
+          retention-days: 1
 
       - name: Upload auth blob report
         if: always()
@@ -174,12 +168,11 @@ jobs:
 
       - name: Run Playwright tests (shard ${{ matrix.shardIndex }})
         id: run-tests
-        env:
-          ENABLE_NETWORK_CAPTURE: "true"
         run: |
           set +e
           npx playwright test \
             --project=chromium-shard${{ matrix.shardIndex }} \
+            --grep "@shard${{ matrix.shardIndex }}" \
             --workers=1
           echo "STATUS_CODE=$?" >> $GITHUB_ENV
           mv test-results.json test-results-${{ matrix.shardIndex }}.json
@@ -249,16 +242,6 @@ jobs:
           name: stage-status-shard-${{ matrix.shardIndex }}
           path: stage-status.json
 
-      - name: Upload network traces (shard ${{ matrix.shardIndex }})
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: network-traces-shard-${{ matrix.shardIndex }}
-          path: ai-outputs/traces/network-traces.json
-          if-no-files-found: warn
-          retention-days: 1
-        continue-on-error: true
-
   # =========================================================================
   # JOB 3 — Merge reports & publish dashboard
   # Runs with if: always() so the dashboard reflects even an auth failure.
@@ -268,23 +251,10 @@ jobs:
     needs: [auth-gate, postchecks]
     if: ${{ always() }}
     runs-on: ubuntu-latest
-    outputs:
-      # Passed to ai-intelligence so AI history entries correlate 1:1 with run dirs
-      timestamp: ${{ steps.add-report.outputs.timestamp }}
     permissions:
       contents: write
       pages: write
       id-token: write
-    # Declare runtime env vars so the YAML linter recognises them as valid.
-    # Actual values are set via $GITHUB_ENV in individual steps below.
-    env:
-      EXECUTED_TESTS: ""
-      PASSED_TESTS: ""
-      FAILED_TESTS: ""
-      FLAKY_TESTS: ""
-      FINAL_STATUS: ""
-      FAILED_STAGE: ""
-      TIMESTAMP: ""
 
     steps:
       - uses: actions/checkout@v4
@@ -328,48 +298,17 @@ jobs:
       - name: Determine which stage failed
         run: |
           FAILED_STAGE="None"
-          echo "── Stage status files found ─────────────────────────────────────────────────────────"
-          # Use 'find' with recursive search — the glob all-stage-statuses/*.json only
-          # matches files directly in the root of that directory. When download-artifact
-          # places files in subdirectories (which can happen with certain action versions),
-          # the glob silently matches nothing and FAILED_STAGE stays "None" even when a
-          # shard actually failed.  'find' is depth-agnostic and catches all layouts.
-          ALL_STATUS_FILES=$(find all-stage-statuses -name "*.json" 2>/dev/null | sort)
-          if [ -z "$ALL_STATUS_FILES" ]; then
-            echo "::warning::No stage-status JSON files found in all-stage-statuses — cannot determine failed stage"
-          else
-            echo "$ALL_STATUS_FILES" | while read f; do
-              STATUS=$(jq -r '.status' "$f" 2>/dev/null || echo "unknown")
-              STAGE=$(jq  -r '.stage'  "$f" 2>/dev/null || echo "unknown")
-              SHARD=$(jq  -r '.shard // "n/a"' "$f" 2>/dev/null)
-              echo "  $f  →  stage=$STAGE  shard=$SHARD  status=$STATUS"
-            done
-          fi
-          # Find first failure (auth failure takes priority because postchecks can't run without it)
-          for f in $(echo "$ALL_STATUS_FILES"); do
+          for f in all-stage-statuses/*.json; do
             [ -f "$f" ] || continue
             STATUS=$(jq -r '.status' "$f" 2>/dev/null)
-            STAGE=$(jq  -r '.stage'  "$f" 2>/dev/null)
-            if [ "$STATUS" = "Failed" ] && [ "$STAGE" = "auth" ]; then
-              FAILED_STAGE="auth"
+            STAGE=$(jq -r '.stage'  "$f" 2>/dev/null)
+            if [ "$STATUS" = "Failed" ]; then
+              FAILED_STAGE="$STAGE"
               break
             fi
           done
-          # If auth passed, check postchecks
-          if [ "$FAILED_STAGE" = "None" ]; then
-            for f in $(echo "$ALL_STATUS_FILES"); do
-              [ -f "$f" ] || continue
-              STATUS=$(jq -r '.status' "$f" 2>/dev/null)
-              STAGE=$(jq  -r '.stage'  "$f" 2>/dev/null)
-              if [ "$STATUS" = "Failed" ]; then
-                FAILED_STAGE="$STAGE"
-                break
-              fi
-            done
-          fi
-          echo "───────────────────────────────────────────────────────────────────────────────────────"
-          echo "Resolved FAILED_STAGE: $FAILED_STAGE"
           echo "FAILED_STAGE=$FAILED_STAGE" >> $GITHUB_ENV
+          echo "Failed stage: $FAILED_STAGE"
 
       - name: Load TEST_ENV from .env file
         run: |
@@ -395,43 +334,8 @@ jobs:
         run: |
           echo "test-results/:"; ls -la test-results/ 2>/dev/null || echo "(empty)"
 
-      - name: List blob reports to merge
-        run: |
-          echo "Blobs to merge: $(find all-blob-reports -name '*.zip' | wc -l)"
-          find all-blob-reports -name '*.zip' | sort | while read f; do echo "  $f"; done
-
       - name: Merge Playwright HTML reports
-        run: |
-          set +e
-          npx playwright merge-reports \
-          --reporter=html \
-          all-blob-reports
-
-          MERGE_EXIT=$?
-          set -e
-
-          echo "merge-reports exit code: $MERGE_EXIT"
-          echo "── playwright-report/ contents ──────────────────────────────────"
-          find playwright-report -type f 2>/dev/null | head -30 \
-            || echo "  playwright-report/ not present at CWD"
-          echo "─────────────────────────────────────────────────────────────────"
-
-          if [ $MERGE_EXIT -ne 0 ]; then
-            echo "::error::merge-reports failed with exit code $MERGE_EXIT"
-            exit $MERGE_EXIT
-          fi
-
-      - name: Preserve playwright-report to /tmp
-        if: always()
-        run: |
-          if [ -d playwright-report ] && [ -f playwright-report/index.html ]; then
-            cp -r playwright-report /tmp/playwright-report-backup
-            echo "✅ playwright-report preserved to /tmp ($(find playwright-report -type f | wc -l) files)"
-          else
-            echo "⚠️  playwright-report/index.html not found after merge"
-            echo "    playwright-report/ exists: $([ -d playwright-report ] && echo yes || echo no)"
-            mkdir -p /tmp/playwright-report-backup
-          fi
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: Configure Git User
         run: |
@@ -494,31 +398,21 @@ jobs:
           echo "Flaky Tests:    ${{ env.FLAKY_TESTS }}"
           echo "Failed Stage:   $FAILED_STAGE"
 
+      - name: Stash untracked files
+        run: git stash push -m "Stashing untracked report files" --include-untracked
+
       - name: Display JSON report (formatted)
         if: always()
         run: |
           echo "Current directory:"; pwd
           echo "Files:"; ls -l
-          if [ -f test-results.json ]; then
-            jq '.' test-results.json
-          else
-            echo "⚠️  test-results.json not found (already stashed or not produced)"
-          fi
-
-      - name: Stash untracked files
-        run: git stash push -m "Stashing untracked report files" --include-untracked
+          jq '.' test-results.json
 
       - name: Pull from gh-pages branch
         run: |
           git fetch origin
           git checkout gh-pages
           git pull --rebase origin gh-pages || echo "No changes to pull"
-
-      - name: Restore playwright-report from /tmp
-        run: |
-          rm -rf playwright-report
-          cp -r /tmp/playwright-report-backup playwright-report
-          echo "✅ playwright-report restored from /tmp ($(find playwright-report -type f | wc -l) files)"
 
       - name: Generate Human-Readable Execution Time
         run: |
@@ -594,24 +488,16 @@ jobs:
           echo "workflow-time.txt:  $(cat workflow-time.txt  2>/dev/null || echo NOT FOUND)"
 
       - name: Add Current Report with Timestamp
-        id: add-report
         run: |
           TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
           mkdir -p published-reports/$TIMESTAMP
-          if [ -f playwright-report/index.html ]; then
-            cp -r playwright-report/* published-reports/$TIMESTAMP
-          else
-            echo "⚠️  No playwright-report/index.html — auth-gate failed before producing blob data"
-            printf '<html><head><title>No report</title></head><body><h1>Report unavailable</h1><p>No Playwright HTML report was produced for this run.</p></body></html>' \
-              > published-reports/$TIMESTAMP/index.html
-          fi
+          cp -r playwright-report/* published-reports/$TIMESTAMP
           [ -f execution-time.txt ] && cp execution-time.txt published-reports/$TIMESTAMP/
           [ -f shard-times.json ]   && cp shard-times.json   published-reports/$TIMESTAMP/
           [ -f test-results.json ]  && cp test-results.json  published-reports/$TIMESTAMP/
           [ -f workflow-time.txt ]  && cp workflow-time.txt  published-reports/$TIMESTAMP/
           echo "$FAILED_STAGE" > published-reports/$TIMESTAMP/failed-stage.txt
           echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
-          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
 
       - name: Download Shard Statuses
         uses: actions/download-artifact@v4
@@ -682,14 +568,10 @@ jobs:
           EOF
           )
 
-          if [ "$EXECUTED_TESTS" -gt 0 ]; then
-            jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' \
-              test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
-            jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' \
-              test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
-          else
-            echo "⚠️  Zero tests executed — skipping consolidated.json update to preserve history slots."
-          fi
+          jq --argjson newRun "$CURRENT_RUN" '.runs += [$newRun]' \
+            test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
+          jq '{ runs: (.runs | sort_by(.timestamp) | reverse | .[0:30]) }' \
+            test-results-history/consolidated.json > temp.json && mv temp.json test-results-history/consolidated.json
 
           git add test-results-history/consolidated.json
           git commit -m "Update test history with run from $TIMESTAMP" || echo "No changes to commit"
@@ -778,6 +660,15 @@ jobs:
           git commit -m "Update Playwright reports with $TIMESTAMP"
           git push origin gh-pages
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: published-reports/
+
       - name: Set FINAL_STATUS from status.json
         run: |
           STATUS=$(jq -r '.status' published-reports/$TIMESTAMP/status.json)
@@ -809,7 +700,7 @@ jobs:
             SIMS Finance QA Team
           to: pruthviraj.pardeshi@parentpay.com
           from: ${{ secrets.EMAIL_USERNAME }}
-          # cc: princy.rajkumar@parentpay.com  # temporarily excluded
+          # cc: princy.rajkumar@parentpay.com
 
       - name: Upload merged test results artifact
         if: always()
@@ -995,10 +886,9 @@ jobs:
   # branch (dashboard + AI artifacts) is deployed in one shot.
   # Uses always() so a failing ai-intelligence never blocks deploy.
   # =========================================================================
+
   Deploy-to-GitHub-Pages:
-    name: Deploy to GitHub Pages
-    needs: [merge-reports, ai-intelligence]
-    if: ${{ always() && needs.merge-reports.result != 'skipped' }}
+    needs: merge-reports
     permissions:
       pages: write
       id-token: write
@@ -1007,49 +897,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout gh-pages
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
-
-      - name: Diagnose Pages artifact size and largest content
-        run: |
-          set -e
-          ROOT="published-reports"
-          if [ ! -d "$ROOT" ]; then
-            echo "::error::Pages root '$ROOT' not found"
-            exit 1
-          fi
-
-          TOTAL_BYTES=$(du -sb "$ROOT" | awk '{print $1}')
-          TOTAL_GB=$(awk "BEGIN {printf \"%.3f\", $TOTAL_BYTES/1024/1024/1024}")
-          echo "Pages artifact size: ${TOTAL_BYTES} bytes (${TOTAL_GB} GB)"
-
-          echo "Top 20 largest directories under $ROOT:"
-          du -sb "$ROOT"/* 2>/dev/null | sort -nr | head -20 || true
-
-          echo "Top 20 largest files under $ROOT:"
-          find "$ROOT" -type f -printf "%s %p\n" | sort -nr | head -20 || true
-
-          if [ "$TOTAL_BYTES" -gt 1073741824 ]; then
-            echo "::warning::Pages artifact exceeds 1GB (${TOTAL_GB} GB)"
-          fi
-          if [ "$TOTAL_BYTES" -gt 3221225472 ]; then
-            echo "::warning::Pages artifact exceeds 3GB (${TOTAL_GB} GB)"
-          fi
-          if [ "$TOTAL_BYTES" -gt 5368709120 ]; then
-            echo "::warning::Pages artifact exceeds 5GB (${TOTAL_GB} GB)"
-          fi
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          name: github-pages
-          path: published-reports/
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
