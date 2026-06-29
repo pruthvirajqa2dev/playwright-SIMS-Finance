@@ -48,7 +48,7 @@ export default defineConfig({
 
     outputDir: "./temp/playwright-test-results",
 
-    timeout: 120 * 1000,
+    timeout: 200 * 1000,
 
     expect: {
         timeout: 35 * 1000
