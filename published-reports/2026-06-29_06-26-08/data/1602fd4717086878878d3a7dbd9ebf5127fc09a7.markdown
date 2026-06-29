@@ -1,0 +1,393 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Post-Deployment-Tests/PostChecksTests.spec.ts >> Postchecks on environment:UAT >> NML510 - Trial Balance Report @shard1
+- Location: src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:316:13
+
+# Error details
+
+```
+Error: expect(locator).toBeVisible() failed
+
+Locator: locator('*[id^=ui-id]').locator('text="Background Processing"').first()
+Expected: visible
+Timeout: 35000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" with timeout 35000ms
+  - waiting for locator('*[id^=ui-id]').locator('text="Background Processing"').first()
+
+```
+
+```yaml
+- text: 
+- heading "NML510 - Trial Balance Report" [level=2]
+- heading "SIMS Finance Demo Site 130" [level=3]
+- text: Finance Director
+- button "Quick Launch"
+- button "Spaces"
+- button "Recent History"
+- button "Favourites"
+- text:  
+- button "Options"
+- heading "Submission Parameters" [level=1]
+- table:
+  - rowgroup:
+    - row "School ID 000001 Show Lookup Select Green Abbey School":
+      - cell "School ID"
+      - cell "000001 Show Lookup Select Green Abbey School":
+        - textbox "School ID":
+          - /placeholder: ""
+          - text: "000001"
+        - button "Show Lookup": 
+        - button "Select"
+        - text: Green Abbey School
+- table:
+  - rowgroup:
+    - row "Trial Balance Year 2425 Show Lookup Mandatory":
+      - cell "Trial Balance Year"
+      - cell "2425 Show Lookup Mandatory":
+        - textbox "Trial Balance Year":
+          - /placeholder: ""
+          - text: "2425"
+        - button "Show Lookup": 
+        - text: 
+    - row "Up to Which Period 02 Show Lookup Mandatory":
+      - cell "Up to Which Period"
+      - cell "02 Show Lookup Mandatory":
+        - textbox "Up to Which Period":
+          - /placeholder: ""
+          - text: "02"
+        - button "Show Lookup": 
+        - text: 
+- heading "Sequence" [level=1]
+- table:
+  - rowgroup:
+    - row "Sequence (Cost Centre/Ledger) School ID/Cost Centre":
+      - cell "Sequence (Cost Centre/Ledger)"
+      - cell "School ID/Cost Centre":
+        - combobox "Sequence (Cost Centre/Ledger)":
+          - option "School ID/Cost Centre" [selected]
+          - option "School ID/Ledger"
+- heading "Account Codes" [level=1]
+- table:
+  - rowgroup:
+    - row "From GL Code Show Lookup":
+      - cell "From GL Code"
+      - cell "Show Lookup":
+        - textbox "From GL Code"
+        - button "Show Lookup": 
+    - row "To GL Code ZZZZZ/999999-99 Show Lookup":
+      - cell "To GL Code"
+      - cell "ZZZZZ/999999-99 Show Lookup":
+        - textbox "To GL Code":
+          - /placeholder: ""
+          - text: ZZZZZ/999999-99
+        - button "Show Lookup": 
+    - row "Cash /Accrual Data Sets Accrual":
+      - cell "Cash /Accrual Data Sets"
+      - cell "Accrual":
+        - combobox "Cash /Accrual Data Sets" [disabled]:
+          - option "Accrual" [selected]
+    - row "Currency ALL":
+      - cell "Currency"
+      - cell "ALL":
+        - combobox "Currency" [disabled]:
+          - option "ALL" [selected]
+- table:
+  - rowgroup:
+    - row:
+      - cell:
+        - table:
+          - rowgroup
+      - cell:
+        - table:
+          - rowgroup
+- table:
+  - rowgroup:
+    - row "Submit":
+      - cell "Submit":
+        - button "Submit"
+- status
+- dialog "Job Processing":
+  - text: Job Processing
+  - button " Close"
+  - table:
+    - rowgroup:
+      - row "NML510 - Trial Balance Report":
+        - cell "NML510 - Trial Balance Report"
+  - tablist:
+    - tab "Submit"
+    - tabpanel:
+      - heading "Details" [level=1]
+      - table:
+        - rowgroup:
+          - row "Queue Default Concurrent Queue Mandatory":
+            - cell "Queue"
+            - cell "Default Concurrent Queue Mandatory":
+              - combobox "Queue":
+                - option "Default Concurrent Queue" [selected]
+                - option "ICE Queue"
+                - option "Real Time Updates Sequential Queue"
+                - option "RSS Migrations Queue"
+                - option "SLS Allocations Queue"
+              - text: 
+          - row "Date 29/06/2026 Date Picker Mandatory":
+            - cell "Date"
+            - cell "29/06/2026 Date Picker Mandatory":
+              - textbox "Date": 29/06/2026
+              - button "Date Picker": 
+              - text: 
+          - row "Time 07:22 Mandatory":
+            - cell "Time"
+            - cell "07:22 Mandatory":
+              - textbox "Time": 07:22
+              - text: 
+      - heading "Email On Completion" [level=1]
+      - table:
+        - rowgroup:
+          - row "Send Email":
+            - cell "Send Email"
+            - cell "Send Email":
+              - checkbox "Send Email": 
+          - row "To Address Pruthviraj.Pardeshi@parentpay.com":
+            - cell "To Address"
+            - cell "Pruthviraj.Pardeshi@parentpay.com":
+              - textbox "To Address": Pruthviraj.Pardeshi@parentpay.com
+    - tab "Schedule"
+    - tab "Add To Batch"
+  - table:
+    - rowgroup:
+      - row "OK Close":
+        - cell "OK Close":
+          - button "OK"
+          - button "Close"
+  - text: 
+- alertdialog "Duplicate job found":
+  - text: Duplicate job found
+  - button " Close"
+  - table:
+    - rowgroup:
+      - row "An identical job is already submitted. Program ID 'NML510' Job key 'NML510000001' Would you like to continue to submit this job?":
+        - cell
+        - cell "An identical job is already submitted. Program ID 'NML510' Job key 'NML510000001' Would you like to continue to submit this job?"
+  - table:
+    - rowgroup:
+      - row "Yes No":
+        - cell "Yes No":
+          - button "Yes"
+          - button "No"
+```
+
+# Test source
+
+```ts
+  217 |         logger.info(`Fill text ${text} in locator ${locator}`);
+  218 |         await this.fill(locator, text);
+  219 |         //Verify Text filled
+  220 |         logger.info(`Expecting text ${text} in locator ${locator}`);
+  221 |         await this.expectElementToContainText(locator, text);
+  222 |     }
+  223 |     /**
+  224 |      *
+  225 |      * @param locator
+  226 |      * @param text
+  227 |      */
+  228 |     async fillTextAndVerifyValue(locator: string, value: string) {
+  229 |         // Fill text
+  230 |         logger.info(`Fill text ${value} in locator ${locator}`);
+  231 |         await this.fill(locator, value);
+  232 |         //Verify Text filled
+  233 |         logger.info(`Expecting value ${value} in locator ${locator}`);
+  234 |         await this.expectElementToContainText(locator, value);
+  235 |     }
+  236 |     /**
+  237 |      *
+  238 |      * @param locator
+  239 |      * @param value
+  240 |      */
+  241 |     async selectOption(locator: string, value: string) {
+  242 |         await this.page.locator(locator).selectOption(value);
+  243 |     }
+  244 | 
+  245 |     // Advanced element interaction methods
+  246 |     /**
+  247 |      *
+  248 |      * @param role
+  249 |      * @param options
+  250 |      * @returns
+  251 |      */
+  252 |     async getByRole(
+  253 |         role: any,
+  254 |         options?: { name?: string; hidden?: boolean; exact?: boolean }
+  255 |     ): Promise<Locator> {
+  256 |         return this.page.getByRole(role, options);
+  257 |     }
+  258 |     /**
+  259 |      *
+  260 |      * @param label
+  261 |      * @returns
+  262 |      */
+  263 |     async getByLabel(
+  264 |         label: string,
+  265 |         options?: { name?: string; hidden?: boolean; exact?: boolean }
+  266 |     ): Promise<Locator> {
+  267 |         return this.page.getByLabel(label, options);
+  268 |     }
+  269 |     /**
+  270 |      *
+  271 |      * @param placeholder
+  272 |      * @returns
+  273 |      */
+  274 |     async getByPlaceholder(placeholder: string): Promise<Locator> {
+  275 |         return this.page.getByPlaceholder(placeholder);
+  276 |     }
+  277 |     /**
+  278 |      *
+  279 |      * @param altText
+  280 |      * @returns Promise<Locator>
+  281 |      */
+  282 |     async getByAltText(altText: string): Promise<Locator> {
+  283 |         return this.page.getByAltText(altText);
+  284 |     }
+  285 |     /**
+  286 |      *This function returns located element using provided text
+  287 |      * @param text
+  288 |      * @returns
+  289 |      */
+  290 |     async getByText(text: string): Promise<Locator> {
+  291 |         return await this.page.getByText(text, { exact: true });
+  292 |     }
+  293 |     /**
+  294 |      * This function returns located element using provided heading
+  295 |      * @param heading
+  296 |      * @returns
+  297 |      */
+  298 |     async getByHeading(heading: string): Promise<Locator> {
+  299 |         return this.page.getByRole("heading", { name: heading, exact: true });
+  300 |     }
+  301 | 
+  302 |     async getByLocator(locator: string): Promise<Locator> {
+  303 |         return this.page.locator(locator);
+  304 |     }
+  305 |     // Assertions
+  306 |     /**
+  307 |      *
+  308 |      * @param locator
+  309 |      */
+  310 |     async expectElementToBeVisibleUsingLocator(
+  311 |         locator: string,
+  312 |         p0?: { timeout: number }
+  313 |     ) {
+  314 |         if (typeof p0 !== "undefined") {
+  315 |             await expect(this.page.locator(locator).first()).toBeVisible(p0);
+  316 |         } else {
+> 317 |             await expect(this.page.locator(locator).first()).toBeVisible();
+      |                                                              ^ Error: expect(locator).toBeVisible() failed
+  318 |         }
+  319 |     }
+  320 |     /**
+  321 |      *
+  322 |      * @param locator
+  323 |      */
+  324 |     async expectElementToBeHidden(locator: string) {
+  325 |         await expect(this.page.locator(locator)).toBeHidden();
+  326 |     }
+  327 |     /**
+  328 |      *
+  329 |      * @param locator
+  330 |      * @param text
+  331 |      */
+  332 |     async expectElementToHaveText(locator: string, text: string) {
+  333 |         await expect(
+  334 |             this.page.locator(locator).first(),
+  335 |             "Check if page element has text :" + text
+  336 |         ).toHaveText(text);
+  337 |     }
+  338 |     /**
+  339 |      *
+  340 |      * @param locator
+  341 |      * @param text
+  342 |      */
+  343 |     async expectElementToContainText(locator: string, text: string) {
+  344 |         await expect(
+  345 |             this.page.locator(locator).first(),
+  346 |             "Check if page element contains text :" + text
+  347 |         ).toContainText(text);
+  348 |     }
+  349 |     /**
+  350 |      *
+  351 |      * @param locator
+  352 |      * @param value
+  353 |      */
+  354 |     async expectElementToHaveValue(locator: string, value: string) {
+  355 |         await expect(
+  356 |             this.page.locator(locator).first(),
+  357 |             "Check if page element has value :" + value
+  358 |         ).toHaveValue(value);
+  359 |     }
+  360 |     /**
+  361 |      * This function checks if a provided attribute with provided value is present in the element locator by provided locator
+  362 |      * @param locator
+  363 |      * @param attr
+  364 |      * @param value
+  365 |      */
+  366 |     async expectElementToHaveAttributeWithValue(
+  367 |         locator: string,
+  368 |         attr: string,
+  369 |         value: string
+  370 |     ) {
+  371 |         await expect(
+  372 |             this.page.locator(locator).first(),
+  373 |             "Check if page element has attr :" + attr + " with value " + value
+  374 |         ).toHaveAttribute(attr, value);
+  375 |     }
+  376 |     /**
+  377 |      *
+  378 |      * @param locator
+  379 |      * @param value
+  380 |      */
+  381 |     async expectElementToContainValue(locator: string, value: string) {
+  382 |         const actualText = await this.page
+  383 |             .locator(locator)
+  384 |             .first()
+  385 |             .inputValue();
+  386 |         const actualValue = parseFloat(actualText);
+  387 |         const expectedValue = parseFloat(value);
+  388 |         console.log(
+  389 |             `Actual Value: ${actualValue} Expected Value: ${expectedValue}`
+  390 |         );
+  391 |         expect(
+  392 |             parseFloat(Math.abs(actualValue - expectedValue).toPrecision(2))
+  393 |         ).toBeLessThanOrEqual(0.01);
+  394 |     }
+  395 |     // Additional methods (as needed)
+  396 |     /**
+  397 |      *
+  398 |      * @param path
+  399 |      */
+  400 |     async screenshot(path: string) {
+  401 |         await this.page.screenshot({ path });
+  402 |     }
+  403 |     /**
+  404 |      *
+  405 |      * @returns
+  406 |      */
+  407 |     async getURL(): Promise<string> {
+  408 |         return this.page.url();
+  409 |     }
+  410 | 
+  411 |     /**
+  412 |      * This function verifies current URL is the provided URL
+  413 |      * @param url
+  414 |      */
+  415 |     async verifyURL(url: string) {
+  416 |         await expect(this.page.url()).toBe(url);
+  417 |     }
+```
