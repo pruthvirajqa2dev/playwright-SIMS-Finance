@@ -1,6 +1,19 @@
 {
   "entries": [
     {
+      "timestamp": "2026-06-30_11-12-22",
+      "runId": "28439132336",
+      "generatedAt": "2026-06-30T11:12:22.840Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 175,
+      "endpointCount": 43
+    },
+    {
       "timestamp": "2026-06-29_12-44-57",
       "runId": "28372083718",
       "generatedAt": "2026-06-29T12:44:57.796Z",
