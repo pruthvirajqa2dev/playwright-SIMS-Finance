@@ -1,0 +1,274 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Post-Deployment-Tests/PostChecksTests.spec.ts >> Postchecks on environment:UAT >> NML510 - Trial Balance Report @shard1
+- Location: src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:316:13
+
+# Error details
+
+```
+Test timeout of 200000ms exceeded.
+```
+
+```
+Error: locator.click: Test timeout of 200000ms exceeded.
+Call log:
+  - waiting for locator('#banner_navigation_navigate')
+    - waiting for" https://uat-v2.pecuniam-online.co.uk/auth/esr.elogin" navigation to finish...
+    - navigated to "https://uat-v2.pecuniam-online.co.uk/auth/esr.elogin"
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e5]:
+      - img "Integra Centros Logo" [ref=e6]
+      - text:  
+      - generic [ref=e7]:
+        - generic [ref=e8]: Login
+        - generic [ref=e9]:
+          - generic [ref=e10]: Username
+          - generic [ref=e11]: 
+          - textbox "Please enter a valid username" [active] [ref=e12]
+        - generic [ref=e13]:
+          - generic [ref=e14]: Password
+          - generic [ref=e15]: 
+          - textbox "Please enter a valid password for the specified user account" [ref=e16]
+        - button "Login" [ref=e19] [cursor=pointer]
+      - generic [ref=e20]:
+        - link "Click here to change your password" [ref=e21] [cursor=pointer]:
+          - /url: javascript:showchangepwd();
+          - generic [ref=e22]: 
+          - text: Change Password
+        - link "Click here to read cookie policy" [ref=e23] [cursor=pointer]:
+          - /url: javascript:showCookieDisclaimer();
+          - generic [ref=e24]: 
+          - text: Cookie Usage
+        - link " Privacy" [ref=e25] [cursor=pointer]:
+          - /url: javascript:showGDPR();
+          - generic [ref=e26]: 
+          - text: Privacy
+    - generic [ref=e28]: © 2026 AdvT Limited
+  - generic [ref=e29]:
+    - heading "System Messages" [level=1] [ref=e30]
+    - generic [ref=e31]:
+      - heading " UAT" [level=1] [ref=e32]:
+        - generic [ref=e33]: 
+        - text: UAT
+      - heading "Version 3.10.0" [level=2] [ref=e34]
+```
+
+# Test source
+
+```ts
+  7   | /**
+  8   |  * Represents the HomePage class which extends the BasePage.
+  9   |  * This class contains locators and actions specific to the Home Page of the application.
+  10  |  *
+  11  |  * @class HomePage
+  12  |  * @extends {BasePage}
+  13  |  *
+  14  |  * @property {string} pageHeadingText - The text for the page heading.
+  15  |  * @property {string} newsMessageHeadingText - The text for the news message heading.
+  16  |  * @property {string} userMessageHeadingText - The text for the user message heading.
+  17  |  * @property {string} tasksHeadingText - The text for the tasks heading.
+  18  |  * @property {string} hamburgerMenuBtnLocator - The locator for the hamburger menu button.
+  19  |  * @property {string} recentHistorySearchInputLocator - The locator for the recent history search input.
+  20  |  * @property {string} searchResultLocator - The locator for the search result.
+  21  |  * @property {string} profileMenuDropdownLocator - The locator for the profile menu dropdown.
+  22  |  * @property {string} logoutLabel - The label text for the logout option.
+  23  |  * @property {string} menusLocator - The locator for the menus.
+  24  |  * @property {string} filterInputLocator - The locator for the filter input.
+  25  |  * @property {string} filterBtnLocator - The locator for the filter button.
+  26  |  * @property {string} filteredMenuItemLocator - The locator for the filtered menu item.
+  27  |  * @property {string} helpLinkLocator - The locator for the help link.
+  28  |  *
+  29  |  * @method expectPageElementsVisibilityOnLoad - Verifies key page elements are visible after loading.
+  30  |  * @method clickHamburgerMenuButton - Clicks on the hamburger menu button.
+  31  |  * @method goToScreenUsingMenusOption - Navigates to a screen using the menus option.
+  32  |  * @param {string} screen - The screen to navigate to.
+  33  |  * @method createDynamicScreenNameRegex - Creates a dynamic regex for screen names.
+  34  |  * @param {string} baseText - The base text to create the regex from.
+  35  |  * @returns {RegExp} - The generated regex.
+  36  |  * @method clickScreenLocator - Clicks on a screen locator.
+  37  |  * @param {string} screen - The screen to click on.
+  38  |  * @method fillSearchOptions - Enters search criteria into the search textbox.
+  39  |  * @param {string} search - The search criteria.
+  40  |  * @method clickSearchOptionInList - Clicks the first search option displayed on the search list.
+  41  |  * @method clickProfileMenu - Clicks on the profile menu.
+  42  |  * @method clickLogoutLabel - Clicks on the logout label.
+  43  |  * @method logout - Logs out the user.
+  44  |  * @method verifyVisibilityYesNoButton - Verifies the visibility of Yes and No buttons.
+  45  |  * @method clickyesBtnLocator - Clicks the Yes button.
+  46  |  * @method clickHelpLink - Clicks on the help link.
+  47  |  */
+  48  | export default class HomePage extends BasePage {
+  49  |     //Locators
+  50  |     private readonly pageHeadingText = "SIMS Finance";
+  51  |     private readonly newsMessageHeadingText = "News Messages";
+  52  |     private readonly userMessageHeadingText = "User Messages";
+  53  |     private readonly tasksHeadingText = "Tasks";
+  54  |     private readonly hamburgerMenuBtnLocator = "#banner_navigation_navigate";
+  55  |     private readonly recentHistorySearchInputLocator =
+  56  |         "input[type='text']:visible";
+  57  |     private readonly searchResultLocator = ".ui-menu-item-wrapper";
+  58  |     private readonly profileMenuDropdownLocator = "#esr_user_profile_menu";
+  59  |     private readonly logoutLabel = "Click to Logout";
+  60  |     private readonly menusLocator = "[name*='_esr_nav_ESR_NAV_PANE']";
+  61  |     private readonly filterInputLocator =
+  62  |         "input[placeholder='type here to filter...']";
+  63  |     private readonly filterBtnLocator = "#esr_tree_filter_button";
+  64  |     private readonly filteredMenuItemLocator =
+  65  |         "div.esr_tree_selectable[name*=_esr_nav_ESR_MENUS_TREE_]";
+  66  |     private readonly helpLinkLocator = "[aria-label=Help]";
+  67  |     private readonly recentHistoryMenuOptionLocator =
+  68  |         "[aria-label='Your Last 20 Accessed Options']";
+  69  |     //Constructor
+  70  | 
+  71  |     //Actions
+  72  |     /**
+  73  |      * This methods verifies key page elements are visible after loading
+  74  |      */
+  75  |     async expectPageElementsVisibilityOnLoad() {
+  76  |         //Page Heading
+  77  |         const pageHeading = this.page.getByRole("heading", {
+  78  |             name: this.pageHeadingText,
+  79  |             exact: true
+  80  |         });
+  81  |         await expect(pageHeading).toBeVisible();
+  82  | 
+  83  |         //News message heading
+  84  |         const newsMessageHeading = this.page.getByRole("heading", {
+  85  |             name: this.newsMessageHeadingText,
+  86  |             exact: true
+  87  |         });
+  88  |         expect(newsMessageHeading).toBeVisible();
+  89  | 
+  90  |         //User message heading
+  91  |         const userMessageHeading = this.page.getByRole("heading", {
+  92  |             name: this.userMessageHeadingText,
+  93  |             exact: true
+  94  |         });
+  95  |         expect(userMessageHeading).toBeVisible();
+  96  | 
+  97  |         //Task heading
+  98  |         const tasksHeading = this.page
+  99  |             .locator("h3")
+  100 |             .filter({ hasText: this.tasksHeadingText });
+  101 |         expect(tasksHeading).toBeVisible();
+  102 |     }
+  103 |     /**
+  104 |      * This function clicks on Hamburger menu button
+  105 |      */
+  106 |     async clickHamburgerMenuButton() {
+> 107 |         await this.page.locator(this.hamburgerMenuBtnLocator).click();
+      |                                                               ^ Error: locator.click: Test timeout of 200000ms exceeded.
+  108 |     }
+  109 |     /**
+  110 |      *@param screen
+  111 |      */
+  112 |     async goToScreenUsingMenusOption(screen: string) {
+  113 |         await this.click(this.menusLocator);
+  114 |         await this.fill(this.filterInputLocator, screen);
+  115 |         await this.click(this.filterBtnLocator);
+  116 |         await this.clickScreenLocator(screen);
+  117 |     }
+  118 |     /**
+  119 |      * Navigates to a specified screen using the recent history menu.
+  120 |      *
+  121 |      * @param screen - The name of the screen to navigate to.
+  122 |      *
+  123 |      * This method performs the following steps:
+  124 |      * 1. Clicks on the recent history menu option.
+  125 |      * 2. Fills the search options with the provided screen name.
+  126 |      * 3. Clicks on the locator corresponding to the specified screen.
+  127 |      *
+  128 |      * Ensure that the locators and screen name are correctly configured before calling this method.
+  129 |      */
+  130 |     async goToScreenUsingRecentHistory(screen: string) {
+  131 |         await this.click(this.recentHistoryMenuOptionLocator);
+  132 |         await this.fillSearchOptions(screen);
+  133 |         await this.clickSearchOptionInList();
+  134 |     }
+  135 |     /**
+  136 |      *
+  137 |      * @param baseText
+  138 |      * @returns
+  139 |      */
+  140 |     createDynamicScreenNameRegex(baseText: string): RegExp {
+  141 |         // Escape any special characters in baseText, then build the regex
+  142 |         const escapedBaseText = baseText.replace(
+  143 |             /[.*+?^=!:${}()|\[\]\/\\]/g,
+  144 |             "\\$&"
+  145 |         );
+  146 |         const regexPattern = `${escapedBaseText} \\s*-?\\s*.*`; // Match anything after baseText
+  147 |         return new RegExp(regexPattern, "i"); // Case-insensitive regex
+  148 |     }
+  149 |     /**
+  150 |      *
+  151 |      * @param screen
+  152 |      */
+  153 |     async clickScreenLocator(screen: string) {
+  154 |         await this.page
+  155 |             .locator(this.filteredMenuItemLocator)
+  156 |             .filter({ hasText: this.createDynamicScreenNameRegex(screen) })
+  157 |             .first()
+  158 |             .click();
+  159 |     }
+  160 |     /**
+  161 |      * This function enters search criteria into the search textbox
+  162 |      * @param search ***UNUSED***
+  163 |      */
+  164 |     async fillSearchOptions(search: string) {
+  165 |         await this.page
+  166 |             .locator(this.recentHistorySearchInputLocator)
+  167 |             .fill(search);
+  168 |     }
+  169 |     /**
+  170 |      * This function clicks first search option displayed on the search list ***UNUSED***
+  171 |      */
+  172 |     async clickSearchOptionInList() {
+  173 |         await this.page.locator(this.searchResultLocator).first().click();
+  174 |     }
+  175 |     /**
+  176 |      *This function clicks on profile menu
+  177 |      */
+  178 |     async clickProfileMenu() {
+  179 |         await this.page
+  180 |             .locator(this.profileMenuDropdownLocator)
+  181 |             .click()
+  182 |             .catch((error) => {
+  183 |                 console.error(`Error clicking profile menu dropdown: ${error}`);
+  184 |                 throw error;
+  185 |             });
+  186 |     }
+  187 |     /**
+  188 |      *
+  189 |      */
+  190 |     async clickLogoutLabel() {
+  191 |         await this.page
+  192 |             .getByLabel(this.logoutLabel)
+  193 |             .click()
+  194 |             .catch((error) => {
+  195 |                 console.error(`Error clicking logout label: ${error}`);
+  196 |                 throw error;
+  197 |             });
+  198 |     }
+  199 |     /**
+  200 |      *
+  201 |      */
+  202 |     async logout() {
+  203 |         await this.clickProfileMenu();
+  204 |         await this.clickLogoutLabel();
+  205 |     }
+  206 |     /**
+  207 |      *
+```
