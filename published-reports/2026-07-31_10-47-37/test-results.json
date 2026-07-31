@@ -1,0 +1,1207 @@
+{
+  "config": {
+    "configFile": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/playwright.config.ts",
+    "rootDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/utils/globalSetup.ts",
+    "globalTeardown": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/utils/globalTeardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 2,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+        "commitHash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+        "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/30624095881"
+      },
+      "gitCommit": {
+        "shortHash": "9c54f80",
+        "hash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+        "subject": "Update test history with run from 2026-07-30_10-33-47",
+        "body": "Update test history with run from 2026-07-30_10-33-47\n",
+        "author": {
+          "name": "pruthvirajqa2dev",
+          "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+          "time": 1785407628000
+        },
+        "committer": {
+          "name": "pruthvirajqa2dev",
+          "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+          "time": 1785407628000
+        },
+        "branch": "Main"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "commitHash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/30624095881"
+          },
+          "gitCommit": {
+            "shortHash": "9c54f80",
+            "hash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "subject": "Update test history with run from 2026-07-30_10-33-47",
+            "body": "Update test history with run from 2026-07-30_10-33-47\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "auth",
+        "name": "auth",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Auth/auth.spec.ts"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "commitHash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/30624095881"
+          },
+          "gitCommit": {
+            "shortHash": "9c54f80",
+            "hash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "subject": "Update test history with run from 2026-07-30_10-33-47",
+            "body": "Update test history with run from 2026-07-30_10-33-47\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium-shard1",
+        "name": "chromium-shard1",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Post-Deployment-Tests/PostChecksTests.spec.ts"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "commitHash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/30624095881"
+          },
+          "gitCommit": {
+            "shortHash": "9c54f80",
+            "hash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "subject": "Update test history with run from 2026-07-30_10-33-47",
+            "body": "Update test history with run from 2026-07-30_10-33-47\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium-shard2",
+        "name": "chromium-shard2",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Post-Deployment-Tests/PostChecksTests.spec.ts"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "commitHash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/30624095881"
+          },
+          "gitCommit": {
+            "shortHash": "9c54f80",
+            "hash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "subject": "Update test history with run from 2026-07-30_10-33-47",
+            "body": "Update test history with run from 2026-07-30_10-33-47\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "purchase-orders",
+        "name": "purchase-orders",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Purchase Order/**"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "commitHash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/30624095881"
+          },
+          "gitCommit": {
+            "shortHash": "9c54f80",
+            "hash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "subject": "Update test history with run from 2026-07-30_10-33-47",
+            "body": "Update test history with run from 2026-07-30_10-33-47\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "gl-code-extractor",
+        "name": "gl-code-extractor",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/glCodeExtractor.spec.ts"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "commitHash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/30624095881"
+          },
+          "gitCommit": {
+            "shortHash": "9c54f80",
+            "hash": "9c54f80cb1f4cd584b38b30381c6b49928ad479e",
+            "subject": "Update test history with run from 2026-07-30_10-33-47",
+            "body": "Update test history with run from 2026-07-30_10-33-47\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1785407628000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "prl300",
+        "name": "prl300",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/PRL300QInvoicesCreditNote/**"
+        ],
+        "timeout": 200000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "blob",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Postchecks on environment:UAT",
+          "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+          "line": 101,
+          "column": 6,
+          "specs": [
+            {
+              "title": "RSS570 - Crystal Report @shard1",
+              "ok": true,
+              "tags": [
+                "shard1"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "RSS570 - Crystal Report",
+                      "description": "This test is for checking if RSS570 Crystal Report is generated for given criteria"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard1",
+                  "projectName": "chromium-shard1",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 34688,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-0 | ENABLE_NETWORK_CAPTURE=(not set) | capture=false\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "Zip Filename: RSS570-5096.zip\n"
+                        },
+                        {
+                          "text": "Into unzip file\n"
+                        },
+                        {
+                          "text": "directory:/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/RSS570-5096.zip\n"
+                        },
+                        {
+                          "text": "Unzipping in: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1785494348715\n"
+                        },
+                        {
+                          "text": "[2026-07-31T10:39:08.759Z] INFO: Looking up latest file name using directory: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip*/*.PDF\n"
+                        },
+                        {
+                          "text": "[2026-07-31T10:39:08.768Z] INFO: Returning /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1785494348715/RSS570_01.PDF from directory\n"
+                        },
+                        {
+                          "text": "PDF File name is: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1785494348715/RSS570_01.PDF\n"
+                        },
+                        {
+                          "text": "PDF data from /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1785494348715/RSS570_01.PDF : \n\nOutstanding Accruals\nUsername:\nFINDIR99D130\n11:38 am\nPrint Date:\n31-July-2026\nSorted By:\nS\n(N = Nominal Code;   S = Supplier)\nRSS570\nCurrency:\n0\n(0= Base 1;   1 = Base 2;   2 = Base 3)\nSelection Criteria\nCompany ID:\n000001\nGreen Abbey School\nOrder No\n/Line\nReceived\nQuantity\nOutstanding\nGRNI\nQty\nOutstanding\nGRNI Value \n(inc. NR VAT)\nGRN/Return\nNo/Line\nInvoiced\nQuantity\nTrx.\nType\nGRN/Return\nDate\nReceived\nValue\nInvoiced\nValue\nNon Rec.\nVAT\nNominal Code\n[RSS570]\nOutstanding Accruals Print Date: \n31-Jul-2026\nFINDIR99D130\nLn.\nTy.\nAccrual Code\n0014153060031\nNominal Code\n00005\nSupplier Code\n9000031070900\nGRN03-Dec-2025 9.100014153060031 5,101.10 0.00 0.00 5,101.10\n//\n 9.10 0.00000000010001000000009001N\n00005 0.00 5,101.10\n 9.10\nSupplier Code\nTotals for\nAccrual Code\n3000181020001\nNominal Code\n00009\nSupplier Code\n9000031070900\nGRN31-Jul-2024 2.003000181020001 800.84 0.00 0.00 800.84\n//\n 2.00 0.00000000002001000000003001N\n00009 0.00 800.84\n 2.00\nSupplier Code\nTotals for\nAccrual Code\n9000047010000\nNominal Code\n00013\nSupplier Code\n9000031070900\nGRN31-Jul-2024 1.009000047010000 6,589.32 0.00 0.00 6,589.32\n//\n 1.00 0.00000000005001000000004001N\nGRN31-Jul-2024 1.009000047010000 6,589.33 0.00 0.00 6,589.33\n//\n 1.00 0.00000000004001000000004001N\n00013 0.00 13,178.65\n 2.00\nSupplier Code\nTotals for\nPage 1 of 2\n[RSS570]\n\nOrder No\n/Line\nReceived\nQuantity\nOutstanding\nGRNI\nQty\nOutstanding\nGRNI Value \n(inc. NR VAT)\nGRN/Return\nNo/Line\nInvoiced\nQuantity\nTrx.\nType\nGRN/Return\nDate\nReceived\nValue\nInvoiced\nValue\nNon Rec.\nVAT\nNominal Code\n[RSS570]\nOutstanding Accruals Print Date: \n31-Jul-2026\nFINDIR99D130\nLn.\nTy.\nAccrual Code\n0010153020031\nNominal Code\n01001\nSupplier Code\n9000031070900\nGRN02-May-2025 2.000010153020031 912.00 0.00 0.00 912.00\n//\n 2.00 0.00000000007001000000014001N\n01001 0.00 912.00\n 2.00\nSupplier Code\nTotals for\n 15.10 19,992.59 0.00\nTotals forAccrual Code   9000031070900  \nReport Totals\n 15.10 19,992.59 0.00\nPage 2 of 2\n[RSS570]\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1525
+                        },
+                        {
+                          "title": "Go to the screen RSS570",
+                          "duration": 7899
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 315
+                        },
+                        {
+                          "title": "Enter school Id, sort option and check currency checkbox",
+                          "duration": 2947
+                        },
+                        {
+                          "title": "Click on submit button",
+                          "duration": 791
+                        },
+                        {
+                          "title": "Submit job on job processing dialog and wait for green icon on Background processing dialog",
+                          "duration": 583
+                        },
+                        {
+                          "title": "Wait for green icon on Background processing dialog",
+                          "duration": 16935
+                        },
+                        {
+                          "title": "Verify PDF is generated in RSS570",
+                          "duration": 21
+                        },
+                        {
+                          "title": "Click on PDF report",
+                          "duration": 3508
+                        }
+                      ],
+                      "startTime": "2026-07-31T10:38:34.055Z",
+                      "annotations": [
+                        {
+                          "type": "RSS570 - Crystal Report",
+                          "description": "This test is for checking if RSS570 Crystal Report is generated for given criteria"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-59530c6179447b2eb31f",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 237,
+              "column": 13
+            },
+            {
+              "title": "NML510 - Trial Balance Report @shard1",
+              "ok": true,
+              "tags": [
+                "shard1"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "NML510 - Trial Balance Report",
+                      "description": "This test is for checking if NML510 Trial Balance Report is generated for given criteria"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard1",
+                  "projectName": "chromium-shard1",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 78175,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "Zip Filename: NML510-5097.zip\n"
+                        },
+                        {
+                          "text": "Into unzip file\n"
+                        },
+                        {
+                          "text": "directory:/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/NML510-5097.zip\n"
+                        },
+                        {
+                          "text": "Unzipping in: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1785494426468\n"
+                        },
+                        {
+                          "text": "[2026-07-31T10:40:26.483Z] INFO: Looking up latest file name using directory: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip*/*.PDF\n"
+                        },
+                        {
+                          "text": "[2026-07-31T10:40:26.489Z] INFO: Returning /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1785494426468/NML510_01.PDF from directory\n"
+                        },
+                        {
+                          "text": "PDF File name is: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1785494426468/NML510_01.PDF\n"
+                        },
+                        {
+                          "text": "PDF data from /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1785494426468/NML510_01.PDF : \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.002,942.900.000.002,942.9000001/510100-01 ESFA Grants GAG(not stud supp/trust grant)\n0.002,942.900.000.002,942.9000001/510100\n0.00423.000.000.00423.0000001/510110-01 ESFA Grants GAG(student support)\n0.00423.000.000.00423.0000001/510110\n0.000.000.000.000.0000001/510120-01 ESFA Grants GAG(start up grants)\n0.000.000.000.000.0000001/510120\n0.0039,064.720.000.0039,064.7200001/510140-01 ESFA Grants Pupil number adjustment\n0.0039,064.720.000.0039,064.7200001/510140\n0.000.000.000.000.0000001/510150-01 ESFA Grants Rates reclaim\n0.000.000.000.000.0000001/510150\n0.000.000.000.000.0000001/510250-01 ESFA Grants Universal Inf Free School Meal\n0.000.000.000.000.0000001/510250\n0.00-3,000.000.000.00-3,000.0000001/510300-01 ESFA Grants Insurance top up\n0.00-3,000.000.000.00-3,000.0000001/510300\n0.000.000.000.000.0000001/510350-01 ESFA Grants Sponsor capacity grant\n0.000.000.000.000.0000001/510350\n0.000.000.000.000.0000001/510400-01 ESFA Grants PE&Sports grant\n0.000.000.000.000.0000001/510400\n0.000.000.000.000.0000001/510450-01 ESFA Grants Year 7 catch up grant\n0.000.000.000.000.0000001/510450\n \n0.0039,430.620.000.0039,430.6200001\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 1\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.00-3,750.000.000.00-3,750.0000002/510200-01 Pupil Premium Pupil Premium grant\n0.00-3,750.000.000.00-3,750.0000002/510200\n \n0.00-3,750.000.000.00-3,750.0000002\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 2\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.0010,895.270.000.0010,895.2700011/510950-01 NCTL Grants Other DfE revenue grants\n0.0010,895.270.000.0010,895.2700011/510950\n0.000.000.000.000.0000011/515100-01 NCTL Grants Standards&Testing Agency\n0.000.000.000.000.0000011/515100\n0.000.000.000.000.0000011/515150-01 NCTL Grants Equalities&Human Rights Comm\n0.000.000.000.000.0000011/515150\n0.00-300.000.000.00-300.0000011/515200-01 NCTL Grants Off of Childrens Commissioner\n0.00-300.000.000.00-300.0000011/515200\n0.000.000.000.000.0000011/515250-01 NCTL Grants Student Loans Company\n0.000.000.000.000.0000011/515250\n0.000.000.000.000.0000011/515300-01 NCTL Grants Office for Students\n0.000.000.000.000.0000011/515300\n0.000.000.000.000.0000011/515350-01 NCTL Grants Engineering Contraction ITB\n0.000.000.000.000.0000011/515350\n0.000.000.000.000.0000011/515400-01 NCTL Grants Construction ITB\n0.000.000.000.000.0000011/515400\n \n0.0010,595.270.000.0010,595.2700011\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 3\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.006,138.130.000.006,138.1300021/520100-01 LA Grants LA-SEN\n0.006,138.130.000.006,138.1300021/520100\n0.000.000.000.000.0000021/520150-01 LA Grants LA-Early Years\n0.000.000.000.000.0000021/520150\n0.000.000.000.000.0000021/520200-01 LA Grants LA-Other grants\n0.000.000.000.000.0000021/520200\n \n0.006,138.130.000.006,138.1300021\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 4\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.005,819.710.000.005,819.7100101/530200-31 Catering Catering inc(visitors&staff)\n0.005,819.710.000.005,819.7100101/530200\n \n0.005,819.710.000.005,819.7100101\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 5\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.001,289.280.000.001,289.2800121/530100-31 Lettings Hire of facilities income\n0.001,289.280.000.001,289.2800121/530100\n \n0.001,289.280.000.001,289.2800121\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 6\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.009,419.410.000.009,419.4100141/530600-31 Music Lessons Income from music\n0.009,419.410.000.009,419.4100141/530600\n \n0.009,419.410.000.009,419.4100141\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 7\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.004,828.040.000.004,828.0400151/530700-31 Services of Staff Other trading income\n0.004,828.040.000.004,828.0400151/530700\n \n0.004,828.040.000.004,828.0400151\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 8\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0000161/580300-31 Donations Revenue Donation-general\n0.000.000.000.000.0000161/580300\n \n0.000.000.000.000.0000161\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 9\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0000601/550250-51 Capital Funding Devolved Formula Cap\n0.000.000.000.000.0000601/550250\n0.000.000.000.000.0000601/550300-51 Capital Funding DfE Managed Free School\n0.000.000.000.000.0000601/550300\n0.000.000.000.000.0000601/550350-51 Capital Funding Building School for the Future\n0.000.000.000.000.0000601/550350\n0.000.000.000.000.0000601/550400-51 Capital Funding School Sponsorship Development\n0.000.000.000.000.0000601/550400\n0.000.000.000.000.0000601/550450-51 Capital Funding Other DfE Cap grants\n0.000.000.000.000.0000601/550450\n0.000.000.000.000.0000601/555100-51 Capital Funding Cap:Standards&Testing Agency\n0.000.000.000.000.0000601/555100\n0.000.000.000.000.0000601/555150-51 Capital Funding Cap:Equalities&Hum Rights Comm\n0.000.000.000.000.0000601/555150\n0.000.000.000.000.0000601/555200-51 Capital Funding Cap:Off of Child Commissioner\n0.000.000.000.000.0000601/555200\n0.000.000.000.000.0000601/555250-51 Capital Funding Cap:Student Loans Company\n0.000.000.000.000.0000601/555250\n0.000.000.000.000.0000601/555300-51 Capital Funding Cap:Office for Students\n0.000.000.000.000.0000601/555300\n0.000.000.000.000.0000601/555350-51 Capital Funding Cap:Engineer Contraction ITB\n0.000.000.000.000.0000601/555350\n0.000.000.000.000.0000601/555400-51 Capital Funding Cap:Construction ITB\n0.000.000.000.000.0000601/555400\n0.000.000.000.000.0000601/560100-51 Capital Funding CapInc:LA Cap grants\n0.000.000.000.000.0000601/560100\n0.000.000.000.000.0000601/560200-51 Capital Funding CapInc:Governmnt grant-not DfE\n0.000.000.000.000.0000601/560200\n0.000.000.000.000.0000601/560300-51 Capital Funding CapInc:Non-govt Cap grants\n0.000.000.000.000.0000601/560300\n \n0.000.000.000.000.0000601\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 10\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0000901/580100-51 Funds Inherited Donated FA-DfE\n0.000.000.000.000.0000901/580100\n0.000.000.000.000.0000901/580200-51 Funds Inherited Donated intangible assets\n0.000.000.000.000.0000901/580200\n0.000.000.000.000.0000901/580300-31 Funds Inherited Revenue Donation-general\n0.000.000.000.000.0000901/580300\n \n0.000.000.000.000.0000901\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 11\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0010001/610100-01 Teachers Salaries Leadership:Salaries\n0.000.000.000.000.0010001/610100\n0.000.000.000.000.0010001/610200-01 Teachers Salaries Leadership:Employers NI\n0.000.000.000.000.0010001/610200\n0.000.000.000.000.0010001/610300-01 Teachers Salaries Leadership:Pension contrb\n0.000.000.000.000.0010001/610300\n0.000.000.000.000.0010001/612100-01 Teachers Salaries Teachers:Salaries\n0.000.000.000.000.0010001/612100\n0.000.000.000.000.0010001/612200-01 Teachers Salaries Teachers:Employers NI\n0.000.000.000.000.0010001/612200\n0.000.000.000.000.0010001/612300-01 Teachers Salaries Teachers:Pension contrb\n0.000.000.000.000.0010001/612300\n \n0.000.000.000.000.0010001\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 12\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.00312.550.000.00312.5510002/610100-01 Leadership Salaries Leadership:Salaries\n0.00312.550.000.00312.5510002/610100\n0.000.000.000.000.0010002/610200-01 Leadership Salaries Leadership:Employers NI\n0.000.000.000.000.0010002/610200\n0.000.000.000.000.0010002/610300-01 Leadership Salaries Leadership:Pension contrb\n0.000.000.000.000.0010002/610300\n \n0.00312.550.000.00312.5510002\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 13\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0010011/650450-01 Supply Staff Sals SplyStf:Tchr-ST cover-Salaries\n0.000.000.000.000.0010011/650450\n \n0.000.000.000.000.0010011\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 14\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0010021/615150-01 Ed Supp Salaries Teach Assist:Overtime\n0.000.000.000.000.0010021/615150\n0.000.000.000.000.0010021/615200-01 Ed Supp Salaries Teach Assist:Employers NI\n0.000.000.000.000.0010021/615200\n0.000.000.000.000.0010021/615300-01 Ed Supp Salaries Teach Assist:Pension contrb\n0.000.000.000.000.0010021/615300\n \n0.000.000.000.000.0010021\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 15\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0010101/625100-01 Admin Salaries Fin and Admin:Salaries\n0.000.000.000.000.0010101/625100\n0.000.000.000.000.0010101/625150-01 Admin Salaries Fin and Admin:Overtime\n0.000.000.000.000.0010101/625150\n0.000.000.000.000.0010101/625200-01 Admin Salaries Fin and Admin:Employers NI\n0.000.000.000.000.0010101/625200\n0.000.000.000.000.0010101/625300-01 Admin Salaries Fin and Admin:Pension contrb\n0.000.000.000.000.0010101/625300\n \n0.000.000.000.000.0010101\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 16\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0010201/627100-01 Premises Stff Sals Site Staff:Salaries\n0.000.000.000.000.0010201/627100\n0.000.000.000.000.0010201/627150-01 Premises Stff Sals Site Staff:Overtime\n0.000.000.000.000.0010201/627150\n0.000.000.000.000.0010201/627200-01 Premises Stff Sals Site Staff:Employers NI\n0.000.000.000.000.0010201/627200\n0.000.000.000.000.0010201/627300-01 Premises Stff Sals Site Staff:Pension contrb\n0.000.000.000.000.0010201/627300\n \n0.000.000.000.000.0010201\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 17\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0010251/632100-01 Catering Stff Sals Catering Staff:Salaries\n0.000.000.000.000.0010251/632100\n0.000.000.000.000.0010251/632150-01 Catering Stff Sals Catering Staff:Overtime\n0.000.000.000.000.0010251/632150\n0.000.000.000.000.0010251/632200-01 Catering Stff Sals Catering Staff:Employers NI\n0.000.000.000.000.0010251/632200\n0.000.000.000.000.0010251/632300-01 Catering Stff Sals Catering Staff:Pension contrb\n0.000.000.000.000.0010251/632300\n \n0.000.000.000.000.0010251\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 18\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.001,232.220.000.001,232.2210301/624100-01 Other Staff Sals OthDirStf:Salaries\n0.001,232.220.000.001,232.2210301/624100\n0.00250.550.000.00250.5510301/624200-01 Other Staff Sals OthDirStf:Employers NI\n0.00250.550.000.00250.5510301/624200\n0.001,005.050.000.001,005.0510301/624300-01 Other Staff Sals OthDirStf:Epension contrib\n0.001,005.050.000.001,005.0510301/624300\n0.000.000.000.000.0010301/647100-01 Other Staff Sals Other Staff:Salaries\n0.000.000.000.000.0010301/647100\n0.000.000.000.000.0010301/647150-01 Other Staff Sals Other Staff:Overtime\n0.000.000.000.000.0010301/647150\n0.000.000.000.000.0010301/647200-01 Other Staff Sals Other Staff:Employers NI\n0.000.000.000.000.0010301/647200\n0.000.000.000.000.0010301/647300-01 Other Staff Sals Other Staff:Pension contrb\n0.000.000.000.000.0010301/647300\n0.001,000.550.000.001,000.5510301/675480-01 Other Staff Sals Occupational Health\n0.001,000.550.000.001,000.5510301/675480\n0.000.000.000.000.0010301/870100-31 Other Staff Sals Cost of raise funds-pay\n0.000.000.000.000.0010301/870100\n \n0.003,488.370.000.003,488.3710301\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 19\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0010401/845150-01 Agency Staff Agency teaching stf short term\n0.000.000.000.000.0010401/845150\n0.000.000.000.000.0010401/845250-01 Agency Staff Agency support staff\n0.000.000.000.000.0010401/845250\n \n0.000.000.000.000.0010401\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 20\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0010501/675400-01 Staff Development Staff travel\n0.000.000.000.000.0010501/675400\n0.000.000.000.000.0010501/675650-01 Staff Development Staff training-teachers\n0.000.000.000.000.0010501/675650\n0.000.000.000.000.0010501/675670-01 Staff Development Staff training-support staff\n0.000.000.000.000.0010501/675670\n \n0.000.000.000.000.0010501\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 21\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.001,133.220.000.001,133.2220001/710100-01 Building Maint Building Repair and Mainten\n0.001,133.220.000.001,133.2220001/710100\n \n0.001,133.220.000.001,133.2220001\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 22\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0020011/760100-01 Grounds Maint Grounds Maintenance\n0.000.000.000.000.0020011/760100\n \n0.000.000.000.000.0020011\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 23\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0020101/720100-01 Utilities Gas\n0.000.000.000.000.0020101/720100\n0.000.000.000.000.0020101/720200-01 Utilities Oil\n0.000.000.000.000.0020101/720200\n0.000.000.000.000.0020101/720300-01 Utilities Electricity\n0.000.000.000.000.0020101/720300\n0.000.000.000.000.0020101/760150-01 Utilities Water and Sewerage\n0.000.000.000.000.0020101/760150\n \n0.000.000.000.000.0020101\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 24\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.002,233.110.000.002,233.1120201/730100-01 Cleaning Cleaning contracts\n0.002,233.110.000.002,233.1120201/730100\n0.000.000.000.000.0020201/730200-01 Cleaning Cleaning equip and materials\n0.000.000.000.000.0020201/730200\n0.000.000.000.000.0020201/760250-01 Cleaning Refuse Removal\n0.000.000.000.000.0020201/760250\n0.000.000.000.000.0020201/760300-01 Cleaning Hygiene Supplies&Services\n0.000.000.000.000.0020201/760300\n \n0.002,233.110.000.002,233.1120201\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 25\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0020301/715100-01 Rates Rates\n0.000.000.000.000.0020301/715100\n \n0.000.000.000.000.0020301\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 26\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0020401/725100-01 Insurance Risk Protection Arrangement\n0.000.000.000.000.0020401/725100\n \n0.000.000.000.000.0020401\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 27\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0020501/750100-01 Special Facilities Swimming pool equip/material\n0.000.000.000.000.0020501/750100\n \n0.000.000.000.000.0020501\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 28\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.00101.000.000.00101.0030001/810100-01 Maths Books\n0.00101.000.000.00101.0030001/810100\n0.00-101.000.000.00-101.0030001/810200-01 Maths Curriculum Materials\n0.00-101.000.000.00-101.0030001/810200\n \n0.000.000.000.000.0030001\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 29\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030002/810100-01 English Books\n0.000.000.000.000.0030002/810100\n0.000.000.000.000.0030002/810200-01 English Curriculum Materials\n0.000.000.000.000.0030002/810200\n \n0.000.000.000.000.0030002\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 30\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030003/810100-01 Science Books\n0.000.000.000.000.0030003/810100\n0.000.000.000.000.0030003/810200-01 Science Curriculum Materials\n0.000.000.000.000.0030003/810200\n \n0.000.000.000.000.0030003\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 31\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030004/810100-01 P.E. Books\n0.000.000.000.000.0030004/810100\n0.000.000.000.000.0030004/810200-01 P.E. Curriculum Materials\n0.000.000.000.000.0030004/810200\n0.000.000.000.000.0030004/825100-01 P.E. External sports coaches\n0.000.000.000.000.0030004/825100\n \n0.000.000.000.000.0030004\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 32\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030005/810100-01 Art Books\n0.000.000.000.000.0030005/810100\n0.000.000.000.000.0030005/810200-01 Art Curriculum Materials\n0.000.000.000.000.0030005/810200\n \n0.000.000.000.000.0030005\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 33\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030006/810100-01 Geography Books\n0.000.000.000.000.0030006/810100\n0.000.000.000.000.0030006/810200-01 Geography Curriculum Materials\n0.000.000.000.000.0030006/810200\n \n0.000.000.000.000.0030006\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 34\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030007/810100-01 Music Books\n0.000.000.000.000.0030007/810100\n0.000.000.000.000.0030007/810200-01 Music Curriculum Materials\n0.000.000.000.000.0030007/810200\n \n0.000.000.000.000.0030007\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 35\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030008/810100-01 French Books\n0.000.000.000.000.0030008/810100\n0.000.000.000.000.0030008/810200-01 French Curriculum Materials\n0.000.000.000.000.0030008/810200\n \n0.000.000.000.000.0030008\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 36\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030009/810100-01 D & T Books\n0.000.000.000.000.0030009/810100\n0.000.000.000.000.0030009/810200-01 D & T Curriculum Materials\n0.000.000.000.000.0030009/810200\n \n0.000.000.000.000.0030009\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 37\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030010/810100-01 History Books\n0.000.000.000.000.0030010/810100\n0.000.000.000.000.0030010/810200-01 History Curriculum Materials\n0.000.000.000.000.0030010/810200\n \n0.000.000.000.000.0030010\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 38\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030501/820100-01 Curric IT Educational IT Equipment\n0.000.000.000.000.0030501/820100\n0.000.000.000.000.0030501/820420-01 Curric IT ICT Broadband\n0.000.000.000.000.0030501/820420\n0.000.000.000.000.0030501/820450-01 Curric IT ICT Consumable\n0.000.000.000.000.0030501/820450\n \n0.000.000.000.000.0030501\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 39\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0030601/830100-01 Educational Visits School Trips-Travel costs\n0.000.000.000.000.0030601/830100\n \n0.000.000.000.000.0030601\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 40\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0040001/820300-01 Services ICT Support contract\n0.000.000.000.000.0040001/820300\n0.000.000.000.000.0040001/855150-01 Services Financial\n0.000.000.000.000.0040001/855150\n0.000.000.000.000.0040001/855170-01 Services Legal - Other\n0.000.000.000.000.0040001/855170\n0.000.000.000.000.0040001/855200-01 Services Personnel/HR\n0.000.000.000.000.0040001/855200\n0.000.000.000.000.0040001/855220-01 Services Payroll\n0.000.000.000.000.0040001/855220\n0.000.000.000.000.0040001/855250-01 Services Clerking board/governr meeting\n0.000.000.000.000.0040001/855250\n0.000.000.000.000.0040001/855300-01 Services Property Management Services\n0.000.000.000.000.0040001/855300\n0.000.000.000.000.0040001/860100-01 Services Statutory audit fees\n0.000.000.000.000.0040001/860100\n0.000.000.000.000.0040001/860200-01 Services Internal audit&other fees\n0.000.000.000.000.0040001/860200\n \n0.000.000.000.000.0040001\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 41\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0050001/675800-01 Admin Hospitality\n0.000.000.000.000.0050001/675800\n0.000.000.000.000.0050001/835200-01 Admin Admin Supplies&Stationery\n0.000.000.000.000.0050001/835200\n0.000.000.000.000.0050001/835220-01 Admin Admin Photocopying\n0.000.000.000.000.0050001/835220\n0.000.000.000.000.0050001/835300-01 Admin Advertising\n0.000.000.000.000.0050001/835300\n0.000.000.000.000.0050001/835320-01 Admin Postage and Carriage\n0.000.000.000.000.0050001/835320\n0.000.000.000.000.0050001/835350-01 Admin Telephone Costs\n0.000.000.000.000.0050001/835350\n \n0.000.000.000.000.0050001\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 42\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0050101/850100-01 Catering Supplies Catering contract\n0.000.000.000.000.0050101/850100\n \n0.000.000.000.000.0050101\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 43\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.00-12,425.120.000.00-12,425.1250201/510970-01 Other Costs Core schools budget grant\n0.00-12,425.120.000.00-12,425.1250201/510970\n0.000.000.000.000.0050201/525450-01 Other Costs OthReimbInc parents and staff\n0.000.000.000.000.0050201/525450\n0.000.000.000.000.0050201/890100-01 Other Costs PFI Special concession acct\n0.000.000.000.000.0050201/890100\n0.000.000.000.000.0050201/890200-01 Other Costs Loan Interest paid-DfE Group\n0.000.000.000.000.0050201/890200\n0.000.000.000.000.0050201/892800-01 Other Costs Revenue contrb to Cap\n0.000.000.000.000.0050201/892800\n \n0.00-12,425.120.000.00-12,425.1250201\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 44\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0070001/810200-01 Contingency Curriculum Materials\n0.000.000.000.000.0070001/810200\n \n0.000.000.000.000.0070001\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 45\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0070100/880509-01 Suspense Suspense Items\n0.000.000.000.000.0070100/880509\n \n0.000.000.000.000.0070100\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 46\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0070200/880250-01 Bad Debt Bad Debt written off\n0.000.000.000.000.0070200/880250\n \n0.000.000.000.000.0070200\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 47\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0070300/599200-01 Trust Transfers AcadTrOut:Revenue transfer out\n0.000.000.000.000.0070300/599200\n0.000.000.000.000.0070300/835170-01 Trust Transfers Contrib from academy to trust\n0.000.000.000.000.0070300/835170\n \n0.000.000.000.000.0070300\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 48\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.001,234.560.000.001,234.5680001/735320-01 Capital Expend Laptops desk comps and tablet\n0.001,234.560.000.001,234.5680001/735320\n0.0077,574.8812,425.120.0090,000.0080001/820310-01 Capital Expend ICT Adm laptop desk tabl perip\n0.0077,574.8812,425.120.0090,000.0080001/820310\n0.000.000.000.000.0080001/895850-01 Capital Expend Board:Impairment-boarding\n0.000.000.000.000.0080001/895850\n \n0.0078,809.4412,425.120.0091,234.5680001\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 49\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0080501/892100-51 Depreciation Depn-direct costs-buildings\n0.000.000.000.000.0080501/892100\n0.000.000.000.000.0080501/892110-51 Depreciation Depn-direct costs-other assets\n0.000.000.000.000.0080501/892110\n0.000.000.000.000.0080501/892200-51 Depreciation Amortisation-direct costs\n0.000.000.000.000.0080501/892200\n0.000.000.000.000.0080501/892300-51 Depreciation Imp-direct costs\n0.000.000.000.000.0080501/892300\n \n0.000.000.000.000.0080501\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 50\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0080601/892500-31 Fixed Assets (Gain)/loss on disp of tang FA\n0.000.000.000.000.0080601/892500\n0.000.000.000.000.0080601/892600-31 Fixed Assets (Gain)/loss on disp of Intg FA\n0.000.000.000.000.0080601/892600\n0.000.000.000.000.0080601/892700-31 Fixed Assets (Gain)/loss on disp of invest\n0.000.000.000.000.0080601/892700\n \n0.000.000.000.000.0080601\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 51\n \n\n \nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/110100-00 Balance Sheet FH Land:Cost b/fwd\n0.000.000.000.000.0090000/110100\n0.000.000.000.000.0090000/110109-00 Balance Sheet FH Land:Control\n0.000.000.000.000.0090000/110109\n0.000.000.000.000.0090000/110200-00 Balance Sheet FH Land:Addition Free Sch PSBP\n0.000.000.000.000.0090000/110200\n0.000.000.000.000.0090000/110210-00 Balance Sheet FH Land:Addition DfE Cap Grant\n0.000.000.000.000.0090000/110210\n0.000.000.000.000.0090000/110220-00 Balance Sheet FH Land:Addition oth cap grant\n0.000.000.000.000.0090000/110220\n0.000.000.000.000.0090000/110230-00 Balance Sheet FH Land:Addition other\n0.000.000.000.000.0090000/110230\n0.000.000.000.000.0090000/110300-00 Balance Sheet FH Land:Trans on conv(LA)\n0.000.000.000.000.0090000/110300\n0.000.000.000.000.0090000/110310-00 Balance Sheet FH Land:Trans on conv(not LA)\n0.000.000.000.000.0090000/110310\n0.000.000.000.000.0090000/110320-00 Balance Sheet FH Land:Trans in-existing acad\n0.000.000.000.000.0090000/110320\n0.000.000.000.000.0090000/110400-00 Balance Sheet FH Land:Donation from DfE\n0.000.000.000.000.0090000/110400\n0.000.000.000.000.0090000/110410-00 Balance Sheet FH Land:Donation-not from DfE\n0.000.000.000.000.0090000/110410\n0.000.000.000.000.0090000/110500-00 Balance Sheet FH Land:Disposals\n0.000.000.000.000.0090000/110500\n0.000.000.000.000.0090000/110510-00 Balance Sheet FH Land:Trans out of an acad\n0.000.000.000.000.0090000/110510\n0.000.000.000.000.0090000/110600-00 Balance Sheet FH Land:Cost reclassification\n0.000.000.000.000.0090000/110600\n0.000.000.000.000.0090000/110610-00 Balance Sheet FH Land:Cost revaluation\n0.000.000.000.000.0090000/110610\n0.000.000.000.000.0090000/110900-00 Balance Sheet FH Land:Imp b/fwd\n0.000.000.000.000.0090000/110900\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 52\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/110910-00 Balance Sheet FH Land:Imp charged\n0.000.000.000.000.0090000/110910\n0.000.000.000.000.0090000/110920-00 Balance Sheet FH Land:Imp released on disp\n0.000.000.000.000.0090000/110920\n0.000.000.000.000.0090000/110930-00 Balance Sheet FH Land:Imp-acad Trans in\n0.000.000.000.000.0090000/110930\n0.000.000.000.000.0090000/110940-00 Balance Sheet FH Land:Imp-acad Trans out\n0.000.000.000.000.0090000/110940\n0.000.000.000.000.0090000/115100-00 Balance Sheet FH Build:Cost b/fwd\n0.000.000.000.000.0090000/115100\n0.000.000.000.000.0090000/115109-00 Balance Sheet FH Build:Control\n0.000.000.000.000.0090000/115109\n0.000.000.000.000.0090000/115200-00 Balance Sheet FH Build:Additn Free Sch PSBP\n0.000.000.000.000.0090000/115200\n0.000.000.000.000.0090000/115210-00 Balance Sheet FH Build:Additn DfE Cap Grant\n0.000.000.000.000.0090000/115210\n0.000.000.000.000.0090000/115220-00 Balance Sheet FH Build:Additn oth cap grant\n0.000.000.000.000.0090000/115220\n0.000.000.000.000.0090000/115230-00 Balance Sheet FH Build:Addition other\n0.000.000.000.000.0090000/115230\n0.000.000.000.000.0090000/115300-00 Balance Sheet FH Build:Trans on conv(LA)\n0.000.000.000.000.0090000/115300\n0.000.000.000.000.0090000/115310-00 Balance Sheet FH Build:Trans on conv(not LA)\n0.000.000.000.000.0090000/115310\n0.000.000.000.000.0090000/115320-00 Balance Sheet FH Build:Trans in-exist acad\n0.000.000.000.000.0090000/115320\n0.000.000.000.000.0090000/115400-00 Balance Sheet FH Build:Donation from DfE\n0.000.000.000.000.0090000/115400\n0.000.000.000.000.0090000/115410-00 Balance Sheet FH Build:Donation-not from DfE\n0.000.000.000.000.0090000/115410\n0.000.000.000.000.0090000/115500-00 Balance Sheet FH Build:Disposals\n0.000.000.000.000.0090000/115500\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 53\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/115510-00 Balance Sheet FH Build:Trans out of an acad\n0.000.000.000.000.0090000/115510\n0.000.000.000.000.0090000/115600-00 Balance Sheet FH Build:Cost reclassification\n0.000.000.000.000.0090000/115600\n0.000.000.000.000.0090000/115610-00 Balance Sheet FH Build:Cost revaluation\n0.000.000.000.000.0090000/115610\n0.000.000.000.000.0090000/115700-00 Balance Sheet FH Build:Depn b/fwd\n0.000.000.000.000.0090000/115700\n0.000.000.000.000.0090000/115710-00 Balance Sheet FH Build:Depn charged\n0.000.000.000.000.0090000/115710\n0.000.000.000.000.0090000/115720-00 Balance Sheet FH Build:Depn-acad Trans in\n0.000.000.000.000.0090000/115720\n0.000.000.000.000.0090000/115730-00 Balance Sheet FH Build:Depn-acad Trans out\n0.000.000.000.000.0090000/115730\n0.000.000.000.000.0090000/115740-00 Balance Sheet FH Build:Depn-elimin on disp\n0.000.000.000.000.0090000/115740\n0.000.000.000.000.0090000/115750-00 Balance Sheet FH Build:Depn-revaluation\n0.000.000.000.000.0090000/115750\n0.000.000.000.000.0090000/115760-00 Balance Sheet FH Build:Depn-reclassification\n0.000.000.000.000.0090000/115760\n0.000.000.000.000.0090000/115900-00 Balance Sheet FH Build:Imp b/fwd\n0.000.000.000.000.0090000/115900\n0.000.000.000.000.0090000/115910-00 Balance Sheet FH Build:Imp charged\n0.000.000.000.000.0090000/115910\n0.000.000.000.000.0090000/115920-00 Balance Sheet FH Build:Imp released on disp\n0.000.000.000.000.0090000/115920\n0.000.000.000.000.0090000/115930-00 Balance Sheet FH Build:Imp-acad Trans in\n0.000.000.000.000.0090000/115930\n0.000.000.000.000.0090000/115940-00 Balance Sheet FH Build:Imp-acad Trans out\n0.000.000.000.000.0090000/115940\n0.000.000.000.000.0090000/120100-00 Balance Sheet LH Land:Cost b/fwd\n0.000.000.000.000.0090000/120100\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 54\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/120109-00 Balance Sheet LH Land:Control\n0.000.000.000.000.0090000/120109\n0.000.000.000.000.0090000/120200-00 Balance Sheet LH Land:Addition Free Sch PSBP\n0.000.000.000.000.0090000/120200\n0.000.000.000.000.0090000/120210-00 Balance Sheet LH Land:Addition DfE Cap Grant\n0.000.000.000.000.0090000/120210\n0.000.000.000.000.0090000/120220-00 Balance Sheet LH Land:Addition oth Cap grant\n0.000.000.000.000.0090000/120220\n0.000.000.000.000.0090000/120230-00 Balance Sheet LH Land:Addition other\n0.000.000.000.000.0090000/120230\n0.000.000.000.000.0090000/120300-00 Balance Sheet LH Land:Trans on conv(LA)\n0.000.000.000.000.0090000/120300\n0.000.000.000.000.0090000/120310-00 Balance Sheet LH Land:Trans on conv(not LA)\n0.000.000.000.000.0090000/120310\n0.000.000.000.000.0090000/120320-00 Balance Sheet LH Land:Trans in-existing acad\n0.000.000.000.000.0090000/120320\n0.000.000.000.000.0090000/120400-00 Balance Sheet LH Land:Donation from DfE\n0.000.000.000.000.0090000/120400\n0.000.000.000.000.0090000/120410-00 Balance Sheet LH Land:Donation-not from DfE\n0.000.000.000.000.0090000/120410\n0.000.000.000.000.0090000/120500-00 Balance Sheet LH Land:Disposals\n0.000.000.000.000.0090000/120500\n0.000.000.000.000.0090000/120510-00 Balance Sheet LH Land:Trans out of an acad\n0.000.000.000.000.0090000/120510\n0.000.000.000.000.0090000/120600-00 Balance Sheet LH Land:Cost reclassification\n0.000.000.000.000.0090000/120600\n0.000.000.000.000.0090000/120610-00 Balance Sheet LH Land:Cost revaluation\n0.000.000.000.000.0090000/120610\n0.000.000.000.000.0090000/120900-00 Balance Sheet LH Land:Imp b/fwd\n0.000.000.000.000.0090000/120900\n0.000.000.000.000.0090000/120910-00 Balance Sheet LH Land:Imp charged\n0.000.000.000.000.0090000/120910\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 55\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/120920-00 Balance Sheet LH Land:Imp released on disp\n0.000.000.000.000.0090000/120920\n0.000.000.000.000.0090000/120930-00 Balance Sheet LH Land:Imp-acad Trans in\n0.000.000.000.000.0090000/120930\n0.000.000.000.000.0090000/120940-00 Balance Sheet LH Land:Imp-acad Trans out\n0.000.000.000.000.0090000/120940\n0.000.000.000.000.0090000/125100-00 Balance Sheet LH Build:Cost b/fwd\n0.000.000.000.000.0090000/125100\n0.000.000.000.000.0090000/125109-00 Balance Sheet LH Build:Control\n0.000.000.000.000.0090000/125109\n0.000.000.000.000.0090000/125200-00 Balance Sheet LH Build:Additn Free Sch PSBP\n0.000.000.000.000.0090000/125200\n0.000.000.000.000.0090000/125210-00 Balance Sheet LH Build:Additn DfE Cap Grant\n0.000.000.000.000.0090000/125210\n0.000.000.000.000.0090000/125220-00 Balance Sheet LH Build:Additn oth Cap grant\n0.000.000.000.000.0090000/125220\n0.000.000.000.000.0090000/125230-00 Balance Sheet LH Build:Addition other\n0.000.000.000.000.0090000/125230\n0.000.000.000.000.0090000/125300-00 Balance Sheet LH Build:Trans on conv(LA)\n0.000.000.000.000.0090000/125300\n0.000.000.000.000.0090000/125310-00 Balance Sheet LH Build:Trans on conv(not LA)\n0.000.000.000.000.0090000/125310\n0.000.000.000.000.0090000/125320-00 Balance Sheet LH Build:Trans in-exist acad\n0.000.000.000.000.0090000/125320\n0.000.000.000.000.0090000/125400-00 Balance Sheet LH Build:Donation frm DfE\n0.000.000.000.000.0090000/125400\n0.000.000.000.000.0090000/125410-00 Balance Sheet LH Build:Donation-not frm DfE\n0.000.000.000.000.0090000/125410\n0.000.000.000.000.0090000/125500-00 Balance Sheet LH Build:Disposals\n0.000.000.000.000.0090000/125500\n0.000.000.000.000.0090000/125510-00 Balance Sheet LH Build:Trans out of an acad\n0.000.000.000.000.0090000/125510\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 56\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/125600-00 Balance Sheet LH Build:Cost reclassification\n0.000.000.000.000.0090000/125600\n0.000.000.000.000.0090000/125610-00 Balance Sheet LH Build:Cost revaluation\n0.000.000.000.000.0090000/125610\n0.000.000.000.000.0090000/125700-00 Balance Sheet LH Build:Depn b/fwd\n0.000.000.000.000.0090000/125700\n0.000.000.000.000.0090000/125710-00 Balance Sheet LH Build:Depn charged\n0.000.000.000.000.0090000/125710\n0.000.000.000.000.0090000/125720-00 Balance Sheet LH Build:Depn-acad Trans in\n0.000.000.000.000.0090000/125720\n0.000.000.000.000.0090000/125730-00 Balance Sheet LH Build:Depn-acad Trans out\n0.000.000.000.000.0090000/125730\n0.000.000.000.000.0090000/125740-00 Balance Sheet LH Build:Depn-elimin on disp\n0.000.000.000.000.0090000/125740\n0.000.000.000.000.0090000/125750-00 Balance Sheet LH Build:Depn-revaluation\n0.000.000.000.000.0090000/125750\n0.000.000.000.000.0090000/125760-00 Balance Sheet LH Build:Depn-reclassification\n0.000.000.000.000.0090000/125760\n0.000.000.000.000.0090000/125900-00 Balance Sheet LH Build:Imp b/fwd\n0.000.000.000.000.0090000/125900\n0.000.000.000.000.0090000/125910-00 Balance Sheet LH Build:Imp charged\n0.000.000.000.000.0090000/125910\n0.000.000.000.000.0090000/125920-00 Balance Sheet LH Build:Imp released on disp\n0.000.000.000.000.0090000/125920\n0.000.000.000.000.0090000/125930-00 Balance Sheet LH Build:Imp-acad Trans in\n0.000.000.000.000.0090000/125930\n0.000.000.000.000.0090000/125940-00 Balance Sheet LH Build:Imp-acad Trans out\n0.000.000.000.000.0090000/125940\n0.000.000.000.000.0090000/130100-00 Balance Sheet LH Imprv:Cost b/fwd\n0.000.000.000.000.0090000/130100\n0.000.000.000.000.0090000/130109-00 Balance Sheet LH Imprv:Control\n0.000.000.000.000.0090000/130109\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 57\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/130200-00 Balance Sheet LH Imprv:Additn Free Sch PSBP\n0.000.000.000.000.0090000/130200\n0.000.000.000.000.0090000/130210-00 Balance Sheet LH Imprv:Additn DfE Cap Grant\n0.000.000.000.000.0090000/130210\n0.000.000.000.000.0090000/130220-00 Balance Sheet LH Imprv:Additn oth cap grant\n0.000.000.000.000.0090000/130220\n0.000.000.000.000.0090000/130230-00 Balance Sheet LH Imprv:Additions other\n0.000.000.000.000.0090000/130230\n0.000.000.000.000.0090000/130300-00 Balance Sheet LH Imprv:Trans on conv(LA)\n0.000.000.000.000.0090000/130300\n0.000.000.000.000.0090000/130310-00 Balance Sheet LH Imprv:Trans on conv(not LA)\n0.000.000.000.000.0090000/130310\n0.000.000.000.000.0090000/130320-00 Balance Sheet LH Imprv:Trans in-exist acad\n0.000.000.000.000.0090000/130320\n0.000.000.000.000.0090000/130400-00 Balance Sheet LH Imprv:Donation frm DfE\n0.000.000.000.000.0090000/130400\n0.000.000.000.000.0090000/130410-00 Balance Sheet LH Imprv:Donation-not frm DfE\n0.000.000.000.000.0090000/130410\n0.000.000.000.000.0090000/130500-00 Balance Sheet LH Imprv:Disposals\n0.000.000.000.000.0090000/130500\n0.000.000.000.000.0090000/130510-00 Balance Sheet LH Imprv:Trans out of an acad\n0.000.000.000.000.0090000/130510\n0.000.000.000.000.0090000/130600-00 Balance Sheet LH Imprv:Cost reclassification\n0.000.000.000.000.0090000/130600\n0.000.000.000.000.0090000/130610-00 Balance Sheet LH Imprv:Cost revaluation\n0.000.000.000.000.0090000/130610\n0.000.000.000.000.0090000/130700-00 Balance Sheet LH Imprv:Depn b/fwd\n0.000.000.000.000.0090000/130700\n0.000.000.000.000.0090000/130710-00 Balance Sheet LH Imprv:Depn charged\n0.000.000.000.000.0090000/130710\n0.000.000.000.000.0090000/130720-00 Balance Sheet LH Imprv:Depn-acad Trans in\n0.000.000.000.000.0090000/130720\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 58\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/130730-00 Balance Sheet LH Imprv:Depn-acad Trans out\n0.000.000.000.000.0090000/130730\n0.000.000.000.000.0090000/130740-00 Balance Sheet LH Imprv:Depn-elimin on disp\n0.000.000.000.000.0090000/130740\n0.000.000.000.000.0090000/130750-00 Balance Sheet LH Imprv:Depn-revaluation\n0.000.000.000.000.0090000/130750\n0.000.000.000.000.0090000/130760-00 Balance Sheet LH Imprv:Depn-reclassification\n0.000.000.000.000.0090000/130760\n0.000.000.000.000.0090000/130900-00 Balance Sheet LH Imprv:Imp b/fwd\n0.000.000.000.000.0090000/130900\n0.000.000.000.000.0090000/130910-00 Balance Sheet LH Imprv:Imp charged\n0.000.000.000.000.0090000/130910\n0.000.000.000.000.0090000/130920-00 Balance Sheet LH Imprv:Imp released on disp\n0.000.000.000.000.0090000/130920\n0.000.000.000.000.0090000/130930-00 Balance Sheet LH Imprv:Imp-acad Trans in\n0.000.000.000.000.0090000/130930\n0.000.000.000.000.0090000/130940-00 Balance Sheet LH Imprv:Imp-acad Trans out\n0.000.000.000.000.0090000/130940\n0.000.000.000.000.0090000/135100-00 Balance Sheet PM:Cost b/fwd\n0.000.000.000.000.0090000/135100\n0.000.000.000.000.0090000/135109-00 Balance Sheet PM:Control\n0.000.000.000.000.0090000/135109\n0.000.000.000.000.0090000/135200-00 Balance Sheet PM:Additions Free Sch PSBP\n0.000.000.000.000.0090000/135200\n0.000.000.000.000.0090000/135210-00 Balance Sheet PM:Additions DfE Cap Grant\n0.000.000.000.000.0090000/135210\n0.000.000.000.000.0090000/135220-00 Balance Sheet PM:Additions other Cap grant\n0.000.000.000.000.0090000/135220\n0.000.000.000.000.0090000/135230-00 Balance Sheet PM:Additions other\n0.000.000.000.000.0090000/135230\n0.000.000.000.000.0090000/135300-00 Balance Sheet PM:Trans on conv(LA)\n0.000.000.000.000.0090000/135300\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 59\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/135310-00 Balance Sheet PM:Trans on conv(not LA)\n0.000.000.000.000.0090000/135310\n0.000.000.000.000.0090000/135320-00 Balance Sheet PM:Trans in-existing acad\n0.000.000.000.000.0090000/135320\n0.000.000.000.000.0090000/135400-00 Balance Sheet PM:Donation frm DfE\n0.000.000.000.000.0090000/135400\n0.000.000.000.000.0090000/135410-00 Balance Sheet PM:Donation-not frm DfE\n0.000.000.000.000.0090000/135410\n0.000.000.000.000.0090000/135500-00 Balance Sheet PM:Disposals\n0.000.000.000.000.0090000/135500\n0.000.000.000.000.0090000/135510-00 Balance Sheet PM:Trans out of an acad\n0.000.000.000.000.0090000/135510\n0.000.000.000.000.0090000/135600-00 Balance Sheet PM:Cost reclassification\n0.000.000.000.000.0090000/135600\n0.000.000.000.000.0090000/135610-00 Balance Sheet PM:Cost revaluation\n0.000.000.000.000.0090000/135610\n0.000.000.000.000.0090000/135700-00 Balance Sheet PM:Depn b/fwd\n0.000.000.000.000.0090000/135700\n0.000.000.000.000.0090000/135710-00 Balance Sheet PM:Depn charged\n0.000.000.000.000.0090000/135710\n0.000.000.000.000.0090000/135720-00 Balance Sheet PM:Depn-acad Trans in\n0.000.000.000.000.0090000/135720\n0.000.000.000.000.0090000/135730-00 Balance Sheet PM:Depn-acad Trans out\n0.000.000.000.000.0090000/135730\n0.000.000.000.000.0090000/135740-00 Balance Sheet PM:Depn-elimin on disp\n0.000.000.000.000.0090000/135740\n0.000.000.000.000.0090000/135750-00 Balance Sheet PM:Depn-revaluation\n0.000.000.000.000.0090000/135750\n0.000.000.000.000.0090000/135760-00 Balance Sheet PM:Depn-reclassification\n0.000.000.000.000.0090000/135760\n0.000.000.000.000.0090000/135900-00 Balance Sheet PM:Imp b/fwd\n0.000.000.000.000.0090000/135900\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 60\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/135910-00 Balance Sheet PM:Imp charged\n0.000.000.000.000.0090000/135910\n0.000.000.000.000.0090000/135920-00 Balance Sheet PM:Imp released on disp\n0.000.000.000.000.0090000/135920\n0.000.000.000.000.0090000/135930-00 Balance Sheet PM:Imp-acad Trans in\n0.000.000.000.000.0090000/135930\n0.000.000.000.000.0090000/135940-00 Balance Sheet PM:Imp-acad Trans out\n0.000.000.000.000.0090000/135940\n0.000.000.000.000.0090000/140100-00 Balance Sheet FE:Cost b/fwd\n0.000.000.000.000.0090000/140100\n0.000.000.000.000.0090000/140109-00 Balance Sheet FE:Control\n0.000.000.000.000.0090000/140109\n0.000.000.000.000.0090000/140200-00 Balance Sheet FE:Additions Free Sch PSBP\n0.000.000.000.000.0090000/140200\n0.000.000.000.000.0090000/140210-00 Balance Sheet FE:Additions DfE Cap Grant\n0.000.000.000.000.0090000/140210\n0.000.000.000.000.0090000/140220-00 Balance Sheet FE:Additions other Cap grant\n0.000.000.000.000.0090000/140220\n0.000.000.000.000.0090000/140230-00 Balance Sheet FE:Additions other\n0.000.000.000.000.0090000/140230\n0.000.000.000.000.0090000/140300-00 Balance Sheet FE:Trans on conv(LA)\n0.000.000.000.000.0090000/140300\n0.000.000.000.000.0090000/140310-00 Balance Sheet FE:Trans on conv(not LA)\n0.000.000.000.000.0090000/140310\n0.000.000.000.000.0090000/140320-00 Balance Sheet FE:Trans in-existing acad\n0.000.000.000.000.0090000/140320\n0.000.000.000.000.0090000/140400-00 Balance Sheet FE:Donation frm DfE\n0.000.000.000.000.0090000/140400\n0.000.000.000.000.0090000/140410-00 Balance Sheet FE:Donation-not frm DfE\n0.000.000.000.000.0090000/140410\n0.000.000.000.000.0090000/140500-00 Balance Sheet FE:Disposals\n0.000.000.000.000.0090000/140500\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 61\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/140510-00 Balance Sheet FE:Trans out of an acad\n0.000.000.000.000.0090000/140510\n0.000.000.000.000.0090000/140600-00 Balance Sheet FE:Cost reclassification\n0.000.000.000.000.0090000/140600\n0.000.000.000.000.0090000/140610-00 Balance Sheet FE:Cost revaluation\n0.000.000.000.000.0090000/140610\n0.000.000.000.000.0090000/140700-00 Balance Sheet FE:Depn b/fwd\n0.000.000.000.000.0090000/140700\n0.000.000.000.000.0090000/140710-00 Balance Sheet FE:Depn charged\n0.000.000.000.000.0090000/140710\n0.000.000.000.000.0090000/140720-00 Balance Sheet FE:Depn-acad Trans in\n0.000.000.000.000.0090000/140720\n0.000.000.000.000.0090000/140730-00 Balance Sheet FE:Depn-acad Trans out\n0.000.000.000.000.0090000/140730\n0.000.000.000.000.0090000/140740-00 Balance Sheet FE:Depn-elimin on disp\n0.000.000.000.000.0090000/140740\n0.000.000.000.000.0090000/140750-00 Balance Sheet FE:Depn-revaluation\n0.000.000.000.000.0090000/140750\n0.000.000.000.000.0090000/140760-00 Balance Sheet FE:Depn-reclassification\n0.000.000.000.000.0090000/140760\n0.000.000.000.000.0090000/140900-00 Balance Sheet FE:Imp b/fwd\n0.000.000.000.000.0090000/140900\n0.000.000.000.000.0090000/140910-00 Balance Sheet FE:Imp charged\n0.000.000.000.000.0090000/140910\n0.000.000.000.000.0090000/140920-00 Balance Sheet FE:Imp released on disp\n0.000.000.000.000.0090000/140920\n0.000.000.000.000.0090000/140930-00 Balance Sheet FE:Imp-acad Trans in\n0.000.000.000.000.0090000/140930\n0.000.000.000.000.0090000/140940-00 Balance Sheet FE:Imp-acad Trans out\n0.000.000.000.000.0090000/140940\n0.000.000.000.000.0090000/145100-00 Balance Sheet CE:Cost b/fwd\n0.000.000.000.000.0090000/145100\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 62\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/145109-00 Balance Sheet CE:Control\n0.000.000.000.000.0090000/145109\n0.000.000.000.000.0090000/145200-00 Balance Sheet CE:Additions Free Sch PSBP\n0.000.000.000.000.0090000/145200\n0.000.000.000.000.0090000/145210-00 Balance Sheet CE:Additions DfE Cap Grant\n0.000.000.000.000.0090000/145210\n0.000.000.000.000.0090000/145220-00 Balance Sheet CE:Additions other Cap grant\n0.000.000.000.000.0090000/145220\n0.000.000.000.000.0090000/145230-00 Balance Sheet CE:Additions other\n0.000.000.000.000.0090000/145230\n0.000.000.000.000.0090000/145300-00 Balance Sheet CE:Trans on conv(LA)\n0.000.000.000.000.0090000/145300\n0.000.000.000.000.0090000/145310-00 Balance Sheet CE:Trans on conv(not LA)\n0.000.000.000.000.0090000/145310\n0.000.000.000.000.0090000/145320-00 Balance Sheet CE:Trans in-existing acad\n0.000.000.000.000.0090000/145320\n0.000.000.000.000.0090000/145400-00 Balance Sheet CE:Donation frm DfE\n0.000.000.000.000.0090000/145400\n0.000.000.000.000.0090000/145410-00 Balance Sheet CE:Donation-not frm DfE\n0.000.000.000.000.0090000/145410\n0.000.000.000.000.0090000/145500-00 Balance Sheet CE:Disposals\n0.000.000.000.000.0090000/145500\n0.000.000.000.000.0090000/145510-00 Balance Sheet CE:Trans out of an acad\n0.000.000.000.000.0090000/145510\n0.000.000.000.000.0090000/145600-00 Balance Sheet CE:Cost reclassification\n0.000.000.000.000.0090000/145600\n0.000.000.000.000.0090000/145610-00 Balance Sheet CE:Cost revaluation\n0.000.000.000.000.0090000/145610\n0.000.000.000.000.0090000/145700-00 Balance Sheet CE:Depn b/fwd\n0.000.000.000.000.0090000/145700\n0.000.000.000.000.0090000/145710-00 Balance Sheet CE:Depn charged\n0.000.000.000.000.0090000/145710\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 63\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/145720-00 Balance Sheet CE:Depn-acad Trans in\n0.000.000.000.000.0090000/145720\n0.000.000.000.000.0090000/145730-00 Balance Sheet CE:Depn-acad Trans out\n0.000.000.000.000.0090000/145730\n0.000.000.000.000.0090000/145740-00 Balance Sheet CE:Depn-elimin on disp\n0.000.000.000.000.0090000/145740\n0.000.000.000.000.0090000/145750-00 Balance Sheet CE:Depn-revaluation\n0.000.000.000.000.0090000/145750\n0.000.000.000.000.0090000/145760-00 Balance Sheet CE:Depn-reclassification\n0.000.000.000.000.0090000/145760\n0.000.000.000.000.0090000/145900-00 Balance Sheet CE:Imp b/fwd\n0.000.000.000.000.0090000/145900\n0.000.000.000.000.0090000/145910-00 Balance Sheet CE:Imp charged\n0.000.000.000.000.0090000/145910\n0.000.000.000.000.0090000/145920-00 Balance Sheet CE:Imp released on disp\n0.000.000.000.000.0090000/145920\n0.000.000.000.000.0090000/145930-00 Balance Sheet CE:Imp-acad Trans in\n0.000.000.000.000.0090000/145930\n0.000.000.000.000.0090000/145940-00 Balance Sheet CE:Imp-acad Trans out\n0.000.000.000.000.0090000/145940\n0.000.000.000.000.0090000/150100-00 Balance Sheet MV:Cost b/fwd\n0.000.000.000.000.0090000/150100\n0.000.000.000.000.0090000/150109-00 Balance Sheet MV:Control\n0.000.000.000.000.0090000/150109\n0.000.000.000.000.0090000/150200-00 Balance Sheet MV:Additions Free Sch PSBP\n0.000.000.000.000.0090000/150200\n0.000.000.000.000.0090000/150210-00 Balance Sheet MV:Additions DfE Cap Grant\n0.000.000.000.000.0090000/150210\n0.000.000.000.000.0090000/150220-00 Balance Sheet MV:Additions other Cap grant\n0.000.000.000.000.0090000/150220\n0.000.000.000.000.0090000/150230-00 Balance Sheet MV:Additions other\n0.000.000.000.000.0090000/150230\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 64\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/150300-00 Balance Sheet MV:Trans on conv(LA)\n0.000.000.000.000.0090000/150300\n0.000.000.000.000.0090000/150310-00 Balance Sheet MV:Trans on conv(not LA)\n0.000.000.000.000.0090000/150310\n0.000.000.000.000.0090000/150320-00 Balance Sheet MV:Trans in-existing acad\n0.000.000.000.000.0090000/150320\n0.000.000.000.000.0090000/150400-00 Balance Sheet MV:Donation frm DfE\n0.000.000.000.000.0090000/150400\n0.000.000.000.000.0090000/150410-00 Balance Sheet MV:Donation-not frm DfE\n0.000.000.000.000.0090000/150410\n0.000.000.000.000.0090000/150500-00 Balance Sheet MV:Disposals\n0.000.000.000.000.0090000/150500\n0.000.000.000.000.0090000/150510-00 Balance Sheet MV:Trans out of an acad\n0.000.000.000.000.0090000/150510\n0.000.000.000.000.0090000/150600-00 Balance Sheet MV:Cost reclassification\n0.000.000.000.000.0090000/150600\n0.000.000.000.000.0090000/150610-00 Balance Sheet MV:Cost revaluation\n0.000.000.000.000.0090000/150610\n0.000.000.000.000.0090000/150700-00 Balance Sheet MV:Depn b/fwd\n0.000.000.000.000.0090000/150700\n0.000.000.000.000.0090000/150710-00 Balance Sheet MV:Depn charged\n0.000.000.000.000.0090000/150710\n0.000.000.000.000.0090000/150720-00 Balance Sheet MV:Depn-acad Trans in\n0.000.000.000.000.0090000/150720\n0.000.000.000.000.0090000/150730-00 Balance Sheet MV:Depn-acad Trans out\n0.000.000.000.000.0090000/150730\n0.000.000.000.000.0090000/150740-00 Balance Sheet MV:Depn-elimin on disp\n0.000.000.000.000.0090000/150740\n0.000.000.000.000.0090000/150750-00 Balance Sheet MV:Depn-revaluation\n0.000.000.000.000.0090000/150750\n0.000.000.000.000.0090000/150760-00 Balance Sheet MV:Depn-reclassification\n0.000.000.000.000.0090000/150760\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 65\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/150900-00 Balance Sheet MV:Imp b/fwd\n0.000.000.000.000.0090000/150900\n0.000.000.000.000.0090000/150910-00 Balance Sheet MV:Imp charged\n0.000.000.000.000.0090000/150910\n0.000.000.000.000.0090000/150920-00 Balance Sheet MV:Imp released on disp\n0.000.000.000.000.0090000/150920\n0.000.000.000.000.0090000/150930-00 Balance Sheet MV:Imp-acad Trans in\n0.000.000.000.000.0090000/150930\n0.000.000.000.000.0090000/150940-00 Balance Sheet MV:Imp-acad Trans out\n0.000.000.000.000.0090000/150940\n0.000.000.000.000.0090000/160100-00 Balance Sheet AUC:Cost b/fwd\n0.000.000.000.000.0090000/160100\n0.000.000.000.000.0090000/160109-00 Balance Sheet AUC:Control\n0.000.000.000.000.0090000/160109\n0.000.000.000.000.0090000/160200-00 Balance Sheet AUC:Additions Free Sch PSBP\n0.000.000.000.000.0090000/160200\n0.000.000.000.000.0090000/160210-00 Balance Sheet AUC:Additions DfE Cap Grant\n0.000.000.000.000.0090000/160210\n0.000.000.000.000.0090000/160220-00 Balance Sheet AUC:Additions other Cap grant\n0.000.000.000.000.0090000/160220\n0.000.000.000.000.0090000/160230-00 Balance Sheet AUC:Additions other\n0.000.000.000.000.0090000/160230\n0.000.000.000.000.0090000/160300-00 Balance Sheet AUC:Trans on conv(LA)\n0.000.000.000.000.0090000/160300\n0.000.000.000.000.0090000/160310-00 Balance Sheet AUC:Trans on conv(not LA)\n0.000.000.000.000.0090000/160310\n0.000.000.000.000.0090000/160320-00 Balance Sheet AUC:Trans in-existing acad\n0.000.000.000.000.0090000/160320\n0.000.000.000.000.0090000/160400-00 Balance Sheet AUC:Donation frm DfE\n0.000.000.000.000.0090000/160400\n0.000.000.000.000.0090000/160410-00 Balance Sheet AUC:Donation-not frm DfE\n0.000.000.000.000.0090000/160410\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 66\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/160500-00 Balance Sheet AUC:Disposals\n0.000.000.000.000.0090000/160500\n0.000.000.000.000.0090000/160510-00 Balance Sheet AUC:Trans out of an acad\n0.000.000.000.000.0090000/160510\n0.000.000.000.000.0090000/160600-00 Balance Sheet AUC:Cost reclassification\n0.000.000.000.000.0090000/160600\n0.000.000.000.000.0090000/160610-00 Balance Sheet AUC:Cost revaluation\n0.000.000.000.000.0090000/160610\n0.000.000.000.000.0090000/160900-00 Balance Sheet AUC:Imp b/fwd\n0.000.000.000.000.0090000/160900\n0.000.000.000.000.0090000/160910-00 Balance Sheet AUC:Imp charged\n0.000.000.000.000.0090000/160910\n0.000.000.000.000.0090000/160920-00 Balance Sheet AUC:Imp released on disp\n0.000.000.000.000.0090000/160920\n0.000.000.000.000.0090000/160930-00 Balance Sheet AUC:Imp-acad Trans in\n0.000.000.000.000.0090000/160930\n0.000.000.000.000.0090000/160940-00 Balance Sheet AUC:Imp-acad Trans out\n0.000.000.000.000.0090000/160940\n0.000.000.000.000.0090000/170100-00 Balance Sheet SW:Cost b/fwd\n0.000.000.000.000.0090000/170100\n0.000.000.000.000.0090000/170109-00 Balance Sheet SW:Control\n0.000.000.000.000.0090000/170109\n0.000.000.000.000.0090000/170230-00 Balance Sheet SW:Additions other\n0.000.000.000.000.0090000/170230\n0.000.000.000.000.0090000/170300-00 Balance Sheet SW:Trans on conv(LA)\n0.000.000.000.000.0090000/170300\n0.000.000.000.000.0090000/170310-00 Balance Sheet SW:Trans on conv(not LA)\n0.000.000.000.000.0090000/170310\n0.000.000.000.000.0090000/170320-00 Balance Sheet SW:Trans in-existing acad\n0.000.000.000.000.0090000/170320\n0.000.000.000.000.0090000/170420-00 Balance Sheet SW:Donation-other\n0.000.000.000.000.0090000/170420\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 67\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/170500-00 Balance Sheet SW:Disposals\n0.000.000.000.000.0090000/170500\n0.000.000.000.000.0090000/170510-00 Balance Sheet SW:Trans out of an acad\n0.000.000.000.000.0090000/170510\n0.000.000.000.000.0090000/170600-00 Balance Sheet SW:Cost reclassification\n0.000.000.000.000.0090000/170600\n0.000.000.000.000.0090000/170610-00 Balance Sheet SW:Cost revaluation\n0.000.000.000.000.0090000/170610\n0.000.000.000.000.0090000/170800-00 Balance Sheet SW:Amortisation brought fowd\n0.000.000.000.000.0090000/170800\n0.000.000.000.000.0090000/170810-00 Balance Sheet SW:Amortisation charged\n0.000.000.000.000.0090000/170810\n0.000.000.000.000.0090000/170820-00 Balance Sheet SW:Amor'n-acad Trans in\n0.000.000.000.000.0090000/170820\n0.000.000.000.000.0090000/170830-00 Balance Sheet SW:Amor'n-acad Trans out\n0.000.000.000.000.0090000/170830\n0.000.000.000.000.0090000/170840-00 Balance Sheet SW:Amor'n-elimin on disp\n0.000.000.000.000.0090000/170840\n0.000.000.000.000.0090000/170850-00 Balance Sheet SW:Amor'n-revaluation\n0.000.000.000.000.0090000/170850\n0.000.000.000.000.0090000/170860-00 Balance Sheet SW:Amor'n-reclassification\n0.000.000.000.000.0090000/170860\n0.000.000.000.000.0090000/170900-00 Balance Sheet SW:Imp b/fwd\n0.000.000.000.000.0090000/170900\n0.000.000.000.000.0090000/170910-00 Balance Sheet SW:Imp charged\n0.000.000.000.000.0090000/170910\n0.000.000.000.000.0090000/170920-00 Balance Sheet SW:Imp released on disp\n0.000.000.000.000.0090000/170920\n0.000.000.000.000.0090000/170930-00 Balance Sheet SW:Imp-acad Trans in\n0.000.000.000.000.0090000/170930\n0.000.000.000.000.0090000/170940-00 Balance Sheet SW:Imp-acad Trans out\n0.000.000.000.000.0090000/170940\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 68\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/175100-00 Balance Sheet OIFA:Cost b/fwd\n0.000.000.000.000.0090000/175100\n0.000.000.000.000.0090000/175109-00 Balance Sheet OIFA:Control\n0.000.000.000.000.0090000/175109\n0.000.000.000.000.0090000/175230-00 Balance Sheet OIFA:Additions other\n0.000.000.000.000.0090000/175230\n0.000.000.000.000.0090000/175300-00 Balance Sheet OIFA:Trans on conv(LA)\n0.000.000.000.000.0090000/175300\n0.000.000.000.000.0090000/175310-00 Balance Sheet OIFA:Trans on conv(not LA)\n0.000.000.000.000.0090000/175310\n0.000.000.000.000.0090000/175320-00 Balance Sheet OIFA:Trans in-existing acad\n0.000.000.000.000.0090000/175320\n0.000.000.000.000.0090000/175420-00 Balance Sheet OIFA:Donation-other\n0.000.000.000.000.0090000/175420\n0.000.000.000.000.0090000/175500-00 Balance Sheet OIFA:Disposals\n0.000.000.000.000.0090000/175500\n0.000.000.000.000.0090000/175510-00 Balance Sheet OIFA:Trans out of an acad\n0.000.000.000.000.0090000/175510\n0.000.000.000.000.0090000/175600-00 Balance Sheet OIFA:Cost reclassification\n0.000.000.000.000.0090000/175600\n0.000.000.000.000.0090000/175610-00 Balance Sheet OIFA:Cost revaluation\n0.000.000.000.000.0090000/175610\n0.000.000.000.000.0090000/175800-00 Balance Sheet OIFA:Amortisation brought fwd\n0.000.000.000.000.0090000/175800\n0.000.000.000.000.0090000/175810-00 Balance Sheet OIFA:Amortisation charged\n0.000.000.000.000.0090000/175810\n0.000.000.000.000.0090000/175820-00 Balance Sheet OIFA:Amor'n-acad Trans in\n0.000.000.000.000.0090000/175820\n0.000.000.000.000.0090000/175830-00 Balance Sheet OIFA:Amor'n-acad Trans out\n0.000.000.000.000.0090000/175830\n0.000.000.000.000.0090000/175840-00 Balance Sheet OIFA:Amor'n-elimin on disp\n0.000.000.000.000.0090000/175840\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 69\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/175850-00 Balance Sheet OIFA:Amor'n-revaluation\n0.000.000.000.000.0090000/175850\n0.000.000.000.000.0090000/175860-00 Balance Sheet OIFA:Amor'n-reclassification\n0.000.000.000.000.0090000/175860\n0.000.000.000.000.0090000/175900-00 Balance Sheet OIFA:Imp b/fwd\n0.000.000.000.000.0090000/175900\n0.000.000.000.000.0090000/175910-00 Balance Sheet OIFA:Imp charged\n0.000.000.000.000.0090000/175910\n0.000.000.000.000.0090000/175920-00 Balance Sheet OIFA:Imp released on disp\n0.000.000.000.000.0090000/175920\n0.000.000.000.000.0090000/175930-00 Balance Sheet OIFA:Imp-acad Trans in\n0.000.000.000.000.0090000/175930\n0.000.000.000.000.0090000/175940-00 Balance Sheet OIFA:Imp-acad Trans out\n0.000.000.000.000.0090000/175940\n0.000.000.000.000.0090000/180100-00 Balance Sheet Subsid(ct):Cost brought fwd\n0.000.000.000.000.0090000/180100\n0.000.000.000.000.0090000/180200-00 Balance Sheet Subsid(ct):Additions\n0.000.000.000.000.0090000/180200\n0.000.000.000.000.0090000/180300-00 Balance Sheet Subsid(ct):Trf on conv(LA)\n0.000.000.000.000.0090000/180300\n0.000.000.000.000.0090000/180310-00 Balance Sheet Subsid(ct):Trf on conv(not LA)\n0.000.000.000.000.0090000/180310\n0.000.000.000.000.0090000/180320-00 Balance Sheet Subsid(ct):Trf in-exist acad\n0.000.000.000.000.0090000/180320\n0.000.000.000.000.0090000/180500-00 Balance Sheet Subsid(ct):Disposals\n0.000.000.000.000.0090000/180500\n0.000.000.000.000.0090000/180510-00 Balance Sheet Subsid(ct):Trf out of an acad\n0.000.000.000.000.0090000/180510\n0.000.000.000.000.0090000/180620-00 Balance Sheet Subsid(ct):Reclass frm cur inv\n0.000.000.000.000.0090000/180620\n0.000.000.000.000.0090000/180630-00 Balance Sheet Subsid(ct):Reclass to cur inv\n0.000.000.000.000.0090000/180630\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 70\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/180640-00 Balance Sheet Subsid(ct):Reclass in fix inv\n0.000.000.000.000.0090000/180640\n0.000.000.000.000.0090000/180910-00 Balance Sheet Subsid(ct):Imp charged\n0.000.000.000.000.0090000/180910\n0.000.000.000.000.0090000/181100-00 Balance Sheet InvProp(ct):Cost brought fwd\n0.000.000.000.000.0090000/181100\n0.000.000.000.000.0090000/181200-00 Balance Sheet InvProp(ct):Additions\n0.000.000.000.000.0090000/181200\n0.000.000.000.000.0090000/181300-00 Balance Sheet InvProp(ct):Trf on conv(LA)\n0.000.000.000.000.0090000/181300\n0.000.000.000.000.0090000/181310-00 Balance Sheet InvProp(ct):Trf on conv(notLA)\n0.000.000.000.000.0090000/181310\n0.000.000.000.000.0090000/181320-00 Balance Sheet InvProp(ct):Trf in-exist acad\n0.000.000.000.000.0090000/181320\n0.000.000.000.000.0090000/181500-00 Balance Sheet InvProp(ct):Disposals\n0.000.000.000.000.0090000/181500\n0.000.000.000.000.0090000/181510-00 Balance Sheet InvProp(ct):Trf out of an acad\n0.000.000.000.000.0090000/181510\n0.000.000.000.000.0090000/181620-00 Balance Sheet InvProp(ct):Reclas frm cur inv\n0.000.000.000.000.0090000/181620\n0.000.000.000.000.0090000/181630-00 Balance Sheet InvProp(ct):Reclass to cur inv\n0.000.000.000.000.0090000/181630\n0.000.000.000.000.0090000/181640-00 Balance Sheet InvProp(ct):Reclass in fix inv\n0.000.000.000.000.0090000/181640\n0.000.000.000.000.0090000/181910-00 Balance Sheet InvProp(ct):Imp charged\n0.000.000.000.000.0090000/181910\n0.000.000.000.000.0090000/182100-00 Balance Sheet ShBd(ct):Cost b/fwd\n0.000.000.000.000.0090000/182100\n0.000.000.000.000.0090000/182200-00 Balance Sheet ShBd(ct):Additions\n0.000.000.000.000.0090000/182200\n0.000.000.000.000.0090000/182300-00 Balance Sheet ShBd(ct):Trf on conv(LA)\n0.000.000.000.000.0090000/182300\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 71\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/182310-00 Balance Sheet ShBd(ct):Trf on conv(not LA)\n0.000.000.000.000.0090000/182310\n0.000.000.000.000.0090000/182320-00 Balance Sheet ShBd(ct):Trf in-exist acad\n0.000.000.000.000.0090000/182320\n0.000.000.000.000.0090000/182500-00 Balance Sheet ShBd(ct):Disposals\n0.000.000.000.000.0090000/182500\n0.000.000.000.000.0090000/182510-00 Balance Sheet ShBd(ct):Trf out of an acad\n0.000.000.000.000.0090000/182510\n0.000.000.000.000.0090000/182620-00 Balance Sheet ShBd(ct):Reclass from cur inv\n0.000.000.000.000.0090000/182620\n0.000.000.000.000.0090000/182630-00 Balance Sheet ShBd(ct):Reclass to cur inv\n0.000.000.000.000.0090000/182630\n0.000.000.000.000.0090000/182640-00 Balance Sheet ShBd(ct):Reclass in fix inv\n0.000.000.000.000.0090000/182640\n0.000.000.000.000.0090000/182910-00 Balance Sheet ShBd(ct):Imp charged\n0.000.000.000.000.0090000/182910\n0.000.000.000.000.0090000/183100-00 Balance Sheet OthInv(ct):Cost b/fwd\n0.000.000.000.000.0090000/183100\n0.000.000.000.000.0090000/183200-00 Balance Sheet OthInv(ct):Additions\n0.000.000.000.000.0090000/183200\n0.000.000.000.000.0090000/183300-00 Balance Sheet OthInv(ct):Trf on conv(LA)\n0.000.000.000.000.0090000/183300\n0.000.000.000.000.0090000/183310-00 Balance Sheet OthInv(ct):Trf on conv(not LA)\n0.000.000.000.000.0090000/183310\n0.000.000.000.000.0090000/183320-00 Balance Sheet OthInv(ct):Trf in-exist acad\n0.000.000.000.000.0090000/183320\n0.000.000.000.000.0090000/183500-00 Balance Sheet OthInv(ct):Disposals\n0.000.000.000.000.0090000/183500\n0.000.000.000.000.0090000/183510-00 Balance Sheet OthInv(ct):Trf out of an acad\n0.000.000.000.000.0090000/183510\n0.000.000.000.000.0090000/183620-00 Balance Sheet OthInv(ct):Reclass frm cur inv\n0.000.000.000.000.0090000/183620\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 72\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/183630-00 Balance Sheet OthInv(ct):Reclass to cur inv\n0.000.000.000.000.0090000/183630\n0.000.000.000.000.0090000/183640-00 Balance Sheet OthInv(ct):Reclass in fix inv\n0.000.000.000.000.0090000/183640\n0.000.000.000.000.0090000/183910-00 Balance Sheet OthInv(ct):Imp charged\n0.000.000.000.000.0090000/183910\n0.000.000.000.000.0090000/184100-00 Balance Sheet InvProp(FV):Cost b/fwd\n0.000.000.000.000.0090000/184100\n0.000.000.000.000.0090000/184200-00 Balance Sheet InvProp(FV):Additions\n0.000.000.000.000.0090000/184200\n0.000.000.000.000.0090000/184300-00 Balance Sheet InvProp(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/184300\n0.000.000.000.000.0090000/184310-00 Balance Sheet InvProp(FV):Trf on conv(notLA)\n0.000.000.000.000.0090000/184310\n0.000.000.000.000.0090000/184320-00 Balance Sheet InvProp(FV):Trf in-exist acad\n0.000.000.000.000.0090000/184320\n0.000.000.000.000.0090000/184500-00 Balance Sheet InvProp(FV):Disposals\n0.000.000.000.000.0090000/184500\n0.000.000.000.000.0090000/184510-00 Balance Sheet InvProp(FV):Trf out of an acad\n0.000.000.000.000.0090000/184510\n0.000.000.000.000.0090000/184620-00 Balance Sheet InvProp(FV):Reclas frm cur inv\n0.000.000.000.000.0090000/184620\n0.000.000.000.000.0090000/184630-00 Balance Sheet InvProp(FV):Reclass to cur inv\n0.000.000.000.000.0090000/184630\n0.000.000.000.000.0090000/184640-00 Balance Sheet InvProp(FV):Reclass in fix inv\n0.000.000.000.000.0090000/184640\n0.000.000.000.000.0090000/184680-00 Balance Sheet InvProp(FV):Pd end fv gain/los\n0.000.000.000.000.0090000/184680\n0.000.000.000.000.0090000/184910-00 Balance Sheet InvProp(FV):Imp charged\n0.000.000.000.000.0090000/184910\n0.000.000.000.000.0090000/185100-00 Balance Sheet ManFd(FV):Cost b/fwd\n0.000.000.000.000.0090000/185100\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 73\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/185200-00 Balance Sheet ManFd(FV):Additions\n0.000.000.000.000.0090000/185200\n0.000.000.000.000.0090000/185300-00 Balance Sheet ManFd(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/185300\n0.000.000.000.000.0090000/185310-00 Balance Sheet ManFd(FV):Trf on conv(not LA)\n0.000.000.000.000.0090000/185310\n0.000.000.000.000.0090000/185320-00 Balance Sheet ManFd(FV):Trf in-exist acad\n0.000.000.000.000.0090000/185320\n0.000.000.000.000.0090000/185500-00 Balance Sheet ManFd(FV):Disposals\n0.000.000.000.000.0090000/185500\n0.000.000.000.000.0090000/185510-00 Balance Sheet ManFd(FV):Trf out of an acad\n0.000.000.000.000.0090000/185510\n0.000.000.000.000.0090000/185620-00 Balance Sheet ManFd(FV):Reclass from cur inv\n0.000.000.000.000.0090000/185620\n0.000.000.000.000.0090000/185630-00 Balance Sheet ManFd(FV):Reclass to cur inv\n0.000.000.000.000.0090000/185630\n0.000.000.000.000.0090000/185640-00 Balance Sheet ManFd(FV):Reclass in fix inv\n0.000.000.000.000.0090000/185640\n0.000.000.000.000.0090000/185680-00 Balance Sheet ManFd(FV):Pd end fv gain/loss\n0.000.000.000.000.0090000/185680\n0.000.000.000.000.0090000/185910-00 Balance Sheet ManFd(FV):Imp charged\n0.000.000.000.000.0090000/185910\n0.000.000.000.000.0090000/186100-00 Balance Sheet CshDp(FV):Cost b/fwd\n0.000.000.000.000.0090000/186100\n0.000.000.000.000.0090000/186200-00 Balance Sheet CshDp(FV):Additions\n0.000.000.000.000.0090000/186200\n0.000.000.000.000.0090000/186300-00 Balance Sheet CshDp(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/186300\n0.000.000.000.000.0090000/186310-00 Balance Sheet CshDp(FV):Trf on conv(not LA)\n0.000.000.000.000.0090000/186310\n0.000.000.000.000.0090000/186320-00 Balance Sheet CshDp(FV):Trf in-exist acad\n0.000.000.000.000.0090000/186320\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 74\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/186500-00 Balance Sheet CshDp(FV):Disposals\n0.000.000.000.000.0090000/186500\n0.000.000.000.000.0090000/186510-00 Balance Sheet CshDp(FV):Trf out of an acad\n0.000.000.000.000.0090000/186510\n0.000.000.000.000.0090000/186620-00 Balance Sheet CshDp(FV):Reclass from cur inv\n0.000.000.000.000.0090000/186620\n0.000.000.000.000.0090000/186630-00 Balance Sheet CshDp(FV):Reclass to cur inv\n0.000.000.000.000.0090000/186630\n0.000.000.000.000.0090000/186640-00 Balance Sheet CshDp(FV):Reclass in fix inv\n0.000.000.000.000.0090000/186640\n0.000.000.000.000.0090000/186680-00 Balance Sheet CshDp(FV):Pd end fv gain/loss\n0.000.000.000.000.0090000/186680\n0.000.000.000.000.0090000/186910-00 Balance Sheet CshDp(FV):Imp charged\n0.000.000.000.000.0090000/186910\n0.000.000.000.000.0090000/187100-00 Balance Sheet ShBd(FV):Cost b/fwd\n0.000.000.000.000.0090000/187100\n0.000.000.000.000.0090000/187200-00 Balance Sheet ShBd(FV):Additions\n0.000.000.000.000.0090000/187200\n0.000.000.000.000.0090000/187300-00 Balance Sheet ShBd(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/187300\n0.000.000.000.000.0090000/187310-00 Balance Sheet ShBd(FV):Trf on conv(not LA)\n0.000.000.000.000.0090000/187310\n0.000.000.000.000.0090000/187320-00 Balance Sheet ShBd(FV):Trf in-exist acad\n0.000.000.000.000.0090000/187320\n0.000.000.000.000.0090000/187500-00 Balance Sheet ShBd(FV):Disposals\n0.000.000.000.000.0090000/187500\n0.000.000.000.000.0090000/187510-00 Balance Sheet ShBd(FV):Trf out of an acad\n0.000.000.000.000.0090000/187510\n0.000.000.000.000.0090000/187620-00 Balance Sheet ShBd(FV):Reclass from cur inv\n0.000.000.000.000.0090000/187620\n0.000.000.000.000.0090000/187630-00 Balance Sheet ShBd(FV):Reclass to cur inv\n0.000.000.000.000.0090000/187630\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 75\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/187640-00 Balance Sheet ShBd(FV):Reclass in fix inv\n0.000.000.000.000.0090000/187640\n0.000.000.000.000.0090000/187680-00 Balance Sheet ShBd(FV):Pd end fv gain/loss\n0.000.000.000.000.0090000/187680\n0.000.000.000.000.0090000/187910-00 Balance Sheet ShBd(FV):Imp charged\n0.000.000.000.000.0090000/187910\n0.000.000.000.000.0090000/188100-00 Balance Sheet OthInv(FV):Cost brought fwd\n0.000.000.000.000.0090000/188100\n0.000.000.000.000.0090000/188200-00 Balance Sheet OthInv(FV):Additions\n0.000.000.000.000.0090000/188200\n0.000.000.000.000.0090000/188300-00 Balance Sheet OthInv(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/188300\n0.000.000.000.000.0090000/188310-00 Balance Sheet OthInv(FV):Trf on conv(not LA)\n0.000.000.000.000.0090000/188310\n0.000.000.000.000.0090000/188320-00 Balance Sheet OthInv(FV):Trf in-exist acad\n0.000.000.000.000.0090000/188320\n0.000.000.000.000.0090000/188500-00 Balance Sheet OthInv(FV):Disposals\n0.000.000.000.000.0090000/188500\n0.000.000.000.000.0090000/188510-00 Balance Sheet OthInv(FV):Trf out of an acad\n0.000.000.000.000.0090000/188510\n0.000.000.000.000.0090000/188620-00 Balance Sheet OthInv(FV):Reclass frm cur inv\n0.000.000.000.000.0090000/188620\n0.000.000.000.000.0090000/188630-00 Balance Sheet OthInv(FV):Reclass to cur inv\n0.000.000.000.000.0090000/188630\n0.000.000.000.000.0090000/188640-00 Balance Sheet OthInv(FV):Reclass in fix inv\n0.000.000.000.000.0090000/188640\n0.000.000.000.000.0090000/188680-00 Balance Sheet OthInv(FV):Pd end fv gain/loss\n0.000.000.000.000.0090000/188680\n0.000.000.000.000.0090000/188910-00 Balance Sheet OthInv(FV):Imp charged\n0.000.000.000.000.0090000/188910\n0.000.000.000.000.0090000/210100-00 Balance Sheet CA:Subs(ct):Cost b/fwd\n0.000.000.000.000.0090000/210100\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 76\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/210200-00 Balance Sheet CA:Subs(ct):Additions\n0.000.000.000.000.0090000/210200\n0.000.000.000.000.0090000/210300-00 Balance Sheet CA:Subs(ct):Trf on conv(LA)\n0.000.000.000.000.0090000/210300\n0.000.000.000.000.0090000/210310-00 Balance Sheet CA:Subs(ct):Trf on conv(notLA)\n0.000.000.000.000.0090000/210310\n0.000.000.000.000.0090000/210320-00 Balance Sheet CA:Subs(ct):Trf in-exist acad\n0.000.000.000.000.0090000/210320\n0.000.000.000.000.0090000/210500-00 Balance Sheet CA:Subs(ct):Disposals\n0.000.000.000.000.0090000/210500\n0.000.000.000.000.0090000/210510-00 Balance Sheet CA:Subs(ct):Trf out of an acad\n0.000.000.000.000.0090000/210510\n0.000.000.000.000.0090000/210650-00 Balance Sheet CA:Subs(ct):Reclas frm fix inv\n0.000.000.000.000.0090000/210650\n0.000.000.000.000.0090000/210660-00 Balance Sheet CA:Subs(ct):Reclas to fix inv\n0.000.000.000.000.0090000/210660\n0.000.000.000.000.0090000/210670-00 Balance Sheet CA:Subs(ct):Reclas in cur inv\n0.000.000.000.000.0090000/210670\n0.000.000.000.000.0090000/210910-00 Balance Sheet CA:Subs(ct):Imp charged\n0.000.000.000.000.0090000/210910\n0.000.000.000.000.0090000/211100-00 Balance Sheet CA:InvPr(ct):Cost b/fwd\n0.000.000.000.000.0090000/211100\n0.000.000.000.000.0090000/211200-00 Balance Sheet CA:InvPr(ct):Additions\n0.000.000.000.000.0090000/211200\n0.000.000.000.000.0090000/211300-00 Balance Sheet CA:InvPr(ct):Trf on conv(LA)\n0.000.000.000.000.0090000/211300\n0.000.000.000.000.0090000/211310-00 Balance Sheet CA:InvPr(ct):Tr on conv(notLA)\n0.000.000.000.000.0090000/211310\n0.000.000.000.000.0090000/211320-00 Balance Sheet CA:InvPr(ct):Trf in-exist acad\n0.000.000.000.000.0090000/211320\n0.000.000.000.000.0090000/211500-00 Balance Sheet CA:InvPr(ct):Disposals\n0.000.000.000.000.0090000/211500\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 77\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/211510-00 Balance Sheet CA:InvPr(ct):Trf out of acad\n0.000.000.000.000.0090000/211510\n0.000.000.000.000.0090000/211650-00 Balance Sheet CA:InvPr(ct):Recls frm fix inv\n0.000.000.000.000.0090000/211650\n0.000.000.000.000.0090000/211660-00 Balance Sheet CA:InvPr(ct):Reclas to fix inv\n0.000.000.000.000.0090000/211660\n0.000.000.000.000.0090000/211670-00 Balance Sheet CA:InvPr(ct):Reclas in cur inv\n0.000.000.000.000.0090000/211670\n0.000.000.000.000.0090000/211910-00 Balance Sheet CA:InvPr(ct):Imp charged\n0.000.000.000.000.0090000/211910\n0.000.000.000.000.0090000/212100-00 Balance Sheet CA:ShBd(ct):Cost b/fwd\n0.000.000.000.000.0090000/212100\n0.000.000.000.000.0090000/212200-00 Balance Sheet CA:ShBd(ct):Additions\n0.000.000.000.000.0090000/212200\n0.000.000.000.000.0090000/212300-00 Balance Sheet CA:ShBd(ct):Trf on conv(LA)\n0.000.000.000.000.0090000/212300\n0.000.000.000.000.0090000/212310-00 Balance Sheet CA:ShBd(ct):Trf on conv(notLA)\n0.000.000.000.000.0090000/212310\n0.000.000.000.000.0090000/212320-00 Balance Sheet CA:ShBd(ct):Trf in-exist acad\n0.000.000.000.000.0090000/212320\n0.000.000.000.000.0090000/212500-00 Balance Sheet CA:ShBd(ct):Disposals\n0.000.000.000.000.0090000/212500\n0.000.000.000.000.0090000/212510-00 Balance Sheet CA:ShBd(ct):Trf out of an acad\n0.000.000.000.000.0090000/212510\n0.000.000.000.000.0090000/212650-00 Balance Sheet CA:ShBd(ct):Reclas frm fix inv\n0.000.000.000.000.0090000/212650\n0.000.000.000.000.0090000/212660-00 Balance Sheet CA:ShBd(ct):Reclas to fix inv\n0.000.000.000.000.0090000/212660\n0.000.000.000.000.0090000/212670-00 Balance Sheet CA:ShBd(ct):Reclas in cur inv\n0.000.000.000.000.0090000/212670\n0.000.000.000.000.0090000/212910-00 Balance Sheet CA:ShBd(ct):Imp charged\n0.000.000.000.000.0090000/212910\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 78\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/213100-00 Balance Sheet CA:OInv(ct):Cost b/fwd\n0.000.000.000.000.0090000/213100\n0.000.000.000.000.0090000/213200-00 Balance Sheet CA:OInv(ct):Additions\n0.000.000.000.000.0090000/213200\n0.000.000.000.000.0090000/213300-00 Balance Sheet CA:OInv(ct):Trf on conv(LA)\n0.000.000.000.000.0090000/213300\n0.000.000.000.000.0090000/213310-00 Balance Sheet CA:OInv(ct):Trf on conv(notLA)\n0.000.000.000.000.0090000/213310\n0.000.000.000.000.0090000/213320-00 Balance Sheet CA:OInv(ct):Trf in-exist acad\n0.000.000.000.000.0090000/213320\n0.000.000.000.000.0090000/213500-00 Balance Sheet CA:OInv(ct):Disposals\n0.000.000.000.000.0090000/213500\n0.000.000.000.000.0090000/213510-00 Balance Sheet CA:OInv(ct):Trf out of an acad\n0.000.000.000.000.0090000/213510\n0.000.000.000.000.0090000/213650-00 Balance Sheet CA:OInv(ct):Reclas frm fix inv\n0.000.000.000.000.0090000/213650\n0.000.000.000.000.0090000/213660-00 Balance Sheet CA:OInv(ct):Reclas to fix inv\n0.000.000.000.000.0090000/213660\n0.000.000.000.000.0090000/213670-00 Balance Sheet CA:OInv(ct):Reclas in cur inv\n0.000.000.000.000.0090000/213670\n0.000.000.000.000.0090000/213910-00 Balance Sheet CA:OInv(ct):Imp charged\n0.000.000.000.000.0090000/213910\n0.000.000.000.000.0090000/214100-00 Balance Sheet CA:InvPr(FV):Cost b/fwd\n0.000.000.000.000.0090000/214100\n0.000.000.000.000.0090000/214200-00 Balance Sheet CA:InvPr(FV):Additions\n0.000.000.000.000.0090000/214200\n0.000.000.000.000.0090000/214300-00 Balance Sheet CA:InvPr(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/214300\n0.000.000.000.000.0090000/214310-00 Balance Sheet CA:InvPr(FV):Tr on conv(notLA)\n0.000.000.000.000.0090000/214310\n0.000.000.000.000.0090000/214320-00 Balance Sheet CA:InvPr(FV):Trf in-exist acad\n0.000.000.000.000.0090000/214320\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 79\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/214500-00 Balance Sheet CA:InvPr(FV):Disposals\n0.000.000.000.000.0090000/214500\n0.000.000.000.000.0090000/214510-00 Balance Sheet CA:InvPr(FV):Trf out of acad\n0.000.000.000.000.0090000/214510\n0.000.000.000.000.0090000/214650-00 Balance Sheet CA:InvPr(FV):Recls frm fix inv\n0.000.000.000.000.0090000/214650\n0.000.000.000.000.0090000/214660-00 Balance Sheet CA:InvPr(FV):Reclas to fix inv\n0.000.000.000.000.0090000/214660\n0.000.000.000.000.0090000/214670-00 Balance Sheet CA:InvPr(FV):Reclas in cur inv\n0.000.000.000.000.0090000/214670\n0.000.000.000.000.0090000/214680-00 Balance Sheet CA:InvPr(FV):Pdend fv gain/los\n0.000.000.000.000.0090000/214680\n0.000.000.000.000.0090000/214910-00 Balance Sheet CA:InvPr(FV):Imp charged\n0.000.000.000.000.0090000/214910\n0.000.000.000.000.0090000/215100-00 Balance Sheet CA:MnFd(FV):Cost b/fwd\n0.000.000.000.000.0090000/215100\n0.000.000.000.000.0090000/215200-00 Balance Sheet CA:MnFd(FV):Additions\n0.000.000.000.000.0090000/215200\n0.000.000.000.000.0090000/215300-00 Balance Sheet CA:MnFd(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/215300\n0.000.000.000.000.0090000/215310-00 Balance Sheet CA:MnFd(FV):Trf on conv(notLA)\n0.000.000.000.000.0090000/215310\n0.000.000.000.000.0090000/215320-00 Balance Sheet CA:MnFd(FV):Trf in-exist acad\n0.000.000.000.000.0090000/215320\n0.000.000.000.000.0090000/215500-00 Balance Sheet CA:MnFd(FV):Disposals\n0.000.000.000.000.0090000/215500\n0.000.000.000.000.0090000/215510-00 Balance Sheet CA:MnFd(FV):Trf out of an acad\n0.000.000.000.000.0090000/215510\n0.000.000.000.000.0090000/215650-00 Balance Sheet CA:MnFd(FV):Reclas frm fix inv\n0.000.000.000.000.0090000/215650\n0.000.000.000.000.0090000/215660-00 Balance Sheet CA:MnFd(FV):Reclas to fix inv\n0.000.000.000.000.0090000/215660\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 80\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/215670-00 Balance Sheet CA:MnFd(FV):Reclas in cur inv\n0.000.000.000.000.0090000/215670\n0.000.000.000.000.0090000/215680-00 Balance Sheet CA:MnFd(FV):Pd end fv gain/los\n0.000.000.000.000.0090000/215680\n0.000.000.000.000.0090000/215910-00 Balance Sheet CA:MnFd(FV):Imp charged\n0.000.000.000.000.0090000/215910\n0.000.000.000.000.0090000/216100-00 Balance Sheet CA:ChDp(FV):Cost b/fwd\n0.000.000.000.000.0090000/216100\n0.000.000.000.000.0090000/216200-00 Balance Sheet CA:ChDp(FV):Additions\n0.000.000.000.000.0090000/216200\n0.000.000.000.000.0090000/216300-00 Balance Sheet CA:ChDp(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/216300\n0.000.000.000.000.0090000/216310-00 Balance Sheet CA:ChDp(FV):Trf on conv(notLA)\n0.000.000.000.000.0090000/216310\n0.000.000.000.000.0090000/216320-00 Balance Sheet CA:ChDp(FV):Trf in-exist acad\n0.000.000.000.000.0090000/216320\n0.000.000.000.000.0090000/216500-00 Balance Sheet CA:ChDp(FV):Disposals\n0.000.000.000.000.0090000/216500\n0.000.000.000.000.0090000/216510-00 Balance Sheet CA:ChDp(FV):Trf out of an acad\n0.000.000.000.000.0090000/216510\n0.000.000.000.000.0090000/216650-00 Balance Sheet CA:ChDp(FV):Reclas frm fix inv\n0.000.000.000.000.0090000/216650\n0.000.000.000.000.0090000/216660-00 Balance Sheet CA:ChDp(FV):Reclas to fix inv\n0.000.000.000.000.0090000/216660\n0.000.000.000.000.0090000/216670-00 Balance Sheet CA:ChDp(FV):Reclas in cur inv\n0.000.000.000.000.0090000/216670\n0.000.000.000.000.0090000/216680-00 Balance Sheet CA:ChDp(FV):Pd end fv gain/los\n0.000.000.000.000.0090000/216680\n0.000.000.000.000.0090000/216910-00 Balance Sheet CA:ChDp(FV):Imp charged\n0.000.000.000.000.0090000/216910\n0.000.000.000.000.0090000/217100-00 Balance Sheet CA:ShBd(FV):Cost b/fwd\n0.000.000.000.000.0090000/217100\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 81\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/217200-00 Balance Sheet CA:ShBd(FV):Additions\n0.000.000.000.000.0090000/217200\n0.000.000.000.000.0090000/217300-00 Balance Sheet CA:ShBd(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/217300\n0.000.000.000.000.0090000/217310-00 Balance Sheet CA:ShBd(FV):Trf on conv(notLA)\n0.000.000.000.000.0090000/217310\n0.000.000.000.000.0090000/217320-00 Balance Sheet CA:ShBd(FV):Trf in-exist acad\n0.000.000.000.000.0090000/217320\n0.000.000.000.000.0090000/217500-00 Balance Sheet CA:ShBd(FV):Disposals\n0.000.000.000.000.0090000/217500\n0.000.000.000.000.0090000/217510-00 Balance Sheet CA:ShBd(FV):Trf out of an acad\n0.000.000.000.000.0090000/217510\n0.000.000.000.000.0090000/217650-00 Balance Sheet CA:ShBd(FV):Reclas frm fix inv\n0.000.000.000.000.0090000/217650\n0.000.000.000.000.0090000/217660-00 Balance Sheet CA:ShBd(FV):Reclas to fix inv\n0.000.000.000.000.0090000/217660\n0.000.000.000.000.0090000/217670-00 Balance Sheet CA:ShBd(FV):Reclas in cur inv\n0.000.000.000.000.0090000/217670\n0.000.000.000.000.0090000/217680-00 Balance Sheet CA:ShBd(FV):Pd end fv gain/los\n0.000.000.000.000.0090000/217680\n0.000.000.000.000.0090000/217910-00 Balance Sheet CA:ShBd(FV):Imp charged\n0.000.000.000.000.0090000/217910\n0.000.000.000.000.0090000/218100-00 Balance Sheet CA:OInv(FV):Cost b/fwd\n0.000.000.000.000.0090000/218100\n0.000.000.000.000.0090000/218200-00 Balance Sheet CA:OInv(FV):Additions\n0.000.000.000.000.0090000/218200\n0.000.000.000.000.0090000/218300-00 Balance Sheet CA:OInv(FV):Trf on conv(LA)\n0.000.000.000.000.0090000/218300\n0.000.000.000.000.0090000/218310-00 Balance Sheet CA:OInv(FV):Trf on conv(notLA)\n0.000.000.000.000.0090000/218310\n0.000.000.000.000.0090000/218320-00 Balance Sheet CA:OInv(FV):Trf in-exist acad\n0.000.000.000.000.0090000/218320\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 82\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/218500-00 Balance Sheet CA:OInv(FV):Disposals\n0.000.000.000.000.0090000/218500\n0.000.000.000.000.0090000/218510-00 Balance Sheet CA:OInv(FV):Trf out of an acad\n0.000.000.000.000.0090000/218510\n0.000.000.000.000.0090000/218650-00 Balance Sheet CA:OInv(FV):Reclas frm fix inv\n0.000.000.000.000.0090000/218650\n0.000.000.000.000.0090000/218660-00 Balance Sheet CA:OInv(FV):Reclas to fix inv\n0.000.000.000.000.0090000/218660\n0.000.000.000.000.0090000/218670-00 Balance Sheet CA:OInv(FV):Reclas in cur inv\n0.000.000.000.000.0090000/218670\n0.000.000.000.000.0090000/218680-00 Balance Sheet CA:OInv(FV):Pd end fv gain/los\n0.000.000.000.000.0090000/218680\n0.000.000.000.000.0090000/218910-00 Balance Sheet CA:OInv(FV):Imp charged\n0.000.000.000.000.0090000/218910\n0.000.000.000.000.0090000/230100-00 Balance Sheet Stock\n0.000.000.000.000.0090000/230100\n0.007,553.610.000.007,553.6190000/240100-00 Balance Sheet Debtors control account\n0.007,553.610.000.007,553.6190000/240100\n0.000.000.000.000.0090000/240150-00 Balance Sheet Bad Debts\n0.000.000.000.000.0090000/240150\n0.000.000.000.000.0090000/240200-00 Balance Sheet Accrued DfE Cap grant\n0.000.000.000.000.0090000/240200\n0.000.000.000.000.0090000/240210-00 Balance Sheet Accrued Cap grants\n0.000.000.000.000.0090000/240210\n0.00-200.040.000.00-200.0490000/240220-00 Balance Sheet Accrued DfE revenue grant\n0.00-200.040.000.00-200.0490000/240220\n0.000.000.000.000.0090000/240230-00 Balance Sheet Accrued revenue grant\n0.000.000.000.000.0090000/240230\n0.000.000.000.000.0090000/240250-00 Balance Sheet Accrued income-other\n0.000.000.000.000.0090000/240250\n0.000.000.000.000.0090000/240300-00 Balance Sheet Prepayments\n0.000.000.000.000.0090000/240300\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 83\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.0041,209.550.000.0041,209.5590000/240350-00 Balance Sheet VAT recoverable\n0.0041,209.550.000.0041,209.5590000/240350\n0.000.000.000.000.0090000/240400-00 Balance Sheet PFI payment\n0.000.000.000.000.0090000/240400\n0.000.000.000.000.0090000/240500-00 Balance Sheet Other Debtors\n0.000.000.000.000.0090000/240500\n0.000.000.000.000.0090000/240509-00 Balance Sheet O/S Unrec'd bank lodgements\n0.000.000.000.000.0090000/240509\n0.000.000.000.000.0090000/250100-00 Balance Sheet Debt>1yr:Trade Debtors\n0.000.000.000.000.0090000/250100\n0.000.000.000.000.0090000/250150-00 Balance Sheet Debt>1yr:Bad Debts\n0.000.000.000.000.0090000/250150\n0.000.000.000.000.0090000/250200-00 Balance Sheet Debt>1yr:Accrued DfE Cap grant\n0.000.000.000.000.0090000/250200\n0.000.000.000.000.0090000/250210-00 Balance Sheet Debt>1yr:Accrued Cap grants\n0.000.000.000.000.0090000/250210\n0.000.000.000.000.0090000/250220-00 Balance Sheet Debt>1yr:Accrued DfE rev grant\n0.000.000.000.000.0090000/250220\n0.000.000.000.000.0090000/250230-00 Balance Sheet Debt>1yr:Accrued revenue grant\n0.000.000.000.000.0090000/250230\n0.000.000.000.000.0090000/250250-00 Balance Sheet Debt>1yr:Accrued income-other\n0.000.000.000.000.0090000/250250\n0.000.000.000.000.0090000/250300-00 Balance Sheet Debt>1yr:Prepayments\n0.000.000.000.000.0090000/250300\n0.000.000.000.000.0090000/250350-00 Balance Sheet Debt>1yr:VAT recoverable\n0.000.000.000.000.0090000/250350\n0.000.000.000.000.0090000/250400-00 Balance Sheet Debt>1yr:PFI payment\n0.000.000.000.000.0090000/250400\n0.000.000.000.000.0090000/250500-00 Balance Sheet Debt>1yr:Other Debtors\n0.000.000.000.000.0090000/250500\n0.00-838,869.07-566.370.00-839,435.4490000/260100-00 Balance Sheet Bank Account\n0.00-838,869.07-566.370.00-839,435.4490000/260100\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 84\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/270100-00 Balance Sheet Savings Account\n0.000.000.000.000.0090000/270100\n0.000.000.000.000.0090000/280100-00 Balance Sheet Petty Cash Account\n0.000.000.000.000.0090000/280100\n0.00-278,504.64-11,858.750.00-290,363.3990000/310100-00 Balance Sheet Trade Creditors\n0.00-278,504.64-11,858.750.00-290,363.3990000/310100\n0.000.000.000.000.0090000/310150-00 Balance Sheet Bank Overdraft\n0.000.000.000.000.0090000/310150\n0.000.000.000.000.0090000/310160-00 Balance Sheet Credit/Debit Card\n0.000.000.000.000.0090000/310160\n0.000.000.000.000.0090000/310200-00 Balance Sheet Loans\n0.000.000.000.000.0090000/310200\n0.00-2,214.600.000.00-2,214.6090000/310250-00 Balance Sheet VAT payable\n0.00-2,214.600.000.00-2,214.6090000/310250\n0.000.000.000.000.0090000/310300-00 Balance Sheet Other tax and social security\n0.000.000.000.000.0090000/310300\n0.000.000.000.000.0090000/310350-00 Balance Sheet Other creditors\n0.000.000.000.000.0090000/310350\n0.000.000.000.000.0090000/310359-00 Balance Sheet O/S Unrec'd bank payments\n0.000.000.000.000.0090000/310359\n0.000.000.000.000.0090000/310400-00 Balance Sheet Corporation Tax\n0.000.000.000.000.0090000/310400\n0.000.000.000.000.0090000/310450-00 Balance Sheet Unused holiday accrual\n0.000.000.000.000.0090000/310450\n0.000.000.000.000.0090000/310500-00 Balance Sheet Deferred DfE Cap grant\n0.000.000.000.000.0090000/310500\n0.000.000.000.000.0090000/310510-00 Balance Sheet Deferred Cap grants\n0.000.000.000.000.0090000/310510\n0.000.000.000.000.0090000/310550-00 Balance Sheet Deferred DfE revenue grant\n0.000.000.000.000.0090000/310550\n0.000.000.000.000.0090000/310560-00 Balance Sheet Deferred revenue grant\n0.000.000.000.000.0090000/310560\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 85\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/310590-00 Balance Sheet Deferred income other\n0.000.000.000.000.0090000/310590\n0.000.000.000.000.0090000/310600-00 Balance Sheet Finance leases\n0.000.000.000.000.0090000/310600\n0.000.000.000.000.0090000/310650-00 Balance Sheet Imputed PFI finance lease\n0.000.000.000.000.0090000/310650\n0.000.000.000.000.0090000/310700-00 Balance Sheet Other accruals\n0.000.000.000.000.0090000/310700\n0.0015,164.100.000.0015,164.1090000/310707-00 Balance Sheet Inter-Company Control\n0.0015,164.100.000.0015,164.1090000/310707\n0.000.000.000.000.0090000/310708-00 Balance Sheet Suspense Account\n0.000.000.000.000.0090000/310708\n0.00-23,505.300.000.00-23,505.3090000/310709-00 Balance Sheet GRNI Accruals\n0.00-23,505.300.000.00-23,505.3090000/310709\n0.000.000.000.000.0090000/320200-00 Balance Sheet Cred>1yr:Loans\n0.000.000.000.000.0090000/320200\n0.000.000.000.000.0090000/320350-00 Balance Sheet Cred>1yr:Other creditors\n0.000.000.000.000.0090000/320350\n0.000.000.000.000.0090000/320500-00 Balance Sheet Cred>1yr:Deferred DfE Cap grnt\n0.000.000.000.000.0090000/320500\n0.000.000.000.000.0090000/320510-00 Balance Sheet Cred>1yr:Deferred Cap grants\n0.000.000.000.000.0090000/320510\n0.000.000.000.000.0090000/320550-00 Balance Sheet Cred>1yr:Deferrd DfE rev grant\n0.000.000.000.000.0090000/320550\n0.000.000.000.000.0090000/320560-00 Balance Sheet Cred>1yr:Deferred reven grant\n0.000.000.000.000.0090000/320560\n0.000.000.000.000.0090000/320590-00 Balance Sheet Cred>1yr:Deferred income other\n0.000.000.000.000.0090000/320590\n0.000.000.000.000.0090000/320600-00 Balance Sheet Cred>1yr:Finance leases\n0.000.000.000.000.0090000/320600\n0.000.000.000.000.0090000/320650-00 Balance Sheet Cred>1yr:Imputed PFI fin lease\n0.000.000.000.000.0090000/320650\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 86\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/320700-00 Balance Sheet Cred>1yr:Other Accruals\n0.000.000.000.000.0090000/320700\n0.000.000.000.000.0090000/330100-00 Balance Sheet DfE Group:Balance brought fwd\n0.000.000.000.000.0090000/330100\n0.000.000.000.000.0090000/330150-00 Balance Sheet DfE Group:New borrowings\n0.000.000.000.000.0090000/330150\n0.000.000.000.000.0090000/330200-00 Balance Sheet DfE Group:acad transfer in\n0.000.000.000.000.0090000/330200\n0.000.000.000.000.0090000/330250-00 Balance Sheet DfE Group:acad convs\n0.000.000.000.000.0090000/330250\n0.000.000.000.000.0090000/330300-00 Balance Sheet DfE Group:acad transfer out\n0.000.000.000.000.0090000/330300\n0.000.000.000.000.0090000/330350-00 Balance Sheet DfE Group:Repayment of loan\n0.000.000.000.000.0090000/330350\n0.000.000.000.000.0090000/330400-00 Balance Sheet DfE Group:Interest charged\n0.000.000.000.000.0090000/330400\n0.000.000.000.000.0090000/335100-00 Balance Sheet Oth govt bod:Bal brought fwd\n0.000.000.000.000.0090000/335100\n0.000.000.000.000.0090000/335150-00 Balance Sheet Oth govt bod:New borrowings\n0.000.000.000.000.0090000/335150\n0.000.000.000.000.0090000/335200-00 Balance Sheet Oth govt bod:acad transfer in\n0.000.000.000.000.0090000/335200\n0.000.000.000.000.0090000/335250-00 Balance Sheet Oth govt bod:acad convs\n0.000.000.000.000.0090000/335250\n0.000.000.000.000.0090000/335300-00 Balance Sheet Oth govt bod:acad transfer out\n0.000.000.000.000.0090000/335300\n0.000.000.000.000.0090000/335350-00 Balance Sheet Oth govt bod:Repayment of loan\n0.000.000.000.000.0090000/335350\n0.000.000.000.000.0090000/335400-00 Balance Sheet Oth govt bod:Interest charged\n0.000.000.000.000.0090000/335400\n0.000.000.000.000.0090000/340100-00 Balance Sheet Non-govt bod:Bal brought fwd\n0.000.000.000.000.0090000/340100\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 87\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/340150-00 Balance Sheet Non-govt bod:New borrowings\n0.000.000.000.000.0090000/340150\n0.000.000.000.000.0090000/340200-00 Balance Sheet Non-govt bod:acad transfer in\n0.000.000.000.000.0090000/340200\n0.000.000.000.000.0090000/340250-00 Balance Sheet Non-govt bod:acad convs\n0.000.000.000.000.0090000/340250\n0.000.000.000.000.0090000/340300-00 Balance Sheet Non-govt bod:acad transfer out\n0.000.000.000.000.0090000/340300\n0.000.000.000.000.0090000/340350-00 Balance Sheet Non-govt bod:Repayment of loan\n0.000.000.000.000.0090000/340350\n0.000.000.000.000.0090000/340400-00 Balance Sheet Non-govt bod:Interest charged\n0.000.000.000.000.0090000/340400\n0.000.000.000.000.0090000/350100-00 Balance Sheet Prov:Balance b/fwd\n0.000.000.000.000.0090000/350100\n0.000.000.000.000.0090000/350150-00 Balance Sheet Prov:Charged in year\n0.000.000.000.000.0090000/350150\n0.000.000.000.000.0090000/350200-00 Balance Sheet Prov:acad transfer in\n0.000.000.000.000.0090000/350200\n0.000.000.000.000.0090000/350250-00 Balance Sheet Prov:acad convs\n0.000.000.000.000.0090000/350250\n0.000.000.000.000.0090000/350300-00 Balance Sheet Prov:acad transfer out\n0.000.000.000.000.0090000/350300\n0.000.000.000.000.0090000/350350-00 Balance Sheet Prov:Utilised in year\n0.000.000.000.000.0090000/350350\n0.000.000.000.000.0090000/350400-00 Balance Sheet Prov:Released in year\n0.000.000.000.000.0090000/350400\n0.000.000.000.000.0090000/360100-00 Balance Sheet Payroll Control Account\n0.000.000.000.000.0090000/360100\n0.00-31,362.530.000.00-31,362.5390000/360200-00 Balance Sheet TPS control account\n0.00-31,362.530.000.00-31,362.5390000/360200\n0.000.000.000.000.0090000/370100-00 Balance Sheet Pens-presv Opening balance\n0.000.000.000.000.0090000/370100\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 88\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/370120-00 Balance Sheet Pens-presv Prior year convs\n0.000.000.000.000.0090000/370120\n0.000.000.000.000.0090000/370150-00 Balance Sheet Pens-presv Current year conv\n0.000.000.000.000.0090000/370150\n0.000.000.000.000.0090000/370200-00 Balance Sheet Pens-presv Current serv cost\n0.000.000.000.000.0090000/370200\n0.000.000.000.000.0090000/370250-00 Balance Sheet Pens-presv Interest cost\n0.000.000.000.000.0090000/370250\n0.000.000.000.000.0090000/370300-00 Balance Sheet Pens-presv gain/loss-financial\n0.000.000.000.000.0090000/370300\n0.000.000.000.000.0090000/370320-00 Balance Sheet Pens-presv gain/loss-demograph\n0.000.000.000.000.0090000/370320\n0.000.000.000.000.0090000/370350-00 Balance Sheet Pens-presv gain/loss-experien\n0.000.000.000.000.0090000/370350\n0.000.000.000.000.0090000/370400-00 Balance Sheet Pens-presv Employee contrb\n0.000.000.000.000.0090000/370400\n0.000.000.000.000.0090000/370450-00 Balance Sheet Pens-presv Benefits paid\n0.000.000.000.000.0090000/370450\n0.000.000.000.000.0090000/370500-00 Balance Sheet Pens-presv Curtail loss/gain\n0.000.000.000.000.0090000/370500\n0.000.000.000.000.0090000/370550-00 Balance Sheet Pens-presv Past serv cost/gain\n0.000.000.000.000.0090000/370550\n0.000.000.000.000.0090000/370600-00 Balance Sheet Pens-presv Unfunded payments\n0.000.000.000.000.0090000/370600\n0.000.000.000.000.0090000/370650-00 Balance Sheet Pens-presv Non-routine settlem\n0.000.000.000.000.0090000/370650\n0.000.000.000.000.0090000/370700-00 Balance Sheet Pens-presv acad transfer in\n0.000.000.000.000.0090000/370700\n0.000.000.000.000.0090000/370720-00 Balance Sheet Pens-presv acad transf out\n0.000.000.000.000.0090000/370720\n0.000.000.000.000.0090000/370750-00 Balance Sheet Pens-presv Pension admin costs\n0.000.000.000.000.0090000/370750\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 89\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.000.000.000.000.0090000/371100-00 Balance Sheet Pens-fairv Opening balance\n0.000.000.000.000.0090000/371100\n0.000.000.000.000.0090000/371120-00 Balance Sheet Pens-fairv Prior year convs\n0.000.000.000.000.0090000/371120\n0.000.000.000.000.0090000/371150-00 Balance Sheet Pens-fairv Current year convs\n0.000.000.000.000.0090000/371150\n0.000.000.000.000.0090000/371250-00 Balance Sheet Pens-fairv Interest income\n0.000.000.000.000.0090000/371250\n0.000.000.000.000.0090000/371300-00 Balance Sheet Pens-fairv gain/loss-financial\n0.000.000.000.000.0090000/371300\n0.000.000.000.000.0090000/371320-00 Balance Sheet Pens-fairv gain/loss-demograph\n0.000.000.000.000.0090000/371320\n0.000.000.000.000.0090000/371350-00 Balance Sheet Pens-fairv gain/loss-experien\n0.000.000.000.000.0090000/371350\n0.000.000.000.000.0090000/371400-00 Balance Sheet Pens-fairv Employee contrb\n0.000.000.000.000.0090000/371400\n0.000.000.000.000.0090000/371420-00 Balance Sheet Pens-fairv Employer contrb\n0.000.000.000.000.0090000/371420\n0.000.000.000.000.0090000/371450-00 Balance Sheet Pens-fairv Benefits paid\n0.000.000.000.000.0090000/371450\n0.000.000.000.000.0090000/371650-00 Balance Sheet Pens-fairv Non-routine settlem\n0.000.000.000.000.0090000/371650\n0.000.000.000.000.0090000/371700-00 Balance Sheet Pens-fairv acad transfer in\n0.000.000.000.000.0090000/371700\n0.000.000.000.000.0090000/371720-00 Balance Sheet Pens-fairv acad transfer out\n0.000.000.000.000.0090000/371720\n0.000.000.000.000.0090000/371750-00 Balance Sheet Pens-fairv Pension admin costs\n0.000.000.000.000.0090000/371750\n0.00361,899.860.000.00361,899.8690000/410100-01 Balance Sheet Surplus/Deficit Restricted Fd\n0.00504,380.510.000.00504,380.5190000/410100-31 Balance Sheet Surplus/Deficit Unrestrict Fd\n0.0083,947.870.000.0083,947.8790000/410100-51 Balance Sheet Surplus/Deficit Restrict FA Fd\n0.000.000.000.000.0090000/410100-81 Balance Sheet Surplus/Deficit Pension Fd\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 90\n \n\nADJ Pending\n(Prior Periods)\nOpening Balance\nPeriod 07\nPosted To Date\nPeriod 07\n*Nett Movements\nPeriod 07\nClosing Balance\nPeriod 07\nGeneral Ledger\nGL Code\n0.00950,228.240.000.00950,228.2490000/410100\n0.000.000.000.000.0090000/420100-01 Balance Sheet Restricted General Fund:Fd Bal\n0.000.000.000.000.0090000/420100\n0.000.000.000.000.0090000/430100-51 Balance Sheet Restricted FA Fund:Fd Bal\n0.000.000.000.000.0090000/430100\n0.000.000.000.000.0090000/440100-81 Balance Sheet Pension Fund:Fd Bal\n0.000.000.000.000.0090000/440100\n0.000.000.000.000.0090000/450100-00 Balance Sheet Other Funds:Fd Bal\n0.000.000.000.000.0090000/450100\n0.000.000.000.000.0090000/460100-31 Balance Sheet Unrestricted Funds:Fd Bal\n0.000.000.000.000.0090000/460100\n0.0013,178.650.000.0013,178.6590000/470100-00 Balance Sheet Revaluation Fund:Fd Bal\n0.0013,178.650.000.0013,178.6590000/470100\n0.000.000.000.000.0090000/480100-00 Balance Sheet Endowment Funds:Fd Bal\n0.000.000.000.000.0090000/480100\n0.000.000.000.000.0090000/490100-00 Balance Sheet Gross transfer between funds\n0.000.000.000.000.0090000/490100\n \n0.00-147,322.03-12,425.120.00-159,747.1590000\n \n0.000.000.000.000.00Overall Totals\n \n \n \n * NETT MOVEMENTS ARE THE FOLLOWING DATA SETS AGGREGATED:  \n01, Actuals \n05, Goods Recvd Not Invoiced\n \n \n \nEnd of Report : 31-Jul-2026 11:39\n000001 - Green Abbey SchoolName : NML510_01\nTrial Balance Period 242507User : FINDIR99D130\nFor All CurrenciesEnvironment : SFDEMOSITE130\n31-Jul-2026 11:39NML510 - 25.01.00/037Page 91\n \n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1083
+                        },
+                        {
+                          "title": "Go to the screen NML510",
+                          "duration": 5048
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 2
+                        },
+                        {
+                          "title": "Enter school Id and click submit",
+                          "duration": 4325
+                        },
+                        {
+                          "title": "Submit job on job processing dialog and wait for green icon on Background processing dialog",
+                          "duration": 480
+                        },
+                        {
+                          "title": "Wait for green icon on Background processing dialog",
+                          "duration": 62699
+                        },
+                        {
+                          "title": "Verify PDF report is generated in NML510 with text Trial Balance by Cost Centre",
+                          "duration": 9
+                        },
+                        {
+                          "title": "Click on PDF report",
+                          "duration": 4149
+                        },
+                        {
+                          "title": "Click on Close",
+                          "duration": 195
+                        }
+                      ],
+                      "startTime": "2026-07-31T10:39:08.991Z",
+                      "annotations": [
+                        {
+                          "type": "NML510 - Trial Balance Report",
+                          "description": "This test is for checking if NML510 Trial Balance Report is generated for given criteria"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-b0aab-Trial-Balance-Report-shard1-chromium-shard1/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-b0aab-Trial-Balance-Report-shard1-chromium-shard1/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-5a5cb2000f2cc017ba6f",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 316,
+              "column": 13
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Postchecks on environment:UAT",
+          "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+          "line": 101,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Login and Logout @shard2",
+              "ok": true,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "Login and Logout",
+                      "description": "This test is for performing login to SIMS Finance and then for user FINDIR99D130"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8057,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-0 | ENABLE_NETWORK_CAPTURE=(not set) | capture=false\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1806
+                        },
+                        {
+                          "title": "Expect home page elements visible on Load",
+                          "duration": 3148
+                        },
+                        {
+                          "title": "Click on profile and logout button",
+                          "duration": 1623
+                        },
+                        {
+                          "title": "Assert logout dialog is displayed, verify its content and logout",
+                          "duration": 1146
+                        }
+                      ],
+                      "startTime": "2026-07-31T10:38:28.485Z",
+                      "annotations": [
+                        {
+                          "type": "Login and Logout",
+                          "description": "This test is for performing login to SIMS Finance and then for user FINDIR99D130"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-5df68-UAT-Login-and-Logout-shard2-chromium-shard2/test-results/Postchecks/RunOn31072026/Hour 10/Homepage.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-5df68-UAT-Login-and-Logout-shard2-chromium-shard2/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-5df68-UAT-Login-and-Logout-shard2-chromium-shard2/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-1c54fd3b103d89a9b9e1",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 105,
+              "column": 13
+            },
+            {
+              "title": "File upload using SPC420 @shard2",
+              "ok": true,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "File upload using SPC420",
+                      "description": "This test is for performing File upload to SIMS Finance using SPC420"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16316,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "Writing file in: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/Test Files/\n"
+                        },
+                        {
+                          "text": "dirAndFileNameWithExt=Test Files/test1785494326325.TXT\n"
+                        },
+                        {
+                          "text": "fileNameWithExt=test1785494326325.TXT\n"
+                        },
+                        {
+                          "text": "fileName=TEST1785494326325\n"
+                        },
+                        {
+                          "text": "Created filename with extension:Test Files/test1785494326325.TXT\n"
+                        },
+                        {
+                          "text": "Deleting filename with extension:Test Files/test1785494326325.TXT\n"
+                        },
+                        {
+                          "text": "fileName=TEST1785494326325\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1032
+                        },
+                        {
+                          "title": "Go to the screen SPC420",
+                          "duration": 4963
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 1428
+                        },
+                        {
+                          "title": "Click on LOGS in ADM - Administration",
+                          "duration": 831
+                        },
+                        {
+                          "title": "Upload the file",
+                          "duration": 5654
+                        },
+                        {
+                          "title": "Delete the uploaded file Test Files/test1785494326325.TXT",
+                          "duration": 2248
+                        }
+                      ],
+                      "startTime": "2026-07-31T10:38:37.412Z",
+                      "annotations": [
+                        {
+                          "type": "File upload using SPC420",
+                          "description": "This test is for performing File upload to SIMS Finance using SPC420"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-cfc88--upload-using-SPC420-shard2-chromium-shard2/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-cfc88--upload-using-SPC420-shard2-chromium-shard2/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-a5294a5673d6f4220947",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 173,
+              "column": 13
+            },
+            {
+              "title": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+              "ok": true,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "SIMS_TB_SCHOOL - XQuery Report - Execute",
+                      "description": "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Execute"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12461,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1295
+                        },
+                        {
+                          "title": "Go to the screen SIMS_TB_SCHOOL",
+                          "duration": 6112
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 947
+                        },
+                        {
+                          "title": "Fill up the form and click Execute",
+                          "duration": 3807
+                        }
+                      ],
+                      "startTime": "2026-07-31T10:38:53.744Z",
+                      "annotations": [
+                        {
+                          "type": "SIMS_TB_SCHOOL - XQuery Report - Execute",
+                          "description": "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Execute"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-7508e-ery-Report---Execute-shard2-chromium-shard2/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-7508e-ery-Report---Execute-shard2-chromium-shard2/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-7508e-ery-Report---Execute-shard2-chromium-shard2/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-7b8174d1d7794c54ad97",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 395,
+              "column": 13
+            },
+            {
+              "title": "RSS310Q - Attachments @shard2",
+              "ok": false,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "RSS310Q - Attachments",
+                      "description": "This test is for checking if attachments can be attached to RSS310Q"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 206848,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                            "column": 33,
+                            "line": 145
+                          },
+                          "message": "Error: locator.getAttribute: Test timeout of 200000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('span.esr_grid_sort_span.fa').first()\u001b[22m\n\n\n   at ../pages/RSS/RSS310Q.ts:145\n\n  143 |             var sortIcon = this.page.locator(this.sortIconLocator).first();\n  144 |             const iconClass =\n> 145 |                 (await sortIcon.getAttribute(elementAttr.classAttr))?.trim() ||\n      |                                 ^\n  146 |                 \"\";\n  147 |             return iconClass?.includes(this.upSortIconLocator) ?? false;\n  148 |         };\n    at isAscending (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:145:33)\n    at RSS310Q.clickRandomViewButton (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:158:21)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:481:35\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:479:13"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1502
+                        },
+                        {
+                          "title": "Go to the screen RSS310Q",
+                          "duration": 6007
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 7
+                        },
+                        {
+                          "title": "Fill up the form and click search",
+                          "duration": 3747
+                        },
+                        {
+                          "title": "Click random view button and then verify breadcrumbs",
+                          "duration": 195502,
+                          "error": {
+                            "message": "Error: locator.getAttribute: Test timeout of 200000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('span.esr_grid_sort_span.fa').first()\u001b[22m\n",
+                            "stack": "Error: locator.getAttribute: Test timeout of 200000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('span.esr_grid_sort_span.fa').first()\u001b[22m\n\n    at isAscending (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:145:33)\n    at RSS310Q.clickRandomViewButton (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:158:21)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:481:35\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:479:13",
+                            "location": {
+                              "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                              "column": 33,
+                              "line": 145
+                            },
+                            "snippet": "   at ../pages/RSS/RSS310Q.ts:145\n\n\u001b[0m \u001b[90m 143 |\u001b[39m             \u001b[36mvar\u001b[39m sortIcon \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msortIconLocator)\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n \u001b[90m 144 |\u001b[39m             \u001b[36mconst\u001b[39m iconClass \u001b[33m=\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 145 |\u001b[39m                 (\u001b[36mawait\u001b[39m sortIcon\u001b[33m.\u001b[39mgetAttribute(elementAttr\u001b[33m.\u001b[39mclassAttr))\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mtrim() \u001b[33m||\u001b[39m\n \u001b[90m     |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 146 |\u001b[39m                 \u001b[32m\"\"\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 147 |\u001b[39m             \u001b[36mreturn\u001b[39m iconClass\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mincludes(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mupSortIconLocator) \u001b[33m?\u001b[39m\u001b[33m?\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 148 |\u001b[39m         }\u001b[33m;\u001b[39m\u001b[0m"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-07-31T10:39:06.225Z",
+                      "annotations": [
+                        {
+                          "type": "RSS310Q - Attachments",
+                          "description": "This test is for checking if attachments can be attached to RSS310Q"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2/error-context.md"
+                        }
+                      ]
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 206929,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                            "column": 33,
+                            "line": 145
+                          },
+                          "message": "Error: locator.getAttribute: Test timeout of 200000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('span.esr_grid_sort_span.fa').first()\u001b[22m\n\n\n   at ../pages/RSS/RSS310Q.ts:145\n\n  143 |             var sortIcon = this.page.locator(this.sortIconLocator).first();\n  144 |             const iconClass =\n> 145 |                 (await sortIcon.getAttribute(elementAttr.classAttr))?.trim() ||\n      |                                 ^\n  146 |                 \"\";\n  147 |             return iconClass?.includes(this.upSortIconLocator) ?? false;\n  148 |         };\n    at isAscending (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:145:33)\n    at RSS310Q.clickRandomViewButton (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:158:21)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:481:35\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:479:13"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-1 | ENABLE_NETWORK_CAPTURE=(not set) | capture=false\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1270
+                        },
+                        {
+                          "title": "Go to the screen RSS310Q",
+                          "duration": 5220
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 9
+                        },
+                        {
+                          "title": "Fill up the form and click search",
+                          "duration": 2776
+                        },
+                        {
+                          "title": "Click random view button and then verify breadcrumbs",
+                          "duration": 197580,
+                          "error": {
+                            "message": "Error: locator.getAttribute: Test timeout of 200000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('span.esr_grid_sort_span.fa').first()\u001b[22m\n",
+                            "stack": "Error: locator.getAttribute: Test timeout of 200000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('span.esr_grid_sort_span.fa').first()\u001b[22m\n\n    at isAscending (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:145:33)\n    at RSS310Q.clickRandomViewButton (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:158:21)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:481:35\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:479:13",
+                            "location": {
+                              "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                              "column": 33,
+                              "line": 145
+                            },
+                            "snippet": "   at ../pages/RSS/RSS310Q.ts:145\n\n\u001b[0m \u001b[90m 143 |\u001b[39m             \u001b[36mvar\u001b[39m sortIcon \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msortIconLocator)\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n \u001b[90m 144 |\u001b[39m             \u001b[36mconst\u001b[39m iconClass \u001b[33m=\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 145 |\u001b[39m                 (\u001b[36mawait\u001b[39m sortIcon\u001b[33m.\u001b[39mgetAttribute(elementAttr\u001b[33m.\u001b[39mclassAttr))\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mtrim() \u001b[33m||\u001b[39m\n \u001b[90m     |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 146 |\u001b[39m                 \u001b[32m\"\"\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 147 |\u001b[39m             \u001b[36mreturn\u001b[39m iconClass\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mincludes(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mupSortIconLocator) \u001b[33m?\u001b[39m\u001b[33m?\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 148 |\u001b[39m         }\u001b[33m;\u001b[39m\u001b[0m"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-07-31T10:42:34.357Z",
+                      "annotations": [
+                        {
+                          "type": "RSS310Q - Attachments",
+                          "description": "This test is for checking if attachments can be attached to RSS310Q"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2-retry1/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-6e810ebf42be31a81a4d",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 445,
+              "column": 13
+            },
+            {
+              "title": "Help screen @shard2",
+              "ok": true,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "Help screen",
+                      "description": "This test is for checking if help screen is working"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6583,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-2 | ENABLE_NETWORK_CAPTURE=(not set) | capture=false\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1132
+                        },
+                        {
+                          "title": "Click help screen",
+                          "duration": 5103
+                        }
+                      ],
+                      "startTime": "2026-07-31T10:46:03.190Z",
+                      "annotations": [
+                        {
+                          "type": "Help screen",
+                          "description": "This test is for checking if help screen is working"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-dfc4a-ment-UAT-Help-screen-shard2-chromium-shard2/test-finished-1.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-dfc4a-ment-UAT-Help-screen-shard2-chromium-shard2/test-finished-2.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-dfc4a-ment-UAT-Help-screen-shard2-chromium-shard2/video-1.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-dfc4a-ment-UAT-Help-screen-shard2-chromium-shard2/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-fc8a12db2c0d7367a46b",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 499,
+              "column": 13
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-31T10:38:26.014Z",
+    "duration": 579604.471,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
