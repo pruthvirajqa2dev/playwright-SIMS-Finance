@@ -1,0 +1,571 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Post-Deployment-Tests/PostChecksTests.spec.ts >> Postchecks on environment:UAT >> RSS570 - Crystal Report @shard1
+- Location: src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:237:13
+
+# Error details
+
+```
+Test timeout of 200000ms exceeded.
+```
+
+```
+Error: locator.click: Test timeout of 200000ms exceeded.
+Call log:
+  - waiting for locator('[aria-label=\'Your Last 20 Accessed Options\']').first()
+    - locator resolved to <li tabindex="0" data-tag="1" data-tipped="true" form="sid5523_esr_nav" data-control_owner_id="" data-page_name="esr_nav" data-type="NAVIGATIONPANE" name="sid5523_esr_nav_ESR_NAV_PANE" data-control_owner="NAVIGATIONPANE" class="navigation_section_selected_li" onblur="esr_ControlBlur(this, event);" onclick="esr_ControlClick(this, event);" onfocus="esr_ControlFocus(this, event);" id="sid5523_esr_nav_ESR_NAV_PANE_HISTORY" aria-label="Your Last 20 Accessed Options" onchange="esr_ControlChange(this, ev…>…</li>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - element is outside of the viewport
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - element is outside of the viewport
+    - retrying click action
+      - waiting 100ms
+    370 × waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - element is outside of the viewport
+      - retrying click action
+        - waiting 500ms
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic "Click here to show the navigation panel" [active] [ref=e7] [cursor=pointer]: 
+        - generic "Click here to navigate to your homepage" [ref=e8] [cursor=pointer]
+      - heading "SIMS Finance" [level=2] [ref=e10]
+      - text: 
+      - generic [ref=e12]:
+        - heading "SIMS Finance Demo Site 130" [level=3] [ref=e13]
+        - generic [ref=e14] [cursor=pointer]: 
+        - text: 
+        - generic [ref=e15] [cursor=pointer]:
+          - generic [ref=e16]:  
+          - text: Finance Director
+          - generic [ref=e17]: 
+    - text:   
+  - generic [ref=e20]:
+    - generic [ref=e22]:
+      - generic [ref=e24]:
+        - button "Quick Launch" [ref=e31] [cursor=pointer]:
+          - generic [ref=e33]: 
+        - text: 
+        - button "Spaces" [ref=e40] [cursor=pointer]:
+          - generic [ref=e42]: 
+        - text: 
+        - button "Recent History" [ref=e49] [cursor=pointer]:
+          - generic [ref=e51]: 
+        - text:     
+        - button "Favourites" [ref=e58] [cursor=pointer]:
+          - generic [ref=e60]: 
+        - text:    
+        - generic: 
+      - generic [ref=e62] [cursor=pointer]:
+        - generic [ref=e63]: 
+        - generic [ref=e64]: 
+    - generic [ref=e66]:
+      - generic [ref=e68]:
+        - text: 
+        - list [ref=e70]:
+          - generic [ref=e72]:
+            - generic [ref=e75]: 
+            - generic [ref=e76]: Last successful login was Tuesday, 11-Aug-2026 09:53:42.
+        - text: 
+      - table [ref=e77]:
+        - rowgroup [ref=e78]:
+          - row [ref=e79]:
+            - cell "News Messages SIMS Finance Messsage System Maintenance; Weekend August 15-16 2026 (Update 05/08/2026) We are planning to undertake system maintenance for SIMS Finance during the weekend August 15-16 2026. During this period, SIMS Finance will not be available, and we apologise for any inconvenience. We will confirm arrangements next week. User Messages No User Messages Found Tasks Refresh this module 'ADM017' 2 Tasks  View 2 View  Overdue 0 Due Soon 0 Upcoming Priority Tasks Overdue  Q Credit Notes Requiring Authorisation Credit Note CRNBEFORE for Eastern Water Authority for -£123.00 requires Authorisation by you. Overdue  Q Credit Notes Requiring Authorisation Credit Note CRDN00001 for GLS for -£3513.51 requires Authorisation by you.  View All Task Summary More  Q Credit Notes Requiring Authorisation (2)" [ref=e80]:
+              - list [ref=e82]:
+                - listitem [ref=e83]:
+                  - heading "News Messages" [level=3] [ref=e85]
+                  - generic [ref=e89]:
+                    - heading "SIMS Finance Messsage" [level=1] [ref=e90]
+                    - generic [ref=e94]:
+                      - generic [ref=e97]: 
+                      - generic [ref=e99]:
+                        - text: System Maintenance; Weekend August 15-16 2026 (Update 05/08/2026)
+                        - text: We are planning to undertake system maintenance for SIMS Finance during the weekend August 15-16 2026. During this period, SIMS Finance will not be available,
+                        - text: and we apologise for any inconvenience. We will confirm arrangements next week.
+                - listitem [ref=e100]:
+                  - heading "User Messages" [level=3] [ref=e102]
+                  - generic [ref=e111]: No User Messages Found
+                - listitem [ref=e112]:
+                  - generic [ref=e113]:
+                    - heading "Tasks" [level=3] [ref=e114]
+                    - generic "Refresh this module 'ADM017'" [ref=e116] [cursor=pointer]: 
+                  - generic [ref=e119]:
+                    - table [ref=e121]:
+                      - rowgroup [ref=e122]:
+                        - row "2 Tasks  View 2 View  Overdue 0 Due Soon 0 Upcoming" [ref=e123]:
+                          - cell "2 Tasks  View" [ref=e124]:
+                            - generic [ref=e129]:
+                              - generic [ref=e133]:
+                                - heading "2" [level=1] [ref=e134]
+                                - heading "Tasks" [level=5] [ref=e135]
+                              - generic [ref=e137]:
+                                - generic [ref=e139]: 
+                                - generic [ref=e140]: View
+                          - cell "2 View  Overdue 0 Due Soon 0 Upcoming" [ref=e141]:
+                            - generic [ref=e146]:
+                              - generic [ref=e147]:
+                                - heading "2" [level=5] [ref=e150]
+                                - generic [ref=e151]:
+                                  - generic [ref=e152]:
+                                    - heading "View" [level=5] [ref=e153]
+                                    - generic [ref=e154]: 
+                                  - generic [ref=e155]: Overdue
+                              - generic [ref=e156]:
+                                - heading "0" [level=5] [ref=e159]
+                                - generic [ref=e161]: Due Soon
+                              - generic [ref=e162]:
+                                - heading "0" [level=5] [ref=e165]
+                                - generic [ref=e167]: Upcoming
+                    - table [ref=e170]:
+                      - rowgroup [ref=e171]:
+                        - row "Priority Tasks" [ref=e172]:
+                          - cell "Priority Tasks" [ref=e173]:
+                            - generic [ref=e175]: Priority Tasks 
+                    - generic [ref=e176]:
+                      - generic [ref=e180]:
+                        - generic [ref=e181]:
+                          - generic [ref=e183]:
+                            - generic [ref=e185]: 
+                            - heading "Overdue" [level=5] [ref=e186]
+                          - generic [ref=e187]:
+                            - generic [ref=e189]: 
+                            - generic [ref=e190]:
+                              - text: Q Credit Notes Requiring Authorisation
+                              - text: Credit Note CRNBEFORE for Eastern Water Authority for -£123.00 requires Authorisation by you.
+                        - generic [ref=e191]:
+                          - generic [ref=e193]:
+                            - generic [ref=e195]: 
+                            - heading "Overdue" [level=5] [ref=e196]
+                          - generic [ref=e197]:
+                            - generic [ref=e199]: 
+                            - generic [ref=e200]:
+                              - text: Q Credit Notes Requiring Authorisation
+                              - text: Credit Note CRDN00001 for GLS for -£3513.51 requires Authorisation by you.
+                      - generic [ref=e207]:
+                        - generic [ref=e209]: 
+                        - generic [ref=e210]: View All
+                    - table [ref=e213]:
+                      - rowgroup [ref=e214]:
+                        - row "Task Summary" [ref=e215]:
+                          - cell "Task Summary" [ref=e216]:
+                            - generic [ref=e218]: Task Summary 
+                    - table [ref=e221]:
+                      - rowgroup [ref=e222]:
+                        - row "More  Q Credit Notes Requiring Authorisation (2)" [ref=e223]:
+                          - cell [ref=e224]:
+                            - generic [ref=e228]:  􏀭
+                          - cell "More  Q Credit Notes Requiring Authorisation (2)" [ref=e229]:
+                            - generic [ref=e231]:
+                              - generic [ref=e232]:
+                                - heading "More" [level=5] [ref=e233]
+                                - generic [ref=e234]: 
+                              - generic [ref=e235]: Q Credit Notes Requiring Authorisation (2)
+                              - text: 
+            - cell "Favourites NML400 - Accounts Master/Transaction Enquiry - Green Abbey School RSS310Q - Purchase Orders" [ref=e236]:
+              - list [ref=e238]:
+                - listitem [ref=e239]:
+                  - heading "Favourites" [level=3] [ref=e241]
+                  - generic [ref=e249]:
+                    - generic [ref=e250]:
+                      - generic [ref=e253]: 
+                      - generic [ref=e255]: NML400 - Accounts Master/Transaction Enquiry - Green Abbey School
+                    - generic [ref=e256]:
+                      - generic [ref=e259]: 
+                      - generic [ref=e261]: RSS310Q - Purchase Orders
+  - status [ref=e262]
+  - dialog [ref=e263]:
+    - button " Close" [ref=e266] [cursor=pointer]:
+      - generic [ref=e267]: 
+      - text: Close
+    - generic [ref=e270]:
+      - table [ref=e272]:
+        - rowgroup [ref=e273]:
+          - row "Type to filter menus or enter Option Id to launch. Click to open a new browser window" [ref=e274]:
+            - cell "Type to filter menus or enter Option Id to launch." [ref=e275]:
+              - generic [ref=e281]:
+                - generic [ref=e282]: Launch
+                - generic [ref=e283]:
+                  - textbox "Type to filter menus or enter Option Id to launch." [ref=e284]:
+                    - /placeholder: type here to search for options...
+                  - text: 
+            - cell "Click to open a new browser window" [ref=e285]:
+              - table [ref=e288]:
+                - rowgroup [ref=e289]:
+                  - row "Click to open a new browser window" [ref=e290]:
+                    - cell "Click to open a new browser window" [ref=e291]:
+                      - generic [ref=e293]:
+                        - link "Click to open a new browser window" [ref=e294] [cursor=pointer]:
+                          - /url: "#"
+                          - text: New Window
+                        - text: 
+      - table [ref=e296]:
+        - rowgroup [ref=e297]:
+          - row "Menus Your Last 20 Accessed Options Favourites Homepages Tools Crystal AND XQuery Reports you have access to by Security Group Business Intelligence Your last 10 Submitted Documents Your last 10 Submitted Jobs Tasks that require your attention User Details Help AND About User Documentation NML510 - Trial Balance Report (Standard) RSS310Q - Purchase Orders RSS570 - Outstanding Accruals XQUERY - SIMS Trial Balance School SPC420 - File Manager BDM710Q - SIMS Personnel Data Upload SPC400 - SPC Job Enquiry PRL614Q - BACS Processing SPC411 - Report Viewer (User) NML630 - Period End XQUERY - SIMS Package Periods SIM850 - Period End Report RSS820 - Period End Update CMS800 - Period End Update FAM800 - Depreciation Processing PRL800 - Period End Update SLS800 - Period End Update FAM804 - Period End Update NML400 - Account Enquiry BDM300A - Budget Maintenance (Accountant)" [ref=e298]:
+            - cell "Menus Your Last 20 Accessed Options Favourites Homepages Tools Crystal AND XQuery Reports you have access to by Security Group Business Intelligence Your last 10 Submitted Documents Your last 10 Submitted Jobs Tasks that require your attention User Details Help AND About User Documentation" [ref=e299]:
+              - list [ref=e303]:
+                - listitem [ref=e304]:
+                  - generic [ref=e306]: 
+                  - link "Menus" [ref=e307] [cursor=pointer]:
+                    - /url: "#"
+                - listitem "Your Last 20 Accessed Options" [ref=e308]:
+                  - generic [ref=e310]: 
+                  - link "Your Last 20 Accessed Options" [ref=e311] [cursor=pointer]:
+                    - /url: "#"
+                    - text: Recent History
+                  - text: 
+                - listitem [ref=e312]:
+                  - generic [ref=e314]: 
+                  - link "Favourites" [ref=e315] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=e316]:
+                  - generic [ref=e318]: 
+                  - link "Homepages" [ref=e319] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=e320]:
+                  - generic [ref=e322]: 
+                  - link "Tools" [ref=e323] [cursor=pointer]:
+                    - /url: "#"
+                - listitem "Crystal AND XQuery Reports you have access to by Security Group" [ref=e324]:
+                  - generic [ref=e326]: 
+                  - link "Crystal AND XQuery Reports you have access to by Security Group" [ref=e327] [cursor=pointer]:
+                    - /url: "#"
+                    - text: Reports
+                - listitem "Business Intelligence" [ref=e328]:
+                  - generic [ref=e330]: 
+                  - link "Business Intelligence" [ref=e331] [cursor=pointer]:
+                    - /url: "#"
+                    - text: IBI
+                - listitem "Your last 10 Submitted Documents" [ref=e332]:
+                  - generic [ref=e334]: 
+                  - link "Your last 10 Submitted Documents" [ref=e335] [cursor=pointer]:
+                    - /url: "#"
+                    - text: Document Updates
+                - listitem "Your last 10 Submitted Jobs" [ref=e336]:
+                  - generic [ref=e338]: 
+                  - link "Your last 10 Submitted Jobs" [ref=e339] [cursor=pointer]:
+                    - /url: "#"
+                    - text: Job Controller
+                - listitem "Tasks that require your attention" [ref=e340]:
+                  - generic [ref=e342]: 
+                  - link "Tasks that require your attention" [ref=e343] [cursor=pointer]:
+                    - /url: "#"
+                    - text: Tasks
+                - listitem [ref=e344]:
+                  - generic [ref=e346]: 
+                  - link "User Details" [ref=e347] [cursor=pointer]:
+                    - /url: "#"
+                - listitem "Help AND About" [ref=e348]:
+                  - generic [ref=e350]: 
+                  - link "Help AND About" [ref=e351] [cursor=pointer]:
+                    - /url: "#"
+                    - text: Help
+                - listitem [ref=e352]:
+                  - generic [ref=e354]: 
+                  - link "User Documentation" [ref=e355] [cursor=pointer]:
+                    - /url: "#"
+            - cell "NML510 - Trial Balance Report (Standard) RSS310Q - Purchase Orders RSS570 - Outstanding Accruals XQUERY - SIMS Trial Balance School SPC420 - File Manager BDM710Q - SIMS Personnel Data Upload SPC400 - SPC Job Enquiry PRL614Q - BACS Processing SPC411 - Report Viewer (User) NML630 - Period End XQUERY - SIMS Package Periods SIM850 - Period End Report RSS820 - Period End Update CMS800 - Period End Update FAM800 - Depreciation Processing PRL800 - Period End Update SLS800 - Period End Update FAM804 - Period End Update NML400 - Account Enquiry BDM300A - Budget Maintenance (Accountant)" [ref=e357]:
+              - generic [ref=e366]:
+                - generic [ref=e367]:
+                  - generic [ref=e370]: 
+                  - generic [ref=e372]: NML510 - Trial Balance Report (Standard)
+                - generic [ref=e373]:
+                  - generic [ref=e376]: 
+                  - generic [ref=e378]: RSS310Q - Purchase Orders
+                - generic [ref=e379]:
+                  - generic [ref=e382]: 
+                  - generic [ref=e384]: RSS570 - Outstanding Accruals
+                - generic [ref=e385]:
+                  - generic [ref=e388]: 
+                  - generic [ref=e390]: XQUERY - SIMS Trial Balance School
+                - generic [ref=e391]:
+                  - generic [ref=e394]: 
+                  - generic [ref=e396]: SPC420 - File Manager
+                - generic [ref=e397]:
+                  - generic [ref=e400]: 
+                  - generic [ref=e402]: BDM710Q - SIMS Personnel Data Upload
+                - generic [ref=e403]:
+                  - generic [ref=e406]: 
+                  - generic "SPC400 - SPC Job Enquiry" [ref=e408]: SPC400 - Job Enquiry
+                - generic [ref=e409]:
+                  - generic [ref=e412]: 
+                  - generic [ref=e414]: PRL614Q - BACS Processing
+                - generic [ref=e415]:
+                  - generic [ref=e418]: 
+                  - generic [ref=e420]: SPC411 - Report Viewer (User)
+                - generic [ref=e421]:
+                  - generic [ref=e424]: 
+                  - generic [ref=e426]: NML630 - Period End
+                - generic [ref=e427]:
+                  - generic [ref=e430]: 
+                  - generic [ref=e432]: XQUERY - SIMS Package Periods
+                - generic [ref=e433]:
+                  - generic [ref=e436]: 
+                  - generic [ref=e438]: SIM850 - Period End Report
+                - generic [ref=e439]:
+                  - generic [ref=e442]: 
+                  - generic [ref=e444]: RSS820 - Period End Update
+                - generic [ref=e445]:
+                  - generic [ref=e448]: 
+                  - generic [ref=e450]: CMS800 - Period End Update
+                - generic [ref=e451]:
+                  - generic [ref=e454]: 
+                  - generic [ref=e456]: FAM800 - Depreciation Processing
+                - generic [ref=e457]:
+                  - generic [ref=e460]: 
+                  - generic [ref=e462]: PRL800 - Period End Update
+                - generic [ref=e463]:
+                  - generic [ref=e466]: 
+                  - generic [ref=e468]: SLS800 - Period End Update
+                - generic [ref=e469]:
+                  - generic [ref=e472]: 
+                  - generic [ref=e474]: FAM804 - Period End Update
+                - generic [ref=e475]:
+                  - generic [ref=e478]: 
+                  - generic [ref=e480]: NML400 - Account Enquiry
+                - generic [ref=e481]:
+                  - generic [ref=e484]: 
+                  - generic [ref=e486]: BDM300A - Budget Maintenance (Accountant)
+      - table [ref=e490]:
+        - rowgroup [ref=e491]:
+          - row "Launch Options In New Window" [ref=e492]:
+            - cell [ref=e493]
+            - cell "Launch Options In New Window" [ref=e494]:
+              - generic [ref=e495]: Launch Options In New Window
+            - cell "Launch Options In New Window" [ref=e496]:
+              - generic [ref=e498]:
+                - checkbox "Launch Options In New Window" [ref=e499] [cursor=pointer]: 
+                - text: 
+  - status [ref=e501]
+```
+
+# Test source
+
+```ts
+  77  |     private readonly _saveAllBtnLocator = "#save_all";
+  78  |     public get saveAllBtnLocator(): string {
+  79  |         return this._saveAllBtnLocator;
+  80  |     }
+  81  | 
+  82  |     protected _closeBtnLocator = "#btn_close";
+  83  |     public get closeBtnLocator(): string {
+  84  |         return this._closeBtnLocator;
+  85  |     }
+  86  |     private readonly _breadcrumbLocator = "div[id*=esr_breadcrumb]";
+  87  |     public get breadcrumbLocator(): string {
+  88  |         return this._breadcrumbLocator;
+  89  |     }
+  90  |     private readonly _attachmentBtnLocator = "#esr_attachments_button";
+  91  |     public get attachmentBtnLocator(): string {
+  92  |         return this._attachmentBtnLocator;
+  93  |     }
+  94  |     private readonly _btnElementListLocator = "div.esr_multibutton";
+  95  |     public get btnElementListLocator(): string {
+  96  |         return this._btnElementListLocator;
+  97  |     }
+  98  |     private readonly _multiBtnLocator = ".multibutton_content";
+  99  |     public get multiBtnLocator(): string {
+  100 |         return this._multiBtnLocator;
+  101 |     }
+  102 |     private readonly _commonDhxBtnLocator = ".dhx_button";
+  103 |     public get commonDhxBtnLocator(): string {
+  104 |         return this._commonDhxBtnLocator;
+  105 |     }
+  106 |     private readonly pdfIconLocator =
+  107 |         "div[style*='background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);']";
+  108 | 
+  109 |     private readonly _fileNameAfterUploadLocator = ".dhx_list-item--name";
+  110 |     public get fileNameAfterUploadLocator(): string {
+  111 |         return this._fileNameAfterUploadLocator;
+  112 |     }
+  113 |     private readonly _successMarkLocator = "*[class^=dhx_item--success-mark]";
+  114 |     public get successMarkLocator(): string {
+  115 |         return this._successMarkLocator;
+  116 |     }
+  117 |     private readonly _upArrowLocator = ".fa-sort-amount-up";
+  118 |     public get upArrowLocator(): string {
+  119 |         return this._upArrowLocator;
+  120 |     }
+  121 |     protected _downArrowLocator = ".fa-sort-amount-down";
+  122 |     public get downArrowLocator(): string {
+  123 |         return this._downArrowLocator;
+  124 |     }
+  125 |     private readonly _sortableGridLocator = ".esr_grid_sort_span ";
+  126 |     public get sortableGridLocator(): string {
+  127 |         return this._sortableGridLocator;
+  128 |     }
+  129 | 
+  130 |     private readonly _sortIconLocator = "span.esr_grid_sort_span.fa";
+  131 |     public get sortIconLocator(): string {
+  132 |         return this._sortIconLocator;
+  133 |     }
+  134 | 
+  135 |     private readonly _searchBtnLocator = "#search_button";
+  136 |     public get searchBtnLocator() {
+  137 |         return this._searchBtnLocator;
+  138 |     }
+  139 |     private readonly esrMsgBoxOkBtnLocator = "#esr_messagebox_ok";
+  140 |     protected readonly summaryBtnLabel = "Summary";
+  141 | 
+  142 |     screenshotPath =
+  143 |         "test-results/Postchecks/RunOn" +
+  144 |         new Date().toLocaleDateString("en-GB").replace(/\//g, "") +
+  145 |         "/" +
+  146 |         "Hour " +
+  147 |         new Date().getHours();
+  148 |     //Actions
+  149 | 
+  150 |     // Common navigation methods
+  151 |     /**
+  152 |      * This function is for navigating to provided resource/endpoint
+  153 |      * @param url
+  154 |      */
+  155 |     async navigateTo(url: string) {
+  156 |         await this.page.goto(url);
+  157 |     }
+  158 |     /**
+  159 |      *
+  160 |      */
+  161 |     async navigateBack() {
+  162 |         await this.page.goBack();
+  163 |     }
+  164 |     /**
+  165 |      *
+  166 |      */
+  167 |     async navigateForward() {
+  168 |         await this.page.goForward();
+  169 |     }
+  170 | 
+  171 |     // Common element interaction methods
+  172 |     /**
+  173 |      *
+  174 |      * @param locator
+  175 |      */
+  176 |     async click(locator: string) {
+> 177 |         await this.page.locator(locator).first().click();
+      |                                                  ^ Error: locator.click: Test timeout of 200000ms exceeded.
+  178 |     }
+  179 |     /**
+  180 |      *
+  181 |      * @param locator
+  182 |      */
+  183 |     async dblClick(locator: string) {
+  184 |         await this.page.locator(locator).first().dblclick();
+  185 |     }
+  186 |     /**
+  187 |      *
+  188 |      * @param locator
+  189 |      */
+  190 |     async check(locator: string) {
+  191 |         await this.page.check(locator);
+  192 |     }
+  193 |     /**
+  194 |      *
+  195 |      * @param locator
+  196 |      */
+  197 |     async checkAndVerify(locator: string) {
+  198 |         await this.check(locator);
+  199 |         expect(await this.page.isChecked(locator)).toBeTruthy();
+  200 |     }
+  201 |     /**
+  202 |      *
+  203 |      * @param locator
+  204 |      * @param text
+  205 |      */
+  206 |     async fill(locator: string, text: string) {
+  207 |         await this.page.locator(locator).click();
+  208 |         await this.page.locator(locator).fill(text, { force: true });
+  209 |     }
+  210 |     /**
+  211 |      *
+  212 |      * @param locator
+  213 |      * @param text
+  214 |      */
+  215 |     async fillTextAndVerify(locator: string, text: string) {
+  216 |         // Fill text
+  217 |         logger.info(`Fill text ${text} in locator ${locator}`);
+  218 |         await this.fill(locator, text);
+  219 |         //Verify Text filled
+  220 |         logger.info(`Expecting text ${text} in locator ${locator}`);
+  221 |         await this.expectElementToContainText(locator, text);
+  222 |     }
+  223 |     /**
+  224 |      *
+  225 |      * @param locator
+  226 |      * @param text
+  227 |      */
+  228 |     async fillTextAndVerifyValue(locator: string, value: string) {
+  229 |         // Fill text
+  230 |         logger.info(`Fill text ${value} in locator ${locator}`);
+  231 |         await this.fill(locator, value);
+  232 |         //Verify Text filled
+  233 |         logger.info(`Expecting value ${value} in locator ${locator}`);
+  234 |         await this.expectElementToContainText(locator, value);
+  235 |     }
+  236 |     /**
+  237 |      *
+  238 |      * @param locator
+  239 |      * @param value
+  240 |      */
+  241 |     async selectOption(locator: string, value: string) {
+  242 |         await this.page.locator(locator).selectOption(value);
+  243 |     }
+  244 | 
+  245 |     // Advanced element interaction methods
+  246 |     /**
+  247 |      *
+  248 |      * @param role
+  249 |      * @param options
+  250 |      * @returns
+  251 |      */
+  252 |     async getByRole(
+  253 |         role: any,
+  254 |         options?: { name?: string; hidden?: boolean; exact?: boolean }
+  255 |     ): Promise<Locator> {
+  256 |         return this.page.getByRole(role, options);
+  257 |     }
+  258 |     /**
+  259 |      *
+  260 |      * @param label
+  261 |      * @returns
+  262 |      */
+  263 |     async getByLabel(
+  264 |         label: string,
+  265 |         options?: { name?: string; hidden?: boolean; exact?: boolean }
+  266 |     ): Promise<Locator> {
+  267 |         return this.page.getByLabel(label, options);
+  268 |     }
+  269 |     /**
+  270 |      *
+  271 |      * @param placeholder
+  272 |      * @returns
+  273 |      */
+  274 |     async getByPlaceholder(placeholder: string): Promise<Locator> {
+  275 |         return this.page.getByPlaceholder(placeholder);
+  276 |     }
+  277 |     /**
+```
