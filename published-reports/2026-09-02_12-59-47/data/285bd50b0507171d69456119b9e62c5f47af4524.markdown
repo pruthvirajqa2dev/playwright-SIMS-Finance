@@ -1,0 +1,359 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Post-Deployment-Tests/PostChecksTests.spec.ts >> Postchecks on environment:UAT >> NML510 - Trial Balance Report @shard1
+- Location: src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:316:13
+
+# Error details
+
+```
+Test timeout of 200000ms exceeded.
+```
+
+```
+Error: expect(locator).toBeInViewport() failed
+
+Locator: locator('.faicon > i[style*="color:green"]')
+Expected: in viewport
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeInViewport" with timeout 240000ms
+  - waiting for locator('.faicon > i[style*="color:green"]')
+
+```
+
+```yaml
+- text: 
+- heading "NML510 - Trial Balance Report" [level=2]
+- heading "SIMS Finance Demo Site 130" [level=3]
+- text: Finance Director
+- button "Quick Launch"
+- button "Spaces"
+- button "Recent History"
+- button "Favourites"
+- text:  
+- button "Options"
+- heading "Submission Parameters" [level=1]
+- table:
+  - rowgroup:
+    - row "School ID 000001 Show Lookup Select Green Abbey School":
+      - cell "School ID"
+      - cell "000001 Show Lookup Select Green Abbey School":
+        - textbox "School ID":
+          - /placeholder: ""
+          - text: "000001"
+        - button "Show Lookup": 
+        - button "Select"
+        - text: Green Abbey School
+- table:
+  - rowgroup:
+    - row "Trial Balance Year 2425 Show Lookup Mandatory":
+      - cell "Trial Balance Year"
+      - cell "2425 Show Lookup Mandatory":
+        - textbox "Trial Balance Year":
+          - /placeholder: ""
+          - text: "2425"
+        - button "Show Lookup": 
+        - text: 
+    - row "Up to Which Period 07 Show Lookup Mandatory":
+      - cell "Up to Which Period"
+      - cell "07 Show Lookup Mandatory":
+        - textbox "Up to Which Period":
+          - /placeholder: ""
+          - text: "07"
+        - button "Show Lookup": 
+        - text: 
+- heading "Sequence" [level=1]
+- table:
+  - rowgroup:
+    - row "Sequence (Cost Centre/Ledger) School ID/Cost Centre":
+      - cell "Sequence (Cost Centre/Ledger)"
+      - cell "School ID/Cost Centre":
+        - combobox "Sequence (Cost Centre/Ledger)":
+          - option "School ID/Cost Centre" [selected]
+          - option "School ID/Ledger"
+- heading "Account Codes" [level=1]
+- table:
+  - rowgroup:
+    - row "From GL Code Show Lookup":
+      - cell "From GL Code"
+      - cell "Show Lookup":
+        - textbox "From GL Code"
+        - button "Show Lookup": 
+    - row "To GL Code ZZZZZ/999999-99 Show Lookup":
+      - cell "To GL Code"
+      - cell "ZZZZZ/999999-99 Show Lookup":
+        - textbox "To GL Code":
+          - /placeholder: ""
+          - text: ZZZZZ/999999-99
+        - button "Show Lookup": 
+    - row "Cash /Accrual Data Sets Accrual":
+      - cell "Cash /Accrual Data Sets"
+      - cell "Accrual":
+        - combobox "Cash /Accrual Data Sets" [disabled]:
+          - option "Accrual" [selected]
+    - row "Currency ALL":
+      - cell "Currency"
+      - cell "ALL":
+        - combobox "Currency" [disabled]:
+          - option "ALL" [selected]
+- table:
+  - rowgroup:
+    - row:
+      - cell:
+        - table:
+          - rowgroup
+      - cell:
+        - table:
+          - rowgroup
+- table:
+  - rowgroup:
+    - row "Submit":
+      - cell "Submit":
+        - button "Submit"
+- status
+- dialog "Background Processing":
+  - text: Background Processing
+  - button " Close"
+  - table:
+    - rowgroup:
+      - row "NML510 - Trial Balance Report":
+        - cell "NML510 - Trial Balance Report"
+  - heading "Job Details" [level=1]
+  - table:
+    - rowgroup:
+      - 'row "Job Submitted : 5140"':
+        - cell
+        - 'cell "Job Submitted : 5140"'
+      - row "Processing":
+        - cell "Processing"
+      - row "Started Processing at 02/09/2026 13:54:07":
+        - cell "Started Processing at 02/09/2026 13:54:07"
+  - heading "Progress" [level=1]
+  - table:
+    - rowgroup:
+      - row "Generating PDF,":
+        - cell "Generating PDF,"
+      - row:
+        - cell
+      - row:
+        - cell
+  - table:
+    - rowgroup:
+      - row "Close":
+        - cell "Close":
+          - button "Close"
+```
+
+# Test source
+
+```ts
+  440 |      */
+  441 |     async clickElementByText(text: string) {
+  442 |         await (await this.getByText(text)).click();
+  443 |     }
+  444 |     /**
+  445 |      * This function wraps the function to find the element using role
+  446 |      * @param name
+  447 |      */
+  448 |     async clickButtonUsingRole(name: string) {
+  449 |         await this.page
+  450 |             .getByRole("button", {
+  451 |                 name: name,
+  452 |                 exact: true
+  453 |             })
+  454 |             .click();
+  455 |     }
+  456 |     /**
+  457 |      * This function wraps the function to enter Text using role
+  458 |      * @param value
+  459 |      */
+  460 |     async enterToTextBoxUsingRole(name: string, value: string) {
+  461 |         await this.page
+  462 |             .getByRole("textbox", {
+  463 |                 name: name,
+  464 |                 exact: true
+  465 |             })
+  466 |             .fill(value);
+  467 |     }
+  468 |     /**
+  469 |      * This function checks if the dialog with provided title exists on the page
+  470 |      * @param title
+  471 |      */
+  472 |     async checkIfDialogExistsWithTitle(title: string) {
+  473 |         const locator: string =
+  474 |             this.multipleDialogTitleLocator + '>>text="' + title + '"';
+  475 |         await this.expectElementToBeVisibleUsingLocator(locator);
+  476 |     }
+  477 |     /**
+  478 |      * This function selects school id provided
+  479 |      * @param schoolId
+  480 |      */
+  481 |     async selectSchoolId(schoolId: string) {
+  482 |         //Click
+  483 |         await this.click(this.schoolIdIconLocator);
+  484 | 
+  485 |         //School ID Dialog check
+  486 |         const expectedDialogText = expectedTexts.expectedSchoolIDDialogTitle;
+  487 |         await this.checkIfDialogExistsWithTitle(expectedDialogText);
+  488 | 
+  489 |         //Click select button for school id
+  490 |         const schoolDescrEle = this.page.locator(
+  491 |             this.selectBtnForSchoolLocator.replace("%", schoolId!)
+  492 |         );
+  493 |         await schoolDescrEle.first().click();
+  494 |         await this.expectElementToHaveValue(
+  495 |             this.schoolIdLocator,
+  496 |             expectedTexts.expectedSchoolID
+  497 |         );
+  498 |     }
+  499 |     /**
+  500 |      * Click submit button on page
+  501 |      */
+  502 |     async clickSubmitBtn() {
+  503 |         await this.page.locator(this.submitBtnLocator).click();
+  504 |     }
+  505 |     /**
+  506 |      * Click ok button on page
+  507 |      */
+  508 |     async clickOkBtn() {
+  509 |         await this.page.locator(this.okBtnLocator).click();
+  510 |     }
+  511 |     /**
+  512 |      * Waits up to 240 s for the background-processing green icon to appear in
+  513 |      * the viewport.  If the element is still absent after 180 s a warning is
+  514 |      * logged (indicating slow server-side report generation) but the assertion
+  515 |      * continues until the full 240 s deadline.
+  516 |      *
+  517 |      * The 180 s threshold is intentional: it is a soft SLA signal — the test
+  518 |      * is not yet failed, but the delay is worth investigating.  Failures
+  519 |      * caused by this wait are tagged `timeoutSuspected` by the AI agent and
+  520 |      * surfaced as a "Report Generation SLA" alert in the AI report dashboard.
+  521 |      */
+  522 |     async expectGreenIconToBeVisible() {
+  523 |         const WARN_AFTER_MS = 180_000;
+  524 |         const TIMEOUT_MS = 240_000;
+  525 |         const testLabel = this.testInfo?.title ?? "unknown test";
+  526 | 
+  527 |         const warnTimer = setTimeout(() => {
+  528 |             logger.warn(
+  529 |                 `⏱ [SLA WARNING] Green icon not yet visible after 180 s — ` +
+  530 |                     `report generation is taking longer than expected. ` +
+  531 |                     `Test: "${testLabel}". ` +
+  532 |                     `This will be surfaced as a Report Generation SLA signal ` +
+  533 |                     `in the AI dashboard if the test ultimately fails.`
+  534 |             );
+  535 |         }, WARN_AFTER_MS);
+  536 | 
+  537 |         try {
+  538 |             await expect(
+  539 |                 this.page.locator(this.greenIconLocator)
+> 540 |             ).toBeInViewport({ timeout: TIMEOUT_MS });
+      |               ^ Error: expect(locator).toBeInViewport() failed
+  541 |         } finally {
+  542 |             clearTimeout(warnTimer);
+  543 |         }
+  544 |     }
+  545 |     /**
+  546 |      *
+  547 |      * @param text
+  548 |      */
+  549 |     async expectTextNotToBeNull(text: string | null) {
+  550 |         expect(text).not.toBeNull();
+  551 |     }
+  552 |     /**
+  553 |      * This function is for checking if PDF is generated with extension on RSS570
+  554 |      */
+  555 |     async verifyPDFGeneratedWithExtOnScreen(
+  556 |         screen: string,
+  557 |         expectedText: string
+  558 |     ) {
+  559 |         if (process.env.TEST_ENV === "TRAINING") {
+  560 |             await Promise.all([
+  561 |                 this.expectElementToContainText(
+  562 |                     this.secondReportLocator,
+  563 |                     screen
+  564 |                 ),
+  565 |                 this.expectElementToContainText(
+  566 |                     this.secondReportLocator,
+  567 |                     expectedText
+  568 |                 ),
+  569 |                 this.expectElementToContainText(
+  570 |                     this.secondReportLocator,
+  571 |                     expectedTexts.PDFExt
+  572 |                 )
+  573 |             ]);
+  574 |         } else {
+  575 |             await Promise.all([
+  576 |                 this.expectElementToContainText(this.reportLocator, screen),
+  577 |                 this.expectElementToContainText(
+  578 |                     this.reportLocator,
+  579 |                     expectedText
+  580 |                 ),
+  581 |                 this.expectElementToContainText(
+  582 |                     this.reportLocator,
+  583 |                     expectedTexts.PDFExt
+  584 |                 )
+  585 |             ]);
+  586 |         }
+  587 |     }
+  588 |     /**
+  589 |      * This function is for checking if PDF is generated with extension on RSS570
+  590 |      */
+  591 |     async verifyExcelGeneratedWithExtOnScreen(
+  592 |         screen: string,
+  593 |         expectedText: string
+  594 |     ) {
+  595 |         await Promise.all([
+  596 |             this.expectElementToContainText(this.secondReportLocator, screen),
+  597 |             this.expectElementToContainText(
+  598 |                 this.secondReportLocator,
+  599 |                 expectedText
+  600 |             ),
+  601 |             this.expectElementToContainText(
+  602 |                 this.secondReportLocator,
+  603 |                 expectedTexts.XLSXExt
+  604 |             )
+  605 |         ]);
+  606 |     }
+  607 |     /**
+  608 |      * This function is for clicking save all button
+  609 |      */
+  610 |     async clickSaveAllButton() {
+  611 |         await this.click(this.saveAllBtnLocator);
+  612 |     }
+  613 |     /**
+  614 |      *
+  615 |      */
+  616 |     async waitForPdfIconLocator() {
+  617 |         await this.expectElementToBeVisibleUsingLocator(this.pdfIconLocator);
+  618 |     }
+  619 |     /**
+  620 |      *
+  621 |      * @param page
+  622 |      * @param url
+  623 |      */
+  624 |     async verifyPageURL(page: Page, url: any) {
+  625 |         expect(page.url()).toContain(url);
+  626 |     }
+  627 |     /**
+  628 |      *@description This function is for clicking search button
+  629 |      */
+  630 |     async clickSearchBtn() {
+  631 |         await this.click(this.searchBtnLocator);
+  632 |     }
+  633 |     /**
+  634 |      *
+  635 |      * @param text
+  636 |      * @description
+  637 |      */
+  638 |     async clickEsrMultiBtnUsingText(text: string) {
+  639 |         await this.page
+  640 |             .locator(this.btnElementListLocator)
+```
