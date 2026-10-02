@@ -38,7 +38,10 @@ export default class FileUtils {
      * @param content
      * @returns
      */
-    static async writeFileAsync(filePath, content): Promise<void> {
+    static async writeFileAsync(
+        filePath: fs.PathOrFileDescriptor,
+        content: string | NodeJS.ArrayBufferView<ArrayBufferLike>
+    ): Promise<void> {
         return new Promise((resolve, reject) => {
             fs.writeFile(filePath, content, (err) => {
                 if (err) {
@@ -54,7 +57,9 @@ export default class FileUtils {
      * @param filePath
      * @returns
      */
-    static async readFileAsync(filePath): Promise<string> {
+    static async readFileAsync(
+        filePath: fs.PathOrFileDescriptor
+    ): Promise<string> {
         return new Promise((resolve, reject) => {
             fs.readFile(filePath, "utf-8", (err, data) => {
                 if (err) {
@@ -78,7 +83,7 @@ export default class FileUtils {
                 // If it doesn't exist, create the directory
                 fs.mkdirSync(path.join(dir));
             }
-            const fileNameWithExt: string = "test" + Date.now() + ext;
+            const fileNameWithExt: string = Date.now() + "test" + ext;
             fs.writeFile(
                 path.join(dir + fileNameWithExt),
                 "SIMS Finance Test File Content " + Date.now(),
