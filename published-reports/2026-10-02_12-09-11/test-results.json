@@ -1,0 +1,1392 @@
+{
+  "config": {
+    "configFile": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/playwright.config.ts",
+    "rootDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/utils/globalSetup.ts",
+    "globalTeardown": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/utils/globalTeardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 2,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+        "commitHash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+        "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/37003704971"
+      },
+      "gitCommit": {
+        "shortHash": "a337d26",
+        "hash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+        "subject": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)",
+        "body": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)\n",
+        "author": {
+          "name": "pruthvirajqa2dev",
+          "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+          "time": 1790942120000
+        },
+        "committer": {
+          "name": "pruthvirajqa2dev",
+          "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+          "time": 1790942120000
+        },
+        "branch": "Main"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "commitHash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/37003704971"
+          },
+          "gitCommit": {
+            "shortHash": "a337d26",
+            "hash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "subject": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)",
+            "body": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "auth",
+        "name": "auth",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Auth/auth.spec.ts"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "commitHash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/37003704971"
+          },
+          "gitCommit": {
+            "shortHash": "a337d26",
+            "hash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "subject": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)",
+            "body": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium-shard1",
+        "name": "chromium-shard1",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Post-Deployment-Tests/PostChecksTests.spec.ts"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "commitHash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/37003704971"
+          },
+          "gitCommit": {
+            "shortHash": "a337d26",
+            "hash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "subject": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)",
+            "body": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium-shard2",
+        "name": "chromium-shard2",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Post-Deployment-Tests/PostChecksTests.spec.ts"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "commitHash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/37003704971"
+          },
+          "gitCommit": {
+            "shortHash": "a337d26",
+            "hash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "subject": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)",
+            "body": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "purchase-orders",
+        "name": "purchase-orders",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/Purchase Order/**"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "commitHash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/37003704971"
+          },
+          "gitCommit": {
+            "shortHash": "a337d26",
+            "hash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "subject": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)",
+            "body": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "gl-code-extractor",
+        "name": "gl-code-extractor",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/glCodeExtractor.spec.ts"
+        ],
+        "timeout": 200000
+      },
+      {
+        "outputDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/commit/a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "commitHash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "buildHref": "https://github.com/pruthvirajqa2dev/playwright-SIMS-Finance/actions/runs/37003704971"
+          },
+          "gitCommit": {
+            "shortHash": "a337d26",
+            "hash": "a337d2623e5e7edd63cccfa3f079abb55c2b224b",
+            "subject": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)",
+            "body": "Refactor file handling methods in FileUtils and update RSS310Q interactions for better element handling(Cover up due to issue in Sorting by Date)\n",
+            "author": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "committer": {
+              "name": "pruthvirajqa2dev",
+              "email": "154661815+pruthvirajqa2dev@users.noreply.github.com",
+              "time": 1790942120000
+            },
+            "branch": "Main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "prl300",
+        "name": "prl300",
+        "testDir": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/PRL300QInvoicesCreditNote/**"
+        ],
+        "timeout": 200000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "blob",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.60.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Postchecks on environment:UAT",
+          "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+          "line": 101,
+          "column": 6,
+          "specs": [
+            {
+              "title": "RSS570 - Crystal Report @shard1",
+              "ok": true,
+              "tags": [
+                "shard1"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "RSS570 - Crystal Report",
+                      "description": "This test is for checking if RSS570 Crystal Report is generated for given criteria"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard1",
+                  "projectName": "chromium-shard1",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 122946,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-0 | ENABLE_NETWORK_CAPTURE=(not set) | capture=false\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "Zip Filename: RSS570-5290.zip\n"
+                        },
+                        {
+                          "text": "Into unzip file\n"
+                        },
+                        {
+                          "text": "directory:/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/RSS570-5290.zip\n"
+                        },
+                        {
+                          "text": "Unzipping in: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1790942401064\n"
+                        },
+                        {
+                          "text": "[2026-10-02T12:00:01.079Z] INFO: Looking up latest file name using directory: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip*/*.PDF\n"
+                        },
+                        {
+                          "text": "[2026-10-02T12:00:01.086Z] INFO: Returning /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1790942401064/RSS570_01.PDF from directory\n"
+                        },
+                        {
+                          "text": "PDF File name is: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1790942401064/RSS570_01.PDF\n"
+                        },
+                        {
+                          "text": "PDF data from /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/PDFDownloads/unzip1790942401064/RSS570_01.PDF : \n\nOutstanding Accruals\nUsername:\nFINDIR99D130\n12:59 pm\nPrint Date:\n02-October-2026\nSorted By:\nS\n(N = Nominal Code;   S = Supplier)\nRSS570\nCurrency:\n0\n(0= Base 1;   1 = Base 2;   2 = Base 3)\nSelection Criteria\nCompany ID:\n000001\nGreen Abbey School\nOrder No\n/Line\nReceived\nQuantity\nOutstanding\nGRNI\nQty\nOutstanding\nGRNI Value \n(inc. NR VAT)\nGRN/Return\nNo/Line\nInvoiced\nQuantity\nTrx.\nType\nGRN/Return\nDate\nReceived\nValue\nInvoiced\nValue\nNon Rec.\nVAT\nNominal Code\n[RSS570]\nOutstanding Accruals Print Date: \n02-Oct-2026\nFINDIR99D130\nLn.\nTy.\nAccrual Code\n0001151530001\nNominal Code\n00001\nSupplier Code\n9000031070900\nGRN02-Oct-2026 1.000001151530001 165.47 0.00 0.00 165.47\n//\n 1.00 0.00000000012001000000027001N\n00001 0.00 165.47\n 1.00\nSupplier Code\nTotals for\nAccrual Code\n0014153060031\nNominal Code\n00005\nSupplier Code\n9000031070900\nGRN03-Dec-2025 9.100014153060031 5,101.10 0.00 0.00 5,101.10\n//\n 9.10 0.00000000010001000000009001N\n00005 0.00 5,101.10\n 9.10\nSupplier Code\nTotals for\nAccrual Code\n3000181020001\nNominal Code\n00009\nSupplier Code\n9000031070900\nGRN31-Jul-2024 2.003000181020001 800.84 0.00 0.00 800.84\n//\n 2.00 0.00000000002001000000003001N\n00009 0.00 800.84\n 2.00\nSupplier Code\nTotals for\nPage 1 of 2\n[RSS570]\n\nOrder No\n/Line\nReceived\nQuantity\nOutstanding\nGRNI\nQty\nOutstanding\nGRNI Value \n(inc. NR VAT)\nGRN/Return\nNo/Line\nInvoiced\nQuantity\nTrx.\nType\nGRN/Return\nDate\nReceived\nValue\nInvoiced\nValue\nNon Rec.\nVAT\nNominal Code\n[RSS570]\nOutstanding Accruals Print Date: \n02-Oct-2026\nFINDIR99D130\nLn.\nTy.\nAccrual Code\n9000047010000\nNominal Code\n00013\nSupplier Code\n9000031070900\nGRN31-Jul-2024 1.009000047010000 6,589.32 0.00 0.00 6,589.32\n//\n 1.00 0.00000000005001000000004001N\nGRN31-Jul-2024 1.009000047010000 6,589.33 0.00 0.00 6,589.33\n//\n 1.00 0.00000000004001000000004001N\n00013 0.00 13,178.65\n 2.00\nSupplier Code\nTotals for\nAccrual Code\n0010153020031\nNominal Code\n01001\nSupplier Code\n9000031070900\nGRN02-May-2025 2.000010153020031 912.00 0.00 0.00 912.00\n//\n 2.00 0.00000000007001000000014001N\n01001 0.00 912.00\n 2.00\nSupplier Code\nTotals for\n 16.10 20,158.06 0.00\nTotals forAccrual Code   9000031070900  \nReport Totals\n 16.10 20,158.06 0.00\nPage 2 of 2\n[RSS570]\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1796
+                        },
+                        {
+                          "title": "Go to the screen RSS570",
+                          "duration": 7428
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 1229
+                        },
+                        {
+                          "title": "Enter school Id, sort option and check currency checkbox",
+                          "duration": 2875
+                        },
+                        {
+                          "title": "Click on submit button",
+                          "duration": 867
+                        },
+                        {
+                          "title": "Submit job on job processing dialog and wait for green icon on Background processing dialog",
+                          "duration": 969
+                        },
+                        {
+                          "title": "Wait for green icon on Background processing dialog",
+                          "duration": 96968
+                        },
+                        {
+                          "title": "Verify PDF is generated in RSS570",
+                          "duration": 10
+                        },
+                        {
+                          "title": "Click on PDF report",
+                          "duration": 10627
+                        }
+                      ],
+                      "startTime": "2026-10-02T11:57:58.150Z",
+                      "annotations": [
+                        {
+                          "type": "RSS570 - Crystal Report",
+                          "description": "This test is for checking if RSS570 Crystal Report is generated for given criteria"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-f9f25-570---Crystal-Report-shard1-chromium-shard1/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-59530c6179447b2eb31f",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 237,
+              "column": 13
+            },
+            {
+              "title": "NML510 - Trial Balance Report @shard1",
+              "ok": false,
+              "tags": [
+                "shard1"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "NML510 - Trial Balance Report",
+                      "description": "This test is for checking if NML510 Trial Balance Report is generated for given criteria"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard1",
+                  "projectName": "chromium-shard1",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 200134,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                            "column": 62,
+                            "line": 317
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[style*=\\'background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);\\']').first()\nExpected: visible\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[style*=\\'background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);\\']').first()\u001b[22m\n\n\n   at ../pages/BasePage.ts:317\n\n  315 |             await expect(this.page.locator(locator).first()).toBeVisible(p0);\n  316 |         } else {\n> 317 |             await expect(this.page.locator(locator).first()).toBeVisible();\n      |                                                              ^\n  318 |         }\n  319 |     }\n  320 |     /**\n    at NML510.expectElementToBeVisibleUsingLocator (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:317:62)\n    at NML510.waitForPdfIconLocator (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:617:20)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:376:30\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:375:13"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "[2026-10-02T12:03:16.732Z] WARN: ⏱ [SLA WARNING] Green icon not yet visible after 180 s — report generation is taking longer than expected. Test: \"NML510 - Trial Balance Report @shard1\". This will be surfaced as a Report Generation SLA signal in the AI dashboard if the test ultimately fails.\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1604
+                        },
+                        {
+                          "title": "Go to the screen NML510",
+                          "duration": 7938
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 3
+                        },
+                        {
+                          "title": "Enter school Id and click submit",
+                          "duration": 5011
+                        },
+                        {
+                          "title": "Submit job on job processing dialog and wait for green icon on Background processing dialog",
+                          "duration": 789
+                        },
+                        {
+                          "title": "Wait for green icon on Background processing dialog",
+                          "duration": 181099
+                        },
+                        {
+                          "title": "Verify PDF report is generated in NML510 with text Trial Balance by Cost Centre",
+                          "duration": 19
+                        },
+                        {
+                          "title": "Click on PDF report",
+                          "duration": 3621,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[style*=\\'background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);\\']').first()\nExpected: visible\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[style*=\\'background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);\\']').first()\u001b[22m\n",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[style*=\\'background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);\\']').first()\nExpected: visible\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[style*=\\'background-image : url(/staticcontent/images/core/ui/16_16/pdf.png);\\']').first()\u001b[22m\n\n    at NML510.expectElementToBeVisibleUsingLocator (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:317:62)\n    at NML510.waitForPdfIconLocator (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:617:20)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:376:30\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:375:13",
+                            "location": {
+                              "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                              "column": 62,
+                              "line": 317
+                            },
+                            "snippet": "   at ../pages/BasePage.ts:317\n\n\u001b[0m \u001b[90m 315 |\u001b[39m             \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(locator)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible(p0)\u001b[33m;\u001b[39m\n \u001b[90m 316 |\u001b[39m         } \u001b[36melse\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 317 |\u001b[39m             \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(locator)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 318 |\u001b[39m         }\n \u001b[90m 319 |\u001b[39m     }\n \u001b[90m 320 |\u001b[39m     \u001b[90m/**\u001b[39m\u001b[0m"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-10-02T12:00:01.331Z",
+                      "annotations": [
+                        {
+                          "type": "NML510 - Trial Balance Report",
+                          "description": "This test is for checking if NML510 Trial Balance Report is generated for given criteria"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-b0aab-Trial-Balance-Report-shard1-chromium-shard1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-b0aab-Trial-Balance-Report-shard1-chromium-shard1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-b0aab-Trial-Balance-Report-shard1-chromium-shard1/error-context.md"
+                        }
+                      ]
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 201494,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                            "column": 11,
+                            "line": 347
+                          },
+                          "message": "Error: Check if page element contains text :.PDF\n\n\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#spc_rep_0').first()\nExpected substring: \u001b[32m\".PDF\"\u001b[39m\nReceived string:    \u001b[31m\"NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001\"\u001b[39m\n\nCall log:\n\u001b[2m  - Check if page element contains text :.PDF with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('#spc_rep_0').first()\u001b[22m\n\u001b[2m    7 × locator resolved to <div data-text=\"\" tabindex=\"0\" haschanged=\"\" id=\"spc_rep_0\" class=\"esr_bold\" name=\"spc_rep_0\" data-originalvalue=\"\" data-colour_style=\"null\" data-control_owner=\"PAGE\" form=\"sid1235_spcjob_5292\" data-page_name=\"spcjob_5292\" data-control_owner_id=\"spcjob_5292\" data-tag=\"22456|NML510_01.XLSX|true\" onblur=\"esr_ControlBlur(this, event);\" onclick=\"esr_ControlClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onchange=\"esr_ControlChange(this, event);\" ondblclick=\"esr_ControlDblClick(this, event…>NML510_01.XLSX - Trial Balance by Cost Centre, Sc…</div>\u001b[22m\n\u001b[2m      - unexpected value \"NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001\"\u001b[22m\n\n\n   at ../pages/BasePage.ts:347\n\n  345 |             this.page.locator(locator).first(),\n  346 |             \"Check if page element contains text :\" + text\n> 347 |         ).toContainText(text);\n      |           ^\n  348 |     }\n  349 |     /**\n  350 |      *\n    at NML510.expectElementToContainText (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:347:11)\n    at NML510.verifyPDFGeneratedWithExtOnScreen (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:581:22)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:369:34\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:365:13"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-1 | ENABLE_NETWORK_CAPTURE=(not set) | capture=false\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "[2026-10-02T12:06:37.985Z] WARN: ⏱ [SLA WARNING] Green icon not yet visible after 180 s — report generation is taking longer than expected. Test: \"NML510 - Trial Balance Report @shard1\". This will be surfaced as a Report Generation SLA signal in the AI dashboard if the test ultimately fails.\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1977
+                        },
+                        {
+                          "title": "Go to the screen NML510",
+                          "duration": 7114
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 5
+                        },
+                        {
+                          "title": "Enter school Id and click submit",
+                          "duration": 5190
+                        },
+                        {
+                          "title": "Submit job on job processing dialog and wait for green icon on Background processing dialog",
+                          "duration": 748
+                        },
+                        {
+                          "title": "Wait for green icon on Background processing dialog",
+                          "duration": 184853
+                        },
+                        {
+                          "title": "Verify PDF report is generated in NML510 with text Trial Balance by Cost Centre",
+                          "duration": 1544,
+                          "error": {
+                            "message": "Error: Check if page element contains text :.PDF\n\n\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#spc_rep_0').first()\nExpected substring: \u001b[32m\".PDF\"\u001b[39m\nReceived string:    \u001b[31m\"NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001\"\u001b[39m\n\nCall log:\n\u001b[2m  - Check if page element contains text :.PDF with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('#spc_rep_0').first()\u001b[22m\n\u001b[2m    7 × locator resolved to <div data-text=\"\" tabindex=\"0\" haschanged=\"\" id=\"spc_rep_0\" class=\"esr_bold\" name=\"spc_rep_0\" data-originalvalue=\"\" data-colour_style=\"null\" data-control_owner=\"PAGE\" form=\"sid1235_spcjob_5292\" data-page_name=\"spcjob_5292\" data-control_owner_id=\"spcjob_5292\" data-tag=\"22456|NML510_01.XLSX|true\" onblur=\"esr_ControlBlur(this, event);\" onclick=\"esr_ControlClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onchange=\"esr_ControlChange(this, event);\" ondblclick=\"esr_ControlDblClick(this, event…>NML510_01.XLSX - Trial Balance by Cost Centre, Sc…</div>\u001b[22m\n\u001b[2m      - unexpected value \"NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001\"\u001b[22m\n",
+                            "stack": "Error: Check if page element contains text :.PDF\n\n\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#spc_rep_0').first()\nExpected substring: \u001b[32m\".PDF\"\u001b[39m\nReceived string:    \u001b[31m\"NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001\"\u001b[39m\n\nCall log:\n\u001b[2m  - Check if page element contains text :.PDF with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('#spc_rep_0').first()\u001b[22m\n\u001b[2m    7 × locator resolved to <div data-text=\"\" tabindex=\"0\" haschanged=\"\" id=\"spc_rep_0\" class=\"esr_bold\" name=\"spc_rep_0\" data-originalvalue=\"\" data-colour_style=\"null\" data-control_owner=\"PAGE\" form=\"sid1235_spcjob_5292\" data-page_name=\"spcjob_5292\" data-control_owner_id=\"spcjob_5292\" data-tag=\"22456|NML510_01.XLSX|true\" onblur=\"esr_ControlBlur(this, event);\" onclick=\"esr_ControlClick(this, event);\" onfocus=\"esr_ControlFocus(this, event);\" onchange=\"esr_ControlChange(this, event);\" ondblclick=\"esr_ControlDblClick(this, event…>NML510_01.XLSX - Trial Balance by Cost Centre, Sc…</div>\u001b[22m\n\u001b[2m      - unexpected value \"NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001\"\u001b[22m\n\n    at NML510.expectElementToContainText (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:347:11)\n    at NML510.verifyPDFGeneratedWithExtOnScreen (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts:581:22)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:369:34\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:365:13",
+                            "location": {
+                              "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/BasePage.ts",
+                              "column": 11,
+                              "line": 347
+                            },
+                            "snippet": "   at ../pages/BasePage.ts:347\n\n\u001b[0m \u001b[90m 345 |\u001b[39m             \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(locator)\u001b[33m.\u001b[39mfirst()\u001b[33m,\u001b[39m\n \u001b[90m 346 |\u001b[39m             \u001b[32m\"Check if page element contains text :\"\u001b[39m \u001b[33m+\u001b[39m text\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 347 |\u001b[39m         )\u001b[33m.\u001b[39mtoContainText(text)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 348 |\u001b[39m     }\n \u001b[90m 349 |\u001b[39m     \u001b[90m/**\u001b[39m\n \u001b[90m 350 |\u001b[39m \u001b[90m     *\u001b[39m\u001b[0m"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-10-02T12:03:22.771Z",
+                      "annotations": [
+                        {
+                          "type": "NML510 - Trial Balance Report",
+                          "description": "This test is for checking if NML510 Trial Balance Report is generated for given criteria"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-b0aab-Trial-Balance-Report-shard1-chromium-shard1-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-b0aab-Trial-Balance-Report-shard1-chromium-shard1-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-b0aab-Trial-Balance-Report-shard1-chromium-shard1-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-b0aab-Trial-Balance-Report-shard1-chromium-shard1-retry1/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-5a5cb2000f2cc017ba6f",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 316,
+              "column": 13
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Postchecks on environment:UAT",
+          "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+          "line": 101,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Login and Logout @shard2",
+              "ok": true,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "Login and Logout",
+                      "description": "This test is for performing login to SIMS Finance and then for user FINDIR99D130"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8018,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-0 | ENABLE_NETWORK_CAPTURE=(not set) | capture=false\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1935
+                        },
+                        {
+                          "title": "Expect home page elements visible on Load",
+                          "duration": 3664
+                        },
+                        {
+                          "title": "Click on profile and logout button",
+                          "duration": 1055
+                        },
+                        {
+                          "title": "Assert logout dialog is displayed, verify its content and logout",
+                          "duration": 1065
+                        }
+                      ],
+                      "startTime": "2026-10-02T11:57:30.495Z",
+                      "annotations": [
+                        {
+                          "type": "Login and Logout",
+                          "description": "This test is for performing login to SIMS Finance and then for user FINDIR99D130"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-5df68-UAT-Login-and-Logout-shard2-chromium-shard2/test-results/Postchecks/RunOn02102026/Hour 11/Homepage.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-5df68-UAT-Login-and-Logout-shard2-chromium-shard2/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-5df68-UAT-Login-and-Logout-shard2-chromium-shard2/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-1c54fd3b103d89a9b9e1",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 105,
+              "column": 13
+            },
+            {
+              "title": "File upload using SPC420 @shard2",
+              "ok": true,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "File upload using SPC420",
+                      "description": "This test is for performing File upload to SIMS Finance using SPC420"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16322,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "Writing file in: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/Test Files/\n"
+                        },
+                        {
+                          "text": "dirAndFileNameWithExt=Test Files/1790942268085test.TXT\n"
+                        },
+                        {
+                          "text": "fileNameWithExt=1790942268085test.TXT\n"
+                        },
+                        {
+                          "text": "fileName=1790942268085TEST\n"
+                        },
+                        {
+                          "text": "Created filename with extension:Test Files/1790942268085test.TXT\n"
+                        },
+                        {
+                          "text": "Deleting filename with extension:Test Files/1790942268085test.TXT\n"
+                        },
+                        {
+                          "text": "fileName=1790942268085TEST\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1338
+                        },
+                        {
+                          "title": "Go to the screen SPC420",
+                          "duration": 5238
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 1010
+                        },
+                        {
+                          "title": "Click on LOGS in ADM - Administration",
+                          "duration": 923
+                        },
+                        {
+                          "title": "Upload the file",
+                          "duration": 5236
+                        },
+                        {
+                          "title": "Delete the uploaded file Test Files/1790942268085test.TXT",
+                          "duration": 2367
+                        }
+                      ],
+                      "startTime": "2026-10-02T11:57:38.767Z",
+                      "annotations": [
+                        {
+                          "type": "File upload using SPC420",
+                          "description": "This test is for performing File upload to SIMS Finance using SPC420"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-cfc88--upload-using-SPC420-shard2-chromium-shard2/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-cfc88--upload-using-SPC420-shard2-chromium-shard2/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-a5294a5673d6f4220947",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 173,
+              "column": 13
+            },
+            {
+              "title": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+              "ok": true,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "SIMS_TB_SCHOOL - XQuery Report - Execute",
+                      "description": "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Execute"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13186,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1393
+                        },
+                        {
+                          "title": "Go to the screen SIMS_TB_SCHOOL",
+                          "duration": 6506
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 1188
+                        },
+                        {
+                          "title": "Fill up the form and click Execute",
+                          "duration": 3869
+                        }
+                      ],
+                      "startTime": "2026-10-02T11:57:55.103Z",
+                      "annotations": [
+                        {
+                          "type": "SIMS_TB_SCHOOL - XQuery Report - Execute",
+                          "description": "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Execute"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-7508e-ery-Report---Execute-shard2-chromium-shard2/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-7508e-ery-Report---Execute-shard2-chromium-shard2/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-7508e-ery-Report---Execute-shard2-chromium-shard2/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-7b8174d1d7794c54ad97",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 395,
+              "column": 13
+            },
+            {
+              "title": "RSS310Q - Attachments @shard2",
+              "ok": false,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "RSS310Q - Attachments",
+                      "description": "This test is for checking if attachments can be attached to RSS310Q"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 24075,
+                      "error": {
+                        "message": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n",
+                        "stack": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n\n    at RSS310Q.verifyUploadedAttachmentsOnAttachmentsDialog (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:296:14)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:492:17\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:489:13",
+                        "location": {
+                          "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                          "column": 14,
+                          "line": 296
+                        },
+                        "snippet": "   at ../pages/RSS/RSS310Q.ts:296\n\n\u001b[0m \u001b[90m 294 |\u001b[39m             \u001b[33m.\u001b[39mlocator(\u001b[32m\"..\"\u001b[39m)\n \u001b[90m 295 |\u001b[39m             \u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m expectedTexts\u001b[33m.\u001b[39mdocumentTitleText })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 296 |\u001b[39m             \u001b[33m.\u001b[39mdblclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 297 |\u001b[39m\n \u001b[90m 298 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\n \u001b[90m 299 |\u001b[39m             \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                            "column": 14,
+                            "line": 296
+                          },
+                          "message": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n\n\n   at ../pages/RSS/RSS310Q.ts:296\n\n  294 |             .locator(\"..\")\n  295 |             .filter({ hasText: expectedTexts.documentTitleText })\n> 296 |             .dblclick();\n      |              ^\n  297 |\n  298 |         await expect(\n  299 |             this.page\n    at RSS310Q.verifyUploadedAttachmentsOnAttachmentsDialog (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:296:14)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:492:17\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:489:13"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "Column is sorted in ascending order. Proceeding with next steps...\n"
+                        },
+                        {
+                          "text": "Random index is: 7\n"
+                        },
+                        {
+                          "text": "paddedString:000000009\n"
+                        },
+                        {
+                          "text": "Writing file in: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/Test Files/\n"
+                        },
+                        {
+                          "text": "dirAndFileNameWithExt=Test Files/1790942309763test.DOCX\n"
+                        },
+                        {
+                          "text": "fileNameWithExt=1790942309763test.DOCX\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1758
+                        },
+                        {
+                          "title": "Go to the screen RSS310Q",
+                          "duration": 5866
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 6
+                        },
+                        {
+                          "title": "Fill up the form and click search",
+                          "duration": 5070
+                        },
+                        {
+                          "title": "Click random view button and then verify breadcrumbs",
+                          "duration": 6559
+                        },
+                        {
+                          "title": "Upload Attachment",
+                          "duration": 3077
+                        },
+                        {
+                          "title": "Verify attachment details for 1790942309763test.DOCX",
+                          "duration": 1512,
+                          "error": {
+                            "message": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n",
+                            "stack": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n\n    at RSS310Q.verifyUploadedAttachmentsOnAttachmentsDialog (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:296:14)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:492:17\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:489:13",
+                            "location": {
+                              "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                              "column": 14,
+                              "line": 296
+                            },
+                            "snippet": "   at ../pages/RSS/RSS310Q.ts:296\n\n\u001b[0m \u001b[90m 294 |\u001b[39m             \u001b[33m.\u001b[39mlocator(\u001b[32m\"..\"\u001b[39m)\n \u001b[90m 295 |\u001b[39m             \u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m expectedTexts\u001b[33m.\u001b[39mdocumentTitleText })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 296 |\u001b[39m             \u001b[33m.\u001b[39mdblclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 297 |\u001b[39m\n \u001b[90m 298 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\n \u001b[90m 299 |\u001b[39m             \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[0m"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-10-02T11:58:08.303Z",
+                      "annotations": [
+                        {
+                          "type": "RSS310Q - Attachments",
+                          "description": "This test is for checking if attachments can be attached to RSS310Q"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                        "column": 14,
+                        "line": 296
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 23699,
+                      "error": {
+                        "message": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n",
+                        "stack": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n\n    at RSS310Q.verifyUploadedAttachmentsOnAttachmentsDialog (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:296:14)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:492:17\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:489:13",
+                        "location": {
+                          "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                          "column": 14,
+                          "line": 296
+                        },
+                        "snippet": "   at ../pages/RSS/RSS310Q.ts:296\n\n\u001b[0m \u001b[90m 294 |\u001b[39m             \u001b[33m.\u001b[39mlocator(\u001b[32m\"..\"\u001b[39m)\n \u001b[90m 295 |\u001b[39m             \u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m expectedTexts\u001b[33m.\u001b[39mdocumentTitleText })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 296 |\u001b[39m             \u001b[33m.\u001b[39mdblclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 297 |\u001b[39m\n \u001b[90m 298 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\n \u001b[90m 299 |\u001b[39m             \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                            "column": 14,
+                            "line": 296
+                          },
+                          "message": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n\n\n   at ../pages/RSS/RSS310Q.ts:296\n\n  294 |             .locator(\"..\")\n  295 |             .filter({ hasText: expectedTexts.documentTitleText })\n> 296 |             .dblclick();\n      |              ^\n  297 |\n  298 |         await expect(\n  299 |             this.page\n    at RSS310Q.verifyUploadedAttachmentsOnAttachmentsDialog (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:296:14)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:492:17\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:489:13"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-1 | ENABLE_NETWORK_CAPTURE=(not set) | capture=false\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        },
+                        {
+                          "text": "Column is sorted in ascending order. Proceeding with next steps...\n"
+                        },
+                        {
+                          "text": "Random index is: 2\n"
+                        },
+                        {
+                          "text": "paddedString:000000003\n"
+                        },
+                        {
+                          "text": "Writing file in: /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/Test Files/\n"
+                        },
+                        {
+                          "text": "dirAndFileNameWithExt=Test Files/1790942334508test.DOCX\n"
+                        },
+                        {
+                          "text": "fileNameWithExt=1790942334508test.DOCX\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1473
+                        },
+                        {
+                          "title": "Go to the screen RSS310Q",
+                          "duration": 6610
+                        },
+                        {
+                          "title": "Verify valid page elements are visible",
+                          "duration": 7
+                        },
+                        {
+                          "title": "Fill up the form and click search",
+                          "duration": 4630
+                        },
+                        {
+                          "title": "Click random view button and then verify breadcrumbs",
+                          "duration": 5853
+                        },
+                        {
+                          "title": "Upload Attachment",
+                          "duration": 3121
+                        },
+                        {
+                          "title": "Verify attachment details for 1790942334508test.DOCX",
+                          "duration": 1444,
+                          "error": {
+                            "message": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n",
+                            "stack": "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:\n    1) <div>…</div> aka locator('#LINE_NO > div')\n    2) <div>…</div> aka locator('#SAVED_DATE > div')\n\nCall log:\n\u001b[2m  - waiting for locator('.esr_grid_sort_span').locator('..')\u001b[22m\n\n    at RSS310Q.verifyUploadedAttachmentsOnAttachmentsDialog (/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts:296:14)\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:492:17\n    at /home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:489:13",
+                            "location": {
+                              "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                              "column": 14,
+                              "line": 296
+                            },
+                            "snippet": "   at ../pages/RSS/RSS310Q.ts:296\n\n\u001b[0m \u001b[90m 294 |\u001b[39m             \u001b[33m.\u001b[39mlocator(\u001b[32m\"..\"\u001b[39m)\n \u001b[90m 295 |\u001b[39m             \u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m expectedTexts\u001b[33m.\u001b[39mdocumentTitleText })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 296 |\u001b[39m             \u001b[33m.\u001b[39mdblclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 297 |\u001b[39m\n \u001b[90m 298 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\n \u001b[90m 299 |\u001b[39m             \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[0m"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-10-02T11:58:33.693Z",
+                      "annotations": [
+                        {
+                          "type": "RSS310Q - Attachments",
+                          "description": "This test is for checking if attachments can be attached to RSS310Q"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-47f85-SS310Q---Attachments-shard2-chromium-shard2-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/src/pages/RSS/RSS310Q.ts",
+                        "column": 14,
+                        "line": 296
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-6e810ebf42be31a81a4d",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 445,
+              "column": 13
+            },
+            {
+              "title": "Help screen @shard2",
+              "ok": true,
+              "tags": [
+                "shard2"
+              ],
+              "tests": [
+                {
+                  "timeout": 200000,
+                  "annotations": [
+                    {
+                      "type": "Help screen",
+                      "description": "This test is for checking if help screen is working"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-shard2",
+                  "projectName": "chromium-shard2",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7541,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[NetworkCapture fixture] worker-2 | ENABLE_NETWORK_CAPTURE=(not set) | capture=false\n"
+                        },
+                        {
+                          "text": "Loading users for environment: UAT\n"
+                        },
+                        {
+                          "text": "Retrieved credentials for tenant: SFDEMOSITE130, schoolId: SCHOOL99, userRole: FINANCEDIRECTOR\n"
+                        },
+                        {
+                          "text": "Filling username: FINDIR99D130\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Login using SFDEMOSITE130 SCHOOL99 and role FINANCEDIRECTOR",
+                          "duration": 1260
+                        },
+                        {
+                          "title": "Click help screen",
+                          "duration": 5927
+                        }
+                      ],
+                      "startTime": "2026-10-02T11:58:59.283Z",
+                      "annotations": [
+                        {
+                          "type": "Help screen",
+                          "description": "This test is for checking if help screen is working"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-dfc4a-ment-UAT-Help-screen-shard2-chromium-shard2/test-finished-1.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-dfc4a-ment-UAT-Help-screen-shard2-chromium-shard2/test-finished-2.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-dfc4a-ment-UAT-Help-screen-shard2-chromium-shard2/video.webm"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/runner/work/playwright-SIMS-Finance/playwright-SIMS-Finance/temp/playwright-test-results/Post-Deployment-Tests-Post-dfc4a-ment-UAT-Help-screen-shard2-chromium-shard2/video-1.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "beb5408dd0a316a193fa-fc8a12db2c0d7367a46b",
+              "file": "Post-Deployment-Tests/PostChecksTests.spec.ts",
+              "line": 499,
+              "column": 13
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-02T11:57:28.065Z",
+    "duration": 629327.797,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}
