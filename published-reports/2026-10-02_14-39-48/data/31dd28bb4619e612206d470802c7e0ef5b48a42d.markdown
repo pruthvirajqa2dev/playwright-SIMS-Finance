@@ -1,0 +1,244 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Post-Deployment-Tests/PostChecksTests.spec.ts >> Postchecks on environment:UAT >> NML510 - Trial Balance Report @shard1
+- Location: src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:316:13
+
+# Error details
+
+```
+Test timeout of 200000ms exceeded.
+```
+
+```
+Error: Check if page element contains text :.PDF
+
+expect(locator).toContainText(expected) failed
+
+Locator: locator('#spc_rep_0').first()
+Expected substring: ".PDF"
+Received string:    "NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001"
+
+Call log:
+  - Check if page element contains text :.PDF with timeout 35000ms
+  - waiting for locator('#spc_rep_0').first()
+    2 × locator resolved to <div data-text="" tabindex="0" haschanged="" id="spc_rep_0" class="esr_bold" name="spc_rep_0" data-originalvalue="" data-colour_style="null" data-control_owner="PAGE" form="sid3250_spcjob_5294" data-page_name="spcjob_5294" data-control_owner_id="spcjob_5294" data-tag="22464|NML510_01.XLSX|true" onblur="esr_ControlBlur(this, event);" onclick="esr_ControlClick(this, event);" onfocus="esr_ControlFocus(this, event);" onchange="esr_ControlChange(this, event);" ondblclick="esr_ControlDblClick(this, event…>NML510_01.XLSX - Trial Balance by Cost Centre, Sc…</div>
+      - unexpected value "NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001"
+
+```
+
+```yaml
+- text: "NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001"
+```
+
+# Test source
+
+```ts
+  247 |      *
+  248 |      * @param role
+  249 |      * @param options
+  250 |      * @returns
+  251 |      */
+  252 |     async getByRole(
+  253 |         role: any,
+  254 |         options?: { name?: string; hidden?: boolean; exact?: boolean }
+  255 |     ): Promise<Locator> {
+  256 |         return this.page.getByRole(role, options);
+  257 |     }
+  258 |     /**
+  259 |      *
+  260 |      * @param label
+  261 |      * @returns
+  262 |      */
+  263 |     async getByLabel(
+  264 |         label: string,
+  265 |         options?: { name?: string; hidden?: boolean; exact?: boolean }
+  266 |     ): Promise<Locator> {
+  267 |         return this.page.getByLabel(label, options);
+  268 |     }
+  269 |     /**
+  270 |      *
+  271 |      * @param placeholder
+  272 |      * @returns
+  273 |      */
+  274 |     async getByPlaceholder(placeholder: string): Promise<Locator> {
+  275 |         return this.page.getByPlaceholder(placeholder);
+  276 |     }
+  277 |     /**
+  278 |      *
+  279 |      * @param altText
+  280 |      * @returns Promise<Locator>
+  281 |      */
+  282 |     async getByAltText(altText: string): Promise<Locator> {
+  283 |         return this.page.getByAltText(altText);
+  284 |     }
+  285 |     /**
+  286 |      *This function returns located element using provided text
+  287 |      * @param text
+  288 |      * @returns
+  289 |      */
+  290 |     async getByText(text: string): Promise<Locator> {
+  291 |         return await this.page.getByText(text, { exact: true });
+  292 |     }
+  293 |     /**
+  294 |      * This function returns located element using provided heading
+  295 |      * @param heading
+  296 |      * @returns
+  297 |      */
+  298 |     async getByHeading(heading: string): Promise<Locator> {
+  299 |         return this.page.getByRole("heading", { name: heading, exact: true });
+  300 |     }
+  301 | 
+  302 |     async getByLocator(locator: string): Promise<Locator> {
+  303 |         return this.page.locator(locator);
+  304 |     }
+  305 |     // Assertions
+  306 |     /**
+  307 |      *
+  308 |      * @param locator
+  309 |      */
+  310 |     async expectElementToBeVisibleUsingLocator(
+  311 |         locator: string,
+  312 |         p0?: { timeout: number }
+  313 |     ) {
+  314 |         if (typeof p0 !== "undefined") {
+  315 |             await expect(this.page.locator(locator).first()).toBeVisible(p0);
+  316 |         } else {
+  317 |             await expect(this.page.locator(locator).first()).toBeVisible();
+  318 |         }
+  319 |     }
+  320 |     /**
+  321 |      *
+  322 |      * @param locator
+  323 |      */
+  324 |     async expectElementToBeHidden(locator: string) {
+  325 |         await expect(this.page.locator(locator)).toBeHidden();
+  326 |     }
+  327 |     /**
+  328 |      *
+  329 |      * @param locator
+  330 |      * @param text
+  331 |      */
+  332 |     async expectElementToHaveText(locator: string, text: string) {
+  333 |         await expect(
+  334 |             this.page.locator(locator).first(),
+  335 |             "Check if page element has text :" + text
+  336 |         ).toHaveText(text);
+  337 |     }
+  338 |     /**
+  339 |      *
+  340 |      * @param locator
+  341 |      * @param text
+  342 |      */
+  343 |     async expectElementToContainText(locator: string, text: string) {
+  344 |         await expect(
+  345 |             this.page.locator(locator).first(),
+  346 |             "Check if page element contains text :" + text
+> 347 |         ).toContainText(text);
+      |           ^ Error: Check if page element contains text :.PDF
+  348 |     }
+  349 |     /**
+  350 |      *
+  351 |      * @param locator
+  352 |      * @param value
+  353 |      */
+  354 |     async expectElementToHaveValue(locator: string, value: string) {
+  355 |         await expect(
+  356 |             this.page.locator(locator).first(),
+  357 |             "Check if page element has value :" + value
+  358 |         ).toHaveValue(value);
+  359 |     }
+  360 |     /**
+  361 |      * This function checks if a provided attribute with provided value is present in the element locator by provided locator
+  362 |      * @param locator
+  363 |      * @param attr
+  364 |      * @param value
+  365 |      */
+  366 |     async expectElementToHaveAttributeWithValue(
+  367 |         locator: string,
+  368 |         attr: string,
+  369 |         value: string
+  370 |     ) {
+  371 |         await expect(
+  372 |             this.page.locator(locator).first(),
+  373 |             "Check if page element has attr :" + attr + " with value " + value
+  374 |         ).toHaveAttribute(attr, value);
+  375 |     }
+  376 |     /**
+  377 |      *
+  378 |      * @param locator
+  379 |      * @param value
+  380 |      */
+  381 |     async expectElementToContainValue(locator: string, value: string) {
+  382 |         const actualText = await this.page
+  383 |             .locator(locator)
+  384 |             .first()
+  385 |             .inputValue();
+  386 |         const actualValue = parseFloat(actualText);
+  387 |         const expectedValue = parseFloat(value);
+  388 |         console.log(
+  389 |             `Actual Value: ${actualValue} Expected Value: ${expectedValue}`
+  390 |         );
+  391 |         expect(
+  392 |             parseFloat(Math.abs(actualValue - expectedValue).toPrecision(2))
+  393 |         ).toBeLessThanOrEqual(0.01);
+  394 |     }
+  395 |     // Additional methods (as needed)
+  396 |     /**
+  397 |      *
+  398 |      * @param path
+  399 |      */
+  400 |     async screenshot(path: string) {
+  401 |         await this.page.screenshot({ path });
+  402 |     }
+  403 |     /**
+  404 |      *
+  405 |      * @returns
+  406 |      */
+  407 |     async getURL(): Promise<string> {
+  408 |         return this.page.url();
+  409 |     }
+  410 | 
+  411 |     /**
+  412 |      * This function verifies current URL is the provided URL
+  413 |      * @param url
+  414 |      */
+  415 |     async verifyURL(url: string) {
+  416 |         await expect(this.page.url()).toBe(url);
+  417 |     }
+  418 | 
+  419 |     /**
+  420 |      * This function returns boolean whether the heading is visible on page located by provided text
+  421 |      * @param headingText
+  422 |      * @returns
+  423 |      */
+  424 |     async isHeadingVisibleByText(headingText: string): Promise<boolean> {
+  425 |         return (
+  426 |             await this.getByRole("heading", { name: headingText })
+  427 |         ).isVisible();
+  428 |     }
+  429 |     /**
+  430 |      * This function clicks the heading on page located by provided text
+  431 |      * @param headingText
+  432 |      */
+  433 |     async clickHeadingByText(headingText: string) {
+  434 |         await (await this.getByRole("heading", { name: headingText })).click();
+  435 |     }
+  436 | 
+  437 |     /**
+  438 |      *
+  439 |      * @param text
+  440 |      */
+  441 |     async clickElementByText(text: string) {
+  442 |         await (await this.getByText(text)).click();
+  443 |     }
+  444 |     /**
+  445 |      * This function wraps the function to find the element using role
+  446 |      * @param name
+  447 |      */
+```
