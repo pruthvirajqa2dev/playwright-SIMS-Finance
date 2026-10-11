@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-10-11T14:50:48.036Z",
+  "pivotDate": "2026-10-04",
+  "beforeWindow": {
+    "from": "2026-09-14",
+    "to": "2026-10-02",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-10-05",
+    "to": "2026-10-09",
+    "runsAnalysed": 4
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 25,
+      "failureDelta": 0,
+      "flakyDelta": 25,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 40,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 0,
+      "failureDelta": -40,
+      "flakyDelta": -10,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate the cause of flaky behaviour in 'RSS570 - Crystal Report'.",
+    "Analyze the timing of failures in the 'RSS570' test to identify potential timing issues.",
+    "Review the environment setup for consistency between before and after the pivot date.",
+    "Monitor the impact of the regression on financial reporting processes.",
+    "Conduct a deeper analysis of the 'NML510 - Trial Balance Report' resolution for best practices."
+  ],
+  "executiveSummary": [
+    "1 regression was observed in 'RSS570 - Crystal Report' with a new flaky rate of 25%.",
+    "1 test, 'NML510 - Trial Balance Report', improved from 40% failure to 0%.",
+    "5 tests remained stable with no changes in failure rates.",
+    "The increase in flakiness for 'RSS570' may indicate a timing issue introduced by recent changes.",
+    "This regression could affect the reliability of financial reporting for users.",
+    "Further investigation into the flaky behaviour of 'RSS570' is recommended.",
+    "Comparing the environment setup before and after the pivot may provide insights.",
+    "Monitoring the impact on report generation consistency is crucial for finance staff."
+  ]
+}

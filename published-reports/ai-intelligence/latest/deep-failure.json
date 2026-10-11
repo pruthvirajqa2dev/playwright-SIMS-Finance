@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T14:26:48.416Z",
+  "generatedAt": "2026-10-11T14:50:39.198Z",
   "runsAnalysed": 15,
   "runsWithIssues": 15,
   "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
@@ -137,11 +137,11 @@
       "priority": "High",
       "failureRate": 100,
       "flakyRate": 0,
-      "mostFrequentError": "Test timeout of 200000ms exceeded.",
+      "mostFrequentError": "timeout",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "The test may be experiencing timing issues due to complex UI interactions.",
-      "recommendation": "Investigate the UI interactions and optimize the locator strategy."
+      "failureHypothesis": "Timing issue or selector conflict leading to strict mode violation.",
+      "recommendation": "Investigate locator strategy to ensure unique element targeting."
     },
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
@@ -149,11 +149,11 @@
       "priority": "High",
       "failureRate": 27,
       "flakyRate": 13,
-      "mostFrequentError": "Test timeout of 200000ms exceeded.",
+      "mostFrequentError": "timeout",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "The test may be affected by slow backend responses or heavy data processing.",
-      "recommendation": "Analyze backend performance during test execution to identify bottlenecks."
+      "failureHypothesis": "Timeouts suggest potential performance issues or slow backend responses.",
+      "recommendation": "Analyze performance metrics during test execution for bottlenecks."
     },
     {
       "testTitle": "RSS570 - Crystal Report @shard1",
@@ -164,8 +164,8 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour may suggest intermittent UI rendering issues.",
-      "recommendation": "Review the test's timing and conditions for UI readiness."
+      "failureHypothesis": "Flaky behaviour may indicate intermittent UI rendering issues.",
+      "recommendation": "Monitor for patterns in flaky runs to identify environmental factors."
     },
     {
       "testTitle": "File upload using SPC420 @shard2",
@@ -176,8 +176,8 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour may indicate issues with file handling or network stability.",
-      "recommendation": "Examine network conditions and file handling logic during uploads."
+      "failureHypothesis": "Flaky behaviour could reflect timing issues during file upload.",
+      "recommendation": "Review file upload handling for potential race conditions."
     },
     {
       "testTitle": "Login and Logout @shard2",
@@ -231,20 +231,20 @@
     "NML510 - Trial Balance Report @shard1"
   ],
   "actionItems": [
-    "Investigate timing issues in RSS310Q to improve reliability.",
-    "Analyze backend performance during NML510 runs to identify slow responses.",
-    "Review UI readiness conditions for flaky tests like RSS570 and File upload.",
-    "Monitor network stability during file uploads to reduce flakiness.",
-    "Continue tracking stable tests for any emerging issues."
+    "Investigate locator strategy for RSS310Q to resolve strict mode violations.",
+    "Analyze performance metrics for NML510 during test execution.",
+    "Monitor flaky behaviour in RSS570 and File upload tests for patterns.",
+    "Review file upload handling for potential race conditions.",
+    "Continue monitoring stable tests for any future anomalies."
   ],
   "executiveSummary": [
-    "100% of runs for RSS310Q failed, indicating severe instability.",
-    "27% of NML510 runs failed, with 13% showing flaky behaviour.",
-    "Flaky behaviour observed in RSS570 and File upload tests at 7%.",
-    "Co-failure between NML510 and RSS310Q suggests shared timing or data state issues.",
-    "Stable tests like Login and Logout show no failures, indicating reliability.",
-    "Investigating timing and backend performance may improve overall test stability.",
-    "Addressing flaky tests is crucial for maintaining confidence in financial reporting.",
-    "Monitoring and optimizing test conditions will enhance reliability across the suite."
+    "100% failure rate observed for RSS310Q across all runs.",
+    "NML510 had a 27% failure rate with 13% flaky behaviour.",
+    "Two tests showed flaky behaviour, indicating potential timing issues.",
+    "Co-failure between NML510 and RSS310Q suggests shared dependencies.",
+    "High failure rates may affect report generation consistency for finance staff.",
+    "Investigating locator strategies and performance metrics is recommended.",
+    "Monitoring for patterns in flaky tests could provide insights.",
+    "Stable tests should continue to be monitored for future anomalies."
   ]
 }

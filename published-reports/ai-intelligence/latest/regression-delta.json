@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-10-10T14:26:58.364Z",
-  "pivotDate": "2026-10-03",
+  "generatedAt": "2026-10-11T14:50:48.036Z",
+  "pivotDate": "2026-10-04",
   "beforeWindow": {
-    "from": "2026-09-11",
+    "from": "2026-09-14",
     "to": "2026-10-02",
     "runsAnalysed": 10
   },
@@ -54,20 +54,20 @@
     }
   ],
   "actionItems": [
-    "Investigate the flaky behaviour of 'RSS570 - Crystal Report' which increased to 25%.",
-    "Analyze the timing of test executions to identify potential race conditions.",
+    "Investigate the cause of flaky behaviour in 'RSS570 - Crystal Report'.",
+    "Analyze the timing of failures in the 'RSS570' test to identify potential timing issues.",
     "Review the environment setup for consistency between before and after the pivot date.",
-    "Examine the error logs for 'NML510 - Trial Balance Report' to ensure stability.",
-    "Monitor future runs for any emerging patterns in test failures."
+    "Monitor the impact of the regression on financial reporting processes.",
+    "Conduct a deeper analysis of the 'NML510 - Trial Balance Report' resolution for best practices."
   ],
   "executiveSummary": [
-    "1 regression was observed in the 'RSS570 - Crystal Report' test after the pivot date.",
-    "The flaky rate for 'RSS570' increased from 0% to 25%, indicating potential timing issues.",
-    "The 'NML510 - Trial Balance Report' test showed a significant improvement, reducing failure from 40% to 0%.",
-    "The observed regression may suggest instability introduced by recent code changes.",
-    "This pattern could reflect underlying issues affecting report generation reliability.",
-    "Increased flakiness may lead to inconsistent results for finance staff relying on reports.",
-    "Further investigation into the timing of test executions may clarify the observed issues.",
-    "Comparing test environments could help isolate the cause of the regression."
+    "1 regression was observed in 'RSS570 - Crystal Report' with a new flaky rate of 25%.",
+    "1 test, 'NML510 - Trial Balance Report', improved from 40% failure to 0%.",
+    "5 tests remained stable with no changes in failure rates.",
+    "The increase in flakiness for 'RSS570' may indicate a timing issue introduced by recent changes.",
+    "This regression could affect the reliability of financial reporting for users.",
+    "Further investigation into the flaky behaviour of 'RSS570' is recommended.",
+    "Comparing the environment setup before and after the pivot may provide insights.",
+    "Monitoring the impact on report generation consistency is crucial for finance staff."
   ]
 }
