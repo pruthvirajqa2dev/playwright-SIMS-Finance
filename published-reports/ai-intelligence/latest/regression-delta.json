@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-11T14:50:48.036Z",
-  "pivotDate": "2026-10-04",
+  "generatedAt": "2026-10-12T17:33:53.032Z",
+  "pivotDate": "2026-10-05",
   "beforeWindow": {
     "from": "2026-09-14",
     "to": "2026-10-02",
@@ -8,8 +8,8 @@
   },
   "afterWindow": {
     "from": "2026-10-05",
-    "to": "2026-10-09",
-    "runsAnalysed": 4
+    "to": "2026-10-12",
+    "runsAnalysed": 5
   },
   "beforeEnvs": [
     "UAT"
@@ -24,9 +24,9 @@
       "beforeFailureRate": 0,
       "afterFailureRate": 0,
       "beforeFlakyRate": 0,
-      "afterFlakyRate": 25,
+      "afterFlakyRate": 20,
       "failureDelta": 0,
-      "flakyDelta": 25,
+      "flakyDelta": 20,
       "verdict": "Regressed",
       "riskLevel": "Low",
       "errorSamplesBefore": [],
@@ -54,20 +54,20 @@
     }
   ],
   "actionItems": [
-    "Investigate the cause of flaky behaviour in 'RSS570 - Crystal Report'.",
+    "Investigate the flaky behaviour of 'RSS570 - Crystal Report' which increased to 20%.",
     "Analyze the timing of failures in the 'RSS570' test to identify potential timing issues.",
-    "Review the environment setup for consistency between before and after the pivot date.",
-    "Monitor the impact of the regression on financial reporting processes.",
-    "Conduct a deeper analysis of the 'NML510 - Trial Balance Report' resolution for best practices."
+    "Review the environment setup for consistency between the before and after windows.",
+    "Examine the impact of recent code changes on the stability of financial reports.",
+    "Monitor the performance of 'NML510 - Trial Balance Report' to ensure resolution is maintained."
   ],
   "executiveSummary": [
-    "1 regression was observed in 'RSS570 - Crystal Report' with a new flaky rate of 25%.",
-    "1 test, 'NML510 - Trial Balance Report', improved from 40% failure to 0%.",
-    "5 tests remained stable with no changes in failure rates.",
-    "The increase in flakiness for 'RSS570' may indicate a timing issue introduced by recent changes.",
-    "This regression could affect the reliability of financial reporting for users.",
-    "Further investigation into the flaky behaviour of 'RSS570' is recommended.",
-    "Comparing the environment setup before and after the pivot may provide insights.",
-    "Monitoring the impact on report generation consistency is crucial for finance staff."
+    "1 regression was observed in the 'RSS570 - Crystal Report' test after the pivot date.",
+    "The flaky rate for 'RSS570' increased from 0% to 20%, indicating potential timing issues.",
+    "1 test, 'NML510 - Trial Balance Report', showed improvement, reducing failure rate from 40% to 0%.",
+    "The observed pattern may suggest instability introduced by recent code changes.",
+    "Increased flakiness could affect the reliability of financial reporting for users.",
+    "Further investigation into the timing of 'RSS570' failures is recommended.",
+    "Comparing test environments may help isolate the cause of the regression.",
+    "Monitoring the stability of resolved tests is crucial to maintain confidence in the system."
   ]
 }
