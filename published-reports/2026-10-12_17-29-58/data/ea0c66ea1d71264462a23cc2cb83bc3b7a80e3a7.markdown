@@ -1,0 +1,892 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Post-Deployment-Tests/PostChecksTests.spec.ts >> Postchecks on environment:UAT >> RSS310Q - Attachments @shard2
+- Location: src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:445:13
+
+# Error details
+
+```
+Error: expect(received).toBeTruthy()
+
+Received: false
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic "Click here to show the navigation panel" [ref=e7] [cursor=pointer]: 
+        - generic "Click here to navigate to your homepage" [ref=e8] [cursor=pointer]
+      - heading "RSS310Q - Purchase Orders" [level=2] [ref=e10]
+      - text: 
+      - generic [ref=e12]:
+        - heading "SIMS Finance Demo Site 130" [level=3] [ref=e13]
+        - generic [ref=e14] [cursor=pointer]: 
+        - text: 
+        - generic [ref=e15] [cursor=pointer]:
+          - generic [ref=e16]:  
+          - text: Finance Director
+          - generic [ref=e17]: 
+    - text:   
+  - text: 
+  - generic [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e23]:
+        - button "Quick Launch" [ref=e30] [cursor=pointer]:
+          - generic [ref=e32]: 
+        - text: 
+        - button "Spaces" [ref=e39] [cursor=pointer]:
+          - generic [ref=e41]: 
+        - text: 
+        - button "Recent History" [ref=e48] [cursor=pointer]:
+          - generic [ref=e50]: 
+        - text:     
+        - button "Favourites" [ref=e57] [cursor=pointer]:
+          - generic [ref=e59]: 
+        - text:    
+        - generic: 
+      - generic [ref=e61] [cursor=pointer]:
+        - generic [ref=e62]: 
+        - generic [ref=e63]: 
+    - generic [ref=e67]:
+      - button "Options" [ref=e76] [cursor=pointer]:
+        - generic [ref=e78]: 
+        - text: Options
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - generic [ref=e82]: Search Criteria
+          - text: »
+          - generic [ref=e83]: Header Results
+        - generic [ref=e84]:
+          - generic "Grid Summary :" [ref=e85]:
+            - generic [ref=e88]:
+              - generic [ref=e93]:
+                - generic [ref=e94]:
+                  - button "Refresh grid" [ref=e95] [cursor=pointer]:
+                    - generic [ref=e97]: 
+                  - button "Export grid data" [ref=e98] [cursor=pointer]:
+                    - generic [ref=e100]: 
+                - button "New" [ref=e101] [cursor=pointer]:
+                  - generic [ref=e102]:
+                    - generic [ref=e103]: New
+                    - generic [ref=e104]: 
+              - generic [ref=e105]:
+                - table "Grid Summary :" [ref=e106]:
+                  - rowgroup [ref=e107]:
+                    - 'row "Check to Select All Rows School ID Security Applied Target : COMPANY_ID Type : RANGE Restriction : 000000 to 999999 Order Date Order Number Value Ordered Supplier Buyer Delivery Location Order Status Order Method User Action" [ref=e108]':
+                      - columnheader "Check to Select All Rows" [ref=e109]:
+                        - checkbox "Check to Select All Rows" [ref=e110] [cursor=pointer]: 
+                      - 'columnheader "School ID Security Applied Target : COMPANY_ID Type : RANGE Restriction : 000000 to 999999" [ref=e111] [cursor=pointer]':
+                        - generic [ref=e112]:
+                          - generic [ref=e113]: School ID
+                          - 'generic "Security Applied Target : COMPANY_ID Type : RANGE Restriction : 000000 to 999999" [ref=e115]': 
+                      - columnheader "Order Date" [ref=e116] [cursor=pointer]:
+                        - generic [ref=e118]: Order Date
+                      - columnheader "Order Number" [ref=e119] [cursor=pointer]:
+                        - generic [ref=e120]:
+                          - generic [ref=e121]: 
+                          - generic [ref=e122]: Order Number
+                      - columnheader "Value Ordered" [ref=e123] [cursor=pointer]:
+                        - generic [ref=e125]: Value Ordered
+                      - columnheader "Supplier" [ref=e126] [cursor=pointer]:
+                        - generic [ref=e128]: Supplier
+                      - columnheader "Buyer" [ref=e129] [cursor=pointer]:
+                        - generic [ref=e131]: Buyer
+                      - columnheader "Delivery Location" [ref=e132] [cursor=pointer]:
+                        - generic [ref=e134]: Delivery Location
+                      - columnheader "Order Status" [ref=e135] [cursor=pointer]:
+                        - generic [ref=e137]: Order Status
+                      - columnheader "Order Method" [ref=e138] [cursor=pointer]:
+                        - generic [ref=e140]: Order Method
+                      - columnheader "User" [ref=e141] [cursor=pointer]:
+                        - generic [ref=e143]: User
+                      - columnheader "Action" [ref=e144] [cursor=pointer]:
+                        - generic [ref=e146]: Action
+                    - row "          Clear Filters" [ref=e147]:
+                      - columnheader [ref=e148]
+                      - columnheader "" [ref=e149]:
+                        - textbox "Enter Text to Filter on School ID" [ref=e150]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "" [ref=e151]:
+                        - textbox "Enter Text to Filter on Order Date" [ref=e152]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "" [ref=e153]:
+                        - textbox "Enter Text to Filter on Order Number" [ref=e154]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "" [ref=e155]:
+                        - textbox "Enter Text to Filter on Value Ordered" [ref=e156]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "" [ref=e157]:
+                        - textbox "Enter Text to Filter on Supplier" [ref=e158]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "" [ref=e159]:
+                        - textbox "Enter Text to Filter on Buyer" [ref=e160]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "" [ref=e161]:
+                        - textbox "Enter Text to Filter on Delivery Location" [ref=e162]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "" [ref=e163]:
+                        - textbox "Enter Text to Filter on Order Status" [ref=e164]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "" [ref=e165]:
+                        - textbox "Enter Text to Filter on Order Method" [ref=e166]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "" [ref=e167]:
+                        - textbox "Enter Text to Filter on User" [ref=e168]:
+                          - /placeholder: Filter
+                        - text:  
+                      - columnheader "Clear Filters" [ref=e169]:
+                        - button "Clear Filters" [ref=e170] [cursor=pointer]:
+                          - generic [ref=e172]: 
+                          - text: Clear Filters
+                  - rowgroup [ref=e173]:
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00001 000001 000001 User Area Order Method Who Setup View" [ref=e174]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e175]:
+                        - checkbox "Check to Select Row" [ref=e176] [cursor=pointer]: 
+                      - cell "School" [ref=e177]:
+                        - generic "School" [ref=e178]: "000001"
+                      - cell "Order Date" [ref=e179]:
+                        - generic "Order Date" [ref=e180]: 05/06/2026
+                      - cell "Order Number" [ref=e181]:
+                        - generic "Order Number" [ref=e182]: "000000027"
+                      - cell "Value Ordered" [ref=e183]:
+                        - generic "Value Ordered" [ref=e184]: "165.47"
+                      - cell "00001" [ref=e185]:
+                        - generic "00001" [ref=e186]: YPO
+                      - cell "000001" [ref=e187]:
+                        - generic "000001" [ref=e188]: Green Abbey Buyer
+                      - cell "000001" [ref=e189]:
+                        - generic "000001" [ref=e190]: Green Abbey School
+                      - cell "User Area" [ref=e191]:
+                        - generic "User Area" [ref=e192]: Fully Received
+                      - cell "Order Method" [ref=e193]:
+                        - generic "Order Method" [ref=e194]: DIRECT
+                      - cell "Who Setup" [ref=e195]:
+                        - generic "Who Setup" [ref=e196]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e197]:
+                        - button "View" [ref=e198]:
+                          - generic [ref=e199]:
+                            - generic [ref=e200]: View
+                            - generic [ref=e201] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00001 000001 000001 User Area Order Method Who Setup View" [ref=e202]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e203]:
+                        - checkbox "Check to Select Row" [ref=e204] [cursor=pointer]: 
+                      - cell "School" [ref=e205]:
+                        - generic "School" [ref=e206]: "000001"
+                      - cell "Order Date" [ref=e207]:
+                        - generic "Order Date" [ref=e208]: 05/06/2026
+                      - cell "Order Number" [ref=e209]:
+                        - generic "Order Number" [ref=e210]: "000000026"
+                      - cell "Value Ordered" [ref=e211]:
+                        - generic "Value Ordered" [ref=e212]: "641.82"
+                      - cell "00001" [ref=e213]:
+                        - generic "00001" [ref=e214]: YPO
+                      - cell "000001" [ref=e215]:
+                        - generic "000001" [ref=e216]: Green Abbey Buyer
+                      - cell "000001" [ref=e217]:
+                        - generic "000001" [ref=e218]: Green Abbey School
+                      - cell "User Area" [ref=e219]:
+                        - generic "User Area" [ref=e220]: Entered - Emailed
+                      - cell "Order Method" [ref=e221]:
+                        - generic "Order Method" [ref=e222]: DIRECT
+                      - cell "Who Setup" [ref=e223]:
+                        - generic "Who Setup" [ref=e224]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e225]:
+                        - button "View" [ref=e226]:
+                          - generic [ref=e227]:
+                            - generic [ref=e228]: View
+                            - generic [ref=e229] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00001 000001 000001 User Area Order Method Who Setup View" [ref=e230]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e231]:
+                        - checkbox "Check to Select Row" [ref=e232] [cursor=pointer]: 
+                      - cell "School" [ref=e233]:
+                        - generic "School" [ref=e234]: "000001"
+                      - cell "Order Date" [ref=e235]:
+                        - generic "Order Date" [ref=e236]: 05/06/2026
+                      - cell "Order Number" [ref=e237]:
+                        - generic "Order Number" [ref=e238]: "000000025"
+                      - cell "Value Ordered" [ref=e239]:
+                        - generic "Value Ordered" [ref=e240]: "524.74"
+                      - cell "00001" [ref=e241]:
+                        - generic "00001" [ref=e242]: YPO
+                      - cell "000001" [ref=e243]:
+                        - generic "000001" [ref=e244]: Green Abbey Buyer
+                      - cell "000001" [ref=e245]:
+                        - generic "000001" [ref=e246]: Green Abbey School
+                      - cell "User Area" [ref=e247]:
+                        - generic "User Area" [ref=e248]: Entered - Emailed
+                      - cell "Order Method" [ref=e249]:
+                        - generic "Order Method" [ref=e250]: DIRECT
+                      - cell "Who Setup" [ref=e251]:
+                        - generic "Who Setup" [ref=e252]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e253]:
+                        - button "View" [ref=e254]:
+                          - generic [ref=e255]:
+                            - generic [ref=e256]: View
+                            - generic [ref=e257] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00001 000001 000001 User Area Order Method Who Setup View" [ref=e258]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e259]:
+                        - checkbox "Check to Select Row" [ref=e260] [cursor=pointer]: 
+                      - cell "School" [ref=e261]:
+                        - generic "School" [ref=e262]: "000001"
+                      - cell "Order Date" [ref=e263]:
+                        - generic "Order Date" [ref=e264]: 05/06/2026
+                      - cell "Order Number" [ref=e265]:
+                        - generic "Order Number" [ref=e266]: "000000024"
+                      - cell "Value Ordered" [ref=e267]:
+                        - generic "Value Ordered" [ref=e268]: "318.33"
+                      - cell "00001" [ref=e269]:
+                        - generic "00001" [ref=e270]: YPO
+                      - cell "000001" [ref=e271]:
+                        - generic "000001" [ref=e272]: Green Abbey Buyer
+                      - cell "000001" [ref=e273]:
+                        - generic "000001" [ref=e274]: Green Abbey School
+                      - cell "User Area" [ref=e275]:
+                        - generic "User Area" [ref=e276]: Entered - Emailed
+                      - cell "Order Method" [ref=e277]:
+                        - generic "Order Method" [ref=e278]: DIRECT
+                      - cell "Who Setup" [ref=e279]:
+                        - generic "Who Setup" [ref=e280]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e281]:
+                        - button "View" [ref=e282]:
+                          - generic [ref=e283]:
+                            - generic [ref=e284]: View
+                            - generic [ref=e285] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00007 000001 000001 User Area Order Method Who Setup View" [ref=e286]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e287]:
+                        - checkbox "Check to Select Row" [ref=e288] [cursor=pointer]: 
+                      - cell "School" [ref=e289]:
+                        - generic "School" [ref=e290]: "000001"
+                      - cell "Order Date" [ref=e291]:
+                        - generic "Order Date" [ref=e292]: 20/05/2026
+                      - cell "Order Number" [ref=e293]:
+                        - generic "Order Number" [ref=e294]: "000000023"
+                      - cell "Value Ordered" [ref=e295]:
+                        - generic "Value Ordered" [ref=e296]: "919.60"
+                      - cell "00007" [ref=e297]:
+                        - generic "00007" [ref=e298]: Global Construction Ltd
+                      - cell "000001" [ref=e299]:
+                        - generic "000001" [ref=e300]: Green Abbey Buyer
+                      - cell "000001" [ref=e301]:
+                        - generic "000001" [ref=e302]: Green Abbey School
+                      - cell "User Area" [ref=e303]:
+                        - generic "User Area" [ref=e304]: Fully Invoiced / Fully Received
+                      - cell "Order Method" [ref=e305]:
+                        - generic "Order Method" [ref=e306]: DIRECT
+                      - cell "Who Setup" [ref=e307]:
+                        - generic "Who Setup" [ref=e308]: FINDIR99D130
+                      - text: 
+                      - cell "View" [ref=e309]:
+                        - button "View" [ref=e310]:
+                          - generic [ref=e311]:
+                            - generic [ref=e312]: View
+                            - generic [ref=e313] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00008 000001 000001 User Area Order Method Who Setup View" [ref=e314]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e315]:
+                        - checkbox "Check to Select Row" [ref=e316] [cursor=pointer]: 
+                      - cell "School" [ref=e317]:
+                        - generic "School" [ref=e318]: "000001"
+                      - cell "Order Date" [ref=e319]:
+                        - generic "Order Date" [ref=e320]: 11/05/2026
+                      - cell "Order Number" [ref=e321]:
+                        - generic "Order Number" [ref=e322]: "000000022"
+                      - cell "Value Ordered" [ref=e323]:
+                        - generic "Value Ordered" [ref=e324]: "246.00"
+                      - cell "00008" [ref=e325]:
+                        - generic "00008" [ref=e326]: British Telecom
+                      - cell "000001" [ref=e327]:
+                        - generic "000001" [ref=e328]: Green Abbey Buyer
+                      - cell "000001" [ref=e329]:
+                        - generic "000001" [ref=e330]: Green Abbey School
+                      - cell "User Area" [ref=e331]:
+                        - generic "User Area" [ref=e332]: Entered - Emailed
+                      - cell "Order Method" [ref=e333]:
+                        - generic "Order Method" [ref=e334]: DIRECT
+                      - cell "Who Setup" [ref=e335]:
+                        - generic "Who Setup" [ref=e336]: FINDIR99D130
+                      - text: 
+                      - cell "View" [ref=e337]:
+                        - button "View" [ref=e338]:
+                          - generic [ref=e339]:
+                            - generic [ref=e340]: View
+                            - generic [ref=e341] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 01002 000001 000001 User Area Order Method Who Setup View" [ref=e342]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e343]:
+                        - checkbox "Check to Select Row" [ref=e344] [cursor=pointer]: 
+                      - cell "School" [ref=e345]:
+                        - generic "School" [ref=e346]: "000001"
+                      - cell "Order Date" [ref=e347]:
+                        - generic "Order Date" [ref=e348]: 02/10/2025
+                      - cell "Order Number" [ref=e349]:
+                        - generic "Order Number" [ref=e350]: "000000021"
+                      - cell "Value Ordered" [ref=e351]:
+                        - generic "Value Ordered" [ref=e352]: 13,578.00
+                      - cell "01002" [ref=e353]:
+                        - generic "01002" [ref=e354]: Three Trees Academy
+                      - cell "000001" [ref=e355]:
+                        - generic "000001" [ref=e356]: Green Abbey Buyer
+                      - cell "000001" [ref=e357]:
+                        - generic "000001" [ref=e358]: Green Abbey School
+                      - cell "User Area" [ref=e359]:
+                        - generic "User Area" [ref=e360]: Entered
+                      - cell "Order Method" [ref=e361]:
+                        - generic "Order Method" [ref=e362]: DIRECT
+                      - cell "Who Setup" [ref=e363]:
+                        - generic "Who Setup" [ref=e364]: FINDIR99D130
+                      - text: 
+                      - cell "View" [ref=e365]:
+                        - button "View" [ref=e366]:
+                          - generic [ref=e367]:
+                            - generic [ref=e368]: View
+                            - generic [ref=e369] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00005 000001 000001 User Area Order Method Who Setup View" [ref=e370]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e371]:
+                        - checkbox "Check to Select Row" [ref=e372] [cursor=pointer]: 
+                      - cell "School" [ref=e373]:
+                        - generic "School" [ref=e374]: "000001"
+                      - cell "Order Date" [ref=e375]:
+                        - generic "Order Date" [ref=e376]: 14/07/2025
+                      - cell "Order Number" [ref=e377]:
+                        - generic "Order Number" [ref=e378]: "000000020"
+                      - cell "Value Ordered" [ref=e379]:
+                        - generic "Value Ordered" [ref=e380]: "699.21"
+                      - cell "00005" [ref=e381]:
+                        - generic "00005" [ref=e382]: Eastern Water Authority
+                      - cell "000001" [ref=e383]:
+                        - generic "000001" [ref=e384]: Green Abbey Buyer
+                      - cell "000001" [ref=e385]:
+                        - generic "000001" [ref=e386]: Green Abbey School
+                      - cell "User Area" [ref=e387]:
+                        - generic "User Area" [ref=e388]: Entered - Emailed
+                      - cell "Order Method" [ref=e389]:
+                        - generic "Order Method" [ref=e390]: DIRECT
+                      - cell "Who Setup" [ref=e391]:
+                        - generic "Who Setup" [ref=e392]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e393]:
+                        - button "View" [ref=e394]:
+                          - generic [ref=e395]:
+                            - generic [ref=e396]: View
+                            - generic [ref=e397] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00007 000001 000001 User Area Order Method Who Setup View" [ref=e398]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e399]:
+                        - checkbox "Check to Select Row" [ref=e400] [cursor=pointer]: 
+                      - cell "School" [ref=e401]:
+                        - generic "School" [ref=e402]: "000001"
+                      - cell "Order Date" [ref=e403]:
+                        - generic "Order Date" [ref=e404]: 14/07/2025
+                      - cell "Order Number" [ref=e405]:
+                        - generic "Order Number" [ref=e406]: "000000019"
+                      - cell "Value Ordered" [ref=e407]:
+                        - generic "Value Ordered" [ref=e408]: "244.24"
+                      - cell "00007" [ref=e409]:
+                        - generic "00007" [ref=e410]: Global Construction Ltd
+                      - cell "000001" [ref=e411]:
+                        - generic "000001" [ref=e412]: Green Abbey Buyer
+                      - cell "000001" [ref=e413]:
+                        - generic "000001" [ref=e414]: Green Abbey School
+                      - cell "User Area" [ref=e415]:
+                        - generic "User Area" [ref=e416]: Entered - Emailed
+                      - cell "Order Method" [ref=e417]:
+                        - generic "Order Method" [ref=e418]: DIRECT
+                      - cell "Who Setup" [ref=e419]:
+                        - generic "Who Setup" [ref=e420]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e421]:
+                        - button "View" [ref=e422]:
+                          - generic [ref=e423]:
+                            - generic [ref=e424]: View
+                            - generic [ref=e425] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00001 000001 000001 User Area Order Method Who Setup View" [ref=e426]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e427]:
+                        - checkbox "Check to Select Row" [ref=e428] [cursor=pointer]: 
+                      - cell "School" [ref=e429]:
+                        - generic "School" [ref=e430]: "000001"
+                      - cell "Order Date" [ref=e431]:
+                        - generic "Order Date" [ref=e432]: 14/07/2025
+                      - cell "Order Number" [ref=e433]:
+                        - generic "Order Number" [ref=e434]: "000000018"
+                      - cell "Value Ordered" [ref=e435]:
+                        - generic "Value Ordered" [ref=e436]: "123.32"
+                      - cell "00001" [ref=e437]:
+                        - generic "00001" [ref=e438]: YPO
+                      - cell "000001" [ref=e439]:
+                        - generic "000001" [ref=e440]: Green Abbey Buyer
+                      - cell "000001" [ref=e441]:
+                        - generic "000001" [ref=e442]: Green Abbey School
+                      - cell "User Area" [ref=e443]:
+                        - generic "User Area" [ref=e444]: Entered - Emailed
+                      - cell "Order Method" [ref=e445]:
+                        - generic "Order Method" [ref=e446]: DIRECT
+                      - cell "Who Setup" [ref=e447]:
+                        - generic "Who Setup" [ref=e448]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e449]:
+                        - button "View" [ref=e450]:
+                          - generic [ref=e451]:
+                            - generic [ref=e452]: View
+                            - generic [ref=e453] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00004 000001 000001 User Area Order Method Who Setup View" [ref=e454]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e455]:
+                        - checkbox "Check to Select Row" [ref=e456] [cursor=pointer]: 
+                      - cell "School" [ref=e457]:
+                        - generic "School" [ref=e458]: "000001"
+                      - cell "Order Date" [ref=e459]:
+                        - generic "Order Date" [ref=e460]: 14/07/2025
+                      - cell "Order Number" [ref=e461]:
+                        - generic "Order Number" [ref=e462]: "000000017"
+                      - cell "Value Ordered" [ref=e463]:
+                        - generic "Value Ordered" [ref=e464]: "112.33"
+                      - cell "00004" [ref=e465]:
+                        - generic "00004" [ref=e466]: "3663"
+                      - cell "000001" [ref=e467]:
+                        - generic "000001" [ref=e468]: Green Abbey Buyer
+                      - cell "000001" [ref=e469]:
+                        - generic "000001" [ref=e470]: Green Abbey School
+                      - cell "User Area" [ref=e471]:
+                        - generic "User Area" [ref=e472]: Entered - Emailed
+                      - cell "Order Method" [ref=e473]:
+                        - generic "Order Method" [ref=e474]: DIRECT
+                      - cell "Who Setup" [ref=e475]:
+                        - generic "Who Setup" [ref=e476]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e477]:
+                        - button "View" [ref=e478]:
+                          - generic [ref=e479]:
+                            - generic [ref=e480]: View
+                            - generic [ref=e481] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00015 000001 000001 User Area Order Method Who Setup View" [ref=e482]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e483]:
+                        - checkbox "Check to Select Row" [ref=e484] [cursor=pointer]: 
+                      - cell "School" [ref=e485]:
+                        - generic "School" [ref=e486]: "000001"
+                      - cell "Order Date" [ref=e487]:
+                        - generic "Order Date" [ref=e488]: 10/07/2025
+                      - cell "Order Number" [ref=e489]:
+                        - generic "Order Number" [ref=e490]: "000000016"
+                      - cell "Value Ordered" [ref=e491]:
+                        - generic "Value Ordered" [ref=e492]: 2,233.11
+                      - cell "00015" [ref=e493]:
+                        - generic "00015" [ref=e494]: ABC Personnel Services
+                      - cell "000001" [ref=e495]:
+                        - generic "000001" [ref=e496]: Green Abbey Buyer
+                      - cell "000001" [ref=e497]:
+                        - generic "000001" [ref=e498]: Green Abbey School
+                      - cell "User Area" [ref=e499]:
+                        - generic "User Area" [ref=e500]: Fully Invoiced / Fully Received
+                      - cell "Order Method" [ref=e501]:
+                        - generic "Order Method" [ref=e502]: DIRECT
+                      - cell "Who Setup" [ref=e503]:
+                        - generic "Who Setup" [ref=e504]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e505]:
+                        - button "View" [ref=e506]:
+                          - generic [ref=e507]:
+                            - generic [ref=e508]: View
+                            - generic [ref=e509] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00007 000001 000001 User Area Order Method Who Setup View" [ref=e510]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e511]:
+                        - checkbox "Check to Select Row" [ref=e512] [cursor=pointer]: 
+                      - cell "School" [ref=e513]:
+                        - generic "School" [ref=e514]: "000001"
+                      - cell "Order Date" [ref=e515]:
+                        - generic "Order Date" [ref=e516]: 10/07/2025
+                      - cell "Order Number" [ref=e517]:
+                        - generic "Order Number" [ref=e518]: "000000015"
+                      - cell "Value Ordered" [ref=e519]:
+                        - generic "Value Ordered" [ref=e520]: 1,122.33
+                      - cell "00007" [ref=e521]:
+                        - generic "00007" [ref=e522]: Global Construction Ltd
+                      - cell "000001" [ref=e523]:
+                        - generic "000001" [ref=e524]: Green Abbey Buyer
+                      - cell "000001" [ref=e525]:
+                        - generic "000001" [ref=e526]: Green Abbey School
+                      - cell "User Area" [ref=e527]:
+                        - generic "User Area" [ref=e528]: Fully Invoiced / Fully Received
+                      - cell "Order Method" [ref=e529]:
+                        - generic "Order Method" [ref=e530]: DIRECT
+                      - cell "Who Setup" [ref=e531]:
+                        - generic "Who Setup" [ref=e532]: FINCLERK01D130
+                      - text: 
+                      - cell "View" [ref=e533]:
+                        - button "View" [ref=e534]:
+                          - generic [ref=e535]:
+                            - generic [ref=e536]: View
+                            - generic [ref=e537] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 01001 000001 000001 User Area Order Method Who Setup View" [ref=e538]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e539]:
+                        - checkbox "Check to Select Row" [ref=e540] [cursor=pointer]: 
+                      - cell "School" [ref=e541]:
+                        - generic "School" [ref=e542]: "000001"
+                      - cell "Order Date" [ref=e543]:
+                        - generic "Order Date" [ref=e544]: 02/05/2025
+                      - cell "Order Number" [ref=e545]:
+                        - generic "Order Number" [ref=e546]: "000000014"
+                      - cell "Value Ordered" [ref=e547]:
+                        - generic "Value Ordered" [ref=e548]: "912.00"
+                      - cell "01001" [ref=e549]:
+                        - generic "01001" [ref=e550]: BakeMyCookie Cookie Supplier
+                      - cell "000001" [ref=e551]:
+                        - generic "000001" [ref=e552]: Green Abbey Buyer
+                      - cell "000001" [ref=e553]:
+                        - generic "000001" [ref=e554]: Green Abbey School
+                      - cell "User Area" [ref=e555]:
+                        - generic "User Area" [ref=e556]: Fully Received
+                      - cell "Order Method" [ref=e557]:
+                        - generic "Order Method" [ref=e558]: DIRECT
+                      - cell "Who Setup" [ref=e559]:
+                        - generic "Who Setup" [ref=e560]: FINDIR99D130
+                      - text: 
+                      - cell "View" [ref=e561]:
+                        - button "View" [ref=e562]:
+                          - generic [ref=e563]:
+                            - generic [ref=e564]: View
+                            - generic [ref=e565] [cursor=pointer]: 
+                      - text: 
+                    - row "Check to Select Row School Order Date Order Number Value Ordered 00014 000001 000001 User Area Order Method Who Setup View" [ref=e566]:
+                      - text: 
+                      - cell "Check to Select Row" [ref=e567]:
+                        - checkbox "Check to Select Row" [ref=e568] [cursor=pointer]: 
+                      - cell "School" [ref=e569]:
+                        - generic "School" [ref=e570]: "000001"
+                      - cell "Order Date" [ref=e571]:
+                        - generic "Order Date" [ref=e572]: 10/03/2025
+                      - cell "Order Number" [ref=e573]:
+                        - generic "Order Number" [ref=e574]: "000000013"
+                      - cell "Value Ordered" [ref=e575]:
+                        - generic "Value Ordered" [ref=e576]: "1.00"
+                      - cell "00014" [ref=e577]:
+                        - generic "00014" [ref=e578]: GLS
+                      - cell "000001" [ref=e579]:
+                        - generic "000001" [ref=e580]: Green Abbey Buyer
+                      - cell "000001" [ref=e581]:
+                        - generic "000001" [ref=e582]: Green Abbey School
+                      - cell "User Area" [ref=e583]:
+                        - generic "User Area" [ref=e584]: Fully Invoiced / Fully Received
+                      - cell "Order Method" [ref=e585]:
+                        - generic "Order Method" [ref=e586]: DIRECT
+                      - cell "Who Setup" [ref=e587]:
+                        - generic "Who Setup" [ref=e588]: FINDIR99D130
+                      - text: 
+                      - cell "View" [ref=e589]:
+                        - button "View" [ref=e590]:
+                          - generic [ref=e591]:
+                            - generic [ref=e592]: View
+                            - generic [ref=e593] [cursor=pointer]: 
+                      - text: 
+                    - row "Total Row" [ref=e594]:
+                      - cell "Total" [ref=e595]:
+                        - generic "Total"
+                      - cell "Total" [ref=e596]:
+                        - generic "Total"
+                      - cell "Total" [ref=e597]:
+                        - generic "Total"
+                      - rowheader "Total" [ref=e598]:
+                        - generic "Total" [ref=e599]
+                      - cell "Total 45,204.31" [ref=e600]:
+                        - generic "Total 45,204.31" [ref=e601]: 45,204.31
+                      - cell "Total" [ref=e602]:
+                        - generic "Total"
+                      - cell "Total" [ref=e603]:
+                        - generic "Total"
+                      - cell "Total" [ref=e604]:
+                        - generic "Total"
+                      - cell "Total" [ref=e605]:
+                        - generic "Total"
+                      - cell "Total" [ref=e606]:
+                        - generic "Total"
+                      - cell "Total" [ref=e607]:
+                        - generic "Total"
+                      - cell "Total" [ref=e608]:
+                        - generic "Total"
+                - generic [ref=e612]:
+                  - generic [ref=e614]: Records 1 to 15 of 26
+                  - generic [ref=e616]:
+                    - text: Page
+                    - textbox "Enter Page Number to go to and hit the Enter Key" [ref=e617]: "1"
+                    - text:  / 2
+                    - generic [ref=e618] [cursor=pointer]: 
+                    - generic [ref=e619] [cursor=pointer]: 
+          - table [ref=e622]:
+            - rowgroup [ref=e623]:
+              - row "Authorise View PDFs" [ref=e624]:
+                - cell "Authorise View PDFs" [ref=e625]:
+                  - button "Authorise" [disabled] [ref=e627]
+                  - button "View PDFs" [disabled] [ref=e629]
+        - table [ref=e631]:
+          - rowgroup [ref=e632]:
+            - row "Back" [ref=e633]:
+              - cell "Back" [ref=e634]:
+                - table [ref=e637]:
+                  - rowgroup [ref=e638]:
+                    - row "Back" [ref=e639]:
+                      - cell "Back" [ref=e640]:
+                        - button "Back" [ref=e642] [cursor=pointer]
+  - status [ref=e643]
+  - status [ref=e644]
+  - status [ref=e645]
+  - status [ref=e646]
+  - status [ref=e647]
+  - status [ref=e648]
+  - status [ref=e649]
+  - status [ref=e650]
+  - status [ref=e651]
+  - status [ref=e652]
+  - status [ref=e653]
+```
+
+# Test source
+
+```ts
+  67  |     _closeBtnLocator = "#esr_close_button";
+  68  |     private readonly costCentreLookupIconLocator = "img#c1_part_code_lookup";
+  69  |     private readonly costCentreCodeColumnLocator = "[axes='C1_PART_CODE']";
+  70  |     private readonly selectButtonLocator = "button[aria-label='Select code']";
+  71  |     private readonly _descrColumnLocator = "[axes='DESCR']";
+  72  |     public get descrColumnLocator() {
+  73  |         return this._descrColumnLocator;
+  74  |     }
+  75  | 
+  76  |     private readonly _fundCodeColumnLocator = "[axes='E2_PART_CODE']";
+  77  |     public get fundCodeColumnLocator() {
+  78  |         return this._fundCodeColumnLocator;
+  79  |     }
+  80  |     private readonly _ledgerCodeColumnLocator = "[axes='E1_PART_CODE']";
+  81  |     public get ledgerCodeColumnLocator() {
+  82  |         return this._ledgerCodeColumnLocator;
+  83  |     }
+  84  |     private readonly nextPageButtonLocator =
+  85  |         "*[data-uid$=glcodepartlookup_GL_CODE_PART_GRID_next]";
+  86  |     private readonly _costCentreInputLocator = "#c1_part_code";
+  87  |     public get costCentreInputLocator() {
+  88  |         return this._costCentreInputLocator;
+  89  |     }
+  90  |     private readonly _ledgerCodeInputLocator = "#e1_part_code";
+  91  |     public get ledgerCodeInputLocator() {
+  92  |         return this._ledgerCodeInputLocator;
+  93  |     }
+  94  |     private readonly _ledgerCodeDescriptionInputLocator =
+  95  |         "[for='e1_part_code'][type='descr']";
+  96  |     public get ledgerCodeDescriptionInputLocator() {
+  97  |         return this._ledgerCodeDescriptionInputLocator;
+  98  |     }
+  99  |     private readonly _fundCodeInputLocator = "#e2_part_code";
+  100 |     public get fundCodeInputLocator() {
+  101 |         return this._fundCodeInputLocator;
+  102 |     }
+  103 |     private readonly _fundCodeDescriptionInputLocator =
+  104 |         "[for='e2_part_code'][type='descr']";
+  105 |     public get fundCodeDescriptionInputLocator() {
+  106 |         return this._fundCodeDescriptionInputLocator;
+  107 |     }
+  108 |     private readonly _ledgerCodeLookupIconLocator = "#e1_part_code_lookup";
+  109 |     public get ledgerCodeLookupIconLocator() {
+  110 |         return this._ledgerCodeLookupIconLocator;
+  111 |     }
+  112 |     private readonly _fundCodeLookupIconLocator = "#e2_part_code_lookup";
+  113 |     public get fundCodeLookupIconLocator() {
+  114 |         return this._fundCodeLookupIconLocator;
+  115 |     }
+  116 | 
+  117 |     private readonly purchaseOrderNumberLocator =
+  118 |         "label[data-alias='ORDER_NO_0']";
+  119 |     private readonly closeBtnOnDialogLocator = "button[title='Close']";
+  120 |     private readonly vatCodeLocator = "#vat_code";
+  121 |     // private readonly costCentreCodeLocator =""
+  122 | 
+  123 |     //Actions
+  124 |     /**
+  125 |      * @author: @pruthvirajqa2dev
+  126 |      * This methods verifies key page elements are visible after loading
+  127 |      */
+  128 |     async expectPageElementsVisibilityOnLoad() {
+  129 |         //Page Heading
+  130 |         expect(this.isHeadingVisibleByText(this.pageHeadingText)).toBeTruthy();
+  131 |     }
+  132 | 
+  133 |     /**
+  134 |      *
+  135 |      * @returns
+  136 |      */
+  137 |     async clickRandomViewButton(): Promise<[string[], number]> {
+  138 |         var orderNoColumnHeader = this.page.locator(
+  139 |             this.orderNoColumnHeaderLocator
+  140 |         );
+  141 |         // Function to check if the column is sorted in ascending order
+  142 |         var isAscending = async (): Promise<boolean> => {
+  143 |             var sortIcon = this.page.locator(this.sortIconLocator).first();
+  144 |             const iconClass =
+  145 |                 (await sortIcon.getAttribute(elementAttr.classAttr))?.trim() ||
+  146 |                 "";
+  147 |             return iconClass?.includes(this.upSortIconLocator) ?? false;
+  148 |         };
+  149 |         // Function to check if the column is sorted in descending order
+  150 |         var isDescending = async (): Promise<boolean> => {
+  151 |             var sortIcon = this.page.locator(this.sortIconLocator).first();
+  152 |             const iconClass =
+  153 |                 (await sortIcon.getAttribute(elementAttr.classAttr))?.trim() ||
+  154 |                 "";
+  155 |             return iconClass?.includes(this.downSortIconLocator) ?? false;
+  156 |         };
+  157 |         // Ensure the column is sorted in ascending order
+  158 |         if (!(await isAscending())) {
+  159 |             await orderNoColumnHeader.click({ force: true }); // First click
+  160 |             await this.page.waitForTimeout(3000);
+  161 |             if (await isDescending()) {
+  162 |                 await orderNoColumnHeader.click({ force: true }); // Second click if initially sorted descending
+  163 |                 await this.page.waitForTimeout(3000);
+  164 |             }
+  165 |         }
+  166 |         // Verify the column is now sorted in ascending order
+> 167 |         expect(await isAscending()).toBeTruthy();
+      |                                     ^ Error: expect(received).toBeTruthy()
+  168 |         // Perform your next action
+  169 |         console.log(
+  170 |             "Column is sorted in ascending order. Proceeding with next steps..."
+  171 |         );
+  172 |         const random = Math.floor(Math.random() * 9);
+  173 |         console.log("Random index is: " + random);
+  174 |         const orderNumberValue: string[] = await this.page
+  175 |             .locator(this.orderNoColumnValuesLocator)
+  176 |             .allTextContents();
+  177 |         await this.page
+  178 |             .locator(this.btnElementListLocator)
+  179 |             .filter({ hasText: labels.viewLbl })
+  180 |             .nth(random)
+  181 |             .click();
+  182 |         return [orderNumberValue, random];
+  183 |     }
+  184 |     /**
+  185 |      *
+  186 |      * @param random
+  187 |      */
+  188 |     async verifyBreadcrumbs(random: [string[], number]) {
+  189 |         const paddedString = random[0][random[1]].toString().padStart(9, "0");
+  190 |         console.log("paddedString:" + paddedString.trim());
+  191 |         await this.page.waitForLoadState("networkidle");
+  192 |         const breadcrumbs = await this.page
+  193 |             .locator(this.breadcrumbLocator)
+  194 |             .allTextContents();
+  195 | 
+  196 |         expect(breadcrumbs).toContainEqual(
+  197 |             expectedTexts.expectedSearchCriteriaText
+  198 |         );
+  199 |         expect(breadcrumbs).toContainEqual(
+  200 |             expectedTexts.expectedHeaderResultsText
+  201 |         );
+  202 |         expect(breadcrumbs).toContainEqual(
+  203 |             expectedTexts.expectedHeaderDetailsText +
+  204 |                 " (" +
+  205 |                 paddedString.trim() +
+  206 |                 ")"
+  207 |         );
+  208 |     }
+  209 |     /**
+  210 |      *
+  211 |      * @returns
+  212 |      */
+  213 |     async uploadAttachment(): Promise<string> {
+  214 |         //CLick attachments icon
+  215 |         await this.click(this.attachmentBtnLocator);
+  216 |         //Verify dialog
+  217 |         await this.checkIfDialogExistsWithTitle(
+  218 |             expectedTexts.exepctedAttachmentsDialogText
+  219 |         );
+  220 |         //Click add file
+  221 |         await this.page
+  222 |             .locator(this.multiBtnLocator)
+  223 |             .filter({ hasText: expectedTexts.addFileText })
+  224 |             .click();
+  225 |         const ext = ".DOCX";
+  226 |         const dirAndFileNameWithExt: string | null =
+  227 |             await FileUtils.fsWriteFile(ext);
+  228 | 
+  229 |         // Start waiting for file chooser before clicking. Note no await.
+  230 |         const fileChooserPromise = this.page.waitForEvent("filechooser");
+  231 |         //await this.clickButtonUsingRole(this.browseForFileLocator);
+  232 |         await this.page
+  233 |             .locator(this.commonDhxBtnLocator)
+  234 |             .filter({ hasText: labels.browseForAFileLbl })
+  235 |             .dblclick();
+  236 |         const fileChooser = await fileChooserPromise;
+  237 |         await fileChooser.setFiles(
+  238 |             path.join(process.cwd() + "/" + dirAndFileNameWithExt!)
+  239 |         );
+  240 |         console.log("dirAndFileNameWithExt=" + dirAndFileNameWithExt);
+  241 |         var fileNameWithExt: string = dirAndFileNameWithExt!.split("/")[1];
+  242 |         console.log("fileNameWithExt=" + fileNameWithExt);
+  243 |         await expect(
+  244 |             this.page.locator(this.fileNameAfterUploadLocator)
+  245 |         ).toContainText(fileNameWithExt);
+  246 |         await this.expectElementToBeVisibleUsingLocator(
+  247 |             this.successMarkLocator
+  248 |         );
+  249 |         await this.click(this._okBtnLocator);
+  250 |         return fileNameWithExt;
+  251 |     }
+  252 |     /**
+  253 |      *
+  254 |      * @param uploadedFileName
+  255 |      */
+  256 |     async verifyAttachmentDetails(uploadedFileName: string) {
+  257 |         //Verify dialog
+  258 |         await this.checkIfDialogExistsWithTitle(
+  259 |             expectedTexts.exepctedAttachmentDetailsDialogText
+  260 |         );
+  261 |         const splitFileName = uploadedFileName.split(".");
+  262 | 
+  263 |         //Assert filename
+  264 |         await this.expectElementToHaveValue(
+  265 |             this.fileTitleLocator,
+  266 |             splitFileName[0]
+  267 |         );
+```
