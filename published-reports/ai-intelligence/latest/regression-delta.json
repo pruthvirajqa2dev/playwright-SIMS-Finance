@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-10-12T17:33:53.032Z",
-  "pivotDate": "2026-10-05",
+  "generatedAt": "2026-10-13T15:48:22.603Z",
+  "pivotDate": "2026-10-06",
   "beforeWindow": {
     "from": "2026-09-14",
-    "to": "2026-10-02",
+    "to": "2026-10-05",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-10-05",
-    "to": "2026-10-12",
+    "from": "2026-10-06",
+    "to": "2026-10-13",
     "runsAnalysed": 5
   },
   "beforeEnvs": [
@@ -38,36 +38,35 @@
   "resolvedFailures": [
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 40,
+      "beforeFailureRate": 30,
       "afterFailureRate": 0,
       "beforeFlakyRate": 10,
       "afterFlakyRate": 0,
-      "failureDelta": -40,
+      "failureDelta": -30,
       "flakyDelta": -10,
       "verdict": "Resolved",
       "riskLevel": "Low",
       "errorSamplesBefore": [
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m",
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
       ],
       "errorSamplesAfter": []
     }
   ],
   "actionItems": [
     "Investigate the flaky behaviour of 'RSS570 - Crystal Report' which increased to 20%.",
-    "Analyze the timing of failures in the 'RSS570' test to identify potential timing issues.",
-    "Review the environment setup for consistency between the before and after windows.",
-    "Examine the impact of recent code changes on the stability of financial reports.",
-    "Monitor the performance of 'NML510 - Trial Balance Report' to ensure resolution is maintained."
+    "Analyze the timing issues that may have caused the new flakiness in the Crystal Report test.",
+    "Review the changes made around the pivot date for potential impacts on report generation.",
+    "Monitor the performance of the 'NML510 - Trial Balance Report' to ensure stability post-resolution.",
+    "Conduct a thorough comparison of test environments to identify any discrepancies."
   ],
   "executiveSummary": [
-    "1 regression was observed in the 'RSS570 - Crystal Report' test after the pivot date.",
-    "The flaky rate for 'RSS570' increased from 0% to 20%, indicating potential timing issues.",
-    "1 test, 'NML510 - Trial Balance Report', showed improvement, reducing failure rate from 40% to 0%.",
-    "The observed pattern may suggest instability introduced by recent code changes.",
-    "Increased flakiness could affect the reliability of financial reporting for users.",
-    "Further investigation into the timing of 'RSS570' failures is recommended.",
-    "Comparing test environments may help isolate the cause of the regression.",
-    "Monitoring the stability of resolved tests is crucial to maintain confidence in the system."
+    "1 regression was observed in the 'RSS570 - Crystal Report' with a new flaky rate of 20%.",
+    "1 test, 'NML510 - Trial Balance Report', improved from 30% failure to 0% after the pivot.",
+    "The pivot date of 2026-10-06 marks a significant change in test behaviour.",
+    "The increase in flakiness for 'RSS570' may indicate timing issues introduced by recent changes.",
+    "This pattern could reflect instability in report generation processes affecting finance staff.",
+    "Continued flaky behaviour may lead to inconsistent reporting outcomes for users.",
+    "Further investigation into the test environment may clarify the observed regression.",
+    "Monitoring the impact of these changes is crucial for maintaining operational reliability."
   ]
 }

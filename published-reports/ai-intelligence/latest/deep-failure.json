@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-12T17:33:42.995Z",
+  "generatedAt": "2026-10-13T15:48:11.953Z",
   "runsAnalysed": 15,
   "runsWithIssues": 15,
   "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
@@ -12,11 +12,11 @@
       "passCount": 0,
       "failureRate": 100,
       "flakyRate": 0,
-      "avgDurationMs": 234040,
-      "lastSeen": "2026-10-12_17-29-58",
+      "avgDurationMs": 210209,
+      "lastSeen": "2026-10-13_15-44-13",
       "errorSamples": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m  Received: \u001b[31mfalse\u001b[39m",
         "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:     1) <div>…</div> aka lo",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m  Received: \u001b[31mfalse\u001b[39m",
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m  Expected substring: \u001b[32m\"01/10/2026\"\u001b"
       ],
       "failuresByEnv": {
@@ -25,24 +25,23 @@
       "runsByEnv": {
         "UAT": 15
       },
-      "lastFailureTimestamp": "2026-10-12_17-29-58"
+      "lastFailureTimestamp": "2026-10-13_15-44-13"
     },
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "totalRuns": 15,
-      "failureCount": 4,
+      "failureCount": 3,
       "flakyCount": 1,
-      "passCount": 10,
-      "failureRate": 27,
+      "passCount": 11,
+      "failureRate": 20,
       "flakyRate": 7,
-      "avgDurationMs": 191567,
-      "lastSeen": "2026-10-12_17-29-58",
+      "avgDurationMs": 185705,
+      "lastSeen": "2026-10-13_15-44-13",
       "errorSamples": [
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m",
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background "
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
       ],
       "failuresByEnv": {
-        "UAT": 4
+        "UAT": 3
       },
       "runsByEnv": {
         "UAT": 15
@@ -57,8 +56,8 @@
       "passCount": 14,
       "failureRate": 0,
       "flakyRate": 7,
-      "avgDurationMs": 128767,
-      "lastSeen": "2026-10-12_17-29-58",
+      "avgDurationMs": 127924,
+      "lastSeen": "2026-10-13_15-44-13",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
@@ -73,8 +72,8 @@
       "passCount": 14,
       "failureRate": 0,
       "flakyRate": 7,
-      "avgDurationMs": 36201,
-      "lastSeen": "2026-10-12_17-29-58",
+      "avgDurationMs": 36077,
+      "lastSeen": "2026-10-13_15-44-13",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
@@ -89,8 +88,8 @@
       "passCount": 15,
       "failureRate": 0,
       "flakyRate": 0,
-      "avgDurationMs": 9768,
-      "lastSeen": "2026-10-12_17-29-58",
+      "avgDurationMs": 9878,
+      "lastSeen": "2026-10-13_15-44-13",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
@@ -105,8 +104,8 @@
       "passCount": 15,
       "failureRate": 0,
       "flakyRate": 0,
-      "avgDurationMs": 14268,
-      "lastSeen": "2026-10-12_17-29-58",
+      "avgDurationMs": 14213,
+      "lastSeen": "2026-10-13_15-44-13",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
@@ -121,8 +120,8 @@
       "passCount": 15,
       "failureRate": 0,
       "flakyRate": 0,
-      "avgDurationMs": 11700,
-      "lastSeen": "2026-10-12_17-29-58",
+      "avgDurationMs": 11674,
+      "lastSeen": "2026-10-13_15-44-13",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
@@ -140,20 +139,20 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "The test may be failing due to strict mode violations and element resolution issues.",
-      "recommendation": "Investigate the locator strategy and element visibility conditions."
+      "failureHypothesis": "The strict mode violation suggests a brittle selector issue.",
+      "recommendation": "Review and refine the locator strategy to ensure unique element selection."
     },
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "stabilityLabel": "Unstable",
       "priority": "High",
-      "failureRate": 27,
+      "failureRate": 20,
       "flakyRate": 7,
       "mostFrequentError": "Test timeout of 200000ms exceeded.",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "The test may be experiencing delays due to backend processing or UI rendering issues.",
-      "recommendation": "Analyze performance metrics during test execution to identify bottlenecks."
+      "failureHypothesis": "The timeout suggests potential performance issues or slow backend responses.",
+      "recommendation": "Investigate backend performance during test execution to identify bottlenecks."
     },
     {
       "testTitle": "RSS570 - Crystal Report @shard1",
@@ -164,8 +163,8 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour may suggest intermittent UI rendering issues.",
-      "recommendation": "Monitor the test for additional runs to confirm flakiness pattern."
+      "failureHypothesis": "Flaky behaviour may indicate intermittent UI issues or timing problems.",
+      "recommendation": "Monitor the test for further flaky behaviour and consider adding retries."
     },
     {
       "testTitle": "File upload using SPC420 @shard2",
@@ -176,8 +175,8 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour may indicate timing issues during file upload.",
-      "recommendation": "Review file upload conditions and network stability during tests."
+      "failureHypothesis": "Flaky behaviour may suggest timing issues during file upload.",
+      "recommendation": "Review file upload timing and consider increasing wait times."
     },
     {
       "testTitle": "Login and Logout @shard2",
@@ -189,7 +188,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any future anomalies."
+      "recommendation": "Continue monitoring for any changes in stability."
     },
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
@@ -201,7 +200,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any future anomalies."
+      "recommendation": "Continue monitoring for any changes in stability."
     },
     {
       "testTitle": "Help screen @shard2",
@@ -213,7 +212,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any future anomalies."
+      "recommendation": "Continue monitoring for any changes in stability."
     }
   ],
   "coFailurePatterns": [
@@ -222,7 +221,7 @@
         "NML510 - Trial Balance Report @shard1",
         "RSS310Q - Attachments @shard2"
       ],
-      "occurrences": 4,
+      "occurrences": 3,
       "possibleCause": ""
     }
   ],
@@ -231,19 +230,19 @@
     "NML510 - Trial Balance Report @shard1"
   ],
   "actionItems": [
-    "Investigate locator strategies in RSS310Q for strict mode violations.",
-    "Analyze performance metrics for NML510 during execution.",
-    "Monitor flaky tests for patterns in future runs.",
-    "Review file upload conditions for timing issues.",
-    "Ensure stable tests are maintained and monitored."
+    "Investigate the strict mode violation in RSS310Q.",
+    "Analyze backend performance during NML510 test runs.",
+    "Monitor flaky behaviour in RSS570 and File upload tests.",
+    "Review timing issues for file uploads.",
+    "Continue to track stable tests for any emerging issues."
   ],
   "executiveSummary": [
-    "100% of runs for RSS310Q failed, indicating critical instability.",
-    "NML510 had a 27% failure rate with timeout issues observed.",
-    "Two tests showed flaky behaviour, potentially affecting reliability.",
-    "Co-failure between NML510 and RSS310Q suggests shared dependencies.",
-    "Flaky tests may impact report generation consistency for finance staff.",
-    "Focus on locator strategies and performance metrics for investigation.",
-    "Monitoring is essential for stable tests to prevent future issues."
+    "100% of runs for RSS310Q failed, indicating severe instability.",
+    "20% failure rate observed for NML510, with timeout issues noted.",
+    "Flaky behaviour detected in RSS570 and File upload tests at 7%.",
+    "Co-failure pattern between NML510 and RSS310Q suggests shared dependencies.",
+    "Stable tests showed no failures, indicating reliability in those areas.",
+    "Investigating backend performance and timing issues is recommended.",
+    "Focus on refining locators and monitoring for further instability."
   ]
 }
