@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-10-13T15:48:22.603Z",
-  "pivotDate": "2026-10-06",
+  "generatedAt": "2026-10-14T13:37:07.960Z",
+  "pivotDate": "2026-10-07",
   "beforeWindow": {
-    "from": "2026-09-14",
-    "to": "2026-10-05",
+    "from": "2026-09-15",
+    "to": "2026-10-06",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-10-06",
-    "to": "2026-10-13",
+    "from": "2026-10-08",
+    "to": "2026-10-14",
     "runsAnalysed": 5
   },
   "beforeEnvs": [
@@ -17,56 +17,44 @@
   "afterEnvs": [
     "UAT"
   ],
-  "overallVerdict": "Regressed",
-  "regressions": [
-    {
-      "testTitle": "RSS570 - Crystal Report @shard1",
-      "beforeFailureRate": 0,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 0,
-      "afterFlakyRate": 20,
-      "failureDelta": 0,
-      "flakyDelta": 20,
-      "verdict": "Regressed",
-      "riskLevel": "Low",
-      "errorSamplesBefore": [],
-      "errorSamplesAfter": []
-    }
-  ],
-  "improvements": [],
-  "newFailures": [],
-  "resolvedFailures": [
+  "overallVerdict": "Improved",
+  "regressions": [],
+  "improvements": [
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "beforeFailureRate": 30,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 10,
+      "afterFailureRate": 20,
+      "beforeFlakyRate": 0,
       "afterFlakyRate": 0,
-      "failureDelta": -30,
-      "flakyDelta": -10,
-      "verdict": "Resolved",
-      "riskLevel": "Low",
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Improved",
+      "riskLevel": "Medium",
       "errorSamplesBefore": [
         "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
       ],
-      "errorSamplesAfter": []
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
     }
   ],
+  "newFailures": [],
+  "resolvedFailures": [],
   "actionItems": [
-    "Investigate the flaky behaviour of 'RSS570 - Crystal Report' which increased to 20%.",
-    "Analyze the timing issues that may have caused the new flakiness in the Crystal Report test.",
-    "Review the changes made around the pivot date for potential impacts on report generation.",
-    "Monitor the performance of the 'NML510 - Trial Balance Report' to ensure stability post-resolution.",
-    "Conduct a thorough comparison of test environments to identify any discrepancies."
+    "Monitor the improved performance of 'NML510 - Trial Balance Report' for consistency.",
+    "Investigate the cause of the timeout errors to prevent future occurrences.",
+    "Continue to track the stability of tests in the UAT environment.",
+    "Review the test execution environment for potential optimizations.",
+    "Ensure that any changes made do not introduce new risks in future deployments."
   ],
   "executiveSummary": [
-    "1 regression was observed in the 'RSS570 - Crystal Report' with a new flaky rate of 20%.",
-    "1 test, 'NML510 - Trial Balance Report', improved from 30% failure to 0% after the pivot.",
-    "The pivot date of 2026-10-06 marks a significant change in test behaviour.",
-    "The increase in flakiness for 'RSS570' may indicate timing issues introduced by recent changes.",
-    "This pattern could reflect instability in report generation processes affecting finance staff.",
-    "Continued flaky behaviour may lead to inconsistent reporting outcomes for users.",
-    "Further investigation into the test environment may clarify the observed regression.",
-    "Monitoring the impact of these changes is crucial for maintaining operational reliability."
+    "One test showed improvement with a failure rate decrease from 30% to 20%.",
+    "Six tests remained stable with no change in failure rates.",
+    "No new failures were detected post-pivot, indicating stability.",
+    "The observed timeout errors may indicate performance issues under load.",
+    "Improved performance could enhance report generation for finance staff.",
+    "Further analysis of timeout patterns may provide insight into performance.",
+    "Monitoring the UAT environment will help ensure ongoing stability.",
+    "Investigating the execution environment may clarify potential optimizations."
   ]
 }
