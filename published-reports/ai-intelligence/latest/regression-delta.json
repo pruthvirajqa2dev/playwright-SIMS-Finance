@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-10-14T13:37:07.960Z",
-  "pivotDate": "2026-10-07",
+  "generatedAt": "2026-10-15T13:20:14.394Z",
+  "pivotDate": "2026-10-08",
   "beforeWindow": {
-    "from": "2026-09-15",
+    "from": "2026-09-16",
     "to": "2026-10-06",
     "runsAnalysed": 10
   },
   "afterWindow": {
     "from": "2026-10-08",
-    "to": "2026-10-14",
-    "runsAnalysed": 5
+    "to": "2026-10-15",
+    "runsAnalysed": 6
   },
   "beforeEnvs": [
     "UAT"
@@ -17,44 +17,21 @@
   "afterEnvs": [
     "UAT"
   ],
-  "overallVerdict": "Improved",
+  "overallVerdict": "Neutral",
   "regressions": [],
-  "improvements": [
-    {
-      "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 30,
-      "afterFailureRate": 20,
-      "beforeFlakyRate": 0,
-      "afterFlakyRate": 0,
-      "failureDelta": -10,
-      "flakyDelta": 0,
-      "verdict": "Improved",
-      "riskLevel": "Medium",
-      "errorSamplesBefore": [
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
-      ],
-      "errorSamplesAfter": [
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
-      ]
-    }
-  ],
+  "improvements": [],
   "newFailures": [],
   "resolvedFailures": [],
   "actionItems": [
-    "Monitor the improved performance of 'NML510 - Trial Balance Report' for consistency.",
-    "Investigate the cause of the timeout errors to prevent future occurrences.",
-    "Continue to track the stability of tests in the UAT environment.",
-    "Review the test execution environment for potential optimizations.",
-    "Ensure that any changes made do not introduce new risks in future deployments."
+    "Continue monitoring test stability in UAT environment.",
+    "Review test coverage to ensure all critical areas are assessed.",
+    "Maintain regular regression testing schedule to catch future issues early."
   ],
   "executiveSummary": [
-    "One test showed improvement with a failure rate decrease from 30% to 20%.",
-    "Six tests remained stable with no change in failure rates.",
-    "No new failures were detected post-pivot, indicating stability.",
-    "The observed timeout errors may indicate performance issues under load.",
-    "Improved performance could enhance report generation for finance staff.",
-    "Further analysis of timeout patterns may provide insight into performance.",
-    "Monitoring the UAT environment will help ensure ongoing stability.",
-    "Investigating the execution environment may clarify potential optimizations."
+    "All tests remained stable with no changes in failure rates after the pivot date.",
+    "Seven tests showed consistent performance across both testing windows.",
+    "No regressions or new failures were detected during the analysis period.",
+    "This stability may indicate a solid codebase post-deployment.",
+    "Continued vigilance is recommended to ensure ongoing test reliability."
   ]
 }
