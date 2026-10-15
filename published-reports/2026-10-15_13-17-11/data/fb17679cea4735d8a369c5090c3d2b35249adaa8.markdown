@@ -1,0 +1,435 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Post-Deployment-Tests/PostChecksTests.spec.ts >> Postchecks on environment:UAT >> NML510 - Trial Balance Report @shard1
+- Location: src/tests/Post-Deployment-Tests/PostChecksTests.spec.ts:316:13
+
+# Error details
+
+```
+Test timeout of 200000ms exceeded.
+```
+
+```
+Error: page.waitForEvent: Test timeout of 200000ms exceeded.
+=========================== logs ===========================
+waiting for event "download"
+============================================================
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic "Click here to show the navigation panel" [ref=e7] [cursor=pointer]: 
+        - generic "Click here to navigate to your homepage" [ref=e8] [cursor=pointer]
+      - heading "NML510 - Trial Balance Report" [level=2] [ref=e10]
+      - text: 
+      - generic [ref=e12]:
+        - heading "SIMS Finance Demo Site 130" [level=3] [ref=e13]
+        - generic [ref=e14] [cursor=pointer]: 
+        - text: 
+        - generic [ref=e15] [cursor=pointer]:
+          - generic [ref=e16]:  
+          - text: Finance Director
+          - generic [ref=e17]: 
+    - text:   
+  - text: 
+  - generic [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e23]:
+        - button "Quick Launch" [ref=e30] [cursor=pointer]:
+          - generic [ref=e32]: 
+        - text: 
+        - button "Spaces" [ref=e39] [cursor=pointer]:
+          - generic [ref=e41]: 
+        - text: 
+        - button "Recent History" [ref=e48] [cursor=pointer]:
+          - generic [ref=e50]: 
+        - text:     
+        - button "Favourites" [ref=e57] [cursor=pointer]:
+          - generic [ref=e59]: 
+        - text:    
+        - generic: 
+      - generic [ref=e61] [cursor=pointer]:
+        - generic [ref=e62]: 
+        - generic [ref=e63]: 
+    - generic [ref=e67]:
+      - button "Options" [ref=e76] [cursor=pointer]:
+        - generic [ref=e78]: 
+        - text: Options
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - heading "Submission Parameters" [level=1] [ref=e83]
+            - table [ref=e85]:
+              - rowgroup [ref=e86]:
+                - row "School ID 000001 Show Lookup Select Green Abbey School" [ref=e87]:
+                  - cell "School ID" [ref=e88]:
+                    - generic [ref=e89]: School ID
+                  - cell "000001 Show Lookup Select Green Abbey School" [ref=e90]:
+                    - generic [ref=e91]:
+                      - generic [ref=e92]:
+                        - textbox "School ID" [ref=e93]:
+                          - /placeholder: ""
+                          - text: "000001"
+                        - button "Show Lookup" [ref=e94] [cursor=pointer]: 
+                        - text: 
+                      - button "Select" [ref=e97] [cursor=pointer]
+                    - text: Green Abbey School
+          - table [ref=e100]:
+            - rowgroup [ref=e101]:
+              - row "Trial Balance Year 2526 Show Lookup Mandatory" [ref=e102]:
+                - cell "Trial Balance Year" [ref=e103]:
+                  - generic [ref=e104]: Trial Balance Year
+                - cell "2526 Show Lookup Mandatory" [ref=e105]:
+                  - generic [ref=e107]:
+                    - textbox "Trial Balance Year" [ref=e108]:
+                      - /placeholder: ""
+                      - text: "2526"
+                    - button "Show Lookup" [ref=e109] [cursor=pointer]: 
+                    - generic "Mandatory" [ref=e111]: 
+              - row "Up to Which Period 01 Show Lookup Mandatory" [ref=e112]:
+                - cell "Up to Which Period" [ref=e113]:
+                  - generic [ref=e114]: Up to Which Period
+                - cell "01 Show Lookup Mandatory" [ref=e115]:
+                  - generic [ref=e117]:
+                    - textbox "Up to Which Period" [ref=e118]:
+                      - /placeholder: ""
+                      - text: "01"
+                    - button "Show Lookup" [ref=e119] [cursor=pointer]: 
+                    - generic "Mandatory" [ref=e121]: 
+          - generic [ref=e122]:
+            - heading "Sequence" [level=1] [ref=e123]
+            - table [ref=e125]:
+              - rowgroup [ref=e126]:
+                - row "Sequence (Cost Centre/Ledger) School ID/Cost Centre" [ref=e127]:
+                  - cell "Sequence (Cost Centre/Ledger)" [ref=e128]:
+                    - generic [ref=e129]: Sequence (Cost Centre/Ledger)
+                  - cell "School ID/Cost Centre" [ref=e130]:
+                    - generic [ref=e132]:
+                      - combobox "Sequence (Cost Centre/Ledger)" [ref=e133]:
+                        - option "School ID/Cost Centre" [selected]
+                        - option "School ID/Ledger"
+                      - text: 
+          - generic [ref=e136]:
+            - generic [ref=e138]:
+              - heading "Account Codes" [level=1] [ref=e139]
+              - table [ref=e141]:
+                - rowgroup [ref=e142]:
+                  - row "From GL Code Show Lookup" [ref=e143]:
+                    - cell "From GL Code" [ref=e144]:
+                      - generic [ref=e145]: From GL Code
+                    - cell "Show Lookup" [ref=e146]:
+                      - generic [ref=e148]:
+                        - textbox "From GL Code" [ref=e149]
+                        - button "Show Lookup" [ref=e150] [cursor=pointer]: 
+                        - text: 
+                  - row "To GL Code ZZZZZ/999999-99 Show Lookup" [ref=e151]:
+                    - cell "To GL Code" [ref=e152]:
+                      - generic [ref=e153]: To GL Code
+                    - cell "ZZZZZ/999999-99 Show Lookup" [ref=e154]:
+                      - generic [ref=e156]:
+                        - textbox "To GL Code" [ref=e157]:
+                          - /placeholder: ""
+                          - text: ZZZZZ/999999-99
+                        - button "Show Lookup" [ref=e158] [cursor=pointer]: 
+                        - text: 
+                  - row "Cash /Accrual Data Sets Accrual" [ref=e159]:
+                    - cell "Cash /Accrual Data Sets" [ref=e160]:
+                      - generic [ref=e161]: Cash /Accrual Data Sets
+                    - cell "Accrual" [ref=e162]:
+                      - generic [ref=e164]:
+                        - combobox "Cash /Accrual Data Sets" [disabled] [ref=e165]:
+                          - option "Accrual" [selected]
+                        - text: 
+                  - row "Currency ALL" [ref=e166]:
+                    - cell "Currency" [ref=e167]:
+                      - generic [ref=e168]: Currency
+                    - cell "ALL" [ref=e169]:
+                      - generic [ref=e171]:
+                        - combobox "Currency" [disabled] [ref=e172]:
+                          - option "ALL" [selected]
+                        - text: 
+            - generic:
+              - table:
+                - rowgroup:
+                  - row:
+                    - cell:
+                      - generic:
+                        - generic:
+                          - table:
+                            - rowgroup:    
+                    - cell:
+                      - generic:
+                        - generic:
+                          - table:
+                            - rowgroup:    
+        - table [ref=e174]:
+          - rowgroup [ref=e175]:
+            - row "Submit" [ref=e176]:
+              - cell "Submit" [ref=e177]:
+                - button "Submit" [ref=e179] [cursor=pointer]
+  - status [ref=e180]
+  - dialog "Background Processing" [ref=e181]:
+    - generic [ref=e182]:
+      - generic [ref=e183]: Background Processing
+      - button " Close" [ref=e184] [cursor=pointer]:
+        - generic [ref=e185]: 
+        - text: Close
+    - generic [ref=e188]:
+      - table [ref=e191]:
+        - rowgroup [ref=e192]:
+          - row "NML510 - Trial Balance Report" [ref=e193]:
+            - cell "NML510 - Trial Balance Report" [ref=e194]:
+              - generic [ref=e196]: NML510 - Trial Balance Report 
+      - generic [ref=e197]:
+        - heading "Job Details" [level=1] [ref=e198]
+        - table [ref=e200]:
+          - rowgroup [ref=e201]:
+            - 'row "Job Submitted : 5315" [ref=e202]':
+              - cell [ref=e203]:
+                - generic [ref=e207]: 
+              - 'cell "Job Submitted : 5315" [ref=e208]':
+                - generic [ref=e210]: "Job Submitted : 5315 "
+            - row "Completed" [ref=e211]:
+              - cell "Completed" [ref=e212]:
+                - generic [ref=e214]: Completed 
+            - row "Finished Processing at 15/10/2026 14:14:56" [ref=e215]:
+              - cell "Finished Processing at 15/10/2026 14:14:56" [ref=e216]:
+                - generic [ref=e218]: Finished Processing at 15/10/2026 14:14:56 
+      - tablist [ref=e221]:
+        - generic [ref=e222]:
+          - tab "Progress" [ref=e223] [cursor=pointer]
+          - tabpanel [ref=e224]:
+            - generic [ref=e225]:
+              - generic [ref=e229]:
+                - generic [ref=e232]: "NML510_01.PDF - Trial Balance by Cost Centre, School ID: 000001"
+                - generic [ref=e235]: "NML510_01.XLSX - Trial Balance by Cost Centre, School ID: 000001"
+              - table [ref=e237]:
+                - rowgroup [ref=e238]:
+                  - row "Save All" [ref=e239]:
+                    - cell "Save All" [ref=e240]:
+                      - button "Save All" [active] [ref=e242] [cursor=pointer]
+          - tab "Reports" [ref=e243] [cursor=pointer]
+      - table [ref=e246]:
+        - rowgroup [ref=e247]:
+          - row "Close" [ref=e248]:
+            - cell "Close" [ref=e249]:
+              - button "Close" [ref=e251] [cursor=pointer]
+```
+
+# Test source
+
+```ts
+  277 |             await test.step("Submit job on job processing dialog and wait for green icon on Background processing dialog", async () => {
+  278 |                 await rss570.checkIfDialogExistsWithTitle(
+  279 |                     expectedTexts.expectedJobProcessingDialogTitle
+  280 |                 );
+  281 |                 await rss570.clickOkBtn();
+  282 |             });
+  283 |             await test.step("Wait for green icon on Background processing dialog", async () => {
+  284 |                 await rss570.checkIfDialogExistsWithTitle(
+  285 |                     expectedTexts.expectedBackgroundProcessingDialogTitle
+  286 |                 );
+  287 |                 await rss570.expectGreenIconToBeVisible();
+  288 |             });
+  289 |             await test.step("Verify PDF is generated in RSS570", async () => {
+  290 |                 await rss570.verifyPDFGeneratedWithExtOnScreen(
+  291 |                     expectedTexts.RSS570,
+  292 |                     labels.outstandingAccrualsLbl
+  293 |                 );
+  294 |             });
+  295 |             await test.step("Click on PDF report", async () => {
+  296 |                 await rss570.waitForPdfIconLocator();
+  297 |                 const downloadPromise = page.waitForEvent("download");
+  298 |                 await rss570.clickSaveAllButton();
+  299 |                 const download = await downloadPromise;
+  300 |                 await PDFUtils.unzipDownloadedZip(download);
+  301 |                 const unzipDir = process.cwd() + "/PDFDownloads/unzip*/";
+  302 |                 const pdfText: string | null =
+  303 |                     await PDFUtils.readLatestPDFFromLatestUnzipDir(unzipDir);
+  304 |                 await rss570.expectTextNotToBeNull(pdfText);
+  305 |                 expect(pdfText).toContain(expectedTexts.expectedSchoolID);
+  306 |                 expect(pdfText).toContain(expectedTexts.expectedSchoolName);
+  307 |                 expect(pdfText).toContain(
+  308 |                     "Sorted By:\n" +
+  309 |                         expectedTexts.expectedSupplierOrNominalSortRSS570
+  310 |                 );
+  311 |                 expect(pdfText).toContain(ENV.USERID!.toUpperCase());
+  312 |                 //"Sorted By:\nS"
+  313 |             });
+  314 |         });
+  315 |         //Test case 4
+  316 |         test("NML510 - Trial Balance Report @shard1", async ({
+  317 |             page
+  318 |         }, testInfo) => {
+  319 |             test.info().annotations.push({
+  320 |                 type: "NML510 - Trial Balance Report",
+  321 |                 description:
+  322 |                     "This test is for checking if NML510 Trial Balance Report is generated for given criteria"
+  323 |             });
+  324 |             //Login
+  325 |             const homepage = await test.step(
+  326 |                 `Login using ` +
+  327 |                     tenant +
+  328 |                     " " +
+  329 |                     school +
+  330 |                     ` and role ` +
+  331 |                     userRole,
+  332 |                 async () => {
+  333 |                     return await login(page, testInfo);
+  334 |                 }
+  335 |             );
+  336 |             const screen = expectedTexts.NML510;
+  337 |             const nml510 = await test.step(
+  338 |                 "Go to the screen " + screen,
+  339 |                 async () => {
+  340 |                     await homepage.clickHamburgerMenuButton();
+  341 |                     await homepage.goToScreenUsingRecentHistory(screen);
+  342 |                     return new NML510(page, testInfo);
+  343 |                 }
+  344 |             );
+  345 |             await test.step("Verify valid page elements are visible", async () => {
+  346 |                 await nml510.expectPageElementsVisibilityOnLoad();
+  347 |             });
+  348 |             await test.step("Enter school Id and click submit", async () => {
+  349 |                 await nml510.selectSchoolId(expectedTexts.expectedSchoolName);
+  350 |                 await nml510.clickSubmitBtn();
+  351 |             });
+  352 | 
+  353 |             await test.step("Submit job on job processing dialog and wait for green icon on Background processing dialog", async () => {
+  354 |                 await nml510.checkIfDialogExistsWithTitle(
+  355 |                     expectedTexts.expectedJobProcessingDialogTitle
+  356 |                 );
+  357 |                 await nml510.clickOkBtn();
+  358 |             });
+  359 |             await test.step("Wait for green icon on Background processing dialog", async () => {
+  360 |                 await nml510.checkIfDialogExistsWithTitle(
+  361 |                     expectedTexts.expectedBackgroundProcessingDialogTitle
+  362 |                 );
+  363 |                 await nml510.expectGreenIconToBeVisible();
+  364 |             });
+  365 |             await test.step(
+  366 |                 "Verify PDF report is generated in NML510 with text " +
+  367 |                     labels.tbByCostCentreLbl,
+  368 |                 async () => {
+  369 |                     await nml510.verifyPDFGeneratedWithExtOnScreen(
+  370 |                         expectedTexts.NML510,
+  371 |                         labels.tbByCostCentreLbl
+  372 |                     );
+  373 |                 }
+  374 |             );
+  375 |             await test.step("Click on PDF report", async () => {
+  376 |                 await nml510.waitForPdfIconLocator();
+> 377 |                 const downloadPromise = page.waitForEvent("download");
+      |                                              ^ Error: page.waitForEvent: Test timeout of 200000ms exceeded.
+  378 |                 await nml510.clickSaveAllButton();
+  379 |                 const download = await downloadPromise;
+  380 |                 await PDFUtils.unzipDownloadedZip(download);
+  381 |                 const unzipDir = process.cwd() + "/PDFDownloads/unzip*/";
+  382 |                 const pdfText: string | null =
+  383 |                     await PDFUtils.readLatestPDFFromLatestUnzipDir(unzipDir);
+  384 |                 await nml510.expectTextNotToBeNull(pdfText);
+  385 |                 expect(pdfText).toContain(expectedTexts.expectedSchoolID);
+  386 |                 expect(pdfText).toContain(expectedTexts.expectedSchoolName);
+  387 |                 expect(pdfText).toContain("Name : NML510_01");
+  388 |                 expect(pdfText).toContain(ENV.USERID!.toUpperCase());
+  389 |             });
+  390 |             await test.step("Click on Close", async () => {
+  391 |                 await nml510.click(nml510.closeBtnLocator);
+  392 |             });
+  393 |         });
+  394 |         //Test case 5
+  395 |         test("SIMS_TB_SCHOOL - XQuery Report - Execute @shard2", async ({
+  396 |             page
+  397 |         }, testInfo) => {
+  398 |             test.info().annotations.push({
+  399 |                 type: "SIMS_TB_SCHOOL - XQuery Report - Execute",
+  400 |                 description:
+  401 |                     "This test is for checking if SIMS_TB_SCHOOL - XQuery Report is generated for given criteria using Execute"
+  402 |             });
+  403 |             //Login
+  404 |             const homepage = await test.step(
+  405 |                 `Login using ` +
+  406 |                     tenant +
+  407 |                     " " +
+  408 |                     school +
+  409 |                     ` and role ` +
+  410 |                     userRole,
+  411 |                 async () => {
+  412 |                     return await login(page, testInfo);
+  413 |                 }
+  414 |             );
+  415 |             const screen = expectedTexts.SIMS_TB_SCHOOL;
+  416 |             const simsTbSchool = await test.step(
+  417 |                 "Go to the screen " + screen,
+  418 |                 async () => {
+  419 |                     await homepage.clickHamburgerMenuButton();
+  420 |                     await homepage.goToScreenUsingRecentHistory(screen);
+  421 |                     return new XQuerySIMS_TB_SCHOOL(page, testInfo);
+  422 |                 }
+  423 |             );
+  424 |             await test.step("Verify valid page elements are visible", async () => {
+  425 |                 await simsTbSchool.expectPageElementsVisibilityOnLoad();
+  426 |             });
+  427 |             await test.step("Fill up the form and click Execute", async () => {
+  428 |                 await simsTbSchool.selectSchoolId(
+  429 |                     expectedTexts.expectedSchoolName
+  430 |                 );
+  431 |                 await simsTbSchool.selectYearAndPeriod(
+  432 |                     expectedTexts.expectedYear,
+  433 |                     expectedTexts.expectedPeriod
+  434 |                 );
+  435 | 
+  436 |                 const [newTab] = await Promise.all([
+  437 |                     page.waitForEvent("popup"), // Wait for the new tab to open
+  438 |                     simsTbSchool.clickExecuteBtn() // Click the button that opens the new tab
+  439 |                 ]);
+  440 |                 await simsTbSchool.assertionsOnNewTab(newTab);
+  441 |                 await simsTbSchool.clickCloseBtnOnNewTab(newTab);
+  442 |             });
+  443 |         });
+  444 |         //Test case 6
+  445 |         test("RSS310Q - Attachments @shard2", async ({ page }, testInfo) => {
+  446 |             test.info().annotations.push({
+  447 |                 type: "RSS310Q - Attachments",
+  448 |                 description:
+  449 |                     "This test is for checking if attachments can be attached to RSS310Q"
+  450 |             });
+  451 |             //Login
+  452 |             const homepage = await test.step(
+  453 |                 `Login using ` +
+  454 |                     tenant +
+  455 |                     " " +
+  456 |                     school +
+  457 |                     ` and role ` +
+  458 |                     userRole,
+  459 |                 async () => {
+  460 |                     return await login(page, testInfo);
+  461 |                 }
+  462 |             );
+  463 |             const screen = expectedTexts.RSS310Q;
+  464 |             const rss310q = await test.step(
+  465 |                 "Go to the screen " + screen,
+  466 |                 async () => {
+  467 |                     await homepage.clickHamburgerMenuButton();
+  468 |                     await homepage.goToScreenUsingRecentHistory(screen);
+  469 |                     return new RSS310Q(page, testInfo);
+  470 |                 }
+  471 |             );
+  472 |             await test.step("Verify valid page elements are visible", async () => {
+  473 |                 await rss310q.expectPageElementsVisibilityOnLoad();
+  474 |             });
+  475 |             await test.step("Fill up the form and click search", async () => {
+  476 |                 await rss310q.selectSchoolId(expectedTexts.expectedSchoolName);
+  477 |                 await rss310q.clickSearchBtn();
+```
