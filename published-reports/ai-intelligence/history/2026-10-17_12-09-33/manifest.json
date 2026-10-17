@@ -1,0 +1,16 @@
+{
+  "generatedAt": "2026-10-17T12:09:33.801Z",
+  "workflowRunId": "39030666815",
+  "timestamp": "2026-10-17_12-09-33",
+  "sectionsAvailable": [
+    "api-intelligence",
+    "trend",
+    "deep-failure",
+    "regression-delta"
+  ],
+  "sectionsSkipped": {
+    "db-integrity": "mock/seed placeholder — no real data captured yet"
+  },
+  "traceCount": 175,
+  "endpointCount": 43
+}
