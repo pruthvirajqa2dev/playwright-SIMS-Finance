@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T12:09:04.642Z",
+  "generatedAt": "2026-10-18T12:37:20.875Z",
   "runsAnalysed": 15,
   "runsWithIssues": 15,
   "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
@@ -140,7 +140,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "The test may be failing due to strict mode violations and element resolution issues.",
-      "recommendation": "Review the locator strategy to ensure it targets a unique element."
+      "recommendation": "Review the locator strategy to ensure it targets a single element."
     },
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
@@ -151,8 +151,8 @@
       "mostFrequentError": "Test timeout of 200000ms exceeded.",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "The test may be experiencing delays leading to timeout errors.",
-      "recommendation": "Investigate the performance of the report generation process."
+      "failureHypothesis": "The test may be experiencing delays due to backend processing or data retrieval issues.",
+      "recommendation": "Investigate backend performance during test execution to identify bottlenecks."
     },
     {
       "testTitle": "RSS570 - Crystal Report @shard1",
@@ -163,8 +163,8 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour suggests intermittent issues during report generation.",
-      "recommendation": "Monitor the test during peak load times for further insights."
+      "failureHypothesis": "Flaky behaviour suggests intermittent issues that may not be consistently reproducible.",
+      "recommendation": "Monitor for patterns in flaky runs to identify potential triggers."
     },
     {
       "testTitle": "File upload using SPC420 @shard2",
@@ -175,8 +175,8 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour may indicate timing issues with file upload processing.",
-      "recommendation": "Review file upload handling to ensure consistent performance."
+      "failureHypothesis": "Flaky behaviour may indicate timing issues during file upload processes.",
+      "recommendation": "Examine file upload timing and network conditions during flaky runs."
     },
     {
       "testTitle": "Login and Logout @shard2",
@@ -230,17 +230,20 @@
     "NML510 - Trial Balance Report @shard1"
   ],
   "actionItems": [
-    "Investigate locator strategies for RSS310Q to avoid strict mode violations.",
-    "Analyze performance issues causing timeouts in NML510.",
-    "Monitor flaky tests during peak usage to identify patterns.",
-    "Review file upload handling for consistency.",
-    "Ensure stable tests are maintained with regular monitoring."
+    "Investigate locator issues in RSS310Q to reduce strict mode violations.",
+    "Analyze backend performance during NML510 runs to address timeout issues.",
+    "Monitor flaky behaviour in RSS570 and File upload tests for patterns.",
+    "Review shared data states for co-failing tests to identify dependencies.",
+    "Continue to ensure stable tests are monitored for any future anomalies."
   ],
   "executiveSummary": [
-    "100% of runs for RSS310Q failed, indicating critical instability.",
-    "27% of NML510 runs failed due to timeouts, suggesting performance issues.",
-    "Two tests exhibited flaky behaviour, potentially impacting reliability.",
-    "Co-failure between NML510 and RSS310Q may indicate shared dependencies.",
-    "Monitoring and investigation are needed to enhance test reliability."
+    "100% of runs for RSS310Q failed, indicating severe instability.",
+    "27% of NML510 runs failed due to timeouts, suggesting backend delays.",
+    "Two tests exhibited flaky behaviour, with 7% retry rates.",
+    "Co-failure observed between NML510 and RSS310Q in 27% of runs.",
+    "Instability in critical financial tests may affect reporting accuracy.",
+    "Focus on backend performance and locator strategies for improvement.",
+    "Monitoring is essential for stable tests to catch future issues.",
+    "Addressing these areas could enhance overall test reliability."
   ]
 }
