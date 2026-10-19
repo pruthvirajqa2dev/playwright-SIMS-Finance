@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-18T12:37:28.643Z",
-  "pivotDate": "2026-10-11",
+  "generatedAt": "2026-10-19T15:33:40.812Z",
+  "pivotDate": "2026-10-12",
   "beforeWindow": {
     "from": "2026-09-21",
     "to": "2026-10-09",
@@ -8,8 +8,8 @@
   },
   "afterWindow": {
     "from": "2026-10-12",
-    "to": "2026-10-16",
-    "runsAnalysed": 5
+    "to": "2026-10-19",
+    "runsAnalysed": 6
   },
   "beforeEnvs": [
     "UAT"
@@ -22,10 +22,10 @@
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "beforeFailureRate": 20,
-      "afterFailureRate": 40,
+      "afterFailureRate": 33,
       "beforeFlakyRate": 0,
       "afterFlakyRate": 0,
-      "failureDelta": 20,
+      "failureDelta": 13,
       "flakyDelta": 0,
       "verdict": "Regressed",
       "riskLevel": "High",
@@ -41,16 +41,17 @@
   "newFailures": [],
   "resolvedFailures": [],
   "actionItems": [
-    "Investigate timeout issues for 'NML510 - Trial Balance Report' to identify root causes.",
-    "Review test environment stability during the observed failure period.",
-    "Analyze historical data for similar timeout patterns in financial reports.",
-    "Consider increasing timeout thresholds for high-risk financial tests.",
-    "Monitor for any further regressions in the upcoming testing cycles."
+    "Investigate timeout issues for 'NML510 - Trial Balance Report' to identify potential performance bottlenecks.",
+    "Analyze the impact of recent code changes on report generation processes.",
+    "Review test execution environment settings to ensure consistency with pre-pivot conditions.",
+    "Monitor for any patterns in test failures across different runs to identify recurring issues.",
+    "Consider increasing timeout thresholds temporarily to assess impact on test stability."
   ],
   "executiveSummary": [
-    "The 'NML510 - Trial Balance Report' test failure rate increased from 20% to 40% after the pivot date.",
+    "The 'NML510 - Trial Balance Report' test failure rate increased from 20% to 33% after the pivot date.",
     "This regression may indicate underlying performance issues affecting report generation.",
-    "Increased failure rates could lead to delays in financial reporting for stakeholders.",
-    "Further analysis of timeout occurrences during testing may provide valuable insights."
+    "Increased failure rates could lead to delays in financial reporting for staff.",
+    "Further investigation into timeout errors during report generation is recommended.",
+    "Monitoring test execution environments may help identify contributing factors."
   ]
 }
