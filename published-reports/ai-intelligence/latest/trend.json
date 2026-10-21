@@ -1,23 +1,29 @@
 {
-  "generatedAt": "2026-10-20T13:36:00.879Z",
+  "generatedAt": "2026-10-21T13:40:08.716Z",
   "runsAnalysed": 22,
   "weekendExcluded": 8,
   "dateRange": {
-    "from": "2026-09-21",
-    "to": "2026-10-20"
+    "from": "2026-09-22",
+    "to": "2026-10-21"
   },
-  "overallHealthScore": 60,
+  "overallHealthScore": 50,
   "trendDirection": "Degrading",
   "successRate": 0,
   "avgTestPassRate": 81,
-  "flakyRate": 18,
+  "flakyRate": 14,
   "byEnvironment": {
     "UAT": {
       "total": 22,
       "failures": 22,
-      "flaky": 4,
+      "flaky": 3,
       "avgSuccess": 81,
       "runs": [
+        {
+          "timestamp": "2026-10-21_13-36-54",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-10-20_13-32-43",
           "successRate": 71,
@@ -191,15 +197,15 @@
           "successRate": 71,
           "flaky": false,
           "isWeekend": false
-        },
-        {
-          "timestamp": "2026-09-21_15-02-38",
-          "successRate": 86,
-          "flaky": true,
-          "isWeekend": false
         }
       ],
       "failureRuns": [
+        {
+          "timestamp": "2026-10-21_13-36-54",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-10-20_13-32-43",
           "successRate": 71,
@@ -325,12 +331,6 @@
           "successRate": 71,
           "flaky": false,
           "isWeekend": false
-        },
-        {
-          "timestamp": "2026-09-21_15-02-38",
-          "successRate": 86,
-          "flaky": true,
-          "isWeekend": false
         }
       ],
       "flakyRuns": [
@@ -348,12 +348,6 @@
         },
         {
           "timestamp": "2026-09-23_13-34-36",
-          "successRate": 86,
-          "flaky": true,
-          "isWeekend": false
-        },
-        {
-          "timestamp": "2026-09-21_15-02-38",
           "successRate": 86,
           "flaky": true,
           "isWeekend": false
@@ -430,47 +424,47 @@
   "patterns": [
     {
       "patternType": "Chronic Flakiness",
-      "description": "18% of runs exhibited flaky tests, indicating potential instability in specific test cases.",
-      "affectedRuns": 4,
+      "description": "3 runs exhibited flaky behaviour, indicating instability in some tests. This suggests potential issues with test reliability.",
+      "affectedRuns": 3,
       "severity": "Medium",
-      "recommendation": "Identify and stabilize flaky tests to improve overall reliability."
+      "recommendation": "Investigate the flaky tests to identify underlying causes and improve stability."
     },
     {
       "patternType": "Degrading Trend",
-      "description": "The average success rate decreased from 61% to 55% over the last 7 runs.",
-      "affectedRuns": 7,
+      "description": "The average success rate decreased from 59% to 55% over the last 7 runs, indicating a downward trend in test reliability.",
+      "affectedRuns": 14,
       "severity": "Medium",
-      "recommendation": "Investigate recent changes that may have impacted test stability."
+      "recommendation": "Analyze the recent failures to determine if specific tests are contributing to the decline."
     },
     {
       "patternType": "Recurring Outage",
-      "description": "All 22 runs experienced failures, indicating a systemic issue affecting test execution.",
+      "description": "All 22 runs recorded failures, indicating a systemic issue affecting the test suite's reliability.",
       "affectedRuns": 22,
       "severity": "High",
-      "recommendation": "Conduct a thorough review of the test suite and environment configurations."
+      "recommendation": "Conduct a thorough review of the test suite to identify and address the root causes of failures."
     }
   ],
   "riskPeriods": [
     {
-      "period": "2026-09-21 to 2026-10-20",
-      "description": "All runs during this period recorded failures, suggesting persistent instability."
+      "period": "2026-09-22 to 2026-10-21",
+      "description": "All runs during this period experienced failures, indicating a critical risk to the test suite's reliability."
     }
   ],
   "actionItems": [
-    "Analyze flaky tests to identify root causes.",
-    "Review recent changes to the test suite for potential regressions.",
-    "Enhance monitoring to capture detailed failure logs.",
-    "Consider isolating tests to identify dependencies causing failures.",
-    "Schedule a team review to discuss test strategy and execution."
+    "Investigate flaky tests to improve reliability.",
+    "Analyze recent failures for common patterns.",
+    "Review test suite for systemic issues causing failures.",
+    "Monitor test performance trends closely.",
+    "Consider implementing additional logging for failed tests."
   ],
   "executiveSummary": [
     "All 22 business-day runs recorded failures, with an average success rate of 81%.",
-    "Recent runs showed a decline in success rates, dropping from 61% to 55%.",
-    "18% of runs exhibited flaky tests, indicating potential instability.",
-    "No runs achieved a near-perfect pass rate of 95% or higher.",
-    "This pattern may indicate systemic issues affecting test reliability.",
-    "Could lead to inconsistent results in financial reporting processes.",
-    "Further analysis of test failures is recommended to identify root causes.",
-    "Investigating the impact of recent changes on test performance is crucial."
+    "The average success rate dropped from 59% to 55% in the last 7 runs.",
+    "3 tests showed flaky behaviour, indicating potential reliability issues.",
+    "No runs achieved near-perfect status (≥95% pass rate).",
+    "This pattern may indicate systemic instability within the test suite.",
+    "Could lead to inconsistent results impacting financial reporting.",
+    "Further analysis of failure patterns is recommended.",
+    "Investigating flaky tests may help improve overall test reliability."
   ]
 }
