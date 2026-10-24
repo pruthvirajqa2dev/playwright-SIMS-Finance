@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-10-23T13:13:56.649Z",
-  "pivotDate": "2026-10-16",
+  "generatedAt": "2026-10-24T12:39:02.644Z",
+  "pivotDate": "2026-10-17",
   "beforeWindow": {
-    "from": "2026-09-24",
-    "to": "2026-10-15",
+    "from": "2026-09-25",
+    "to": "2026-10-16",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-10-16",
+    "from": "2026-10-19",
     "to": "2026-10-23",
-    "runsAnalysed": 6
+    "runsAnalysed": 5
   },
   "beforeEnvs": [
     "UAT"
@@ -21,14 +21,14 @@
   "regressions": [
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 40,
-      "afterFailureRate": 50,
+      "beforeFailureRate": 30,
+      "afterFailureRate": 60,
       "beforeFlakyRate": 0,
       "afterFlakyRate": 0,
-      "failureDelta": 10,
+      "failureDelta": 30,
       "flakyDelta": 0,
       "verdict": "Regressed",
-      "riskLevel": "High",
+      "riskLevel": "Critical",
       "errorSamplesBefore": [
         "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
       ],
@@ -41,16 +41,17 @@
   "newFailures": [],
   "resolvedFailures": [],
   "actionItems": [
-    "Investigate timeout patterns for 'NML510 - Trial Balance Report' to identify potential performance issues.",
-    "Review resource allocation during peak usage times to mitigate test timeouts.",
-    "Analyze historical data for similar timeout failures to determine if this is an ongoing issue.",
-    "Consider increasing timeout thresholds temporarily to assess impact on test stability.",
-    "Engage with development to discuss potential optimizations for the report generation process."
+    "Investigate the cause of the increased timeout in 'NML510 - Trial Balance Report'.",
+    "Analyze the impact of the recent code changes on report generation.",
+    "Review the test environment settings for potential discrepancies.",
+    "Monitor the test execution times for patterns indicating instability.",
+    "Assess the overall health of the UAT environment during test runs."
   ],
   "executiveSummary": [
-    "The 'NML510 - Trial Balance Report' test failure rate increased from 40% to 50% after the pivot on 2026-10-16.",
-    "This regression suggests potential performance issues, as both pre- and post-pivot failures reported timeouts.",
-    "Increased failure rates may affect the reliability of financial reporting for users.",
-    "Further investigation into resource usage during test execution may provide insights into the timeout issue."
+    "The 'NML510 - Trial Balance Report' test failure rate increased from 30% to 60% after the pivot date.",
+    "This regression may indicate a timing issue affecting report generation consistency.",
+    "The observed pattern could reflect instability in the UAT environment during testing.",
+    "May affect the reliability of financial reporting for stakeholders.",
+    "Further analysis of timeout occurrences may provide insight into underlying issues."
   ]
 }

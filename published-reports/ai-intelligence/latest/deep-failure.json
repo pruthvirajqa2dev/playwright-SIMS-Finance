@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T13:13:47.245Z",
+  "generatedAt": "2026-10-24T12:38:54.033Z",
   "runsAnalysed": 15,
   "runsWithIssues": 15,
   "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
@@ -135,11 +135,11 @@
       "priority": "High",
       "failureRate": 100,
       "flakyRate": 0,
-      "mostFrequentError": "strict mode violation",
+      "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "The locator may be targeting multiple elements, causing strict mode violations.",
-      "recommendation": "Review the locator strategy to ensure it targets a single element."
+      "failureHypothesis": "Brittle selector may be causing consistent failures.",
+      "recommendation": "Review and update the selector for robustness."
     },
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
@@ -147,11 +147,11 @@
       "priority": "High",
       "failureRate": 40,
       "flakyRate": 0,
-      "mostFrequentError": "Test timeout exceeded",
+      "mostFrequentError": "Test timeout of 200000ms exceeded.",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "Long processing time may be causing the test to exceed the timeout limit.",
-      "recommendation": "Investigate the report generation time and consider increasing the timeout."
+      "failureHypothesis": "Long processing time may lead to timeouts.",
+      "recommendation": "Investigate performance optimizations for report generation."
     },
     {
       "testTitle": "RSS570 - Crystal Report @shard1",
@@ -162,8 +162,8 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour may suggest intermittent issues with report generation.",
-      "recommendation": "Monitor for patterns in flaky behaviour to identify potential causes."
+      "failureHypothesis": "Intermittent issues may arise during report generation.",
+      "recommendation": "Monitor for patterns in flaky behaviour during peak loads."
     },
     {
       "testTitle": "Login and Logout @shard2",
@@ -175,7 +175,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any changes in performance."
+      "recommendation": "Continue monitoring for any future issues."
     },
     {
       "testTitle": "File upload using SPC420 @shard2",
@@ -187,7 +187,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any changes in performance."
+      "recommendation": "Continue monitoring for any future issues."
     },
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
@@ -199,7 +199,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any changes in performance."
+      "recommendation": "Continue monitoring for any future issues."
     },
     {
       "testTitle": "Help screen @shard2",
@@ -211,7 +211,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any changes in performance."
+      "recommendation": "Continue monitoring for any future issues."
     }
   ],
   "coFailurePatterns": [
@@ -229,20 +229,20 @@
     "NML510 - Trial Balance Report @shard1"
   ],
   "actionItems": [
-    "Investigate locator strategy for RSS310Q to avoid strict mode violations.",
-    "Analyze processing time for NML510 to address timeout issues.",
-    "Monitor flaky behaviour in RSS570 for potential underlying causes.",
-    "Ensure stable tests continue to perform reliably without regressions.",
-    "Review co-failure patterns for shared dependencies affecting NML510 and RSS310Q."
+    "Investigate selector robustness for RSS310Q test.",
+    "Optimize performance for NML510 report generation.",
+    "Monitor flaky behaviour in RSS570 during peak loads.",
+    "Review co-failure patterns for shared dependencies.",
+    "Continue monitoring stable tests for future issues."
   ],
   "executiveSummary": [
-    "100% failure rate observed for RSS310Q across all runs.",
-    "40% failure rate recorded for NML510, primarily due to timeouts.",
-    "RSS570 exhibited 7% flaky behaviour, indicating potential instability.",
-    "Co-failure between NML510 and RSS310Q suggests a shared dependency.",
-    "Unstable tests may affect report generation consistency for finance staff.",
-    "Investigating locator strategies and timeout settings is recommended.",
-    "Monitoring flaky tests could help identify intermittent issues.",
-    "Ensuring stable tests remain reliable is crucial for operational confidence."
+    "100% of runs for RSS310Q failed, indicating severe instability.",
+    "40% failure rate observed for NML510, with timeout errors noted.",
+    "RSS570 showed 7% flaky behaviour, suggesting intermittent issues.",
+    "Co-failure between NML510 and RSS310Q may indicate shared data state.",
+    "These issues could affect report generation consistency for finance staff.",
+    "Investigating selector robustness and performance optimizations is recommended.",
+    "Monitoring flaky tests during peak loads may provide further insights.",
+    "Continued observation of stable tests is essential for future reliability."
   ]
 }
