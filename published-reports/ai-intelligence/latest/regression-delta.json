@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-10-24T12:39:02.644Z",
-  "pivotDate": "2026-10-17",
+  "generatedAt": "2026-10-25T13:09:46.016Z",
+  "pivotDate": "2026-10-18",
   "beforeWindow": {
-    "from": "2026-09-25",
+    "from": "2026-09-28",
     "to": "2026-10-16",
     "runsAnalysed": 10
   },
@@ -42,16 +42,16 @@
   "resolvedFailures": [],
   "actionItems": [
     "Investigate the cause of the increased timeout in 'NML510 - Trial Balance Report'.",
-    "Analyze the impact of the recent code changes on report generation.",
-    "Review the test environment settings for potential discrepancies.",
-    "Monitor the test execution times for patterns indicating instability.",
-    "Assess the overall health of the UAT environment during test runs."
+    "Analyze the test environment for potential performance issues affecting execution time.",
+    "Review recent changes to dependencies that may impact report generation.",
+    "Monitor for any patterns in test execution that could indicate timing issues.",
+    "Consider increasing timeout thresholds temporarily to assess impact on test stability."
   ],
   "executiveSummary": [
-    "The 'NML510 - Trial Balance Report' test failure rate increased from 30% to 60% after the pivot date.",
-    "This regression may indicate a timing issue affecting report generation consistency.",
-    "The observed pattern could reflect instability in the UAT environment during testing.",
-    "May affect the reliability of financial reporting for stakeholders.",
-    "Further analysis of timeout occurrences may provide insight into underlying issues."
+    "The 'NML510 - Trial Balance Report' test failure rate increased from 30% to 60% after the pivot on 2026-10-18.",
+    "This regression may indicate a timing issue, as the same timeout error was observed before and after the pivot.",
+    "The increased failure rate could affect the reliability of financial reporting for users.",
+    "Further investigation into the test environment's performance during execution may provide insights.",
+    "Monitoring for similar timeout patterns in other tests could help identify broader issues."
   ]
 }
