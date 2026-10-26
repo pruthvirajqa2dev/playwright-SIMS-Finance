@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T13:09:21.327Z",
+  "generatedAt": "2026-10-26T15:07:16.727Z",
   "runsAnalysed": 20,
   "weekendExcluded": 10,
   "dateRange": {
@@ -425,44 +425,44 @@
       "description": "Two runs exhibited flaky tests, indicating potential instability in specific tests.",
       "affectedRuns": 2,
       "severity": "Medium",
-      "recommendation": "Investigate the flaky tests to determine underlying issues."
+      "recommendation": "Investigate the flaky tests to identify underlying issues."
     },
     {
       "patternType": "Degrading Trend",
       "description": "The average success rate decreased from 57% to 55% over the last 7 runs.",
-      "affectedRuns": 7,
+      "affectedRuns": 14,
       "severity": "Medium",
-      "recommendation": "Analyze recent failures to identify common causes affecting test outcomes."
+      "recommendation": "Analyze recent failures to determine if specific tests are contributing to the decline."
     },
     {
       "patternType": "Recurring Outage",
-      "description": "All 20 runs recorded failures, indicating systemic issues affecting test reliability.",
+      "description": "All 20 runs recorded failures, indicating systemic issues with test reliability.",
       "affectedRuns": 20,
       "severity": "High",
-      "recommendation": "Conduct a thorough review of the application to address persistent failures."
+      "recommendation": "Conduct a thorough review of the test suite to identify and address persistent failures."
     }
   ],
   "riskPeriods": [
     {
       "period": "2026-09-28 to 2026-10-23",
-      "description": "20 consecutive runs recorded failures, indicating a significant risk period."
+      "description": "20 consecutive runs recorded failures, indicating a significant risk to test reliability."
     }
   ],
   "actionItems": [
     "Investigate flaky tests for potential instability.",
-    "Analyze failure patterns from the last 20 runs.",
-    "Review application changes during the risk period.",
-    "Consider increasing test coverage for critical functionalities.",
-    "Schedule a team review to discuss test reliability."
+    "Analyze failure patterns to identify common issues.",
+    "Review the test suite for systemic reliability problems.",
+    "Monitor the impact of recent changes on test outcomes.",
+    "Consider increasing test coverage for critical functionalities."
   ],
   "executiveSummary": [
     "0% of runs were fully passed with no failures or flakiness.",
-    "The average test pass rate is 81%, indicating significant issues.",
-    "All 20 runs experienced failures, with no clean runs recorded.",
-    "The average success rate dropped from 57% to 55% in the last 7 runs.",
-    "Two runs showed flaky behaviour, suggesting instability in specific tests.",
-    "A risk period from 2026-09-28 to 2026-10-23 had 20 consecutive failures.",
-    "This may affect the reliability of financial reporting and processing.",
-    "Further investigation is needed to identify and resolve underlying issues."
+    "Average test pass rate is 81%, indicating significant instability.",
+    "All 20 business-day runs recorded failures, showing systemic issues.",
+    "Recent trend shows a decrease in success rate from 57% to 55%.",
+    "Two runs exhibited flaky tests, suggesting potential instability.",
+    "20 consecutive runs with failures from 2026-09-28 to 2026-10-23.",
+    "This may affect the reliability of financial reporting processes.",
+    "Focus on analyzing failure patterns and improving test stability."
   ]
 }
