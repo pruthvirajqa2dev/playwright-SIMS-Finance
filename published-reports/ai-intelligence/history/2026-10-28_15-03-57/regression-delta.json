@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-10-28T15:03:35.050Z",
+  "pivotDate": "2026-10-21",
+  "beforeWindow": {
+    "from": "2026-09-28",
+    "to": "2026-10-20",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-10-21",
+    "to": "2026-10-28",
+    "runsAnalysed": 5
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 30,
+      "afterFailureRate": 40,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 10,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "High",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [],
+  "actionItems": [
+    "Investigate the cause of the increased failure rate in 'NML510 - Trial Balance Report'.",
+    "Analyze test timeout patterns to identify potential performance issues.",
+    "Review the test environment configuration for any recent changes.",
+    "Monitor for any recurring failures in the same test across future runs.",
+    "Consider increasing timeout thresholds if consistent failures are observed."
+  ],
+  "executiveSummary": [
+    "The 'NML510 - Trial Balance Report' failure rate increased from 30% to 40% after the pivot on 2026-10-21.",
+    "This regression may indicate a timing issue affecting report generation.",
+    "Increased failures could lead to delays in financial reporting for staff.",
+    "Further analysis of timeout occurrences may provide insight into underlying issues.",
+    "Monitoring the test environment for stability could help isolate the cause."
+  ]
+}
