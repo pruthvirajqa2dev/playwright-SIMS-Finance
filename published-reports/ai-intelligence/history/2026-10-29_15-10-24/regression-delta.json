@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-10-29T15:10:01.055Z",
+  "pivotDate": "2026-10-22",
+  "beforeWindow": {
+    "from": "2026-09-29",
+    "to": "2026-10-21",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-10-22",
+    "to": "2026-10-29",
+    "runsAnalysed": 5
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Improved",
+  "regressions": [],
+  "improvements": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 40,
+      "afterFailureRate": 20,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -20,
+      "flakyDelta": 0,
+      "verdict": "Improved",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "newFailures": [],
+  "resolvedFailures": [],
+  "actionItems": [
+    "Monitor the improved test for consistency in future runs.",
+    "Investigate the cause of the previous high failure rate.",
+    "Continue to track flaky behaviour across all tests.",
+    "Ensure that timeout settings are appropriate for all tests.",
+    "Review test execution environments for potential optimizations."
+  ],
+  "executiveSummary": [
+    "1 improvement was observed in the Trial Balance Report test after the pivot date.",
+    "The failure rate decreased from 40% to 20% between 2026-09-29 and 2026-10-29.",
+    "No new failures were detected, indicating stability in other tests.",
+    "The previous high failure rate may suggest timing issues during execution.",
+    "This improvement may enhance report generation reliability for finance staff.",
+    "Further analysis of the improved test could clarify the reasons for past failures.",
+    "Monitoring for any future flaky behaviour will be essential.",
+    "Reviewing timeout settings may help prevent similar issues in the future."
+  ]
+}
