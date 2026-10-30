@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-10-29T15:10:01.055Z",
-  "pivotDate": "2026-10-22",
+  "generatedAt": "2026-10-30T15:08:05.864Z",
+  "pivotDate": "2026-10-23",
   "beforeWindow": {
-    "from": "2026-09-29",
-    "to": "2026-10-21",
+    "from": "2026-09-30",
+    "to": "2026-10-22",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-10-22",
-    "to": "2026-10-29",
+    "from": "2026-10-23",
+    "to": "2026-10-30",
     "runsAnalysed": 5
   },
   "beforeEnvs": [
@@ -17,16 +17,43 @@
   "afterEnvs": [
     "UAT"
   ],
-  "overallVerdict": "Improved",
-  "regressions": [],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 20,
+      "failureDelta": 0,
+      "flakyDelta": 20,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 20,
+      "failureDelta": 0,
+      "flakyDelta": 20,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    }
+  ],
   "improvements": [
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 40,
+      "beforeFailureRate": 50,
       "afterFailureRate": 20,
       "beforeFlakyRate": 0,
       "afterFlakyRate": 0,
-      "failureDelta": -20,
+      "failureDelta": -30,
       "flakyDelta": 0,
       "verdict": "Improved",
       "riskLevel": "Medium",
@@ -34,27 +61,27 @@
         "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
       ],
       "errorSamplesAfter": [
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
       ]
     }
   ],
   "newFailures": [],
   "resolvedFailures": [],
   "actionItems": [
-    "Monitor the improved test for consistency in future runs.",
-    "Investigate the cause of the previous high failure rate.",
-    "Continue to track flaky behaviour across all tests.",
-    "Ensure that timeout settings are appropriate for all tests.",
-    "Review test execution environments for potential optimizations."
+    "Investigate the cause of flaky behaviour in 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "Analyze the impact of the recent code change on financial report tests.",
+    "Review the test environment setup for potential timing issues affecting stability.",
+    "Monitor the performance of tests with previously stable results for any emerging patterns.",
+    "Conduct a deeper analysis of the error messages from the 'NML510 - Trial Balance Report'."
   ],
   "executiveSummary": [
-    "1 improvement was observed in the Trial Balance Report test after the pivot date.",
-    "The failure rate decreased from 40% to 20% between 2026-09-29 and 2026-10-29.",
-    "No new failures were detected, indicating stability in other tests.",
-    "The previous high failure rate may suggest timing issues during execution.",
-    "This improvement may enhance report generation reliability for finance staff.",
-    "Further analysis of the improved test could clarify the reasons for past failures.",
-    "Monitoring for any future flaky behaviour will be essential.",
-    "Reviewing timeout settings may help prevent similar issues in the future."
+    "Two tests regressed with new flaky behaviour after the pivot on 2026-10-23.",
+    "Both 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report' showed 20% flakiness.",
+    "The 'NML510 - Trial Balance Report' improved from 50% to 20% failure rate.",
+    "Flaky behaviour may indicate timing issues introduced by recent code changes.",
+    "This pattern could reflect instability in report generation processes for finance staff.",
+    "May lead to inconsistent reporting outcomes during critical financial periods.",
+    "Further investigation into the flaky tests may clarify underlying issues.",
+    "Reviewing the environment setup could help isolate the cause of regressions."
   ]
 }
