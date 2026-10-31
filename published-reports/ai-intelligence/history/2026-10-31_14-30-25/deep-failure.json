@@ -1,0 +1,246 @@
+{
+  "generatedAt": "2026-10-31T14:29:51.319Z",
+  "runsAnalysed": 15,
+  "runsWithIssues": 15,
+  "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
+  "perTestProfiles": [
+    {
+      "testTitle": "RSS310Q - Attachments @shard2",
+      "totalRuns": 15,
+      "failureCount": 15,
+      "flakyCount": 0,
+      "passCount": 0,
+      "failureRate": 100,
+      "flakyRate": 0,
+      "avgDurationMs": 74501,
+      "lastSeen": "2026-10-30_15-04-13",
+      "errorSamples": [
+        "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:     1) <div>…</div> aka lo",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m  Received: \u001b[31mfalse\u001b[39m"
+      ],
+      "failuresByEnv": {
+        "UAT": 15
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-10-30_15-04-13"
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "totalRuns": 15,
+      "failureCount": 6,
+      "flakyCount": 0,
+      "passCount": 9,
+      "failureRate": 40,
+      "flakyRate": 0,
+      "avgDurationMs": 224528,
+      "lastSeen": "2026-10-30_15-04-13",
+      "errorSamples": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background ",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "failuresByEnv": {
+        "UAT": 6
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-10-30_15-04-13"
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "totalRuns": 15,
+      "failureCount": 0,
+      "flakyCount": 1,
+      "passCount": 14,
+      "failureRate": 0,
+      "flakyRate": 7,
+      "avgDurationMs": 142984,
+      "lastSeen": "2026-10-30_15-04-13",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 15
+      }
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "totalRuns": 15,
+      "failureCount": 0,
+      "flakyCount": 1,
+      "passCount": 14,
+      "failureRate": 0,
+      "flakyRate": 7,
+      "avgDurationMs": 16216,
+      "lastSeen": "2026-10-30_15-04-13",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 15
+      }
+    },
+    {
+      "testTitle": "Login and Logout @shard2",
+      "totalRuns": 15,
+      "failureCount": 0,
+      "flakyCount": 0,
+      "passCount": 15,
+      "failureRate": 0,
+      "flakyRate": 0,
+      "avgDurationMs": 10426,
+      "lastSeen": "2026-10-30_15-04-13",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 15
+      }
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "totalRuns": 15,
+      "failureCount": 0,
+      "flakyCount": 0,
+      "passCount": 15,
+      "failureRate": 0,
+      "flakyRate": 0,
+      "avgDurationMs": 26608,
+      "lastSeen": "2026-10-30_15-04-13",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 15
+      }
+    },
+    {
+      "testTitle": "Help screen @shard2",
+      "totalRuns": 15,
+      "failureCount": 0,
+      "flakyCount": 0,
+      "passCount": 15,
+      "failureRate": 0,
+      "flakyRate": 0,
+      "avgDurationMs": 9523,
+      "lastSeen": "2026-10-30_15-04-13",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 15
+      }
+    }
+  ],
+  "perTestAnalyses": [
+    {
+      "testTitle": "RSS310Q - Attachments @shard2",
+      "stabilityLabel": "Unstable",
+      "priority": "High",
+      "failureRate": 100,
+      "flakyRate": 0,
+      "mostFrequentError": "strict mode violation",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "The test may be failing due to a strict mode violation caused by multiple elements being resolved.",
+      "recommendation": "Review the locator strategy to ensure it targets a single element."
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "stabilityLabel": "Unstable",
+      "priority": "High",
+      "failureRate": 40,
+      "flakyRate": 0,
+      "mostFrequentError": "Test timeout of 200000ms exceeded",
+      "timeoutSuspected": true,
+      "environmentSpecific": false,
+      "failureHypothesis": "The test may be experiencing delays due to backend processing or UI rendering issues.",
+      "recommendation": "Investigate backend performance during test execution to identify bottlenecks."
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "stabilityLabel": "Flaky",
+      "priority": "Medium",
+      "failureRate": 0,
+      "flakyRate": 7,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "Flaky behaviour may suggest intermittent issues with the report generation process.",
+      "recommendation": "Monitor the report generation process for timing issues."
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "stabilityLabel": "Flaky",
+      "priority": "Medium",
+      "failureRate": 0,
+      "flakyRate": 7,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "Flaky behaviour may indicate sporadic issues with the XQuery execution environment.",
+      "recommendation": "Analyze execution logs for anomalies during flaky runs."
+    },
+    {
+      "testTitle": "Login and Logout @shard2",
+      "stabilityLabel": "Stable",
+      "priority": "Low",
+      "failureRate": 0,
+      "flakyRate": 0,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "No failures observed across profiled runs.",
+      "recommendation": "Continue monitoring for any future issues."
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "stabilityLabel": "Stable",
+      "priority": "Low",
+      "failureRate": 0,
+      "flakyRate": 0,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "No failures observed across profiled runs.",
+      "recommendation": "Continue monitoring for any future issues."
+    },
+    {
+      "testTitle": "Help screen @shard2",
+      "stabilityLabel": "Stable",
+      "priority": "Low",
+      "failureRate": 0,
+      "flakyRate": 0,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "No failures observed across profiled runs.",
+      "recommendation": "Continue monitoring for any future issues."
+    }
+  ],
+  "coFailurePatterns": [
+    {
+      "tests": [
+        "NML510 - Trial Balance Report @shard1",
+        "RSS310Q - Attachments @shard2"
+      ],
+      "occurrences": 6,
+      "possibleCause": ""
+    }
+  ],
+  "topUnstableTests": [
+    "RSS310Q - Attachments @shard2",
+    "NML510 - Trial Balance Report @shard1"
+  ],
+  "actionItems": [
+    "Investigate locator strategy for RSS310Q to avoid strict mode violations.",
+    "Analyze backend performance during NML510 runs to identify delays.",
+    "Monitor report generation and XQuery execution for timing issues.",
+    "Continue to track stable tests for any emerging issues.",
+    "Review co-failure patterns for shared dependencies."
+  ],
+  "executiveSummary": [
+    "100% of runs for RSS310Q failed, indicating critical instability.",
+    "40% of runs for NML510 experienced failures, primarily due to timeouts.",
+    "Two tests showed flaky behaviour, suggesting intermittent issues.",
+    "Co-failure observed between NML510 and RSS310Q may indicate shared dependencies.",
+    "These issues could affect financial reporting accuracy and reliability."
+  ]
+}

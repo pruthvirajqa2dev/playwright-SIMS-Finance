@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-10-30T15:08:05.864Z",
-  "pivotDate": "2026-10-23",
+  "generatedAt": "2026-10-31T14:30:00.222Z",
+  "pivotDate": "2026-10-24",
   "beforeWindow": {
-    "from": "2026-09-30",
-    "to": "2026-10-22",
+    "from": "2026-10-01",
+    "to": "2026-10-23",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-10-23",
+    "from": "2026-10-27",
     "to": "2026-10-30",
-    "runsAnalysed": 5
+    "runsAnalysed": 4
   },
   "beforeEnvs": [
     "UAT"
@@ -24,9 +24,9 @@
       "beforeFailureRate": 0,
       "afterFailureRate": 0,
       "beforeFlakyRate": 0,
-      "afterFlakyRate": 20,
+      "afterFlakyRate": 25,
       "failureDelta": 0,
-      "flakyDelta": 20,
+      "flakyDelta": 25,
       "verdict": "Regressed",
       "riskLevel": "Low",
       "errorSamplesBefore": [],
@@ -37,9 +37,9 @@
       "beforeFailureRate": 0,
       "afterFailureRate": 0,
       "beforeFlakyRate": 0,
-      "afterFlakyRate": 20,
+      "afterFlakyRate": 25,
       "failureDelta": 0,
-      "flakyDelta": 20,
+      "flakyDelta": 25,
       "verdict": "Regressed",
       "riskLevel": "Low",
       "errorSamplesBefore": [],
@@ -50,13 +50,13 @@
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "beforeFailureRate": 50,
-      "afterFailureRate": 20,
+      "afterFailureRate": 25,
       "beforeFlakyRate": 0,
       "afterFlakyRate": 0,
-      "failureDelta": -30,
+      "failureDelta": -25,
       "flakyDelta": 0,
       "verdict": "Improved",
-      "riskLevel": "Medium",
+      "riskLevel": "High",
       "errorSamplesBefore": [
         "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
       ],
@@ -69,19 +69,19 @@
   "resolvedFailures": [],
   "actionItems": [
     "Investigate the cause of flaky behaviour in 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report'.",
-    "Analyze the impact of the recent code change on financial report tests.",
+    "Analyze the impact of the recent code changes on financial report tests.",
     "Review the test environment setup for potential timing issues affecting stability.",
-    "Monitor the performance of tests with previously stable results for any emerging patterns.",
-    "Conduct a deeper analysis of the error messages from the 'NML510 - Trial Balance Report'."
+    "Monitor the flaky tests closely to identify patterns during execution.",
+    "Consider increasing timeout settings for tests with observed delays."
   ],
   "executiveSummary": [
-    "Two tests regressed with new flaky behaviour after the pivot on 2026-10-23.",
-    "Both 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report' showed 20% flakiness.",
-    "The 'NML510 - Trial Balance Report' improved from 50% to 20% failure rate.",
-    "Flaky behaviour may indicate timing issues introduced by recent code changes.",
-    "This pattern could reflect instability in report generation processes for finance staff.",
-    "May lead to inconsistent reporting outcomes during critical financial periods.",
-    "Further investigation into the flaky tests may clarify underlying issues.",
-    "Reviewing the environment setup could help isolate the cause of regressions."
+    "Two tests regressed with new flaky behaviour after the pivot on 2026-10-24.",
+    "Both 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report' showed 25% flakiness.",
+    "One test, 'NML510 - Trial Balance Report', improved from 50% to 25% failure rate.",
+    "Flaky behaviour may indicate timing issues introduced by recent changes.",
+    "This pattern could reflect instability in report generation processes.",
+    "May affect the reliability of financial reporting for users.",
+    "Further investigation into the flaky tests is recommended to ensure stability.",
+    "Monitoring execution patterns may help identify underlying issues."
   ]
 }
