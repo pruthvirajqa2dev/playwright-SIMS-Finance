@@ -1,0 +1,145 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Auth/auth.spec.ts >> Auth Gate >> Login succeeds and homepage loads @auth
+- Location: src/tests/Auth/auth.spec.ts:24:9
+
+# Error details
+
+```
+Test timeout of 200000ms exceeded.
+```
+
+```
+Error: locator.fill: Test timeout of 200000ms exceeded.
+Call log:
+  - waiting for locator('.username')
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - heading "502 Bad Gateway" [level=1] [ref=e3]
+  - separator [ref=e4]
+  - generic [ref=e5]: Microsoft-Azure-Application-Gateway/v2
+```
+
+# Test source
+
+```ts
+  1   | import HomePage from "./HomePage";
+  2   | import BasePage from "./BasePage";
+  3   | import * as fs from "fs";
+  4   | import * as path from "path";
+  5   | import { TestInfo } from "@playwright/test";
+  6   | /**
+  7   |  * @author: @pruthvirajqa2dev
+  8   |  * SIMS Finance Login page class with locators
+  9   |  */
+  10  | /**
+  11  |  * Represents the login page of the application.
+  12  |  * Extends the BasePage class to inherit common page functionalities.
+  13  |  */
+  14  | export default class LoginPage extends BasePage {
+  15  |     //Locators
+  16  |     private readonly usernameInputLocator = ".username";
+  17  |     private readonly passwordInputLocator = ".password";
+  18  |     private readonly loginBtnLocator = ".go_button";
+  19  | 
+  20  |     //Actions
+  21  |     /**
+  22  |      * Fills in the username and password fields on the login page.
+  23  |      *
+  24  |      * @param username - The username to be entered.
+  25  |      * @param password - The password to be entered.
+  26  |      */
+  27  |     async fillUsernameAndPassword(username: string, password: string) {
+  28  |         console.log(`Filling username: ${username}`);
+> 29  |         await this.page.locator(this.usernameInputLocator).fill(username);
+      |                                                            ^ Error: locator.fill: Test timeout of 200000ms exceeded.
+  30  |         await this.page.locator(this.passwordInputLocator).fill(password);
+  31  |     }
+  32  | 
+  33  |     /**
+  34  |      * Logs in to the application using the provided username and password.
+  35  |      * Takes a screenshot of the login page and saves it to the specified path.
+  36  |      *
+  37  |      * @param username - The username to be used for login.
+  38  |      * @param password - The password to be used for login.
+  39  |      * @param testInfo - Information about the current test, used for logging and screenshot paths.
+  40  |      * @returns A promise that resolves to an instance of the HomePage class.
+  41  |      */
+  42  |     async login(
+  43  |         [username, password]: [string, string],
+  44  |         testInfo: TestInfo
+  45  |     ): Promise<HomePage> {
+  46  |         await this.navigateTo("/");
+  47  |         await this.fillUsernameAndPassword(username, password);
+  48  | 
+  49  |         // console.log("Path is " + this.screenshotPath + "/" + testInfo.title);
+  50  |         // if (
+  51  |         //     !fs.existsSync(path.join(this.screenshotPath, "/", testInfo.title))
+  52  |         // ) {
+  53  |         //     fs.mkdirSync(path.join(this.screenshotPath, "/", testInfo.title), {
+  54  |         //         recursive: true
+  55  |         //     });
+  56  |         // }
+  57  |         // await this.page.screenshot({
+  58  |         //     path: this.screenshotPath + "/Login.png"
+  59  |         // });
+  60  | 
+  61  |         const homepage: HomePage = await this.clickLoginBtn(testInfo);
+  62  |         return homepage;
+  63  |     }
+  64  |     async externalLogin(
+  65  |         [username, password]: [string, string],
+  66  |         testInfo: TestInfo
+  67  |     ): Promise<HomePage> {
+  68  |         await this.navigateTo("https://uat-v2.pecuniam-online.co.uk");
+  69  |         await this.fillUsernameAndPassword(username, password);
+  70  | 
+  71  |         // console.log("Path is " + this.screenshotPath + "/" + testInfo.title);
+  72  |         // if (
+  73  |         //     !fs.existsSync(path.join(this.screenshotPath, "/", testInfo.title))
+  74  |         // ) {
+  75  |         //     fs.mkdirSync(path.join(this.screenshotPath, "/", testInfo.title), {
+  76  |         //         recursive: true
+  77  |         //     });
+  78  |         // }
+  79  |         // await this.page.screenshot({
+  80  |         //     path: this.screenshotPath + "/Login.png"
+  81  |         // });
+  82  | 
+  83  |         const homepage: HomePage = await this.clickLoginBtn(testInfo);
+  84  |         return homepage;
+  85  |     }
+  86  | 
+  87  |     /**
+  88  |      * Clicks the login button on the login page.
+  89  |      * Handles any errors that occur during the click action.
+  90  |      *
+  91  |      * @param testInfo - Information about the current test, used for logging and navigation.
+  92  |      * @returns A promise that resolves to an instance of the HomePage class.
+  93  |      */
+  94  |     async clickLoginBtn(testInfo: any): Promise<HomePage> {
+  95  |         await this.page
+  96  |             .locator(this.loginBtnLocator)
+  97  |             .click()
+  98  |             .catch((error) => {
+  99  |                 console.error(`Error clicking login button: ${error}`);
+  100 |                 throw error;
+  101 |             });
+  102 | 
+  103 |         const homePage = new HomePage(this.page, testInfo);
+  104 |         return homePage;
+  105 |     }
+  106 | }
+  107 | 
+```
