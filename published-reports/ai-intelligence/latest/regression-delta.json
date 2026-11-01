@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-10-31T14:30:00.222Z",
-  "pivotDate": "2026-10-24",
+  "generatedAt": "2026-11-01T14:55:49.852Z",
+  "pivotDate": "2026-10-25",
   "beforeWindow": {
-    "from": "2026-10-01",
+    "from": "2026-10-02",
     "to": "2026-10-23",
     "runsAnalysed": 10
   },
@@ -70,18 +70,18 @@
   "actionItems": [
     "Investigate the cause of flaky behaviour in 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report'.",
     "Analyze the impact of the recent code changes on financial report tests.",
-    "Review the test environment setup for potential timing issues affecting stability.",
-    "Monitor the flaky tests closely to identify patterns during execution.",
-    "Consider increasing timeout settings for tests with observed delays."
+    "Review the timing and execution environment for tests showing increased flakiness.",
+    "Monitor the stability of tests during peak usage periods to identify patterns.",
+    "Assess the shared dependencies of tests that have regressed."
   ],
   "executiveSummary": [
-    "Two tests regressed with new flaky behaviour after the pivot on 2026-10-24.",
-    "Both 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report' showed 25% flakiness.",
+    "Two tests regressed with new flaky behaviour after the pivot on 2026-10-25.",
+    "Both 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report' now show 25% flakiness.",
     "One test, 'NML510 - Trial Balance Report', improved from 50% to 25% failure rate.",
-    "Flaky behaviour may indicate timing issues introduced by recent changes.",
-    "This pattern could reflect instability in report generation processes.",
-    "May affect the reliability of financial reporting for users.",
-    "Further investigation into the flaky tests is recommended to ensure stability.",
-    "Monitoring execution patterns may help identify underlying issues."
+    "The observed flakiness may indicate timing issues introduced by recent changes.",
+    "This pattern could reflect instability affecting report generation for finance staff.",
+    "May lead to inconsistent results in critical financial reporting processes.",
+    "Further investigation into the timing of flaky tests may provide insights.",
+    "Comparing execution environments could help isolate the cause of regressions."
   ]
 }
