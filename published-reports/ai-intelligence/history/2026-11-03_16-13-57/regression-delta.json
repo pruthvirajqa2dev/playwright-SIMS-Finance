@@ -1,0 +1,84 @@
+{
+  "generatedAt": "2026-11-03T16:13:34.719Z",
+  "pivotDate": "2026-10-27",
+  "beforeWindow": {
+    "from": "2026-10-05",
+    "to": "2026-10-23",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-10-27",
+    "to": "2026-11-03",
+    "runsAnalysed": 6
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 17,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 17,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [],
+  "actionItems": [
+    "Investigate timeout issues in 'File upload using SPC420' test.",
+    "Analyze flaky behaviour in 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "Review test dependencies and configurations in UAT environment.",
+    "Monitor for patterns in failure rates across similar tests.",
+    "Assess impact of recent code changes on financial reporting tests."
+  ],
+  "executiveSummary": [
+    "3 tests regressed after the pivot date of 2026-10-27.",
+    "The 'File upload using SPC420' test failure rate increased from 0% to 17%.",
+    "Both 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report' tests now show 17% flaky behaviour.",
+    "The observed timeout in 'File upload using SPC420' may indicate a performance issue.",
+    "Flaky behaviour in the Crystal Report and XQuery tests suggests potential timing issues.",
+    "These regressions could affect the reliability of financial reporting processes.",
+    "Further investigation into the UAT environment may clarify these patterns.",
+    "Monitoring test performance during peak usage times may provide additional insights."
+  ]
+}
