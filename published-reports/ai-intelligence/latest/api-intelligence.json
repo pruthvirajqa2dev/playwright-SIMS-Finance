@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T16:13:46.819Z",
+  "generatedAt": "2026-11-04T16:16:12.689Z",
   "sessionId": "traces",
   "totalTraces": 175,
   "filteredTraces": 175,
@@ -1293,7 +1293,7 @@
       ],
       "totalDurationMs": 4226,
       "allSucceeded": true,
-      "description": "This workflow represents the user authentication process followed by navigation to the SIMS Finance home screen."
+      "description": "This sequence represents the user logging in and navigating to the SIMS Finance home screen."
     },
     {
       "name": "User Login and Session Management",
@@ -1422,7 +1422,7 @@
       ],
       "totalDurationMs": 5744,
       "allSucceeded": true,
-      "description": "This workflow captures the steps involved in logging in and managing user sessions within the SIMS Finance application."
+      "description": "This workflow captures the process of user login and subsequent navigation within the application."
     },
     {
       "name": "SPC420 File Upload Process",
@@ -1639,7 +1639,7 @@
       ],
       "totalDurationMs": 11478,
       "allSucceeded": true,
-      "description": "This workflow details the process of uploading files using the SPC420 functionality in the SIMS Finance system."
+      "description": "This sequence details the steps involved in uploading a file using the SPC420 functionality."
     },
     {
       "name": "XQuery Report Execution",
@@ -1776,7 +1776,7 @@
       ],
       "totalDurationMs": 7147,
       "allSucceeded": true,
-      "description": "This workflow illustrates the execution of an XQuery report within the SIMS Finance application."
+      "description": "This workflow illustrates the execution of an XQuery report within the SIMS Finance system."
     },
     {
       "name": "RSS310Q Report with Attachments",
@@ -1993,7 +1993,7 @@
       ],
       "totalDurationMs": 14649,
       "allSucceeded": true,
-      "description": "This workflow represents generating the RSS310Q report along with its attachments in the SIMS Finance system."
+      "description": "This sequence represents generating the RSS310Q report along with its attachments."
     },
     {
       "name": "Crystal Report Generation",
@@ -2258,7 +2258,7 @@
       ],
       "totalDurationMs": 12435,
       "allSucceeded": true,
-      "description": "This workflow captures the steps involved in generating a Crystal Report within the SIMS Finance application."
+      "description": "This workflow captures the steps taken to generate the RSS570 Crystal report."
     },
     {
       "name": "Trial Balance Report Generation",
@@ -2659,7 +2659,7 @@
       ],
       "totalDurationMs": 16530,
       "allSucceeded": true,
-      "description": "This workflow details the process of generating the Trial Balance report in the SIMS Finance system."
+      "description": "This sequence details the process of generating the NML510 Trial Balance report."
     }
   ],
   "byDomain": {
@@ -2771,26 +2771,26 @@
     {
       "type": "RepeatedCallWarning",
       "severity": "Medium",
-      "title": "High Frequency of Refresh Control Calls",
+      "title": "High Frequency of Refresh Calls",
       "description": "The endpoint POST /sfdemosite130/nml510_refresh_control.xml was called 23 times in a single test, indicating potential inefficiencies.",
       "endpoints": [
         "/sfdemosite130/nml510_refresh_control.xml"
       ],
-      "recommendation": "Investigate the necessity of multiple calls to this endpoint and consider implementing caching."
+      "recommendation": "Investigate the necessity of multiple refresh calls and consider implementing caching."
     },
     {
       "type": "UIAPIRelationship",
       "severity": "Info",
-      "title": "UI Actions Correlate with API Calls",
-      "description": "User actions such as logging in and navigating to the home screen directly correlate with specific API calls observed in the tests.",
+      "title": "Login Triggers Multiple API Calls",
+      "description": "The login action triggers a series of API calls, including multiple calls to /auth/esr.elogin.",
       "endpoints": [
         "/auth/esr.elogin",
-        "/sfdemosite130/simsfinance.home"
+        "/sfdemosite130/logon.consume"
       ],
-      "recommendation": "Document the UI-API relationships to enhance understanding of user interactions."
+      "recommendation": "Document the API sequence triggered by user login for better understanding of user flows."
     }
   ],
-  "executiveSummary": "• The tests executed successfully with no failures recorded across all runs. \n• High frequency of calls to the refresh control endpoint may indicate inefficiencies in the workflow. \n• User authentication and navigation processes are clearly defined and correlate with specific API calls. \n• The file upload and report generation workflows are functioning as intended, supporting operational needs. \n• Further investigation into the refresh control calls could improve performance and reduce unnecessary load.",
+  "executiveSummary": "• The tests executed successfully with no failures recorded. \n• High frequency of refresh calls may indicate inefficiencies in the NML510 workflow. \n• User login processes trigger multiple API calls, which could impact performance. \n• The execution of various reports, including Trial Balance and Crystal Reports, was successfully captured. \n• Further investigation into the refresh call patterns is recommended to optimize performance.",
   "postmanCollection": null,
   "openApiPaths": null
 }

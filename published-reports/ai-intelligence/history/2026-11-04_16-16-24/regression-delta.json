@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-11-04T16:15:59.129Z",
+  "pivotDate": "2026-10-28",
+  "beforeWindow": {
+    "from": "2026-10-05",
+    "to": "2026-10-27",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-10-28",
+    "to": "2026-11-04",
+    "runsAnalysed": 6
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 17,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 17,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 50,
+      "afterFailureRate": 50,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "High",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ]
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [],
+  "actionItems": [
+    "Investigate timeout issues in 'File upload using SPC420' and 'NML510 - Trial Balance Report'.",
+    "Analyze flaky behaviour in 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "Review shared dependencies in UAT environment for potential instability.",
+    "Conduct a deeper analysis of the failure rates across the pivot date.",
+    "Monitor for any further regressions in upcoming runs."
+  ],
+  "executiveSummary": [
+    "4 tests regressed after the pivot date of 2026-10-28, with failure rates increasing notably.",
+    "'File upload using SPC420' showed a failure rate increase from 0% to 17%, suggesting potential timeout issues.",
+    "'NML510 - Trial Balance Report' maintained a 50% failure rate, indicating persistent instability.",
+    "Flaky behaviour was observed in 'RSS570 - Crystal Report' and 'SIMS_TB_SCHOOL - XQuery Report', which may indicate timing issues.",
+    "These patterns could reflect underlying problems affecting report generation consistency for finance staff.",
+    "Further investigation into the UAT environment may help clarify the observed regressions.",
+    "No improvements were recorded, highlighting a need for immediate attention to these issues.",
+    "Continued monitoring is essential to prevent impact on financial operations."
+  ]
+}
