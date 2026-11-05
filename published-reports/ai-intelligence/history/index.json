@@ -1,6 +1,19 @@
 {
   "entries": [
     {
+      "timestamp": "2026-11-05_16-37-40",
+      "runId": "42061423864",
+      "generatedAt": "2026-11-05T16:37:40.523Z",
+      "sectionsAvailable": [
+        "api-intelligence",
+        "trend",
+        "deep-failure",
+        "regression-delta"
+      ],
+      "traceCount": 175,
+      "endpointCount": 43
+    },
+    {
       "timestamp": "2026-11-04_16-16-24",
       "runId": "41862810288",
       "generatedAt": "2026-11-04T16:16:24.167Z",
@@ -1148,19 +1161,6 @@
       "timestamp": "2026-08-08_08-49-28",
       "runId": "31248780333",
       "generatedAt": "2026-08-08T08:49:28.647Z",
-      "sectionsAvailable": [
-        "api-intelligence",
-        "trend",
-        "deep-failure",
-        "regression-delta"
-      ],
-      "traceCount": 175,
-      "endpointCount": 43
-    },
-    {
-      "timestamp": "2026-08-07_09-13-50",
-      "runId": "31163793381",
-      "generatedAt": "2026-08-07T09:13:50.736Z",
       "sectionsAvailable": [
         "api-intelligence",
         "trend",

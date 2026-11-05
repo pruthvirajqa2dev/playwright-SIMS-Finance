@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-11-05T16:37:16.992Z",
+  "pivotDate": "2026-10-29",
+  "beforeWindow": {
+    "from": "2026-10-05",
+    "to": "2026-10-28",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-10-29",
+    "to": "2026-11-05",
+    "runsAnalysed": 6
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 17,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 17,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ]
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 17,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 17,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 50,
+      "afterFailureRate": 50,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "High",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m",
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [],
+  "actionItems": [
+    "Investigate timing issues related to the XQuery and Crystal Report tests.",
+    "Analyze the shared dependencies for tests with increased flakiness.",
+    "Review error logs for timeout issues in the Trial Balance Report.",
+    "Compare pre- and post-pivot execution environments for discrepancies.",
+    "Conduct a deeper analysis of the failure patterns observed post-pivot."
+  ],
+  "executiveSummary": [
+    "4 tests regressed after the pivot date of 2026-10-29, with failure rates increasing significantly.",
+    "The XQuery Report and File Upload tests both showed a 17% failure rate, indicating potential timing issues.",
+    "The Trial Balance Report maintained a 50% failure rate, suggesting persistent instability.",
+    "Flaky behaviour was observed in two tests that were previously stable, which may indicate underlying timing issues.",
+    "These regressions could affect the reliability of financial reporting and data uploads for users.",
+    "Further investigation into the timing and environment conditions is recommended to identify root causes."
+  ]
+}
