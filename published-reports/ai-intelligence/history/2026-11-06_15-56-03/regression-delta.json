@@ -1,0 +1,104 @@
+{
+  "generatedAt": "2026-11-06T15:55:39.964Z",
+  "pivotDate": "2026-10-30",
+  "beforeWindow": {
+    "from": "2026-10-06",
+    "to": "2026-10-29",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-10-30",
+    "to": "2026-11-06",
+    "runsAnalysed": 6
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 40,
+      "afterFailureRate": 67,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 27,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "Critical",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 17,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 17,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ]
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 17,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 17,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": []
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [],
+  "actionItems": [
+    "Investigate the cause of increased failure rates in 'NML510 - Trial Balance Report' and 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "Analyze timing issues related to flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' and 'RSS570 - Crystal Report'.",
+    "Review the error logs for 'File upload using SPC420' to identify potential timing issues.",
+    "Conduct a comparison of the UAT environment before and after the pivot date for discrepancies.",
+    "Monitor the impact of these regressions on financial reporting and processing workflows."
+  ],
+  "executiveSummary": [
+    "4 tests regressed after the pivot date of 2026-10-30, with failure rates increasing significantly.",
+    "'NML510 - Trial Balance Report' failure rate rose from 40% to 67%, indicating a critical risk.",
+    "Both 'SIMS_TB_SCHOOL - XQuery Report' and 'File upload using SPC420' showed new failures at 17%.",
+    "Flaky behaviour was introduced in two tests, suggesting potential timing issues post-deployment.",
+    "These regressions may affect the reliability of financial reporting and processing.",
+    "Further investigation into the UAT environment may clarify the observed patterns.",
+    "Monitoring is recommended to assess the impact on operational efficiency during peak periods.",
+    "Addressing these issues promptly could restore confidence in the application’s performance."
+  ]
+}
