@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-07T14:53:10.934Z",
-  "pivotDate": "2026-10-31",
+  "generatedAt": "2026-11-08T14:58:36.851Z",
+  "pivotDate": "2026-11-01",
   "beforeWindow": {
-    "from": "2026-10-08",
+    "from": "2026-10-09",
     "to": "2026-10-30",
     "runsAnalysed": 10
   },
@@ -74,19 +74,19 @@
   "resolvedFailures": [],
   "actionItems": [
     "Investigate the increased failure rate of 'NML510 - Trial Balance Report' with a 60% failure rate.",
-    "Analyze the timeout issues in 'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report'.",
-    "Review the flaky behaviour observed in 'NML510 - Trial Balance Report' post-pivot.",
-    "Compare the test environment configurations between the before and after windows.",
-    "Assess the impact of recent code changes on the critical financial reporting tests."
+    "Analyze the timeout errors in 'File upload using SPC420' to identify potential performance issues.",
+    "Review the changes made around the pivot date to understand impacts on the 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "Examine the flaky behaviour in 'NML510 - Trial Balance Report' to determine if timing issues are present.",
+    "Compare the test environments for consistency in failure patterns."
   ],
   "executiveSummary": [
-    "3 tests regressed after the pivot date of 2026-10-31, with failure rates increasing by 20%.",
-    "'NML510 - Trial Balance Report' failure rate rose from 40% to 60%, indicating critical risk.",
-    "Both 'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report' now have 20% failure rates.",
-    "Flaky behaviour in 'NML510 - Trial Balance Report' may suggest timing issues affecting visibility.",
-    "These regressions could impact the reliability of financial reporting and data uploads.",
-    "Further investigation into timeout errors may clarify the observed patterns.",
-    "Comparing configurations between UAT runs before and after the pivot may provide insights.",
-    "The observed patterns suggest a need for immediate attention to maintain operational integrity."
+    "60% of 'NML510 - Trial Balance Report' runs failed post-pivot, up from 40%.",
+    "Both 'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report' showed new failures at 20%.",
+    "The increase in failure rates suggests potential instability introduced by recent code changes.",
+    "Observed timeout errors may indicate performance issues affecting report generation.",
+    "These regressions could lead to inconsistencies in financial reporting for users.",
+    "Further investigation into the timing and environment differences is recommended.",
+    "The presence of flaky behaviour in critical tests raises concerns about reliability.",
+    "No race conditions were detected, indicating the failures are likely not environment-specific."
   ]
 }

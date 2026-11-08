@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-11-08T14:58:36.851Z",
+  "pivotDate": "2026-11-01",
+  "beforeWindow": {
+    "from": "2026-10-09",
+    "to": "2026-10-30",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-11-02",
+    "to": "2026-11-06",
+    "runsAnalysed": 5
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 40,
+      "afterFailureRate": 60,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 20,
+      "failureDelta": 20,
+      "flakyDelta": 20,
+      "verdict": "Regressed",
+      "riskLevel": "Critical",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 20,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 20,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 20,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 0,
+      "failureDelta": 20,
+      "flakyDelta": -10,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [],
+  "actionItems": [
+    "Investigate the increased failure rate of 'NML510 - Trial Balance Report' with a 60% failure rate.",
+    "Analyze the timeout errors in 'File upload using SPC420' to identify potential performance issues.",
+    "Review the changes made around the pivot date to understand impacts on the 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "Examine the flaky behaviour in 'NML510 - Trial Balance Report' to determine if timing issues are present.",
+    "Compare the test environments for consistency in failure patterns."
+  ],
+  "executiveSummary": [
+    "60% of 'NML510 - Trial Balance Report' runs failed post-pivot, up from 40%.",
+    "Both 'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report' showed new failures at 20%.",
+    "The increase in failure rates suggests potential instability introduced by recent code changes.",
+    "Observed timeout errors may indicate performance issues affecting report generation.",
+    "These regressions could lead to inconsistencies in financial reporting for users.",
+    "Further investigation into the timing and environment differences is recommended.",
+    "The presence of flaky behaviour in critical tests raises concerns about reliability.",
+    "No race conditions were detected, indicating the failures are likely not environment-specific."
+  ]
+}

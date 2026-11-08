@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-07T14:53:02.180Z",
+  "generatedAt": "2026-11-08T14:58:28.309Z",
   "runsAnalysed": 15,
   "runsWithIssues": 15,
   "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
@@ -148,8 +148,8 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Strict mode violation suggests a brittle selector issue.",
-      "recommendation": "Review and refine the locator strategy to ensure unique element targeting."
+      "failureHypothesis": "The strict mode violation suggests a brittle selector issue.",
+      "recommendation": "Review and refine the selector used in the test."
     },
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
@@ -160,8 +160,8 @@
       "mostFrequentError": "Test timeout of 200000ms exceeded.",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "Long execution time may indicate performance issues or inefficient queries.",
-      "recommendation": "Investigate the report generation process for potential optimizations."
+      "failureHypothesis": "The high average duration suggests potential performance issues or timing problems.",
+      "recommendation": "Investigate the performance of the report generation process."
     },
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
@@ -172,8 +172,8 @@
       "mostFrequentError": "Target page, context or browser has been closed",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Intermittent closure suggests timing issues or resource constraints.",
-      "recommendation": "Examine the timing of interactions to ensure the page is fully loaded."
+      "failureHypothesis": "The intermittent failures may indicate timing issues with the page load.",
+      "recommendation": "Add waits or checks to ensure the page is fully loaded before interactions."
     },
     {
       "testTitle": "File upload using SPC420 @shard2",
@@ -184,8 +184,8 @@
       "mostFrequentError": "Test timeout of 200000ms exceeded.",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "Timeout suggests potential delays in file processing or upload speed.",
-      "recommendation": "Assess file upload performance and consider increasing timeout thresholds."
+      "failureHypothesis": "The timeout suggests that the file upload process may be slow or unreliable.",
+      "recommendation": "Evaluate the file upload process for performance improvements."
     },
     {
       "testTitle": "RSS570 - Crystal Report @shard1",
@@ -196,8 +196,8 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour may indicate sporadic UI rendering issues.",
-      "recommendation": "Monitor for patterns in flaky runs to identify potential UI stability improvements."
+      "failureHypothesis": "No failures observed across profiled runs.",
+      "recommendation": "Monitor for any future failures to ensure continued stability."
     },
     {
       "testTitle": "Login and Logout @shard2",
@@ -209,7 +209,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any future anomalies."
+      "recommendation": "Continue to monitor for stability."
     },
     {
       "testTitle": "Help screen @shard2",
@@ -221,7 +221,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any future anomalies."
+      "recommendation": "Continue to monitor for stability."
     }
   ],
   "coFailurePatterns": [
@@ -239,20 +239,17 @@
     "NML510 - Trial Balance Report @shard1"
   ],
   "actionItems": [
-    "Investigate locator strategies for RSS310Q to avoid strict mode violations.",
-    "Optimize report generation in NML510 to reduce execution time.",
-    "Assess timing of interactions in XQuery Report to prevent page closure.",
-    "Monitor file upload performance and adjust timeout settings as needed.",
-    "Track flaky behaviour in Crystal Report for potential UI improvements."
+    "Investigate selector issues in RSS310Q to reduce failures.",
+    "Analyze performance of NML510 to address timeout concerns.",
+    "Enhance timing checks in XQuery Report test to improve reliability.",
+    "Review file upload process for potential speed improvements.",
+    "Monitor stable tests for any signs of future instability."
   ],
   "executiveSummary": [
-    "100% failure rate observed for RSS310Q across all runs.",
-    "47% failure rate for NML510 indicates significant instability.",
-    "Co-failure between NML510 and RSS310Q suggests shared dependencies.",
-    "Flaky behaviour noted in XQuery and Crystal Report tests.",
-    "Stable tests like Login and Logout show no failures.",
-    "Investigating locator strategies and performance optimizations is recommended.",
-    "Monitoring for patterns in flaky tests may reveal underlying issues.",
-    "Focus on improving report generation and file upload processes."
+    "100% of runs for RSS310Q failed, indicating critical instability.",
+    "NML510 had a 47% failure rate, with timeouts suggesting performance issues.",
+    "Two tests exhibited flaky behaviour, with failure rates at 7%.",
+    "Co-failure observed between NML510 and RSS310Q in 46.67% of runs.",
+    "Stable tests showed no failures, but should be monitored for future issues."
   ]
 }
