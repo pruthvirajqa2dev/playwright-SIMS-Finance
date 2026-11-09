@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-11-08T14:58:36.851Z",
-  "pivotDate": "2026-11-01",
+  "generatedAt": "2026-11-09T18:31:43.361Z",
+  "pivotDate": "2026-11-02",
   "beforeWindow": {
-    "from": "2026-10-09",
+    "from": "2026-10-12",
     "to": "2026-10-30",
     "runsAnalysed": 10
   },
   "afterWindow": {
     "from": "2026-11-02",
-    "to": "2026-11-06",
-    "runsAnalysed": 5
+    "to": "2026-11-09",
+    "runsAnalysed": 6
   },
   "beforeEnvs": [
     "UAT"
@@ -22,13 +22,13 @@
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "beforeFailureRate": 40,
-      "afterFailureRate": 60,
+      "afterFailureRate": 50,
       "beforeFlakyRate": 0,
-      "afterFlakyRate": 20,
-      "failureDelta": 20,
-      "flakyDelta": 20,
+      "afterFlakyRate": 17,
+      "failureDelta": 10,
+      "flakyDelta": 17,
       "verdict": "Regressed",
-      "riskLevel": "Critical",
+      "riskLevel": "High",
       "errorSamplesBefore": [
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
         "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
@@ -41,10 +41,10 @@
     {
       "testTitle": "File upload using SPC420 @shard2",
       "beforeFailureRate": 0,
-      "afterFailureRate": 20,
+      "afterFailureRate": 17,
       "beforeFlakyRate": 0,
       "afterFlakyRate": 0,
-      "failureDelta": 20,
+      "failureDelta": 17,
       "flakyDelta": 0,
       "verdict": "Regressed",
       "riskLevel": "Medium",
@@ -56,10 +56,10 @@
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
       "beforeFailureRate": 0,
-      "afterFailureRate": 20,
+      "afterFailureRate": 17,
       "beforeFlakyRate": 10,
       "afterFlakyRate": 0,
-      "failureDelta": 20,
+      "failureDelta": 17,
       "flakyDelta": -10,
       "verdict": "Regressed",
       "riskLevel": "Medium",
@@ -73,20 +73,20 @@
   "newFailures": [],
   "resolvedFailures": [],
   "actionItems": [
-    "Investigate the increased failure rate of 'NML510 - Trial Balance Report' with a 60% failure rate.",
-    "Analyze the timeout errors in 'File upload using SPC420' to identify potential performance issues.",
-    "Review the changes made around the pivot date to understand impacts on the 'SIMS_TB_SCHOOL - XQuery Report'.",
-    "Examine the flaky behaviour in 'NML510 - Trial Balance Report' to determine if timing issues are present.",
-    "Compare the test environments for consistency in failure patterns."
+    "Investigate the increased failure rate of 'NML510 - Trial Balance Report' which rose to 50%.",
+    "Analyze the timeout issues in 'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report'.",
+    "Review the shared dependencies in the UAT environment for potential instability.",
+    "Examine the flaky behaviour in 'NML510 - Trial Balance Report' for timing issues.",
+    "Conduct a deeper analysis of the error logs for patterns related to the recent code changes."
   ],
   "executiveSummary": [
-    "60% of 'NML510 - Trial Balance Report' runs failed post-pivot, up from 40%.",
-    "Both 'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report' showed new failures at 20%.",
-    "The increase in failure rates suggests potential instability introduced by recent code changes.",
-    "Observed timeout errors may indicate performance issues affecting report generation.",
-    "These regressions could lead to inconsistencies in financial reporting for users.",
-    "Further investigation into the timing and environment differences is recommended.",
-    "The presence of flaky behaviour in critical tests raises concerns about reliability.",
-    "No race conditions were detected, indicating the failures are likely not environment-specific."
+    "3 tests regressed after the pivot date of 2026-11-02, with failure rates increasing significantly.",
+    "'NML510 - Trial Balance Report' failure rate rose from 40% to 50%, indicating potential instability.",
+    "'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report' both showed new failures at 17%.",
+    "The observed timeout errors may indicate timing issues affecting test reliability.",
+    "These regressions could lead to inconsistencies in financial reporting and data processing.",
+    "Further investigation into the UAT environment may help clarify the underlying issues.",
+    "The increase in failure rates suggests a need for immediate attention to maintain system reliability.",
+    "Monitoring the impact on user operations during peak times may provide additional insights."
   ]
 }

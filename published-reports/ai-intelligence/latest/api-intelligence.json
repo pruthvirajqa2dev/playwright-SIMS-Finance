@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T14:58:48.255Z",
+  "generatedAt": "2026-11-09T18:31:55.846Z",
   "sessionId": "traces",
   "totalTraces": 175,
   "filteredTraces": 175,
@@ -1296,7 +1296,7 @@
       "description": "This sequence represents the user logging in and navigating to the help screen within the SIMS Finance application."
     },
     {
-      "name": "User Login and Session Management",
+      "name": "User Login and Logout Process",
       "testTitle": "Login and Logout @shard2",
       "steps": [
         {
@@ -1422,10 +1422,10 @@
       ],
       "totalDurationMs": 5744,
       "allSucceeded": true,
-      "description": "This workflow captures the process of user login and logout, ensuring session management is functioning correctly."
+      "description": "This workflow captures the steps involved in logging into and out of the SIMS Finance application."
     },
     {
-      "name": "SPC420 File Upload Process",
+      "name": "SPC420 File Upload Workflow",
       "testTitle": "File upload using SPC420 @shard2",
       "steps": [
         {
@@ -1639,7 +1639,7 @@
       ],
       "totalDurationMs": 11478,
       "allSucceeded": true,
-      "description": "This sequence outlines the steps for uploading files using the SPC420 functionality within the SIMS Finance system."
+      "description": "This sequence details the process of uploading a file using the SPC420 functionality in the SIMS Finance system."
     },
     {
       "name": "XQuery Report Execution",
@@ -1776,10 +1776,10 @@
       ],
       "totalDurationMs": 7147,
       "allSucceeded": true,
-      "description": "This workflow details the execution of an XQuery report, including user authentication and report generation."
+      "description": "This workflow illustrates the steps taken to execute an XQuery report within the SIMS Finance application."
     },
     {
-      "name": "RSS310Q Report with Attachments",
+      "name": "RSS310Q Attachments Handling",
       "testTitle": "RSS310Q - Attachments @shard2",
       "steps": [
         {
@@ -1993,7 +1993,7 @@
       ],
       "totalDurationMs": 14649,
       "allSucceeded": true,
-      "description": "This sequence represents the process of generating the RSS310Q report and handling attachments."
+      "description": "This sequence represents the process of managing attachments in the RSS310Q report within the SIMS Finance system."
     },
     {
       "name": "Crystal Report Generation",
@@ -2258,7 +2258,7 @@
       ],
       "totalDurationMs": 12435,
       "allSucceeded": true,
-      "description": "This workflow captures the steps involved in generating the RSS570 Crystal Report, including user authentication."
+      "description": "This workflow captures the steps involved in generating a Crystal Report within the SIMS Finance application."
     },
     {
       "name": "Trial Balance Report Generation",
@@ -2659,7 +2659,7 @@
       ],
       "totalDurationMs": 16530,
       "allSucceeded": true,
-      "description": "This sequence outlines the process for generating the NML510 Trial Balance Report, including multiple data refreshes."
+      "description": "This sequence details the process of generating a Trial Balance report in the SIMS Finance system."
     }
   ],
   "byDomain": {
@@ -2781,24 +2781,22 @@
     {
       "type": "UIAPIRelationship",
       "severity": "Info",
-      "title": "UI Actions Trigger API Calls",
-      "description": "User actions such as logging in and generating reports consistently trigger specific API calls, indicating a strong UI-API relationship.",
+      "title": "Login Actions Trigger API Calls",
+      "description": "The UI actions for logging in directly correlate with multiple POST and GET requests to authentication endpoints.",
       "endpoints": [
         "/auth/esr.elogin",
-        "/sfdemosite130/simsfinance.home"
+        "/sfdemosite130/logon.consume"
       ],
-      "recommendation": "Document the UI-API interactions for better understanding of user workflows."
+      "recommendation": "Document the API calls triggered by UI actions for better understanding of user flows."
     }
   ],
   "executiveSummary": [
     "• All tests executed successfully with no failures recorded.",
-    "• The highest number of API calls was observed for the refresh control endpoint, indicating potential inefficiencies.",
-    "• User login and report generation workflows were consistently executed across multiple tests.",
-    "• The API calls related to user authentication showed stable performance with acceptable latency.",
-    "• High frequency of refresh calls may suggest opportunities for optimization in report generation processes.",
-    "• Strong correlation between UI actions and API calls indicates effective integration.",
-    "• Further analysis of the refresh call patterns could enhance system performance.",
-    "• Overall, the system appears stable with efficient user authentication and reporting capabilities."
+    "• The highest number of API calls was observed for the refresh control endpoint, with 23 calls in one test.",
+    "• User authentication processes triggered multiple API calls, indicating a complex login workflow.",
+    "• File upload and report generation workflows were successfully validated through the tests.",
+    "• No latency issues were detected, with all p95 response times remaining below 3000ms.",
+    "• Continuous monitoring of the refresh control calls is recommended to enhance performance."
   ],
   "postmanCollection": null,
   "openApiPaths": null
