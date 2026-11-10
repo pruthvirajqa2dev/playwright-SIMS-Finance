@@ -1,0 +1,93 @@
+{
+  "generatedAt": "2026-11-10T16:22:43.412Z",
+  "pivotDate": "2026-11-03",
+  "beforeWindow": {
+    "from": "2026-10-12",
+    "to": "2026-11-02",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-11-03",
+    "to": "2026-11-10",
+    "runsAnalysed": 6
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 0,
+      "afterFailureRate": 17,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 0,
+      "failureDelta": 17,
+      "flakyDelta": -10,
+      "verdict": "Regressed",
+      "riskLevel": "Medium",
+      "errorSamplesBefore": [],
+      "errorSamplesAfter": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ]
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 50,
+      "afterFailureRate": 50,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "High",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate the regression in 'SIMS_TB_SCHOOL - XQuery Report' with a 17% failure rate.",
+    "Analyze the flaky behaviour in 'NML510 - Trial Balance Report' which has a 17% flaky rate.",
+    "Review the error logs for both regressed tests to identify common patterns.",
+    "Compare the environment settings between the before and after windows for discrepancies.",
+    "Monitor the impact of these regressions on financial reporting processes."
+  ],
+  "executiveSummary": [
+    "2 tests regressed after the pivot date of 2026-11-03, with failure rates increasing notably.",
+    "'SIMS_TB_SCHOOL - XQuery Report' failure rate rose from 0% to 17%, indicating potential instability.",
+    "'NML510 - Trial Balance Report' maintained a 50% failure rate but introduced 17% flaky behaviour.",
+    "These patterns may suggest timing issues or environmental factors affecting test reliability.",
+    "Increased failures could impact the accuracy of financial reporting for stakeholders.",
+    "Further investigation into the error logs may clarify the underlying issues.",
+    "Comparing the environment settings could help isolate the cause of the regressions.",
+    "Monitoring the impact on financial processes is essential to maintain operational integrity."
+  ]
+}

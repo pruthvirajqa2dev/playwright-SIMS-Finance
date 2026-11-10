@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-11-09T18:31:43.361Z",
-  "pivotDate": "2026-11-02",
+  "generatedAt": "2026-11-10T16:22:43.412Z",
+  "pivotDate": "2026-11-03",
   "beforeWindow": {
     "from": "2026-10-12",
-    "to": "2026-10-30",
+    "to": "2026-11-02",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-11-02",
-    "to": "2026-11-09",
+    "from": "2026-11-03",
+    "to": "2026-11-10",
     "runsAnalysed": 6
   },
   "beforeEnvs": [
@@ -19,40 +19,6 @@
   ],
   "overallVerdict": "Regressed",
   "regressions": [
-    {
-      "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 40,
-      "afterFailureRate": 50,
-      "beforeFlakyRate": 0,
-      "afterFlakyRate": 17,
-      "failureDelta": 10,
-      "flakyDelta": 17,
-      "verdict": "Regressed",
-      "riskLevel": "High",
-      "errorSamplesBefore": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
-      ],
-      "errorSamplesAfter": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
-      ]
-    },
-    {
-      "testTitle": "File upload using SPC420 @shard2",
-      "beforeFailureRate": 0,
-      "afterFailureRate": 17,
-      "beforeFlakyRate": 0,
-      "afterFlakyRate": 0,
-      "failureDelta": 17,
-      "flakyDelta": 0,
-      "verdict": "Regressed",
-      "riskLevel": "Medium",
-      "errorSamplesBefore": [],
-      "errorSamplesAfter": [
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
-      ]
-    },
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
       "beforeFailureRate": 0,
@@ -67,26 +33,61 @@
       "errorSamplesAfter": [
         "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
       ]
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 50,
+      "afterFailureRate": 50,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 17,
+      "failureDelta": 0,
+      "flakyDelta": 17,
+      "verdict": "Regressed",
+      "riskLevel": "High",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ]
     }
   ],
   "improvements": [],
   "newFailures": [],
-  "resolvedFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
   "actionItems": [
-    "Investigate the increased failure rate of 'NML510 - Trial Balance Report' which rose to 50%.",
-    "Analyze the timeout issues in 'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report'.",
-    "Review the shared dependencies in the UAT environment for potential instability.",
-    "Examine the flaky behaviour in 'NML510 - Trial Balance Report' for timing issues.",
-    "Conduct a deeper analysis of the error logs for patterns related to the recent code changes."
+    "Investigate the regression in 'SIMS_TB_SCHOOL - XQuery Report' with a 17% failure rate.",
+    "Analyze the flaky behaviour in 'NML510 - Trial Balance Report' which has a 17% flaky rate.",
+    "Review the error logs for both regressed tests to identify common patterns.",
+    "Compare the environment settings between the before and after windows for discrepancies.",
+    "Monitor the impact of these regressions on financial reporting processes."
   ],
   "executiveSummary": [
-    "3 tests regressed after the pivot date of 2026-11-02, with failure rates increasing significantly.",
-    "'NML510 - Trial Balance Report' failure rate rose from 40% to 50%, indicating potential instability.",
-    "'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report' both showed new failures at 17%.",
-    "The observed timeout errors may indicate timing issues affecting test reliability.",
-    "These regressions could lead to inconsistencies in financial reporting and data processing.",
-    "Further investigation into the UAT environment may help clarify the underlying issues.",
-    "The increase in failure rates suggests a need for immediate attention to maintain system reliability.",
-    "Monitoring the impact on user operations during peak times may provide additional insights."
+    "2 tests regressed after the pivot date of 2026-11-03, with failure rates increasing notably.",
+    "'SIMS_TB_SCHOOL - XQuery Report' failure rate rose from 0% to 17%, indicating potential instability.",
+    "'NML510 - Trial Balance Report' maintained a 50% failure rate but introduced 17% flaky behaviour.",
+    "These patterns may suggest timing issues or environmental factors affecting test reliability.",
+    "Increased failures could impact the accuracy of financial reporting for stakeholders.",
+    "Further investigation into the error logs may clarify the underlying issues.",
+    "Comparing the environment settings could help isolate the cause of the regressions.",
+    "Monitoring the impact on financial processes is essential to maintain operational integrity."
   ]
 }
