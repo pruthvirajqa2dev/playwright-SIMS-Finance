@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T16:22:17.414Z",
+  "generatedAt": "2026-11-11T16:09:23.406Z",
   "runsAnalysed": 21,
   "weekendExcluded": 9,
   "dateRange": {
@@ -420,47 +420,47 @@
   "patterns": [
     {
       "patternType": "Chronic Flakiness",
-      "description": "Two runs exhibited flaky behaviour, indicating potential instability in specific tests.",
+      "description": "Two runs exhibited flaky tests, indicating potential instability in specific tests. This may affect overall reliability.",
       "affectedRuns": 2,
       "severity": "Medium",
-      "recommendation": "Investigate the flaky tests to determine underlying causes."
+      "recommendation": "Investigate the flaky tests to determine underlying causes and improve stability."
     },
     {
-      "patternType": "Failure Cluster",
-      "description": "All 21 runs from 2026-10-12 to 2026-11-10 recorded failures, indicating a persistent issue.",
+      "patternType": "Recurring Outage",
+      "description": "All 21 runs experienced failures, with no clean runs recorded. This suggests systemic issues affecting test reliability.",
       "affectedRuns": 21,
       "severity": "High",
-      "recommendation": "Conduct a thorough review of the test suite to identify common failure points."
+      "recommendation": "Conduct a thorough review of the test suite to identify and address recurring failures."
     },
     {
       "patternType": "Degrading Trend",
-      "description": "The average success rate for the last 7 runs was 54%, suggesting a downward trend in reliability.",
-      "affectedRuns": 7,
-      "severity": "Medium",
-      "recommendation": "Analyze recent changes to the application or test suite that may have impacted performance."
+      "description": "The average success rate increased slightly from 52% to 54% over the last 7 runs, indicating a potential improvement.",
+      "affectedRuns": 14,
+      "severity": "Low",
+      "recommendation": "Continue monitoring success rates to confirm if this trend persists."
     }
   ],
   "riskPeriods": [
     {
       "period": "2026-10-12 to 2026-11-10",
-      "description": "All runs during this period experienced failures, indicating a critical risk to application stability."
+      "description": "21 consecutive runs recorded failures, indicating a significant risk period for test reliability."
     }
   ],
   "actionItems": [
-    "Investigate flaky tests to identify root causes.",
-    "Review test suite for common failure points.",
-    "Analyze recent changes impacting test performance.",
-    "Monitor test execution times for potential slowdowns.",
-    "Consider implementing additional logging for failed tests."
+    "Investigate flaky tests to enhance stability.",
+    "Review the test suite for systemic issues causing failures.",
+    "Monitor success rates for sustained improvement.",
+    "Analyze test execution times for potential optimizations.",
+    "Engage with development teams to address identified issues."
   ],
   "executiveSummary": [
-    "0% of business-day runs were fully passed with no failures or flakiness.",
-    "77% average test pass rate indicates significant instability.",
-    "All 21 runs recorded failures, highlighting a persistent issue.",
-    "Two runs showed flaky behaviour, suggesting instability in specific tests.",
-    "Recent average success rate of 54% indicates a downward trend.",
-    "This pattern may affect the reliability of financial reporting processes.",
-    "Further investigation into failure causes is recommended.",
-    "Monitoring execution times may reveal additional performance issues."
+    "0% of business-day runs achieved full pass rates, indicating significant reliability concerns.",
+    "All 21 runs recorded failures, suggesting systemic issues within the test suite.",
+    "Two runs exhibited flaky behaviour, which may affect overall test reliability.",
+    "Average success rate increased slightly from 52% to 54% in recent runs.",
+    "21 consecutive runs with failures highlight a critical risk period.",
+    "Investigating flaky tests and systemic failures is essential for improvement.",
+    "Continued monitoring of success rates is recommended to assess stability.",
+    "Collaboration with development teams may help address underlying issues."
   ]
 }

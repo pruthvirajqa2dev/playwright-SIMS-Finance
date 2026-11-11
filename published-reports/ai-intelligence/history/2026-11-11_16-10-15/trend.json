@@ -1,0 +1,466 @@
+{
+  "generatedAt": "2026-11-11T16:09:23.406Z",
+  "runsAnalysed": 21,
+  "weekendExcluded": 9,
+  "dateRange": {
+    "from": "2026-10-12",
+    "to": "2026-11-10"
+  },
+  "overallHealthScore": 62,
+  "trendDirection": "Stable",
+  "successRate": 0,
+  "avgTestPassRate": 77,
+  "flakyRate": 10,
+  "byEnvironment": {
+    "UAT": {
+      "total": 21,
+      "failures": 21,
+      "flaky": 2,
+      "avgSuccess": 77,
+      "runs": [
+        {
+          "timestamp": "2026-11-10_16-17-59",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-09_18-27-21",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-08_14-55-03",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-11-07_14-49-36",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-11-06_15-51-37",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-05_16-18-38",
+          "successRate": 67,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-04_16-11-38",
+          "successRate": 86,
+          "flaky": true,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-03_16-03-02",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-02_18-01-51",
+          "successRate": 50,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-01_14-52-38",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-10-31_14-26-06",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-10-30_15-04-13",
+          "successRate": 71,
+          "flaky": true,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-29_15-06-29",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-28_14-59-47",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-27_14-05-59",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-25_13-06-26",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-10-24_12-35-54",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-10-23_13-10-58",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-22_14-17-42",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-21_13-36-54",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-20_13-32-43",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-19_15-26-00",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-18_12-34-55",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-10-17_12-06-42",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
+        {
+          "timestamp": "2026-10-16_13-07-13",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-15_13-17-11",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-14_13-32-54",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-13_15-44-13",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-12_17-29-58",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-11_14-47-26",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        }
+      ],
+      "failureRuns": [
+        {
+          "timestamp": "2026-11-10_16-17-59",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-09_18-27-21",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-06_15-51-37",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-05_16-18-38",
+          "successRate": 67,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-04_16-11-38",
+          "successRate": 86,
+          "flaky": true,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-03_16-03-02",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-11-02_18-01-51",
+          "successRate": 50,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-30_15-04-13",
+          "successRate": 71,
+          "flaky": true,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-29_15-06-29",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-28_14-59-47",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-27_14-05-59",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-23_13-10-58",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-22_14-17-42",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-21_13-36-54",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-20_13-32-43",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-19_15-26-00",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-16_13-07-13",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-15_13-17-11",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-14_13-32-54",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-13_15-44-13",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-12_17-29-58",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        }
+      ],
+      "flakyRuns": [
+        {
+          "timestamp": "2026-11-04_16-11-38",
+          "successRate": 86,
+          "flaky": true,
+          "isWeekend": false
+        },
+        {
+          "timestamp": "2026-10-30_15-04-13",
+          "successRate": 71,
+          "flaky": true,
+          "isWeekend": false
+        }
+      ]
+    }
+  },
+  "weekendRuns": [
+    {
+      "timestamp": "2026-11-08_14-55-03",
+      "date": "2026-11-08",
+      "dayOfWeek": "Sunday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    },
+    {
+      "timestamp": "2026-11-07_14-49-36",
+      "date": "2026-11-07",
+      "dayOfWeek": "Saturday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    },
+    {
+      "timestamp": "2026-11-01_14-52-38",
+      "date": "2026-11-01",
+      "dayOfWeek": "Sunday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    },
+    {
+      "timestamp": "2026-10-31_14-26-06",
+      "date": "2026-10-31",
+      "dayOfWeek": "Saturday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    },
+    {
+      "timestamp": "2026-10-25_13-06-26",
+      "date": "2026-10-25",
+      "dayOfWeek": "Sunday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    },
+    {
+      "timestamp": "2026-10-24_12-35-54",
+      "date": "2026-10-24",
+      "dayOfWeek": "Saturday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    },
+    {
+      "timestamp": "2026-10-18_12-34-55",
+      "date": "2026-10-18",
+      "dayOfWeek": "Sunday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    },
+    {
+      "timestamp": "2026-10-17_12-06-42",
+      "date": "2026-10-17",
+      "dayOfWeek": "Saturday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    },
+    {
+      "timestamp": "2026-10-11_14-47-26",
+      "date": "2026-10-11",
+      "dayOfWeek": "Sunday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    }
+  ],
+  "patterns": [
+    {
+      "patternType": "Chronic Flakiness",
+      "description": "Two runs exhibited flaky tests, indicating potential instability in specific tests. This may affect overall reliability.",
+      "affectedRuns": 2,
+      "severity": "Medium",
+      "recommendation": "Investigate the flaky tests to determine underlying causes and improve stability."
+    },
+    {
+      "patternType": "Recurring Outage",
+      "description": "All 21 runs experienced failures, with no clean runs recorded. This suggests systemic issues affecting test reliability.",
+      "affectedRuns": 21,
+      "severity": "High",
+      "recommendation": "Conduct a thorough review of the test suite to identify and address recurring failures."
+    },
+    {
+      "patternType": "Degrading Trend",
+      "description": "The average success rate increased slightly from 52% to 54% over the last 7 runs, indicating a potential improvement.",
+      "affectedRuns": 14,
+      "severity": "Low",
+      "recommendation": "Continue monitoring success rates to confirm if this trend persists."
+    }
+  ],
+  "riskPeriods": [
+    {
+      "period": "2026-10-12 to 2026-11-10",
+      "description": "21 consecutive runs recorded failures, indicating a significant risk period for test reliability."
+    }
+  ],
+  "actionItems": [
+    "Investigate flaky tests to enhance stability.",
+    "Review the test suite for systemic issues causing failures.",
+    "Monitor success rates for sustained improvement.",
+    "Analyze test execution times for potential optimizations.",
+    "Engage with development teams to address identified issues."
+  ],
+  "executiveSummary": [
+    "0% of business-day runs achieved full pass rates, indicating significant reliability concerns.",
+    "All 21 runs recorded failures, suggesting systemic issues within the test suite.",
+    "Two runs exhibited flaky behaviour, which may affect overall test reliability.",
+    "Average success rate increased slightly from 52% to 54% in recent runs.",
+    "21 consecutive runs with failures highlight a critical risk period.",
+    "Investigating flaky tests and systemic failures is essential for improvement.",
+    "Continued monitoring of success rates is recommended to assess stability.",
+    "Collaboration with development teams may help address underlying issues."
+  ]
+}
