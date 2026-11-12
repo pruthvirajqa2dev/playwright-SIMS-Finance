@@ -1,23 +1,29 @@
 {
-  "generatedAt": "2026-11-11T16:09:23.406Z",
-  "runsAnalysed": 21,
-  "weekendExcluded": 9,
+  "generatedAt": "2026-11-12T16:47:44.841Z",
+  "runsAnalysed": 22,
+  "weekendExcluded": 8,
   "dateRange": {
     "from": "2026-10-12",
-    "to": "2026-11-10"
+    "to": "2026-11-12"
   },
-  "overallHealthScore": 62,
+  "overallHealthScore": 50,
   "trendDirection": "Stable",
   "successRate": 0,
   "avgTestPassRate": 77,
-  "flakyRate": 10,
+  "flakyRate": 14,
   "byEnvironment": {
     "UAT": {
-      "total": 21,
-      "failures": 21,
-      "flaky": 2,
+      "total": 22,
+      "failures": 22,
+      "flaky": 3,
       "avgSuccess": 77,
       "runs": [
+        {
+          "timestamp": "2026-11-12_16-44-04",
+          "successRate": 86,
+          "flaky": true,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-11-10_16-17-59",
           "successRate": 71,
@@ -191,15 +197,15 @@
           "successRate": 86,
           "flaky": false,
           "isWeekend": false
-        },
-        {
-          "timestamp": "2026-10-11_14-47-26",
-          "successRate": 0,
-          "flaky": false,
-          "isWeekend": true
         }
       ],
       "failureRuns": [
+        {
+          "timestamp": "2026-11-12_16-44-04",
+          "successRate": 86,
+          "flaky": true,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-11-10_16-17-59",
           "successRate": 71,
@@ -329,6 +335,12 @@
       ],
       "flakyRuns": [
         {
+          "timestamp": "2026-11-12_16-44-04",
+          "successRate": 86,
+          "flaky": true,
+          "isWeekend": false
+        },
+        {
           "timestamp": "2026-11-04_16-11-38",
           "successRate": 86,
           "flaky": true,
@@ -407,60 +419,52 @@
       "environment": "UAT",
       "outcome": "zero-execution",
       "successRate": 0
-    },
-    {
-      "timestamp": "2026-10-11_14-47-26",
-      "date": "2026-10-11",
-      "dayOfWeek": "Sunday",
-      "environment": "UAT",
-      "outcome": "zero-execution",
-      "successRate": 0
     }
   ],
   "patterns": [
     {
       "patternType": "Chronic Flakiness",
-      "description": "Two runs exhibited flaky tests, indicating potential instability in specific tests. This may affect overall reliability.",
-      "affectedRuns": 2,
+      "description": "Three runs exhibited flaky tests, indicating potential instability in specific test cases.",
+      "affectedRuns": 3,
       "severity": "Medium",
-      "recommendation": "Investigate the flaky tests to determine underlying causes and improve stability."
+      "recommendation": "Investigate the flaky tests to determine underlying causes and improve reliability."
     },
     {
       "patternType": "Recurring Outage",
-      "description": "All 21 runs experienced failures, with no clean runs recorded. This suggests systemic issues affecting test reliability.",
-      "affectedRuns": 21,
+      "description": "All 22 business-day runs recorded failures, suggesting systemic issues affecting test stability.",
+      "affectedRuns": 22,
       "severity": "High",
-      "recommendation": "Conduct a thorough review of the test suite to identify and address recurring failures."
+      "recommendation": "Conduct a thorough review of the test suite to identify and address recurring failure points."
     },
     {
       "patternType": "Degrading Trend",
-      "description": "The average success rate increased slightly from 52% to 54% over the last 7 runs, indicating a potential improvement.",
+      "description": "The average success rate increased slightly from 52% to 54% over the last 7 runs, indicating minimal improvement.",
       "affectedRuns": 14,
       "severity": "Low",
-      "recommendation": "Continue monitoring success rates to confirm if this trend persists."
+      "recommendation": "Monitor success rates closely to identify any emerging patterns or further improvements."
     }
   ],
   "riskPeriods": [
     {
-      "period": "2026-10-12 to 2026-11-10",
-      "description": "21 consecutive runs recorded failures, indicating a significant risk period for test reliability."
+      "period": "2026-10-12 to 2026-11-12",
+      "description": "All runs during this period experienced failures, indicating a persistent risk to application stability."
     }
   ],
   "actionItems": [
-    "Investigate flaky tests to enhance stability.",
-    "Review the test suite for systemic issues causing failures.",
-    "Monitor success rates for sustained improvement.",
+    "Investigate flaky tests to enhance reliability.",
+    "Review test suite for systemic issues causing failures.",
+    "Monitor success rates for further trends.",
     "Analyze test execution times for potential optimizations.",
-    "Engage with development teams to address identified issues."
+    "Consider implementing additional logging for failed tests."
   ],
   "executiveSummary": [
-    "0% of business-day runs achieved full pass rates, indicating significant reliability concerns.",
-    "All 21 runs recorded failures, suggesting systemic issues within the test suite.",
-    "Two runs exhibited flaky behaviour, which may affect overall test reliability.",
-    "Average success rate increased slightly from 52% to 54% in recent runs.",
-    "21 consecutive runs with failures highlight a critical risk period.",
-    "Investigating flaky tests and systemic failures is essential for improvement.",
-    "Continued monitoring of success rates is recommended to assess stability.",
-    "Collaboration with development teams may help address underlying issues."
+    "All 22 business-day runs recorded failures, with an average success rate of 77%.",
+    "No runs achieved a near-perfect pass rate of 95% or higher.",
+    "Three runs exhibited flaky behaviour, indicating potential instability in specific tests.",
+    "The average success rate improved slightly from 52% to 54% in the last 7 runs.",
+    "This pattern may indicate underlying issues affecting test reliability.",
+    "May impact the consistency of financial reporting and operations.",
+    "Further investigation into flaky tests and systemic failures is recommended.",
+    "Monitoring execution times and success rates will be crucial for future stability."
   ]
 }
