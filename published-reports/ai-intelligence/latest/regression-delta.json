@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-14T14:57:35.954Z",
-  "pivotDate": "2026-11-07",
+  "generatedAt": "2026-11-15T15:34:32.917Z",
+  "pivotDate": "2026-11-08",
   "beforeWindow": {
-    "from": "2026-10-14",
+    "from": "2026-10-15",
     "to": "2026-11-06",
     "runsAnalysed": 10
   },
@@ -73,17 +73,17 @@
     }
   ],
   "actionItems": [
-    "Investigate the regression in 'NML510 - Trial Balance Report' with a failure rate increase of 10%.",
-    "Analyze the timing issue indicated by the error messages in the 'NML510' test.",
-    "Review the environment-specific factors in UAT that may contribute to the observed failures.",
+    "Investigate the regression in 'NML510 - Trial Balance Report' with a 10% increase in failure rate.",
+    "Analyze the timing issue indicated by the failure messages for 'NML510'.",
+    "Review the environment setup for consistency between the before and after windows.",
     "Monitor the flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for potential instability.",
-    "Conduct a thorough review of the changes made around the pivot date."
+    "Assess the impact of the recent changes on report generation processes."
   ],
   "executiveSummary": [
-    "The 'NML510 - Trial Balance Report' test failure rate increased from 40% to 50% after the pivot date.",
-    "One regression and two resolved tests were identified, indicating mixed results in test stability.",
-    "The observed error messages may suggest timing issues affecting the visibility of elements.",
-    "Flaky behaviour in the 'SIMS_TB_SCHOOL - XQuery Report' could reflect underlying instability.",
-    "These issues may affect the reliability of financial reporting for stakeholders."
+    "The 'NML510 - Trial Balance Report' failure rate increased from 40% to 50% after the pivot date.",
+    "One regression was observed alongside two resolved tests, indicating mixed results post-deployment.",
+    "The error messages suggest potential timing issues affecting visibility in the report.",
+    "This regression may impact the reliability of financial reporting for stakeholders.",
+    "Further investigation into the report's failure patterns could clarify the underlying issues."
   ]
 }
