@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2026-11-16T18:07:16.370Z",
+  "pivotDate": "2026-11-09",
+  "beforeWindow": {
+    "from": "2026-10-16",
+    "to": "2026-11-06",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-11-09",
+    "to": "2026-11-16",
+    "runsAnalysed": 5
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Improved",
+  "regressions": [],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 20,
+      "failureDelta": -10,
+      "flakyDelta": 10,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Monitor flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for potential timing issues.",
+    "Continue to track improvements in file upload tests to ensure stability.",
+    "Investigate the causes of previously observed errors to prevent future regressions.",
+    "Review test environments for consistency to maintain reliable results.",
+    "Document changes made post-pivot to understand their impact on test outcomes."
+  ],
+  "executiveSummary": [
+    "Two tests improved: 'SIMS_TB_SCHOOL - XQuery Report' and 'File upload using SPC420', both with 0% failure rates.",
+    "Flaky behaviour increased in 'SIMS_TB_SCHOOL - XQuery Report', now at 20%, which may indicate timing issues.",
+    "No regressions or new failures were detected after the pivot date of 2026-11-09.",
+    "Stable performance observed in five tests, suggesting overall reliability in the UAT environment.",
+    "Improvements may enhance confidence in report generation and file upload processes for finance staff."
+  ]
+}
