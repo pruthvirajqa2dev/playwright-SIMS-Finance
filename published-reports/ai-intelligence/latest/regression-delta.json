@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-11-16T18:07:16.370Z",
-  "pivotDate": "2026-11-09",
+  "generatedAt": "2026-11-17T17:37:35.482Z",
+  "pivotDate": "2026-11-10",
   "beforeWindow": {
-    "from": "2026-10-16",
-    "to": "2026-11-06",
+    "from": "2026-10-19",
+    "to": "2026-11-09",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-11-09",
-    "to": "2026-11-16",
+    "from": "2026-11-10",
+    "to": "2026-11-17",
     "runsAnalysed": 5
   },
   "beforeEnvs": [
@@ -17,8 +17,27 @@
   "afterEnvs": [
     "UAT"
   ],
-  "overallVerdict": "Improved",
-  "regressions": [],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 40,
+      "afterFailureRate": 60,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 0,
+      "failureDelta": 20,
+      "flakyDelta": -10,
+      "verdict": "Regressed",
+      "riskLevel": "Critical",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ]
+    }
+  ],
   "improvements": [],
   "newFailures": [],
   "resolvedFailures": [
@@ -27,9 +46,9 @@
       "beforeFailureRate": 10,
       "afterFailureRate": 0,
       "beforeFlakyRate": 10,
-      "afterFlakyRate": 20,
+      "afterFlakyRate": 40,
       "failureDelta": -10,
-      "flakyDelta": 10,
+      "flakyDelta": 30,
       "verdict": "Resolved",
       "riskLevel": "Low",
       "errorSamplesBefore": [
@@ -54,17 +73,17 @@
     }
   ],
   "actionItems": [
-    "Monitor flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for potential timing issues.",
-    "Continue to track improvements in file upload tests to ensure stability.",
-    "Investigate the causes of previously observed errors to prevent future regressions.",
-    "Review test environments for consistency to maintain reliable results.",
-    "Document changes made post-pivot to understand their impact on test outcomes."
+    "Investigate the regression in 'NML510 - Trial Balance Report' with a 20% increase in failure rate.",
+    "Analyze the timing issue indicated by the error messages in the 'NML510' test.",
+    "Review the changes made around the pivot date to identify potential impacts on report generation.",
+    "Monitor the flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for further patterns.",
+    "Assess the environment for any configuration changes that may have contributed to the regression."
   ],
   "executiveSummary": [
-    "Two tests improved: 'SIMS_TB_SCHOOL - XQuery Report' and 'File upload using SPC420', both with 0% failure rates.",
-    "Flaky behaviour increased in 'SIMS_TB_SCHOOL - XQuery Report', now at 20%, which may indicate timing issues.",
-    "No regressions or new failures were detected after the pivot date of 2026-11-09.",
-    "Stable performance observed in five tests, suggesting overall reliability in the UAT environment.",
-    "Improvements may enhance confidence in report generation and file upload processes for finance staff."
+    "The 'NML510 - Trial Balance Report' test failure rate increased from 40% to 60% after the pivot date.",
+    "This regression may indicate a timing issue, as evidenced by the error messages observed.",
+    "Two tests showed improvement, but the overall increase in failure rates raises concerns.",
+    "The observed pattern could reflect instability in the reporting functionality critical for financial operations.",
+    "Further investigation into the changes made around 2026-11-10 is recommended to understand impacts."
   ]
 }
