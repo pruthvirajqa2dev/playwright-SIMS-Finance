@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T17:37:27.305Z",
+  "generatedAt": "2026-11-18T17:11:15.017Z",
   "runsAnalysed": 15,
   "runsWithIssues": 15,
   "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
@@ -12,8 +12,8 @@
       "passCount": 0,
       "failureRate": 100,
       "flakyRate": 0,
-      "avgDurationMs": 75546,
-      "lastSeen": "2026-11-17_17-33-24",
+      "avgDurationMs": 63531,
+      "lastSeen": "2026-11-18_17-06-54",
       "errorSamples": [
         "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:     1) <div>…</div> aka lo"
       ],
@@ -23,29 +23,29 @@
       "runsByEnv": {
         "UAT": 15
       },
-      "lastFailureTimestamp": "2026-11-17_17-33-24"
+      "lastFailureTimestamp": "2026-11-18_17-06-54"
     },
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "totalRuns": 15,
-      "failureCount": 7,
+      "failureCount": 8,
       "flakyCount": 1,
-      "passCount": 7,
-      "failureRate": 47,
+      "passCount": 6,
+      "failureRate": 53,
       "flakyRate": 7,
-      "avgDurationMs": 204972,
-      "lastSeen": "2026-11-17_17-33-24",
+      "avgDurationMs": 214898,
+      "lastSeen": "2026-11-18_17-06-54",
       "errorSamples": [
         "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background ",
         "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
       ],
       "failuresByEnv": {
-        "UAT": 7
+        "UAT": 8
       },
       "runsByEnv": {
         "UAT": 15
       },
-      "lastFailureTimestamp": "2026-11-17_17-33-24"
+      "lastFailureTimestamp": "2026-11-18_17-06-54"
     },
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
@@ -55,8 +55,8 @@
       "passCount": 11,
       "failureRate": 7,
       "flakyRate": 20,
-      "avgDurationMs": 31903,
-      "lastSeen": "2026-11-17_17-33-24",
+      "avgDurationMs": 31800,
+      "lastSeen": "2026-11-18_17-06-54",
       "errorSamples": [
         "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbutton[value=\\'Close\\']')\u001b[22m \u001b"
       ],
@@ -76,8 +76,8 @@
       "passCount": 14,
       "failureRate": 7,
       "flakyRate": 0,
-      "avgDurationMs": 50845,
-      "lastSeen": "2026-11-17_17-33-24",
+      "avgDurationMs": 50604,
+      "lastSeen": "2026-11-18_17-06-54",
       "errorSamples": [
         "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
       ],
@@ -97,8 +97,8 @@
       "passCount": 13,
       "failureRate": 0,
       "flakyRate": 13,
-      "avgDurationMs": 170828,
-      "lastSeen": "2026-11-17_17-33-24",
+      "avgDurationMs": 172116,
+      "lastSeen": "2026-11-18_17-06-54",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
@@ -113,8 +113,8 @@
       "passCount": 15,
       "failureRate": 0,
       "flakyRate": 0,
-      "avgDurationMs": 10100,
-      "lastSeen": "2026-11-17_17-33-24",
+      "avgDurationMs": 10225,
+      "lastSeen": "2026-11-18_17-06-54",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
@@ -129,8 +129,8 @@
       "passCount": 13,
       "failureRate": 0,
       "flakyRate": 0,
-      "avgDurationMs": 9213,
-      "lastSeen": "2026-11-17_17-33-24",
+      "avgDurationMs": 9285,
+      "lastSeen": "2026-11-18_17-06-54",
       "errorSamples": [],
       "failuresByEnv": {},
       "runsByEnv": {
@@ -148,20 +148,20 @@
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Strict mode violation suggests a brittle selector issue.",
-      "recommendation": "Review the locator strategy to ensure it targets a single element."
+      "failureHypothesis": "The strict mode violation suggests a brittle selector issue.",
+      "recommendation": "Review and refine the locator strategy to ensure unique element targeting."
     },
     {
       "testTitle": "NML510 - Trial Balance Report @shard1",
       "stabilityLabel": "Unstable",
       "priority": "High",
-      "failureRate": 47,
+      "failureRate": 53,
       "flakyRate": 7,
       "mostFrequentError": "Test timeout of 200000ms exceeded.",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "Long execution time may indicate performance issues or slow backend responses.",
-      "recommendation": "Investigate backend performance during test execution."
+      "failureHypothesis": "The high failure rate may indicate performance issues or timing problems.",
+      "recommendation": "Investigate the report generation process for potential optimizations."
     },
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
@@ -172,8 +172,8 @@
       "mostFrequentError": "Target page, context or browser has been closed",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour may suggest timing issues with page loading.",
-      "recommendation": "Add explicit waits to ensure the page is fully loaded before interactions."
+      "failureHypothesis": "Flaky behaviour may suggest timing issues with the page load.",
+      "recommendation": "Add wait conditions to ensure the page is fully loaded before interactions."
     },
     {
       "testTitle": "File upload using SPC420 @shard2",
@@ -184,20 +184,20 @@
       "mostFrequentError": "Test timeout of 200000ms exceeded.",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "Timeout suggests potential delays in file processing.",
-      "recommendation": "Evaluate file upload performance and adjust timeout settings if necessary."
+      "failureHypothesis": "The timeout suggests potential delays in file upload processing.",
+      "recommendation": "Review file upload performance and consider increasing timeout settings."
     },
     {
       "testTitle": "RSS570 - Crystal Report @shard1",
       "stabilityLabel": "Flaky",
-      "priority": "Medium",
+      "priority": "Low",
       "failureRate": 0,
       "flakyRate": 13,
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "Flaky behaviour may indicate intermittent UI issues.",
-      "recommendation": "Monitor for patterns in flaky runs to identify potential UI instability."
+      "recommendation": "Monitor for patterns in flaky behaviour to identify root causes."
     },
     {
       "testTitle": "Login and Logout @shard2",
@@ -209,7 +209,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any changes in performance."
+      "recommendation": "Continue monitoring for any unexpected issues."
     },
     {
       "testTitle": "Help screen @shard2",
@@ -221,7 +221,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Maintain current test strategy as it shows consistent results."
+      "recommendation": "Continue monitoring for any unexpected issues."
     }
   ],
   "coFailurePatterns": [
@@ -230,7 +230,7 @@
         "NML510 - Trial Balance Report @shard1",
         "RSS310Q - Attachments @shard2"
       ],
-      "occurrences": 7,
+      "occurrences": 8,
       "possibleCause": ""
     }
   ],
@@ -239,20 +239,17 @@
     "NML510 - Trial Balance Report @shard1"
   ],
   "actionItems": [
-    "Investigate the locator strategy for RSS310Q to avoid strict mode violations.",
-    "Analyze backend performance during NML510 test executions to reduce timeouts.",
-    "Implement explicit waits in SIMS_TB_SCHOOL to address flaky behaviour.",
-    "Evaluate file upload performance for SPC420 to mitigate timeout issues.",
-    "Monitor patterns in flaky runs of RSS570 to identify UI instability."
+    "Investigate the locator strategy for RSS310Q to resolve strict mode violations.",
+    "Analyze performance issues in NML510 to reduce timeout failures.",
+    "Add wait conditions in SIMS_TB_SCHOOL to address flaky behaviour.",
+    "Review file upload performance in SPC420 to mitigate timeout issues.",
+    "Monitor flaky behaviour in RSS570 for potential UI issues."
   ],
   "executiveSummary": [
-    "100% failure rate observed for RSS310Q across all runs.",
-    "47% failure rate for NML510 indicates significant instability.",
-    "Flaky behaviour detected in SIMS_TB_SCHOOL and RSS570 tests.",
-    "Co-failure between NML510 and RSS310Q suggests a shared dependency.",
-    "May affect the reliability of financial reporting processes.",
-    "Investigating backend performance and locator strategies is recommended.",
-    "Monitoring for patterns in flaky tests could improve stability.",
-    "Continued focus on stable tests like Login and Logout is essential."
+    "100% of runs for RSS310Q failed, indicating severe instability.",
+    "53% of NML510 runs failed, with a timeout error suggesting performance issues.",
+    "SIMS_TB_SCHOOL showed 20% flaky behaviour, indicating potential timing issues.",
+    "Co-failure between NML510 and RSS310Q suggests a shared data state or timing issue.",
+    "Stable tests like Login and Logout had no failures, indicating reliability."
   ]
 }
