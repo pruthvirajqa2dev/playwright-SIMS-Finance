@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-11-19T17:14:37.791Z",
+  "pivotDate": "2026-11-12",
+  "beforeWindow": {
+    "from": "2026-10-19",
+    "to": "2026-11-10",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-11-12",
+    "to": "2026-11-19",
+    "runsAnalysed": 6
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Improved",
+  "regressions": [],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 33,
+      "failureDelta": -10,
+      "flakyDelta": 23,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Monitor flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for stability.",
+    "Continue tracking improvements in file upload tests for consistency.",
+    "Investigate the cause of increased flakiness in resolved tests.",
+    "Review test execution environments for potential discrepancies.",
+    "Ensure thorough documentation of changes made post-pivot."
+  ],
+  "executiveSummary": [
+    "Two tests improved from 10% failure rate to 0% after the pivot on 2026-11-12.",
+    "Five tests remained stable with no change in failure rates.",
+    "Flaky behaviour increased in 'SIMS_TB_SCHOOL - XQuery Report' from 10% to 33%.",
+    "This pattern may indicate timing issues affecting test reliability.",
+    "Improvements could enhance report generation consistency for finance staff.",
+    "Continued monitoring of test stability is recommended to ensure reliability.",
+    "Investigating the cause of increased flakiness may clarify underlying issues.",
+    "Reviewing test execution environments could help isolate any discrepancies."
+  ]
+}
