@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T17:14:49.985Z",
+  "generatedAt": "2026-11-20T16:57:26.867Z",
   "sessionId": "traces",
   "totalTraces": 175,
   "filteredTraces": 175,
@@ -1199,7 +1199,7 @@
   ],
   "workflowSequences": [
     {
-      "name": "User Authentication and Home Access",
+      "name": "User Authentication and Navigation",
       "testTitle": "Help screen @shard2",
       "steps": [
         {
@@ -1293,10 +1293,10 @@
       ],
       "totalDurationMs": 4226,
       "allSucceeded": true,
-      "description": "This sequence represents a user logging in and accessing the home screen of the SIMS Finance application."
+      "description": "This sequence represents the user logging in and navigating to the help screen within the SIMS Finance application."
     },
     {
-      "name": "User Login and Navigation",
+      "name": "User Login and Logout Process",
       "testTitle": "Login and Logout @shard2",
       "steps": [
         {
@@ -1422,10 +1422,10 @@
       ],
       "totalDurationMs": 5744,
       "allSucceeded": true,
-      "description": "This workflow captures the process of a user logging in, navigating to the home screen, and performing actions within the application."
+      "description": "This workflow captures the steps involved in logging into and out of the SIMS Finance system."
     },
     {
-      "name": "SPC420 File Upload Process",
+      "name": "SPC420 File Upload Workflow",
       "testTitle": "File upload using SPC420 @shard2",
       "steps": [
         {
@@ -1639,7 +1639,7 @@
       ],
       "totalDurationMs": 11478,
       "allSucceeded": true,
-      "description": "This sequence details the steps involved in uploading a file using the SPC420 functionality within the SIMS Finance system."
+      "description": "This sequence details the process of uploading files using the SPC420 functionality in the SIMS Finance application."
     },
     {
       "name": "XQuery Report Execution",
@@ -1776,7 +1776,7 @@
       ],
       "totalDurationMs": 7147,
       "allSucceeded": true,
-      "description": "This workflow illustrates the execution of an XQuery report, including user authentication and report generation."
+      "description": "This workflow represents the execution of an XQuery report within the SIMS Finance system."
     },
     {
       "name": "RSS310Q Report with Attachments",
@@ -1993,7 +1993,7 @@
       ],
       "totalDurationMs": 14649,
       "allSucceeded": true,
-      "description": "This sequence represents the process of generating the RSS310Q report, including handling attachments and user interactions."
+      "description": "This sequence captures the process of generating the RSS310Q report along with its attachments."
     },
     {
       "name": "Crystal Report Generation",
@@ -2258,7 +2258,7 @@
       ],
       "totalDurationMs": 12435,
       "allSucceeded": true,
-      "description": "This workflow captures the steps involved in generating a Crystal Report, including user authentication and report processing."
+      "description": "This workflow details the generation of the RSS570 Crystal Report within the SIMS Finance application."
     },
     {
       "name": "Trial Balance Report Generation",
@@ -2659,7 +2659,7 @@
       ],
       "totalDurationMs": 16530,
       "allSucceeded": true,
-      "description": "This sequence details the process of generating a Trial Balance report, including multiple interactions with the budget management endpoints."
+      "description": "This sequence represents the steps taken to generate the NML510 Trial Balance Report in the SIMS Finance system."
     }
   ],
   "byDomain": {
@@ -2771,44 +2771,33 @@
     {
       "type": "RepeatedCallWarning",
       "severity": "Medium",
-      "title": "High Frequency of Refresh Control Calls",
+      "title": "High Frequency of Refresh Calls",
       "description": "The endpoint POST /sfdemosite130/nml510_refresh_control.xml was called 23 times in a single test, indicating potential inefficiencies.",
       "endpoints": [
         "/sfdemosite130/nml510_refresh_control.xml"
       ],
-      "recommendation": "Investigate the necessity of multiple calls to this endpoint and consider implementing caching or optimization strategies."
+      "recommendation": "Investigate the necessity of multiple refresh calls to optimize performance."
     },
     {
       "type": "UIAPIRelationship",
       "severity": "Info",
-      "title": "Login Process Correlation",
-      "description": "The UI actions for logging in directly correlate with multiple POST requests to authentication endpoints.",
+      "title": "Login UI Triggers API Calls",
+      "description": "The UI actions for logging in directly correlate with multiple API calls to authentication endpoints.",
       "endpoints": [
         "/auth/esr.elogin",
         "/sfdemosite130/logon.consume"
       ],
-      "recommendation": "Document the login flow to ensure clarity in user experience and API interactions."
-    },
-    {
-      "type": "PerformanceBottleneck",
-      "severity": "Medium",
-      "title": "Latency in Home Screen Access",
-      "description": "The POST /sfdemosite130/simsfinance.home endpoint recorded a p95 latency of 1159ms, indicating a potential performance issue.",
-      "endpoints": [
-        "/sfdemosite130/simsfinance.home"
-      ],
-      "recommendation": "Analyze the performance of this endpoint to identify and resolve any underlying issues."
+      "recommendation": "Document the relationship between UI actions and API calls for better understanding."
     }
   ],
   "executiveSummary": [
     "• All tests executed successfully with no failures recorded.",
-    "• The highest frequency of API calls was observed for the refresh control endpoint, with 23 calls in one test.",
-    "• The home screen access showed a latency of 1159ms, which may affect user experience.",
-    "• User login processes involve multiple API calls, indicating a well-defined authentication workflow.",
-    "• No failed endpoints were detected, suggesting stable API performance during the tests.",
-    "• Further investigation into the refresh control calls could enhance system efficiency.",
-    "• Performance analysis of the home screen access is recommended to improve response times.",
-    "• Overall, the API interactions align well with expected user workflows in the SIMS Finance application."
+    "• The highest latency observed was 2037ms during report generation.",
+    "• The POST /sfdemosite130/nml510_refresh_control.xml endpoint was called 23 times in one test.",
+    "• Multiple API calls are triggered during user login and navigation processes.",
+    "• High frequency of refresh calls may indicate inefficiencies in the workflow.",
+    "• No authentication failures or backend errors were detected during the tests.",
+    "• Overall API performance appears stable with no significant latency spikes."
   ],
   "postmanCollection": null,
   "openApiPaths": null
