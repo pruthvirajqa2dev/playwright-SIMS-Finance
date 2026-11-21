@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2026-11-21T16:08:13.483Z",
+  "pivotDate": "2026-11-14",
+  "beforeWindow": {
+    "from": "2026-10-21",
+    "to": "2026-11-13",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-11-16",
+    "to": "2026-11-20",
+    "runsAnalysed": 5
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Improved",
+  "regressions": [],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 20,
+      "afterFlakyRate": 20,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Monitor the stability of resolved tests to ensure improvements are sustained.",
+    "Investigate the flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' despite resolution.",
+    "Continue tracking failure rates in future runs to identify any emerging patterns.",
+    "Review the test environment setup for consistency across runs.",
+    "Document the changes made that led to the resolution of previous issues."
+  ],
+  "executiveSummary": [
+    "Two tests showed improvement, with failure rates decreasing from 10% to 0% after 2026-11-14.",
+    "The 'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report' tests are now stable.",
+    "Flaky behaviour persists in the XQuery report test, which may indicate timing issues.",
+    "Improvements could enhance user confidence in file uploads and report generation.",
+    "Further analysis of the flaky behaviour in the XQuery report may clarify underlying issues."
+  ]
+}

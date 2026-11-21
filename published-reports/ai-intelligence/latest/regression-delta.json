@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-11-20T16:57:14.140Z",
-  "pivotDate": "2026-11-13",
+  "generatedAt": "2026-11-21T16:08:13.483Z",
+  "pivotDate": "2026-11-14",
   "beforeWindow": {
-    "from": "2026-10-20",
-    "to": "2026-11-12",
+    "from": "2026-10-21",
+    "to": "2026-11-13",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-11-13",
+    "from": "2026-11-16",
     "to": "2026-11-20",
-    "runsAnalysed": 6
+    "runsAnalysed": 5
   },
   "beforeEnvs": [
     "UAT"
@@ -17,27 +17,8 @@
   "afterEnvs": [
     "UAT"
   ],
-  "overallVerdict": "Regressed",
-  "regressions": [
-    {
-      "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 50,
-      "afterFailureRate": 67,
-      "beforeFlakyRate": 10,
-      "afterFlakyRate": 0,
-      "failureDelta": 17,
-      "flakyDelta": -10,
-      "verdict": "Regressed",
-      "riskLevel": "Critical",
-      "errorSamplesBefore": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
-      ],
-      "errorSamplesAfter": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
-      ]
-    }
-  ],
+  "overallVerdict": "Improved",
+  "regressions": [],
   "improvements": [],
   "newFailures": [],
   "resolvedFailures": [
@@ -61,9 +42,9 @@
       "beforeFailureRate": 10,
       "afterFailureRate": 0,
       "beforeFlakyRate": 20,
-      "afterFlakyRate": 17,
+      "afterFlakyRate": 20,
       "failureDelta": -10,
-      "flakyDelta": -3,
+      "flakyDelta": 0,
       "verdict": "Resolved",
       "riskLevel": "Low",
       "errorSamplesBefore": [
@@ -73,17 +54,17 @@
     }
   ],
   "actionItems": [
-    "Investigate the regression in 'NML510 - Trial Balance Report' with a 17% increase in failure rate.",
-    "Analyze the timing issues indicated by the errors in the 'NML510' test.",
-    "Review the changes made around the pivot date that may have impacted the report generation.",
-    "Monitor the stability of the 'File upload using SPC420' and 'XQuery Report' tests to ensure improvements are maintained.",
-    "Assess the overall test environment for potential shared dependencies affecting the 'NML510' report."
+    "Monitor the stability of resolved tests to ensure improvements are sustained.",
+    "Investigate the flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' despite resolution.",
+    "Continue tracking failure rates in future runs to identify any emerging patterns.",
+    "Review the test environment setup for consistency across runs.",
+    "Document the changes made that led to the resolution of previous issues."
   ],
   "executiveSummary": [
-    "The 'NML510 - Trial Balance Report' test failure rate increased from 50% to 67% after the pivot date.",
-    "This regression may indicate timing issues, as observed in the error messages related to visibility.",
-    "The increase in failure rate could affect the accuracy of financial reporting for stakeholders.",
-    "Two tests showed improvement, indicating some areas are stabilizing, but vigilance is needed.",
-    "Further investigation into the changes around November 13 may clarify the cause of the regression."
+    "Two tests showed improvement, with failure rates decreasing from 10% to 0% after 2026-11-14.",
+    "The 'File upload using SPC420' and 'SIMS_TB_SCHOOL - XQuery Report' tests are now stable.",
+    "Flaky behaviour persists in the XQuery report test, which may indicate timing issues.",
+    "Improvements could enhance user confidence in file uploads and report generation.",
+    "Further analysis of the flaky behaviour in the XQuery report may clarify underlying issues."
   ]
 }
