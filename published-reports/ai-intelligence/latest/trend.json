@@ -1,23 +1,29 @@
 {
-  "generatedAt": "2026-11-21T16:07:50.000Z",
-  "runsAnalysed": 21,
-  "weekendExcluded": 9,
+  "generatedAt": "2026-11-22T16:08:21.500Z",
+  "runsAnalysed": 20,
+  "weekendExcluded": 10,
   "dateRange": {
-    "from": "2026-10-21",
+    "from": "2026-10-22",
     "to": "2026-11-20"
   },
-  "overallHealthScore": 60,
-  "trendDirection": "Improving",
+  "overallHealthScore": 45,
+  "trendDirection": "Degrading",
   "successRate": 0,
-  "avgTestPassRate": 84,
-  "flakyRate": 19,
+  "avgTestPassRate": 85,
+  "flakyRate": 20,
   "byEnvironment": {
     "UAT": {
-      "total": 21,
-      "failures": 21,
+      "total": 20,
+      "failures": 20,
       "flaky": 4,
-      "avgSuccess": 76,
+      "avgSuccess": 77,
       "runs": [
+        {
+          "timestamp": "2026-11-22_16-04-26",
+          "successRate": 0,
+          "flaky": false,
+          "isWeekend": true
+        },
         {
           "timestamp": "2026-11-21_16-03-26",
           "successRate": 0,
@@ -191,12 +197,6 @@
           "successRate": 71,
           "flaky": false,
           "isWeekend": false
-        },
-        {
-          "timestamp": "2026-10-21_13-36-54",
-          "successRate": 71,
-          "flaky": false,
-          "isWeekend": false
         }
       ],
       "failureRuns": [
@@ -319,12 +319,6 @@
           "successRate": 71,
           "flaky": false,
           "isWeekend": false
-        },
-        {
-          "timestamp": "2026-10-21_13-36-54",
-          "successRate": 71,
-          "flaky": false,
-          "isWeekend": false
         }
       ],
       "flakyRuns": [
@@ -356,6 +350,14 @@
     }
   },
   "weekendRuns": [
+    {
+      "timestamp": "2026-11-22_16-04-26",
+      "date": "2026-11-22",
+      "dayOfWeek": "Sunday",
+      "environment": "UAT",
+      "outcome": "zero-execution",
+      "successRate": 0
+    },
     {
       "timestamp": "2026-11-21_16-03-26",
       "date": "2026-11-21",
@@ -431,48 +433,48 @@
   ],
   "patterns": [
     {
+      "patternType": "Degrading Trend",
+      "description": "The average success rate dropped from 69% to 55% over the last 14 runs, indicating worsening stability.",
+      "affectedRuns": 14,
+      "severity": "High",
+      "recommendation": "Investigate the causes of the declining success rate in recent runs."
+    },
+    {
       "patternType": "Chronic Flakiness",
-      "description": "Four runs exhibited flaky behaviour, indicating potential instability in specific tests.",
+      "description": "Flaky tests were observed in 20% of the runs, contributing to inconsistent results.",
       "affectedRuns": 4,
       "severity": "Medium",
-      "recommendation": "Investigate the tests with flaky behaviour to identify underlying issues."
+      "recommendation": "Identify and stabilize the tests exhibiting flaky behaviour."
     },
     {
-      "patternType": "Degrading Trend",
-      "description": "The average success rate improved from 57% to 67% over the last 7 runs, suggesting a positive trend.",
-      "affectedRuns": 7,
-      "severity": "Low",
-      "recommendation": "Continue monitoring for further improvements in test stability."
-    },
-    {
-      "patternType": "Recurring Outage",
-      "description": "All 21 runs recorded failures, indicating a systemic issue affecting test reliability.",
-      "affectedRuns": 21,
+      "patternType": "Failure Cluster",
+      "description": "A continuous failure cluster was recorded across 20 runs from October 22 to November 20.",
+      "affectedRuns": 20,
       "severity": "High",
-      "recommendation": "Conduct a thorough review of the test suite to identify and address persistent failures."
+      "recommendation": "Conduct a thorough review of the tests that failed during this period."
     }
   ],
   "riskPeriods": [
     {
-      "period": "2026-10-21 to 2026-11-20",
-      "description": "21 consecutive runs recorded failures, indicating a significant risk to test reliability."
+      "period": "2026-10-22 to 2026-11-20",
+      "description": "This period experienced 20 consecutive runs with failures, indicating significant instability."
     }
   ],
   "actionItems": [
-    "Investigate flaky tests to reduce instability.",
-    "Analyze failure patterns to identify common issues.",
-    "Review test dependencies and configurations.",
-    "Monitor success rates for further improvement trends.",
-    "Ensure adequate test coverage for critical functionalities."
+    "Analyze the tests contributing to the recent drop in success rates.",
+    "Investigate the root causes of flaky tests and implement fixes.",
+    "Review the test environment and dependencies for potential issues.",
+    "Monitor the impact of changes made to the test suite on future runs.",
+    "Consider scheduling additional downtime for maintenance if necessary."
   ],
   "executiveSummary": [
-    "0% of business-day runs were fully passed with no failures.",
-    "The average test pass rate was 84%, indicating systemic issues.",
-    "All 21 runs experienced failures, reflecting a chronic reliability problem.",
-    "Recent runs showed an improvement in success rates from 57% to 67%.",
-    "Four runs exhibited flaky behaviour, suggesting instability in specific tests.",
-    "This pattern may indicate a need for deeper investigation into test reliability.",
-    "May affect the consistency of financial reporting and operations.",
-    "Focus on identifying and addressing persistent test failures."
+    "0% of business-day runs achieved full pass rates, indicating severe instability.",
+    "The average test pass rate declined from 69% to 55% in the last 14 runs.",
+    "20 consecutive runs recorded failures between October 22 and November 20.",
+    "Flaky tests were present in 20% of the runs, affecting reliability.",
+    "This pattern may indicate underlying issues with test stability or environment.",
+    "Could lead to inconsistent results impacting finance operations.",
+    "Further analysis of failure patterns during this period is recommended.",
+    "Identifying and addressing flaky tests may improve overall performance."
   ]
 }
