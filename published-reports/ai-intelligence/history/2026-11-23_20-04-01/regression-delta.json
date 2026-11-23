@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-11-23T20:03:37.979Z",
+  "pivotDate": "2026-11-16",
+  "beforeWindow": {
+    "from": "2026-10-23",
+    "to": "2026-11-13",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-11-16",
+    "to": "2026-11-23",
+    "runsAnalysed": 5
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Improved",
+  "regressions": [],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": []
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 20,
+      "afterFlakyRate": 20,
+      "failureDelta": -10,
+      "flakyDelta": 0,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Monitor the stability of resolved tests for future regressions.",
+    "Investigate the persistent flaky behaviour in the XQuery report test.",
+    "Review the test timeout settings to prevent future issues.",
+    "Ensure consistent environment configurations to maintain test reliability.",
+    "Document the improvements for knowledge sharing within the team."
+  ],
+  "executiveSummary": [
+    "Two tests showed measurable improvements after the pivot date.",
+    "The 'File upload using SPC420' and 'XQuery Report' tests both resolved from 10% to 0% failure rates.",
+    "The XQuery report test continues to exhibit 20% flaky behaviour, which may indicate timing issues.",
+    "Improved stability could enhance user confidence in report generation for finance staff.",
+    "Further analysis of the flaky behaviour in the XQuery report test may provide insights.",
+    "Maintaining consistent environment configurations could help prevent future regressions."
+  ]
+}

@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-11-22T16:08:42.819Z",
-  "pivotDate": "2026-11-15",
+  "generatedAt": "2026-11-23T20:03:37.979Z",
+  "pivotDate": "2026-11-16",
   "beforeWindow": {
-    "from": "2026-10-22",
+    "from": "2026-10-23",
     "to": "2026-11-13",
     "runsAnalysed": 10
   },
   "afterWindow": {
     "from": "2026-11-16",
-    "to": "2026-11-20",
+    "to": "2026-11-23",
     "runsAnalysed": 5
   },
   "beforeEnvs": [
@@ -55,19 +55,17 @@
   ],
   "actionItems": [
     "Monitor the stability of resolved tests for future regressions.",
-    "Investigate the flaky behaviour in the XQuery report test.",
-    "Continue tracking failure rates in UAT to ensure ongoing improvements.",
+    "Investigate the persistent flaky behaviour in the XQuery report test.",
     "Review the test timeout settings to prevent future issues.",
-    "Document the changes made to achieve improvements for future reference."
+    "Ensure consistent environment configurations to maintain test reliability.",
+    "Document the improvements for knowledge sharing within the team."
   ],
   "executiveSummary": [
-    "Two tests showed measurable improvements with failure rates decreasing from 10% to 0%.",
-    "Five tests remained stable with no changes in failure rates.",
-    "The XQuery report test exhibited persistent flaky behaviour at 20%.",
-    "This pattern may indicate underlying timing issues that warrant further investigation.",
-    "Improvements could enhance user confidence in report generation consistency.",
-    "Continued monitoring of test performance in UAT is recommended.",
-    "Reviewing the flaky behaviour in the XQuery report may clarify its instability.",
-    "Documenting the successful changes may help replicate improvements in future cycles."
+    "Two tests showed measurable improvements after the pivot date.",
+    "The 'File upload using SPC420' and 'XQuery Report' tests both resolved from 10% to 0% failure rates.",
+    "The XQuery report test continues to exhibit 20% flaky behaviour, which may indicate timing issues.",
+    "Improved stability could enhance user confidence in report generation for finance staff.",
+    "Further analysis of the flaky behaviour in the XQuery report test may provide insights.",
+    "Maintaining consistent environment configurations could help prevent future regressions."
   ]
 }

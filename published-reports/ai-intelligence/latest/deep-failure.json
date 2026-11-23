@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22T16:08:34.659Z",
+  "generatedAt": "2026-11-23T20:03:29.239Z",
   "runsAnalysed": 15,
   "runsWithIssues": 15,
   "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
@@ -172,8 +172,8 @@
       "mostFrequentError": "Target page, context or browser has been closed.",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour suggests timing issues with page transitions.",
-      "recommendation": "Add waits or retries around page load events."
+      "failureHypothesis": "Flaky behaviour may suggest timing issues with page loading.",
+      "recommendation": "Add waits or retries to ensure page readiness before actions."
     },
     {
       "testTitle": "File upload using SPC420 @shard2",
@@ -184,20 +184,20 @@
       "mostFrequentError": "Test timeout of 200000ms exceeded.",
       "timeoutSuspected": true,
       "environmentSpecific": false,
-      "failureHypothesis": "Timeout suggests potential issues with file upload processing speed.",
-      "recommendation": "Examine file upload handling for performance improvements."
+      "failureHypothesis": "Timeout suggests potential delays in file upload processing.",
+      "recommendation": "Examine file upload performance and adjust timeout settings."
     },
     {
       "testTitle": "RSS570 - Crystal Report @shard1",
       "stabilityLabel": "Flaky",
-      "priority": "Low",
+      "priority": "Medium",
       "failureRate": 0,
       "flakyRate": 13,
       "mostFrequentError": "none",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Monitor for any future instability trends."
+      "failureHypothesis": "Flaky behaviour may indicate intermittent UI issues.",
+      "recommendation": "Monitor for patterns in flaky behaviour across runs."
     },
     {
       "testTitle": "Login and Logout @shard2",
@@ -209,7 +209,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue regular monitoring for stability."
+      "recommendation": "Continue monitoring for any future anomalies."
     },
     {
       "testTitle": "Help screen @shard2",
@@ -221,7 +221,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Maintain current test practices for this test."
+      "recommendation": "Continue monitoring for any future anomalies."
     }
   ],
   "coFailurePatterns": [
@@ -243,15 +243,17 @@
   "actionItems": [
     "Investigate the brittle selector issue in RSS310Q.",
     "Analyze backend performance during NML510 execution.",
-    "Add waits around page transitions in XQuery Report tests.",
-    "Examine file upload processing speed for potential improvements."
+    "Add waits to XQuery Report to handle timing issues.",
+    "Monitor file upload performance and adjust timeouts.",
+    "Review flaky behaviour patterns in Crystal Report."
   ],
   "executiveSummary": [
-    "100% of runs for RSS310Q failed, indicating severe instability.",
-    "60% failure rate observed for NML510, with timeout issues noted.",
-    "Flaky behaviour detected in XQuery Report and File Upload tests.",
-    "Co-failure of NML510 and RSS310Q suggests a shared dependency.",
-    "Stable tests like Login and Logout show no failures across runs.",
-    "Investigating performance and timing issues is recommended for improvement."
+    "100% of runs for RSS310Q had failures, indicating severe instability.",
+    "60% of runs for NML510 experienced failures, with timeout issues noted.",
+    "Flaky behaviour observed in XQuery Report and Crystal Report tests.",
+    "Co-failure between NML510 and RSS310Q suggests a shared dependency.",
+    "Stable tests like Login and Logout show no failures, indicating reliability.",
+    "Investigating timing and performance issues may improve overall stability.",
+    "Focus on refining locators and monitoring backend performance."
   ]
 }
