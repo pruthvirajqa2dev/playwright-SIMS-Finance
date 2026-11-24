@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T20:03:29.239Z",
+  "generatedAt": "2026-11-24T19:33:13.225Z",
   "runsAnalysed": 15,
   "runsWithIssues": 15,
   "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
@@ -161,7 +161,7 @@
       "timeoutSuspected": true,
       "environmentSpecific": false,
       "failureHypothesis": "Long execution time may indicate performance issues or slow backend responses.",
-      "recommendation": "Investigate backend performance during test execution."
+      "recommendation": "Investigate backend performance during report generation."
     },
     {
       "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
@@ -172,8 +172,8 @@
       "mostFrequentError": "Target page, context or browser has been closed.",
       "timeoutSuspected": false,
       "environmentSpecific": false,
-      "failureHypothesis": "Flaky behaviour may suggest timing issues with page loading.",
-      "recommendation": "Add waits or retries to ensure page readiness before actions."
+      "failureHypothesis": "Flaky behaviour suggests timing issues with page load or element availability.",
+      "recommendation": "Add waits or retries for element visibility before actions."
     },
     {
       "testTitle": "File upload using SPC420 @shard2",
@@ -197,7 +197,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "Flaky behaviour may indicate intermittent UI issues.",
-      "recommendation": "Monitor for patterns in flaky behaviour across runs."
+      "recommendation": "Monitor for patterns in flaky behaviour during report generation."
     },
     {
       "testTitle": "Login and Logout @shard2",
@@ -209,7 +209,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any future anomalies."
+      "recommendation": "Continue monitoring for any future issues."
     },
     {
       "testTitle": "Help screen @shard2",
@@ -221,7 +221,7 @@
       "timeoutSuspected": false,
       "environmentSpecific": false,
       "failureHypothesis": "No failures observed across profiled runs.",
-      "recommendation": "Continue monitoring for any future anomalies."
+      "recommendation": "Continue monitoring for any future issues."
     }
   ],
   "coFailurePatterns": [
@@ -236,24 +236,20 @@
   ],
   "topUnstableTests": [
     "RSS310Q - Attachments @shard2",
-    "NML510 - Trial Balance Report @shard1",
-    "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
-    "File upload using SPC420 @shard2"
+    "NML510 - Trial Balance Report @shard1"
   ],
   "actionItems": [
-    "Investigate the brittle selector issue in RSS310Q.",
-    "Analyze backend performance during NML510 execution.",
-    "Add waits to XQuery Report to handle timing issues.",
+    "Investigate locator strategies for unstable tests.",
+    "Analyze backend performance during report generation.",
+    "Review timing issues in flaky tests.",
     "Monitor file upload performance and adjust timeouts.",
-    "Review flaky behaviour patterns in Crystal Report."
+    "Continue tracking stable tests for any emerging issues."
   ],
   "executiveSummary": [
-    "100% of runs for RSS310Q had failures, indicating severe instability.",
-    "60% of runs for NML510 experienced failures, with timeout issues noted.",
-    "Flaky behaviour observed in XQuery Report and Crystal Report tests.",
-    "Co-failure between NML510 and RSS310Q suggests a shared dependency.",
-    "Stable tests like Login and Logout show no failures, indicating reliability.",
-    "Investigating timing and performance issues may improve overall stability.",
-    "Focus on refining locators and monitoring backend performance."
+    "100% of runs for 'RSS310Q - Attachments' failed, indicating severe instability.",
+    "60% failure rate observed for 'NML510 - Trial Balance Report', with timeout issues.",
+    "Flaky behaviour detected in 'SIMS_TB_SCHOOL - XQuery Report' and 'File upload using SPC420'.",
+    "Co-failure between 'NML510' and 'RSS310Q' suggests a shared dependency.",
+    "Stable tests like 'Login and Logout' showed no failures, indicating reliability."
   ]
 }

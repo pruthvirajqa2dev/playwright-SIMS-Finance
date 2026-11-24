@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-11-23T20:03:37.979Z",
-  "pivotDate": "2026-11-16",
+  "generatedAt": "2026-11-24T19:33:21.544Z",
+  "pivotDate": "2026-11-17",
   "beforeWindow": {
-    "from": "2026-10-23",
-    "to": "2026-11-13",
+    "from": "2026-10-27",
+    "to": "2026-11-16",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-11-16",
-    "to": "2026-11-23",
-    "runsAnalysed": 5
+    "from": "2026-11-17",
+    "to": "2026-11-24",
+    "runsAnalysed": 4
   },
   "beforeEnvs": [
     "UAT"
@@ -17,11 +17,45 @@
   "afterEnvs": [
     "UAT"
   ],
-  "overallVerdict": "Improved",
-  "regressions": [],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 50,
+      "afterFailureRate": 75,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 0,
+      "failureDelta": 25,
+      "flakyDelta": -10,
+      "verdict": "Regressed",
+      "riskLevel": "Critical",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
+        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
+      ],
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ]
+    }
+  ],
   "improvements": [],
   "newFailures": [],
   "resolvedFailures": [
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 10,
+      "afterFlakyRate": 25,
+      "failureDelta": -10,
+      "flakyDelta": 15,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ],
+      "errorSamplesAfter": []
+    },
     {
       "testTitle": "File upload using SPC420 @shard2",
       "beforeFailureRate": 10,
@@ -36,36 +70,21 @@
         "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
       ],
       "errorSamplesAfter": []
-    },
-    {
-      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
-      "beforeFailureRate": 10,
-      "afterFailureRate": 0,
-      "beforeFlakyRate": 20,
-      "afterFlakyRate": 20,
-      "failureDelta": -10,
-      "flakyDelta": 0,
-      "verdict": "Resolved",
-      "riskLevel": "Low",
-      "errorSamplesBefore": [
-        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
-      ],
-      "errorSamplesAfter": []
     }
   ],
   "actionItems": [
-    "Monitor the stability of resolved tests for future regressions.",
-    "Investigate the persistent flaky behaviour in the XQuery report test.",
-    "Review the test timeout settings to prevent future issues.",
-    "Ensure consistent environment configurations to maintain test reliability.",
-    "Document the improvements for knowledge sharing within the team."
+    "Investigate the regression in 'NML510 - Trial Balance Report' with a 25% increase in failure rate.",
+    "Analyze the timing issues indicated by the error messages in the 'NML510' test.",
+    "Review the environment setup for consistency between the before and after windows.",
+    "Monitor the flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for potential instability.",
+    "Assess the impact of the changes on report generation processes for finance staff."
   ],
   "executiveSummary": [
-    "Two tests showed measurable improvements after the pivot date.",
-    "The 'File upload using SPC420' and 'XQuery Report' tests both resolved from 10% to 0% failure rates.",
-    "The XQuery report test continues to exhibit 20% flaky behaviour, which may indicate timing issues.",
-    "Improved stability could enhance user confidence in report generation for finance staff.",
-    "Further analysis of the flaky behaviour in the XQuery report test may provide insights.",
-    "Maintaining consistent environment configurations could help prevent future regressions."
+    "The 'NML510 - Trial Balance Report' test failure rate increased from 50% to 75% after the pivot date.",
+    "One regression and two improvements were observed, with four tests remaining stable.",
+    "The increase in failure rate may indicate a timing issue related to visibility of elements.",
+    "Flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' could reflect instability in the test environment.",
+    "These issues may affect the reliability of financial reporting for staff.",
+    "Further investigation into the regression and timing issues is recommended."
   ]
 }
