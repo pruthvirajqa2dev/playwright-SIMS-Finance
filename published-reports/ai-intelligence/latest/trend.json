@@ -1,23 +1,29 @@
 {
-  "generatedAt": "2026-11-24T19:32:57.968Z",
-  "runsAnalysed": 20,
-  "weekendExcluded": 10,
+  "generatedAt": "2026-11-25T18:39:25.062Z",
+  "runsAnalysed": 21,
+  "weekendExcluded": 9,
   "dateRange": {
     "from": "2026-10-27",
-    "to": "2026-11-24"
+    "to": "2026-11-25"
   },
-  "overallHealthScore": 50,
+  "overallHealthScore": 62,
   "trendDirection": "Degrading",
   "successRate": 0,
   "avgTestPassRate": 77,
-  "flakyRate": 20,
+  "flakyRate": 19,
   "byEnvironment": {
     "UAT": {
-      "total": 20,
-      "failures": 18,
+      "total": 21,
+      "failures": 19,
       "flaky": 4,
       "avgSuccess": 69,
       "runs": [
+        {
+          "timestamp": "2026-11-25_18-35-18",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-11-24_19-29-02",
           "successRate": 0,
@@ -191,15 +197,15 @@
           "successRate": 0,
           "flaky": false,
           "isWeekend": true
-        },
-        {
-          "timestamp": "2026-10-24_12-35-54",
-          "successRate": 0,
-          "flaky": false,
-          "isWeekend": true
         }
       ],
       "failureRuns": [
+        {
+          "timestamp": "2026-11-25_18-35-18",
+          "successRate": 71,
+          "flaky": false,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-11-20_16-52-46",
           "successRate": 71,
@@ -409,58 +415,47 @@
       "environment": "UAT",
       "outcome": "zero-execution",
       "successRate": 0
-    },
-    {
-      "timestamp": "2026-10-24_12-35-54",
-      "date": "2026-10-24",
-      "dayOfWeek": "Saturday",
-      "environment": "UAT",
-      "outcome": "zero-execution",
-      "successRate": 0
     }
   ],
   "patterns": [
     {
       "patternType": "Degrading Trend",
-      "description": "The average success rate dropped from 80% to 33% over the last 14 runs, indicating worsening stability.",
-      "affectedRuns": 14,
+      "description": "The average success rate dropped from 80% to 33% over the last 7 runs, indicating worsening stability.",
+      "affectedRuns": 7,
       "severity": "High",
-      "recommendation": "Investigate the tests that failed during this period for potential underlying issues."
+      "recommendation": "Investigate the causes of the recent decline in test success rates."
+    },
+    {
+      "patternType": "Recurring Outage",
+      "description": "All 21 runs experienced failures, with no fully passed runs, indicating systemic issues.",
+      "affectedRuns": 21,
+      "severity": "High",
+      "recommendation": "Conduct a thorough review of the test suite to identify and address persistent failures."
     },
     {
       "patternType": "Chronic Flakiness",
-      "description": "4 runs exhibited flaky tests, suggesting instability in specific tests that may require attention.",
+      "description": "Four runs exhibited flaky tests, suggesting instability in specific tests.",
       "affectedRuns": 4,
       "severity": "Medium",
-      "recommendation": "Identify and stabilize the tests showing flaky behaviour to improve overall reliability."
-    },
-    {
-      "patternType": "Failure Cluster",
-      "description": "18 consecutive runs recorded failures, indicating a significant risk to test reliability.",
-      "affectedRuns": 18,
-      "severity": "High",
-      "recommendation": "Conduct a thorough review of the tests involved in these runs to identify common failure points."
+      "recommendation": "Identify and stabilize the tests exhibiting flaky behaviour."
     }
   ],
   "riskPeriods": [
     {
       "period": "2026-10-27 to 2026-11-23",
-      "description": "This period saw 18 consecutive runs with failures, highlighting a critical risk to application stability."
+      "description": "18 consecutive runs recorded failures, indicating a significant risk period."
     }
   ],
   "actionItems": [
-    "Analyze the tests failing during the recent runs for common issues.",
-    "Stabilize tests exhibiting flaky behaviour to reduce overall failure rates.",
-    "Review test dependencies and configurations that may contribute to the observed failures."
+    "Investigate the causes of the recent decline in test success rates.",
+    "Conduct a thorough review of the test suite to identify and address persistent failures.",
+    "Identify and stabilize the tests exhibiting flaky behaviour."
   ],
   "executiveSummary": [
-    "0% of runs achieved full pass rates, indicating significant reliability issues.",
-    "18 consecutive runs from October 27 to November 23 recorded failures.",
-    "The average success rate dropped from 80% to 33% in the last 14 runs.",
-    "4 runs showed flaky tests, suggesting instability in specific areas.",
-    "This pattern may indicate underlying issues affecting test reliability.",
-    "May impact the accuracy of financial reporting and operational processes.",
-    "Further investigation into the failing tests is recommended.",
-    "Focus on stabilizing flaky tests to improve overall performance."
+    "0% of runs were fully passed, indicating systemic issues.",
+    "The average test pass rate dropped from 80% to 33% in the last 7 runs.",
+    "All 21 runs experienced failures, with no clean runs recorded.",
+    "Four runs exhibited flaky tests, suggesting instability in specific tests.",
+    "18 consecutive runs recorded failures from October 27 to November 23."
   ]
 }
