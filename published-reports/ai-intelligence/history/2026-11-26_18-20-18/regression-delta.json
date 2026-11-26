@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-11-26T18:19:54.062Z",
+  "pivotDate": "2026-11-19",
+  "beforeWindow": {
+    "from": "2026-10-27",
+    "to": "2026-11-18",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-11-19",
+    "to": "2026-11-26",
+    "runsAnalysed": 4
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Improved",
+  "regressions": [],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 20,
+      "afterFlakyRate": 0,
+      "failureDelta": -10,
+      "flakyDelta": -20,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Monitor the stability of the resolved test to ensure continued success.",
+    "Investigate the cause of the previous flaky behaviour in the XQuery report.",
+    "Review other tests for potential improvements based on recent changes.",
+    "Continue tracking failure rates in the UAT environment for anomalies.",
+    "Ensure thorough documentation of the changes made leading to the improvement."
+  ],
+  "executiveSummary": [
+    "1 resolved test was identified after the pivot date, improving from 10% to 0% failure rate.",
+    "The previously flaky behaviour of the XQuery report has been eliminated.",
+    "This improvement may indicate successful adjustments in the testing process or environment.",
+    "Stable performance in 6 tests suggests a consistent testing environment.",
+    "Continued monitoring is recommended to maintain the positive trend in test outcomes."
+  ]
+}

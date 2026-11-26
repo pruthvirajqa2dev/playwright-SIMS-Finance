@@ -1,23 +1,29 @@
 {
-  "generatedAt": "2026-11-25T18:39:25.062Z",
-  "runsAnalysed": 21,
-  "weekendExcluded": 9,
+  "generatedAt": "2026-11-26T18:19:30.319Z",
+  "runsAnalysed": 22,
+  "weekendExcluded": 8,
   "dateRange": {
     "from": "2026-10-27",
-    "to": "2026-11-25"
+    "to": "2026-11-26"
   },
-  "overallHealthScore": 62,
+  "overallHealthScore": 50,
   "trendDirection": "Degrading",
   "successRate": 0,
   "avgTestPassRate": 77,
-  "flakyRate": 19,
+  "flakyRate": 18,
   "byEnvironment": {
     "UAT": {
-      "total": 21,
-      "failures": 19,
+      "total": 22,
+      "failures": 20,
       "flaky": 4,
-      "avgSuccess": 69,
+      "avgSuccess": 70,
       "runs": [
+        {
+          "timestamp": "2026-11-26_18-14-17",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-11-25_18-35-18",
           "successRate": 71,
@@ -191,15 +197,15 @@
           "successRate": 86,
           "flaky": false,
           "isWeekend": false
-        },
-        {
-          "timestamp": "2026-10-25_13-06-26",
-          "successRate": 0,
-          "flaky": false,
-          "isWeekend": true
         }
       ],
       "failureRuns": [
+        {
+          "timestamp": "2026-11-26_18-14-17",
+          "successRate": 86,
+          "flaky": false,
+          "isWeekend": false
+        },
         {
           "timestamp": "2026-11-25_18-35-18",
           "successRate": 71,
@@ -407,14 +413,6 @@
       "environment": "UAT",
       "outcome": "zero-execution",
       "successRate": 0
-    },
-    {
-      "timestamp": "2026-10-25_13-06-26",
-      "date": "2026-10-25",
-      "dayOfWeek": "Sunday",
-      "environment": "UAT",
-      "outcome": "zero-execution",
-      "successRate": 0
     }
   ],
   "patterns": [
@@ -427,14 +425,14 @@
     },
     {
       "patternType": "Recurring Outage",
-      "description": "All 21 runs experienced failures, with no fully passed runs, indicating systemic issues.",
-      "affectedRuns": 21,
+      "description": "All 22 runs experienced some level of failure, with no clean runs recorded during this period.",
+      "affectedRuns": 22,
       "severity": "High",
-      "recommendation": "Conduct a thorough review of the test suite to identify and address persistent failures."
+      "recommendation": "Conduct a thorough review of all tests to identify persistent failure points."
     },
     {
       "patternType": "Chronic Flakiness",
-      "description": "Four runs exhibited flaky tests, suggesting instability in specific tests.",
+      "description": "Flaky tests were observed in 4 runs, suggesting instability in specific test cases.",
       "affectedRuns": 4,
       "severity": "Medium",
       "recommendation": "Identify and stabilize the tests exhibiting flaky behaviour."
@@ -444,18 +442,25 @@
     {
       "period": "2026-10-27 to 2026-11-23",
       "description": "18 consecutive runs recorded failures, indicating a significant risk period."
+    },
+    {
+      "period": "2026-11-25 to 2026-11-26",
+      "description": "2 consecutive runs with failures suggest ongoing instability."
     }
   ],
   "actionItems": [
-    "Investigate the causes of the recent decline in test success rates.",
-    "Conduct a thorough review of the test suite to identify and address persistent failures.",
-    "Identify and stabilize the tests exhibiting flaky behaviour."
+    "Investigate the decline in test success rates over the last 7 runs.",
+    "Review all tests for common failure points and address chronic flakiness.",
+    "Analyze the impact of recent changes or deployments on test stability."
   ],
   "executiveSummary": [
-    "0% of runs were fully passed, indicating systemic issues.",
+    "0% of runs achieved full pass rates, indicating significant instability.",
     "The average test pass rate dropped from 80% to 33% in the last 7 runs.",
-    "All 21 runs experienced failures, with no clean runs recorded.",
-    "Four runs exhibited flaky tests, suggesting instability in specific tests.",
-    "18 consecutive runs recorded failures from October 27 to November 23."
+    "All 22 runs experienced failures, with no clean runs recorded.",
+    "4 runs exhibited flaky tests, suggesting potential instability in specific cases.",
+    "18 consecutive runs recorded failures from 2026-10-27 to 2026-11-23.",
+    "2 additional runs with failures occurred on 2026-11-25 and 2026-11-26.",
+    "This pattern may affect the reliability of financial reporting processes.",
+    "Focus on identifying and addressing the root causes of test failures."
   ]
 }

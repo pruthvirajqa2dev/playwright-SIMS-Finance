@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-11-25T18:39:48.451Z",
-  "pivotDate": "2026-11-18",
+  "generatedAt": "2026-11-26T18:19:54.062Z",
+  "pivotDate": "2026-11-19",
   "beforeWindow": {
     "from": "2026-10-27",
-    "to": "2026-11-17",
+    "to": "2026-11-18",
     "runsAnalysed": 10
   },
   "afterWindow": {
-    "from": "2026-11-18",
-    "to": "2026-11-25",
+    "from": "2026-11-19",
+    "to": "2026-11-26",
     "runsAnalysed": 4
   },
   "beforeEnvs": [
@@ -17,27 +17,8 @@
   "afterEnvs": [
     "UAT"
   ],
-  "overallVerdict": "Regressed",
-  "regressions": [
-    {
-      "testTitle": "NML510 - Trial Balance Report @shard1",
-      "beforeFailureRate": 50,
-      "afterFailureRate": 75,
-      "beforeFlakyRate": 10,
-      "afterFlakyRate": 0,
-      "failureDelta": 25,
-      "flakyDelta": -10,
-      "verdict": "Regressed",
-      "riskLevel": "Critical",
-      "errorSamplesBefore": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id",
-        "\u001b[31mTest timeout of 200000ms exceeded.\u001b[39m"
-      ],
-      "errorSamplesAfter": [
-        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
-      ]
-    }
-  ],
+  "overallVerdict": "Improved",
+  "regressions": [],
   "improvements": [],
   "newFailures": [],
   "resolvedFailures": [
@@ -58,17 +39,17 @@
     }
   ],
   "actionItems": [
-    "Investigate the cause of the 25% increase in failure rate for 'NML510 - Trial Balance Report'.",
-    "Analyze the timing issues indicated by the error messages for the regressed test.",
-    "Review the changes made around the pivot date to identify potential impacts on the report.",
-    "Monitor the stability of the 'SIMS_TB_SCHOOL - XQuery Report' to ensure the improvement is sustained.",
-    "Assess the overall test environment for any configuration changes that may have affected test outcomes."
+    "Monitor the stability of the resolved test to ensure continued success.",
+    "Investigate the cause of the previous flaky behaviour in the XQuery report.",
+    "Review other tests for potential improvements based on recent changes.",
+    "Continue tracking failure rates in the UAT environment for anomalies.",
+    "Ensure thorough documentation of the changes made leading to the improvement."
   ],
   "executiveSummary": [
-    "The 'NML510 - Trial Balance Report' failure rate increased from 50% to 75% after the pivot date.",
-    "This regression may indicate a timing issue, as the error suggests visibility problems with the locator.",
-    "The increase in failures could affect the reliability of financial reporting for users.",
-    "The 'SIMS_TB_SCHOOL - XQuery Report' showed improvement, reducing failures from 10% to 0%, indicating potential stability.",
-    "Further investigation into the timing issues and changes made around 2026-11-18 is recommended."
+    "1 resolved test was identified after the pivot date, improving from 10% to 0% failure rate.",
+    "The previously flaky behaviour of the XQuery report has been eliminated.",
+    "This improvement may indicate successful adjustments in the testing process or environment.",
+    "Stable performance in 6 tests suggests a consistent testing environment.",
+    "Continued monitoring is recommended to maintain the positive trend in test outcomes."
   ]
 }
