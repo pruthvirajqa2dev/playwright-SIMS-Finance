@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-11-27T18:04:32.256Z",
+  "pivotDate": "2026-11-20",
+  "beforeWindow": {
+    "from": "2026-10-28",
+    "to": "2026-11-19",
+    "runsAnalysed": 10
+  },
+  "afterWindow": {
+    "from": "2026-11-20",
+    "to": "2026-11-27",
+    "runsAnalysed": 4
+  },
+  "beforeEnvs": [
+    "UAT"
+  ],
+  "afterEnvs": [
+    "UAT"
+  ],
+  "overallVerdict": "Regressed",
+  "regressions": [
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "beforeFailureRate": 50,
+      "afterFailureRate": 75,
+      "beforeFlakyRate": 0,
+      "afterFlakyRate": 0,
+      "failureDelta": 25,
+      "flakyDelta": 0,
+      "verdict": "Regressed",
+      "riskLevel": "Critical",
+      "errorSamplesBefore": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ],
+      "errorSamplesAfter": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id"
+      ]
+    }
+  ],
+  "improvements": [],
+  "newFailures": [],
+  "resolvedFailures": [
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "beforeFailureRate": 10,
+      "afterFailureRate": 0,
+      "beforeFlakyRate": 20,
+      "afterFlakyRate": 25,
+      "failureDelta": -10,
+      "flakyDelta": 5,
+      "verdict": "Resolved",
+      "riskLevel": "Low",
+      "errorSamplesBefore": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbu"
+      ],
+      "errorSamplesAfter": []
+    }
+  ],
+  "actionItems": [
+    "Investigate the cause of the 25% increase in failure rate for 'NML510 - Trial Balance Report'.",
+    "Analyze the timing and context of failures to identify potential instability.",
+    "Review the locator visibility issues reported in the regression errors.",
+    "Monitor the flaky behaviour in 'SIMS_TB_SCHOOL - XQuery Report' for further patterns.",
+    "Compare pre- and post-pivot error logs for additional insights."
+  ],
+  "executiveSummary": [
+    "The 'NML510 - Trial Balance Report' failure rate increased from 50% to 75% after the pivot on 2026-11-20.",
+    "One new failure was observed, while one test improved from 10% to 0% failure rate.",
+    "The regression may indicate issues with locator visibility in the report generation process.",
+    "This pattern could reflect instability affecting financial reporting accuracy.",
+    "May impact the reliability of trial balance reports for finance staff.",
+    "Further investigation into the timing of failures may provide clarity.",
+    "Monitoring the flaky behaviour in XQuery reports is recommended for potential risks.",
+    "Reviewing error logs around the pivot date may help isolate the cause."
+  ]
+}

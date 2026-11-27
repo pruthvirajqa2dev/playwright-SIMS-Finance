@@ -1,0 +1,252 @@
+{
+  "generatedAt": "2026-11-27T18:04:23.881Z",
+  "runsAnalysed": 15,
+  "runsWithIssues": 15,
+  "reportBaseUrl": "https://pruthvirajqa2dev.github.io/playwright-SIMS-Finance/published-reports/",
+  "perTestProfiles": [
+    {
+      "testTitle": "RSS310Q - Attachments @shard2",
+      "totalRuns": 15,
+      "failureCount": 15,
+      "flakyCount": 0,
+      "passCount": 0,
+      "failureRate": 100,
+      "flakyRate": 0,
+      "avgDurationMs": 59771,
+      "lastSeen": "2026-11-27_17-59-47",
+      "errorSamples": [
+        "Error: locator.dblclick: Error: strict mode violation: locator('.esr_grid_sort_span').locator('..') resolved to 2 elements:     1) <div>…</div> aka lo"
+      ],
+      "failuresByEnv": {
+        "UAT": 15
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-11-27_17-59-47"
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "totalRuns": 15,
+      "failureCount": 8,
+      "flakyCount": 1,
+      "passCount": 6,
+      "failureRate": 53,
+      "flakyRate": 7,
+      "avgDurationMs": 202983,
+      "lastSeen": "2026-11-27_17-59-47",
+      "errorSamples": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed  Locator: locator('*[id^=ui-id]').locator('text=\"Background "
+      ],
+      "failuresByEnv": {
+        "UAT": 8
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-11-27_17-59-47"
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "totalRuns": 15,
+      "failureCount": 1,
+      "flakyCount": 3,
+      "passCount": 11,
+      "failureRate": 7,
+      "flakyRate": 20,
+      "avgDurationMs": 31106,
+      "lastSeen": "2026-11-27_17-59-47",
+      "errorSamples": [
+        "Error: locator.click: Target page, context or browser has been closed Call log: \u001b[2m  - waiting for locator('.esr_mainbutton[value=\\'Close\\']')\u001b[22m \u001b"
+      ],
+      "failuresByEnv": {
+        "UAT": 1
+      },
+      "runsByEnv": {
+        "UAT": 15
+      },
+      "lastFailureTimestamp": "2026-11-05_16-18-38"
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "totalRuns": 15,
+      "failureCount": 0,
+      "flakyCount": 1,
+      "passCount": 14,
+      "failureRate": 0,
+      "flakyRate": 7,
+      "avgDurationMs": 142392,
+      "lastSeen": "2026-11-27_17-59-47",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 15
+      }
+    },
+    {
+      "testTitle": "Login and Logout @shard2",
+      "totalRuns": 15,
+      "failureCount": 0,
+      "flakyCount": 0,
+      "passCount": 15,
+      "failureRate": 0,
+      "flakyRate": 0,
+      "avgDurationMs": 9875,
+      "lastSeen": "2026-11-27_17-59-47",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 15
+      }
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "totalRuns": 15,
+      "failureCount": 0,
+      "flakyCount": 0,
+      "passCount": 15,
+      "failureRate": 0,
+      "flakyRate": 0,
+      "avgDurationMs": 23507,
+      "lastSeen": "2026-11-27_17-59-47",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 15
+      }
+    },
+    {
+      "testTitle": "Help screen @shard2",
+      "totalRuns": 14,
+      "failureCount": 0,
+      "flakyCount": 0,
+      "passCount": 14,
+      "failureRate": 0,
+      "flakyRate": 0,
+      "avgDurationMs": 9028,
+      "lastSeen": "2026-11-27_17-59-47",
+      "errorSamples": [],
+      "failuresByEnv": {},
+      "runsByEnv": {
+        "UAT": 14
+      }
+    }
+  ],
+  "perTestAnalyses": [
+    {
+      "testTitle": "RSS310Q - Attachments @shard2",
+      "stabilityLabel": "Unstable",
+      "priority": "High",
+      "failureRate": 100,
+      "flakyRate": 0,
+      "mostFrequentError": "strict mode violation",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "The locator may be too broad, resolving to multiple elements.",
+      "recommendation": "Refine the locator to ensure it targets a single element."
+    },
+    {
+      "testTitle": "NML510 - Trial Balance Report @shard1",
+      "stabilityLabel": "Unstable",
+      "priority": "High",
+      "failureRate": 53,
+      "flakyRate": 7,
+      "mostFrequentError": "Locator not visible",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "Timing issues may prevent the locator from being visible when checked.",
+      "recommendation": "Implement waits or retries to ensure the locator is visible before assertion."
+    },
+    {
+      "testTitle": "SIMS_TB_SCHOOL - XQuery Report - Execute @shard2",
+      "stabilityLabel": "Flaky",
+      "priority": "Medium",
+      "failureRate": 7,
+      "flakyRate": 20,
+      "mostFrequentError": "Target page has been closed",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "The test may be affected by timing issues related to page transitions.",
+      "recommendation": "Add waits to ensure the page is fully loaded before interactions."
+    },
+    {
+      "testTitle": "RSS570 - Crystal Report @shard1",
+      "stabilityLabel": "Flaky",
+      "priority": "Medium",
+      "failureRate": 0,
+      "flakyRate": 7,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "Flaky behaviour may arise from intermittent UI conditions.",
+      "recommendation": "Monitor for patterns in failures to identify specific conditions."
+    },
+    {
+      "testTitle": "Login and Logout @shard2",
+      "stabilityLabel": "Stable",
+      "priority": "Low",
+      "failureRate": 0,
+      "flakyRate": 0,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "No failures observed across profiled runs.",
+      "recommendation": "Continue monitoring for any changes in stability."
+    },
+    {
+      "testTitle": "File upload using SPC420 @shard2",
+      "stabilityLabel": "Stable",
+      "priority": "Low",
+      "failureRate": 0,
+      "flakyRate": 0,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "No failures observed across profiled runs.",
+      "recommendation": "Continue monitoring for any changes in stability."
+    },
+    {
+      "testTitle": "Help screen @shard2",
+      "stabilityLabel": "Stable",
+      "priority": "Low",
+      "failureRate": 0,
+      "flakyRate": 0,
+      "mostFrequentError": "none",
+      "timeoutSuspected": false,
+      "environmentSpecific": false,
+      "failureHypothesis": "No failures observed across profiled runs.",
+      "recommendation": "Continue monitoring for any changes in stability."
+    }
+  ],
+  "coFailurePatterns": [
+    {
+      "tests": [
+        "NML510 - Trial Balance Report @shard1",
+        "RSS310Q - Attachments @shard2"
+      ],
+      "occurrences": 8,
+      "possibleCause": ""
+    }
+  ],
+  "topUnstableTests": [
+    "RSS310Q - Attachments @shard2",
+    "NML510 - Trial Balance Report @shard1"
+  ],
+  "actionItems": [
+    "Investigate locator issues in RSS310Q to improve targeting.",
+    "Enhance visibility checks in NML510 to reduce failures.",
+    "Monitor flaky behaviour in SIMS_TB_SCHOOL for patterns.",
+    "Review timing issues in XQuery Report tests.",
+    "Continue tracking stable tests for any emerging issues."
+  ],
+  "executiveSummary": [
+    "100% of runs for RSS310Q failed, indicating severe instability.",
+    "53% failure rate observed for NML510, with additional flaky behaviour.",
+    "Co-failure between NML510 and RSS310Q suggests a shared dependency.",
+    "Stable tests like Login and Logout show no failures across runs.",
+    "Flaky tests may impact report generation consistency for finance staff.",
+    "Investigating locator and timing issues could improve test reliability.",
+    "Monitoring for patterns in flaky tests may help isolate root causes.",
+    "Continued focus on unstable tests is essential for operational confidence."
+  ]
+}
